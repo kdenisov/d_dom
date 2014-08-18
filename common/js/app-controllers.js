@@ -58,26 +58,6 @@ appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderBy
 		return actual.indexOf(expected) > -1;
 	};
 
-    $scope.GET_COTTAGE_CSS_CLASS = function() {
-        var base = 'cottage-size-';
-        var count = Configurator.cottage.levelsCount;
-        var basement = "";
-        if (Configurator.levels[count - 1].isBasement) {
-            count--;
-            basement = '-basement';
-        }
-
-        var size = 's';
-        for (var i = 0; i < count; i++) {
-            if (Configurator.levels[i].roomsCount > 8) {
-                size = 'b';
-                break;
-            }
-        }
-
-        return base + count + size + basement;
-    };
-
     $scope.SHOW_HOUSE_IMAGE = function(level, rooms, basement) {
         var count = Configurator.cottage.levelsCount;
         var lastLevel = Configurator.levels[count - 1];
