@@ -6,6 +6,7 @@ appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderBy
 	//Configurator = loadLocalStorage({key:'Configurator',val:Configurator});
 
     //$scope.CONFIGURATOR = Configurator;
+
     Configurator.params.orderLinksVisible = false;
 
 	$scope.PARAMS = Configurator.params.cottage;
@@ -75,6 +76,24 @@ appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderBy
         }
 
         return base + count + size + basement;
+    };
+
+    $scope.SHOW_HOUSE_IMAGE = function(level, rooms, basement) {
+        var count = Configurator.cottage.levelsCount;
+        var lastLevel = Configurator.levels[count - 1];
+        if (lastLevel.isBasement) {
+            count--;
+        }
+
+        var size = 's';
+        for (var i = 0; i < count; i++) {
+            if (Configurator.levels[i].roomsCount > 8) {
+                size = 'b';
+                break;
+            }
+        }
+
+        return lastLevel.isBasement == basement && count == level && rooms == size;
     };
 
     /*if(Configurator.initialized) return;

@@ -42,17 +42,17 @@
 					ng-model="COLLECTOR.isFlowmeter"
 					ng-change="COLLECTOR.sets = (PARAMS.sets | filter: {isFlowmeter: COLLECTOR.isFlowmeter, entries: COLLECTOR.entries})[0].id"
 				>
-				<span class="title"><img src="/common/img/products/config-prod-rashodomer.png" title="Расходомер" />Расходомер</span>
+				<span class="title"><img src="common/img/products/config-prod-rashodomer.png" title="Расходомер" />Расходомер</span>
 			</label>
 			<label class="label-checkbox checkbox-{{COLLECTOR.isBallValves}}">
 				<span class="pseudo-checkbox"></span>
 				<input type="checkbox"
 					ng-model="COLLECTOR.isBallValves"
 				>
-				<span class="title"><img src="/common/img/products/config-prod-kran.png" title="Шаровые краны" />Шаровые краны</span>
+				<span class="title"><img src="common/img/products/config-prod-kran.png" title="Шаровые краны" />Шаровые краны</span>
 			</label>
             <label class="label-checkbox">
-				<span class="title"><img src="/common/img/products/config-prod-termometr.png" title="Термометры" />Термометры</span>
+				<span class="title"><img src="common/img/products/config-prod-termometr.png" title="Термометры" />Термометры</span>
 			</label>
             <div class="switchboxes">
                 <label class="label-checkbox half-size checkbox-{{COLLECTOR._thermometerIn}}">
@@ -77,7 +77,7 @@
                 <input type="checkbox"
                         ng-click="COLLECTOR.fittings = 0;"
 				    >
-				<span class="title"><img src="/common/img/products/config-prod-fittings.png" title="Фитинги для труб" />Фитинги для труб</span>
+				<span class="title"><img src="common/img/products/config-prod-fittings.png" title="Фитинги для труб" />Фитинги для труб</span>
 			</label>
 			<label class="label-checkbox checkbox-{{COLLECTOR.fittings != 0}}">
 				<select ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.fittings | filter: {type: 2}" ng-model="COLLECTOR.fittings"></select>

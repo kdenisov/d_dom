@@ -486,36 +486,46 @@ label.tab-item-add {
 	content: '';
 	background: url('../img/house/house.png') no-repeat 28px 0;
 }
-.cottage-size-1s:after {
-	background-image: url('/common/img/house/1s.png');	
+/*.cottage-size-1s:after {
+	background-image: url('../img/house/1s.png');	
 }
 .cottage-size-1b:after {
-	background-image: url('/common/img/house/1b.png');	
+	background-image: url('../img/house/1b.png');	
 }
 .cottage-size-1s-basement:after {
-	background-image: url('/common/img/house/1s_basement.png');	
+	background-image: url('../img/house/1s_basement.png');	
 }
 .cottage-size-1b-basement:after {
-	background-image: url('/common/img/house/1b_basement.png');	
+	background-image: url('../img/house/1b_basement.png');	
 }
 .cottage-size-2s:after {
-	background-image: url('/common/img/house/2s.png');	
+	background-image: url('../img/house/2s.png');	
 }
 .cottage-size-2b:after {
-	background-image: url('/common/img/house/2b.png');	
+	background-image: url('../img/house/2b.png');	
 }
 .cottage-size-2s-basement:after {
-	background-image: url('/common/img/house/2s_basement.png');	
+	background-image: url('../img/house/2s_basement.png');	
 }
 .cottage-size-2b-basement:after {
     top: 16px;
-	background-image: url('/common/img/house/2b_basement.png');	
+	background-image: url('../img/house/2b_basement.png');	
 }
 .cottage-size-3s:after {
-	background-image: url('/common/img/house/3s.png');	
+	background-image: url('../img/house/3s.png');	
 }
 .cottage-size-3b:after {
-	background-image: url('/common/img/house/3b.png');	
+	background-image: url('../img/house/3b.png');	
+}*/
+
+.cottage .house {
+    position: absolute;
+    left: 29px;
+    top: 57px;
+}
+
+.cottage .house.b2b {
+    top: 16.4px;
 }
 
 .cottage h1,

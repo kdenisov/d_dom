@@ -1,7 +1,18 @@
 <!--<div class="cottage cottage-size-{{LEVELS[2].isBasement && (COTTAGE.levelsCount - 1) || COTTAGE.levelsCount}}{{(LEVELS[0].roomsCount > 8 || LEVELS[1].roomsCount > 8 || LEVELS[2].roomsCount > 8) && 'b' || 's'}}{{LEVELS[2].isBasement && '-basement' || ''}}">-->
-    <div class="cottage" ng-class="GET_COTTAGE_CSS_CLASS()">
-    <h1>Параметры коттеджа</h1>
-    <div class="info">
-        Уточните количество этажей и отапливаемых комнат в вашем доме
+<!--<div class="cottage" ng-class="GET_COTTAGE_CSS_CLASS()">-->
+    <div class="cottage">
+        <h1>Параметры коттеджа</h1>
+        <div class="info">
+            Уточните количество этажей и отапливаемых комнат в вашем доме
+        </div>
+        <img class="house" src="/common/img/house/1s.png" alt="" ng-show="SHOW_HOUSE_IMAGE(1, 's', false)" />
+        <img class="house" src="/common/img/house/1b.png" alt="" ng-show="SHOW_HOUSE_IMAGE(1, 'b', false)" />
+        <img class="house" src="/common/img/house/2s.png" alt="" ng-show="SHOW_HOUSE_IMAGE(2, 's', false)" />
+        <img class="house" src="/common/img/house/2b.png" alt="" ng-show="SHOW_HOUSE_IMAGE(2, 'b', false)" />
+        <img class="house" src="/common/img/house/3s.png" alt="" ng-show="SHOW_HOUSE_IMAGE(3, 's', false)" />
+        <img class="house" src="/common/img/house/3b.png" alt="" ng-show="SHOW_HOUSE_IMAGE(3, 'b', false)" />
+        <img class="house" src="/common/img/house/1s_basement.png" alt="" ng-show="SHOW_HOUSE_IMAGE(1, 's', true)" />
+        <img class="house" src="/common/img/house/1b_basement.png" alt="" ng-show="SHOW_HOUSE_IMAGE(1, 'b', true)" />
+        <img class="house" src="/common/img/house/2s_basement.png" alt="" ng-show="SHOW_HOUSE_IMAGE(2, 's', true)" />
+        <img class="house b2b" src="/common/img/house/2b_basement.png" alt="" ng-show="SHOW_HOUSE_IMAGE(2, 'b', true)" />
     </div>
-</div>
