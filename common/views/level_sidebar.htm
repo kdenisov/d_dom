@@ -1,0 +1,71 @@
+<div class="params-collectors autoscroll">
+	<div ng-repeat="COLLECTOR in COLLECTORS" class="group">
+		<label class="label-switchbox switchbox-{{COLLECTOR.isCollector}}">
+		<!-- ng-class="{'label-switchbox-false': COLLECTOR.id == 1 + COTTAGE.levelsCount > 1}" -->
+			<h3>{{COLLECTOR.name}} <nobr><span class="hidden-true">({{COLLECTOR.entries}} вх.)</span></nobr></h3>
+			<input type="checkbox"
+				ng-model="COLLECTOR.isCollector"
+				ng-change="validateCollectors(CURRENT_LEVEL, LEVELS, COLLECTOR)"
+			>
+			<!-- ng-if="!(COLLECTOR.id == 1 + COTTAGE.levelsCount > 1)" -->
+		</label>
+		<div class="hidden-{{!COLLECTOR.isCollector}}">
+			<a ng-href="#/collector/{{CURRENT_LEVEL.id}}/{{COLLECTOR.id}}"><img src="common/img/collector_small_{{COLLECTOR.type}}.jpg" alt=""></a>
+			К этому коллектору подключены
+				<!-- <div class="choicebox hidden-{{!BOILER.isBoiler}}">
+					<label ng-repeat="LEVEL in LEVELS" class="choicebox-{{LEVEL.id == COLLECTOR.level}} hidden-{{!LEVEL.isLevel}}">{{LEVEL.name}} <input type="radio" name="boiler_level" value="{{LEVEL.id}}" ng-model="COLLECTOR.level" ng-change="validateCollectors(CURRENT_LEVEL.id, COLLECTOR.level, COLLECTOR.id)"></label>
+					<label class="choicebox-{{COLLECTOR.level == 0}}">Оба этажа <input type="radio" name="boiler_level" value="0" ng-model="COLLECTOR.level" ng-change="validateCollectors(CURRENT_LEVEL.id, COLLECTOR.level, COLLECTOR.id)"></label>
+				</div> -->
+
+				<!-- <label ng-repeat="(LEVEL, IS_ON_LEVEL) in COLLECTOR.levels" class="checkbox-{{LEVEL == COLLECTOR.level}} hidden-{{!LEVEL.isLevel}}">{{LEVEL.name}} <input type="checkbox" name="collector_level_{{LEVEL.id}}" value="{{LEVEL.id}}" ng-true-value="{{LEVEL.id}}" ng-false-value="0" ng-model="COLLECTOR.level"></label> -->
+				<div class="level-items clearfix">
+					<label ng-repeat="LEVEL in LEVELS | filter:{isLevel: true} | orderBy:'-isBasement'" class="label-checkbox checkbox-{{COLLECTOR.levels[LEVEL.id]}} level-item">
+						<span class="pseudo-checkbox"></span>
+						<input type="checkbox" ng-model="COLLECTOR.levels[LEVEL.id]" disabled aria-disabled ng-change="validateCollectors(CURRENT_LEVEL.id, COLLECTOR.levels, COLLECTOR.id)">
+						<div class="room-items clearfix">
+							<div
+								ng-repeat="ROOM in LEVEL.rooms"
+								ng-class="{'is-room': ROOM.id <= LEVEL.roomsCount}"
+								class="room-item"
+							>
+							</div>
+						</div>
+						{{LEVEL.canonicalName()}}
+					</label>
+				</div>
+		</div>
+	</div>
+</div>
+<script type="text/ng-template" id="alert.html">
+    <div class="modal-header">
+        <h3 class="modal-title">{{ALERT_MESSAGE}}</h3>
+    </div>
+    <div class="modal-footer">
+        <div class="button button-next" ng-click="CLOSE_ALERT()">Ok</div>
+    </div>
+</script>
+<script type="text/ng-template" id="set-dest-collector.html">
+    <div class="modal-header">
+        <h3 class="modal-title">К какому коллектору подключить выходы?</h3>
+    </div>
+    <div class="modal-body">
+        <div ng-repeat="COLLECTOR in GET_FREE_COLLECTORS()" class="group">
+            <label class="hidden-{{!COLLECTOR.isCollector}}" ng-click='TO_COLLECTOR_ID = COLLECTOR.id;'>
+			    <h3>{{COLLECTOR.name}} свободно: {{24 - COLLECTOR.entries}} вх.
+                    <label ng-repeat="LEVEL in LEVELS | filter:{isLevel: true} | orderBy:'-isBasement'" class="label-checkbox checkbox-{{COLLECTOR.levels[LEVEL.id]}} level-item">
+						<span ng-if="COLLECTOR.levels[LEVEL.id]">{{LEVEL.canonicalName()}}</span>
+					</label>
+                </h3>
+			    <input type="radio"
+				    ng-model="MODAL.TO_COLLECTOR_ID"
+                    ng-value="{{COLLECTOR.id}}"
+                    ng-change="MODAL.TO_COLLECTOR_LEVEL_ID = COLLECTOR.setup_level.id;"
+			    >
+		    </label>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="button button-next" ng-click="SET_COLLECTOR()">Применить</div>
+        <div class="button" ng-click="CANCEL_SET_COLLECTOR()">Отмена</div>
+    </div>
+</script>

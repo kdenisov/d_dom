@@ -1,0 +1,47 @@
+<h1>Параметры<br>
+<span ng-switch on="CURRENT_LEVEL.isBasement">
+	<span ng-switch-when="true">подвала</span>
+	<span ng-switch-default ng-switch on="CURRENT_LEVEL.id">
+		<span ng-switch-when="1">первого</span>
+		<span ng-switch-when="2">второго</span>
+		<span ng-switch-when="3">третьего</span>
+		этажа
+	</span>
+</span>
+</h1>
+<div class="info">Уточните количество коллекторов и&nbsp;отапливаемых <br>комнат в&nbsp;вашем доме</div>
+<!-- ng-href="{{ROOM.isRoom && ('#/' + (ROOM.isBoilerRoom && 'boiler' || 'room/' + CURRENT_LEVEL.id + '/' + ROOM.id)) || ''}}" -->
+<div class="room-items">
+	<a
+		ng-repeat="ROOM in CURRENT_LEVEL.rooms"
+		ng-init="
+			ROOM.isRoom = ROOM.id <= CURRENT_LEVEL.roomsCount;
+			ROOM.isBoilerRoom = BOILER.isBoiler && BOILER.level == CURRENT_LEVEL.id && ROOM.id == CURRENT_LEVEL.roomsCount;
+		"
+		ng-class="{'is-room': ROOM.isRoom, 'is-room-boiler': ROOM.isBoilerRoom, 'is-floors': ROOM.floors.isFloors && ROOM.isRoom}"
+		ng-href="{{ROOM.isRoom && ('#/' + 'room/' + CURRENT_LEVEL.id + '/' + ROOM.id) || ''}}"
+		class="room-item"
+	>
+		<div class="room-radiators"><b>{{ROOM.getRadiatorsCount()}}</b></div>
+		<div class="room-floors"><b>{{ROOM.floors.loops}}</b></div>
+		<h4 class="room-title">{{ROOM.name}}</h4>
+		<h4 class="boiler-title">{{BOILER.canonicalName()}}</h4>
+	</a>
+</div>
+
+<div class="level-items">
+	<a ng-repeat="LEVEL in LEVELS | filter:{isLevel: true} | orderBy:'-id' | orderBy:'isBasement'" ng-href="#/level/{{LEVEL.id}}" class="level-item clearfix selected-{{LEVEL.id == CURRENT_LEVEL.id}}">
+		<h3>{{LEVEL.canonicalName()}}</h3>
+		<div class="room-items">
+			<div
+				ng-repeat="ROOM in LEVEL.rooms"
+				ng-class="{'is-room': ROOM.id <= LEVEL.roomsCount}"
+				class="room-item"
+			>
+			</div>
+		</div>
+	</a><!-- .level-item -->
+</div><!-- .level-items -->
+
+<a ng-if="PREV_LEVEL.isLevel" ng-href="#/level/{{PREV_LEVEL.id}}" class="arrow arrow-down"></a>
+<a ng-if="NEXT_LEVEL.isLevel" ng-href="#/level/{{NEXT_LEVEL.id}}" class="arrow arrow-up"></a>

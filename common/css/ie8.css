@@ -1,0 +1,4 @@
+.checkbox input,
+.choicebox input {
+	filter: alpha(opacity=0);
+}
