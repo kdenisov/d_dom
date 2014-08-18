@@ -8,7 +8,7 @@
 	<div class="info">Уточните количество радиаторов в&nbsp;комнате и&nbsp;какого они типа</div>
 	<div class="radiators current-item-{{RADIATORS.current}}">
 		<div class="item-type{{ITEM.connection}} item-{{$index + 1}}" ng-repeat="ITEM in RADIATORS_LIST | limitTo:RADIATORS.radiatorsTypes">
-            <div class="item-valve" style="background-image:url({{VIEW(ITEM.valves, ITEM.connection)}})"></div>
+            <div class="item-valve" style="background-image:url({{VIEW(ITEM.valves, ITEM.connection, ITEM.control)}})"></div>
 		</div>
 	</div>
 	<div class="is-floors-{{FLOORS.isFloors}}"></div>

@@ -245,6 +245,7 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	;
 
 	Configurator.params.room.fittings = Configurator.params.fittings;
+	Configurator.params.room.fittingsMaterial = Configurator.params.fittingsMaterial;
 
 	$scope.BOILER = Configurator.boiler;
 	$scope.BOILER_PARAMS = Configurator.params.boiler;	
@@ -318,9 +319,9 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	$scope.PREVIEW = function (valves) {
 	    return "common/img/radiator-preview/" + Configurator.params.room.radiators.valves[valves-1].preview + ".png";
 	}
-	$scope.VIEW = function (valves, connection) {
+	$scope.VIEW = function (valves, connection, control) {
 	    if ($scope.PARAMS.radiators.control[$scope.RADIATOR.control - 1].previewPrefix)
-	        return "common/img/radiators/n/" + Configurator.params.room.radiators.valves[valves - 1].preview + "_" + $scope.PARAMS.radiators.control[$scope.RADIATOR.control - 1].previewPrefix + "_r" + (connection == 1 ? "2" : "1") + ".png";
+	        return "common/img/radiators/n/" + Configurator.params.room.radiators.valves[valves - 1].preview + "_" + $scope.PARAMS.radiators.control[control - 1].previewPrefix + "_r" + (connection == 1 ? "2" : "1") + ".png";
 	    else
 	        return "common/img/radiators/n/" + Configurator.params.room.radiators.valves[valves - 1].preview + "_r" + (connection == 1 ? "2" : "1") + ".png";
 	}
