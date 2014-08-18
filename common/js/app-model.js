@@ -445,8 +445,8 @@ appConfigurator.factory('Configurator', function(){
 	var room = function (level, room_id) {
 	    var floor = {							// Теплые полы
 	        isFloors: level == 0,			// Теплые полы: есть
-	        loops: 3,						// Количество петель
-	        control: 3,					// Управление
+	        loops: 1,						// Количество петель
+	        control: 1,					// Управление
 	        fittings: 0					// Фитинги
 	    };
 
