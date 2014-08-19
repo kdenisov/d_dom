@@ -33,6 +33,11 @@ appConfigurator.factory('Configurator', function(){
 				step: 5
 			},
 			room: {
+			    roomNames:[
+                        ['Кухня', 'Гостиная', 'Санузел', 'Прихожая', 'Спальня 1', 'Ванная', 'Спальня 2', 'Коридор', 'Спальня 3', 'Спальня 4'],
+                        ['Спальня 1', 'Спальня 2', 'Спальня 3', 'Санузел', 'Ванная', 'Гостиная', 'Спальня 4', 'Коридор', 'Спальня 5', 'Спальня 6'],
+                        ['Спальня 1', 'Спальня 2', 'Спальня 3', 'Санузел', 'Ванная', 'Гостиная', 'Спальня 4', 'Коридор', 'Спальня 5', 'Спальня 7']
+			    ],
 				radiators: {
 					controlType: [
 						{id: 1, name: 'На радиаторе'},
@@ -460,7 +465,7 @@ appConfigurator.factory('Configurator', function(){
 	    return { // Комнаты по умолчанию
 	        id: room_id,
 	        isRoom: false,
-	        name: 'Комната ' + room_id,
+	        name: Cfg.params.room.roomNames[level][room_id - 1],
 	        radiators: radiators,
 	        floors: floor, // объект теплого пола
 
@@ -856,7 +861,6 @@ appConfigurator.factory('Configurator', function(){
 
 	            Cfg.levels[level].floor_loops_count = level_loops_count;
 	            Cfg.levels[level].radiators_count = level_radiators_count;
-	            console.log("LEVEL " + level + " петель " + level_loops_count);
 
 	            // проверяем состоятельность - есть ли включенные коллекторы для этажей на которых они нужны
 	            // если нет, то заново переконфигурируем
@@ -868,7 +872,6 @@ appConfigurator.factory('Configurator', function(){
 	                if (Cfg.levels[__level].isLevel) {
 	                    for (var j in Cfg.levels[__level].collectors) {
 	                        if (Cfg.levels[__level].collectors[j].isCollector) {
-	                            console.log("Cfg.levels[" + __level + "].collectors[" + j + "].levels[" + ((parseInt(level)) + 1) + "] = " + Cfg.levels[__level].collectors[j].levels[level + 1]);
 	                            if (Cfg.levels[__level].collectors[j].levels[parseInt(level) + 1]) {
 	                                if (Cfg.levels[__level].collectors[j].type == 'floor')
 	                                    is_exists_floor_collector = true;
@@ -879,7 +882,6 @@ appConfigurator.factory('Configurator', function(){
 	                    }
 	                }
 	            }
-	            console.log("is_exists_floor_collector = " + is_exists_floor_collector);
 	            if (!is_exists_floor_collector)
 	                rebuild_floor_collectors = true;
 	            if (!is_exists_radiator_collector)
@@ -910,7 +912,6 @@ appConfigurator.factory('Configurator', function(){
 
                                 // если __l-ый этаж подключен к этому коллектору, то считаем сколько входов есть
 	                            var _entries = Cfg.levels[level].collectors[i].type == 'floor' ? Cfg.levels[__l].floor_loops_count : Cfg.levels[__l].radiators_count;
-	                            console.log("LEVEL " + level + " " + Cfg.levels[level].collectors[i].type + " входов " + _entries);
 	                            if (Cfg.levels[level].collectors[i].entries + _entries > 24) {
 	                                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
 	                                return false;
