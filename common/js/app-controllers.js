@@ -337,13 +337,7 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	}
 
 	$scope.UPDATE_RADIATORS_COUNT = function () {
-	    var c = Configurator;
-	    var
-			area = Configurator.cottage.area,
-			levels_count = Configurator.cottage.levelsCount
-	    ;
-
-	    Configurator.RefreshCollectorsCount();
+	    Configurator.UpdateCollectorEntries();
 	}
 
 	$scope.SET_PARAMS_FOR_ALL = function () {
@@ -366,7 +360,7 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	        $scope.ROOM.copyTo(level.rooms[room]);
 	    }
 
-	    Configurator.RefreshCollectorsCount();
+	    Configurator.UpdateCollectorEntries();
 	}
 
 	$scope.SET_PARAMS_FOR_ALL_DECLINED = function () {
@@ -388,7 +382,7 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	}
 
 	$scope.refreshRadiatorCollectorsCount = function () {
-	    Configurator.RefreshCollectorsCount();
+	    Configurator.UpdateCollectorEntries();
 	}
 
 	$scope.UpdateCollectorEntries = function () {
@@ -427,13 +421,7 @@ appConfigurator.controller('BoilerCtrl', function($scope, Configurator, $statePa
 	$scope.EDITOR = Editor;
 
 	$scope.UPDATE_RADIATORS_COUNT = function () {
-	    var c = Configurator;
-	    var
-			area = Configurator.cottage.area,
-			levels_count = Configurator.cottage.levelsCount
-	    ;
-
-	    Configurator.RefreshCollectorsCount();
+	    Configurator.UpdateCollectorEntries();
 	}
 
 	$scope.SET_PARAMS_FOR_ALL = function () {
@@ -456,7 +444,7 @@ appConfigurator.controller('BoilerCtrl', function($scope, Configurator, $statePa
 	        $scope.ROOM.copyTo(level.rooms[room]);
 	    }
 
-	    Configurator.RefreshCollectorsCount();
+	    Configurator.UpdateCollectorEntries();
 	}
 
 	$scope.SET_PARAMS_FOR_ALL_DECLINED = function () {
