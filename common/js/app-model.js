@@ -715,6 +715,7 @@ appConfigurator.factory('Configurator', function(){
 	    updateRoomsConfiguration();
 	}
 
+    // @private автоконфигурирование коллекторов радиаторов для каждого этажа
 	var refreshRadiatorCollectorsCount = function(){
 	    // по всем этажам
 	    for (var level in Cfg.levels) {
@@ -760,82 +761,8 @@ appConfigurator.factory('Configurator', function(){
 	    }
 	}
 
-    // @private пересчет кол-ва входов для конкретного этажа (не меняя конфигурацию коллекторов)
-	var setCollectorEntriesForLevel = function () {
-	    
-	    // по всем этажам - очищаем коллекторные входы
-	    for (var level in Cfg.levels) {
-	        // если этаж активный
-	        if (Cfg.levels[level].isLevel) {
-	            for (var i in Cfg.levels[level].collectors) {
-	                Cfg.levels[level].collectors[i].entries = 0;
-	            }
-	        }
-	    }
 
-	    // по всем этажам считаем кол-во петель
-	    for (var level in Cfg.levels) {
-	        // если этаж активный
-	        if (Cfg.levels[level].isLevel) {
-	            // общее кол-во петель на этаже
-	            var level_loops_count = 0;
-                // общее количество радиаторов на этаже
-	            var level_radiators_count = 0;
-	            // по всем комнатам этажа	            
-	            for (var room = 0; room < Cfg.levels[level].roomsCount; room++) {
-                    // считаем количество радиаторов
-	                level_radiators_count += Cfg.levels[level].rooms[room].getRadiatorsCount();
-	                // если есть теплый пол	                
-	                if (Cfg.levels[level].rooms[room].floors.isFloors) {
-	                    // считаем количество петель
-	                    level_loops_count += Cfg.levels[level].rooms[room].floors.loops;
-	                }
-	            }
-
-	            if (level_loops_count > 24 || level_radiators_count > 24) {
-	                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
-	                return false;
-	            }
-
-	            Cfg.levels[level].floor_loops_count = level_loops_count;
-	            Cfg.levels[level].radiators_count = level_radiators_count;
-	            console.log("LEVEL " + level + " петель " + level_loops_count);
-	        }
-	    }
-        
-	    // по всем этажам - по всем коллекторам - рассовываем петли (в имеющейся конфигурации)
-	    for (var level in Cfg.levels) {
-	        // если этаж активный
-	        if (Cfg.levels[level].isLevel) {
-	            for (var i in Cfg.levels[level].collectors) {
-	                if (Cfg.levels[level].collectors[i].isCollector) {
-	                    // смотрим к каким этажам подключен коллектор
-	                    for (var __l = 0; __l < 3; __l++) {
-	                        // __l-ый этаж
-	                        if (Cfg.levels[level].collectors[i].levels[__l + 1]) {
-
-                                // если __l-ый этаж подключен к этому коллектору, то считаем сколько входов есть
-	                            var _entries = Cfg.levels[level].collectors[i].type == 'floor' ? Cfg.levels[__l].floor_loops_count : Cfg.levels[__l].radiators_count;
-	                            console.log("LEVEL " + level + " " + Cfg.levels[level].collectors[i].type + " входов " + _entries);
-	                            if (Cfg.levels[level].collectors[i].entries + _entries > 24) {
-	                                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
-	                                return false;
-	                            }
-	                            Cfg.levels[level].collectors[i].entries += _entries;
-	                            if (Cfg.levels[level].collectors[i].type == 'floor')
-	                                Cfg.levels[__l].floor_loops_count = 0;
-	                            else
-	                                Cfg.levels[__l].radiators_count = 0;
-
-	                        }
-	                    }                        
-	                } 	                
-	            }
-	        }
-	    }
-	}
-
-    // @private пересчет кол-ва коллекторов для каждого этажа
+    // @private автоконфигурирование коллекторов теплого пола для каждого этажа
 	var refreshCollectorsCount = function () {
 	    // по всем этажам
 	    for (var level in Cfg.levels) {
@@ -868,7 +795,7 @@ appConfigurator.factory('Configurator', function(){
 
 	                    if (Cfg.levels[level].collectors[i].isCollector) {
 	                        // считаем кол-во заходов
-	                        Cfg.levels[level].collectors[i].entries = level_loops_count > 24 ? level_loops_count % 24 : level_loops_count;	                        
+	                        Cfg.levels[level].collectors[i].entries = level_loops_count > 24 ? level_loops_count % 24 : level_loops_count;
 	                        Cfg.levels[level].collectors[i].levels = {
 	                            // Этажи коллекторов
 	                            1: level == 0,
@@ -887,13 +814,128 @@ appConfigurator.factory('Configurator', function(){
 	}
 
 
+    // @private пересчет кол-ва входов для конкретного этажа (не меняя конфигурацию коллекторов)
+	var setCollectorEntriesForLevel = function () {
+	    
+	    // по всем этажам - очищаем коллекторные входы
+	    for (var level in Cfg.levels) {
+	        // если этаж активный
+	        if (Cfg.levels[level].isLevel) {
+	            for (var i in Cfg.levels[level].collectors) {
+	                Cfg.levels[level].collectors[i].entries = 0;
+	            }
+	        }
+	    }
+
+	    var rebuild_floor_collectors = false;
+	    var rebuild_radiator_collectors = false;
+
+	    // по всем этажам считаем кол-во петель
+	    for (var level in Cfg.levels) {
+	        // если этаж активный
+	        if (Cfg.levels[level].isLevel) {
+	            // общее кол-во петель на этаже
+	            var level_loops_count = 0;
+                // общее количество радиаторов на этаже
+	            var level_radiators_count = 0;
+	            // по всем комнатам этажа	            
+	            for (var room = 0; room < Cfg.levels[level].roomsCount; room++) {
+                    // считаем количество радиаторов
+	                level_radiators_count += Cfg.levels[level].rooms[room].getRadiatorsCount();
+	                // если есть теплый пол	                
+	                if (Cfg.levels[level].rooms[room].floors.isFloors) {
+	                    // считаем количество петель
+	                    level_loops_count += Cfg.levels[level].rooms[room].floors.loops;
+	                }
+	            }
+
+	            if (level_loops_count > 24 || level_radiators_count > 24) {
+	                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
+	                return false;
+	            }
+
+	            Cfg.levels[level].floor_loops_count = level_loops_count;
+	            Cfg.levels[level].radiators_count = level_radiators_count;
+	            console.log("LEVEL " + level + " петель " + level_loops_count);
+
+	            // проверяем состоятельность - есть ли включенные коллекторы для этажей на которых они нужны
+	            // если нет, то заново переконфигурируем
+	            // по всем этажам - по всем коллекторам - рассовываем петли (в имеющейся конфигурации)
+	            var is_exists_floor_collector = false;
+	            var is_exists_radiator_collector = false;
+	            for (var __level in Cfg.levels) {
+	                // если этаж активный
+	                if (Cfg.levels[__level].isLevel) {
+	                    for (var j in Cfg.levels[__level].collectors) {
+	                        if (Cfg.levels[__level].collectors[j].isCollector) {
+	                            console.log("Cfg.levels[" + __level + "].collectors[" + j + "].levels[" + ((parseInt(level)) + 1) + "] = " + Cfg.levels[__level].collectors[j].levels[level + 1]);
+	                            if (Cfg.levels[__level].collectors[j].levels[parseInt(level) + 1]) {
+	                                if (Cfg.levels[__level].collectors[j].type == 'floor')
+	                                    is_exists_floor_collector = true;
+	                                else
+	                                    is_exists_radiator_collector = true;
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	            console.log("is_exists_floor_collector = " + is_exists_floor_collector);
+	            if (!is_exists_floor_collector)
+	                rebuild_floor_collectors = true;
+	            if (!is_exists_radiator_collector)
+	                rebuild_radiator_collectors = true;
+	        }
+	    }
+
+	    if (rebuild_floor_collectors) {
+	        refreshCollectorsCount();
+	        return;
+	    }
+
+	    if (rebuild_radiator_collectors) {
+	        refreshRadiatorCollectorsCount();
+	        return;
+	    }
+
+	    // по всем этажам - по всем коллекторам - рассовываем петли (в имеющейся конфигурации)
+	    for (var level in Cfg.levels) {
+	        // если этаж активный
+	        if (Cfg.levels[level].isLevel) {
+	            for (var i in Cfg.levels[level].collectors) {
+	                if (Cfg.levels[level].collectors[i].isCollector) {
+	                    // смотрим к каким этажам подключен коллектор
+	                    for (var __l = 0; __l < 3; __l++) {
+	                        // __l-ый этаж
+	                        if (Cfg.levels[level].collectors[i].levels[__l + 1]) {
+
+                                // если __l-ый этаж подключен к этому коллектору, то считаем сколько входов есть
+	                            var _entries = Cfg.levels[level].collectors[i].type == 'floor' ? Cfg.levels[__l].floor_loops_count : Cfg.levels[__l].radiators_count;
+	                            console.log("LEVEL " + level + " " + Cfg.levels[level].collectors[i].type + " входов " + _entries);
+	                            if (Cfg.levels[level].collectors[i].entries + _entries > 24) {
+	                                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
+	                                return false;
+	                            }
+	                            Cfg.levels[level].collectors[i].entries += _entries;
+	                            if (Cfg.levels[level].collectors[i].type == 'floor')
+	                                Cfg.levels[__l].floor_loops_count = 0;
+	                            else
+	                                Cfg.levels[__l].radiators_count = 0;
+
+	                        }
+	                    }                        
+	                } 	                
+	            }
+	        }
+	    }
+	}
+
 	initStructure();
 	initParams();
 	initBoiler();
 	initLevels();
 	//initCollectors();
 
-    // @public пересчет кол-ва коллекторов для каждого этажа (авто расчет конфигурации коллекторов)
+    // @public автоконфигурирование коллекторов радиаторов и теплых полов
 	Cfg.RefreshCollectorsCount = function () {
 
 	    refreshCollectorsCount();
@@ -926,15 +968,6 @@ appConfigurator.factory('Configurator', function(){
         }
 
 	    var collector_id = collector.id;
-
-	    /*angular.forEach($scope.LEVELS, function (_level) {
-             angular.forEach(_level.collectors, function(_collector, key2) {
-                 if(_level.id != current_level && _collector.id == collector_id && _collector.levels[_level.id] == collector_levels[_level.id]){
-                     _collector.levels[_level.id] = false;
-                     _collector.isCollector = false;
-                 }
-             });
-         });*/
 
 	    if (collector.isCollector == false) {
 	        // Коллектор радиаторов должен быть минимум один, должно быть нельзя выключить все
