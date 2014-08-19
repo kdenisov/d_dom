@@ -1,21 +1,32 @@
 <div class="autoscroll">
 	<div class="group">
-		<h3>К этому коллектору подключены</h3>
-		<div class="level-items clearfix">
-			<label ng-repeat="LEVEL in LEVELS | filter:{isLevel: true} | orderBy:'-isBasement'" class="label-checkbox checkbox-{{COLLECTOR.levels[LEVEL.id]}} level-item">
-				<span class="pseudo-checkbox"></span>
-                <input type="checkbox" ng-model="COLLECTOR.levels[LEVEL.id]" ng-change="validateCollectors(LEVEL, LEVELS, COLLECTOR);">
-				<div class="room-items clearfix">
-					<div
-						ng-repeat="ROOM in LEVEL.rooms"
-						ng-class="{'is-room': ROOM.id <= LEVEL.roomsCount}"
-						class="room-item"
-					>
-					</div>
-				</div>
-				{{LEVEL.canonicalName()}}
-			</label>
-		</div>
+        <div ng-if="COLLECTOR.isCollector">
+		    <h3>К этому коллектору подключены</h3>
+		    <div class="level-items clearfix">
+			    <label ng-repeat="LEVEL in LEVELS | filter:{isLevel: true} | orderBy:'-isBasement'" class="label-checkbox checkbox-{{COLLECTOR.levels[LEVEL.id]}} level-item">
+				    <span class="pseudo-checkbox"></span>
+                    <input type="checkbox" disabled aria-disabled ng-model="COLLECTOR.levels[LEVEL.id]" ng-change="validateCollectors(LEVEL, LEVELS, COLLECTOR);">
+				    <div class="room-items clearfix">
+					    <div
+						    ng-repeat="ROOM in LEVEL.rooms"
+						    ng-class="{'is-room': ROOM.id <= LEVEL.roomsCount}"
+						    class="room-item"
+					    >
+					    </div>
+				    </div>
+				    {{LEVEL.canonicalName()}}
+			    </label>
+		    </div>
+        </div>    
+        <div class="level-items clearfix">
+            <label class="label-switchbox small switchbox-{{COLLECTOR.isCollector}}">
+                <span ng-if="COLLECTOR.isCollector">Отключить</span><span ng-if="!COLLECTOR.isCollector">Включить</span> коллектор
+			        <input type="checkbox"
+				        ng-model="COLLECTOR.isCollector"
+				        ng-change="validateCollectors(CURRENT_LEVEL, LEVELS, COLLECTOR)"
+			        >
+            </label>
+        </div>
 	</div>
 	<div class="group">
         <h3>Количество заходов</h3>        

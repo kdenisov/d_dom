@@ -391,6 +391,9 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	    Configurator.RefreshCollectorsCount();
 	}
 
+	$scope.UpdateCollectorEntries = function () {
+	    Configurator.UpdateCollectorEntries();
+	}
 });
 
 

@@ -760,6 +760,96 @@ appConfigurator.factory('Configurator', function(){
 	    }
 	}
 
+    // @private пересчет кол-ва входов для конкретного этажа (не меняя конфигурацию коллекторов)
+	var setCollectorEntriesForLevel = function (level) {
+	    
+	    // по всем этажам - очищаем коллекторные входы
+	    for (var level in Cfg.levels) {
+	        // если этаж активный
+	        if (Cfg.levels[level].isLevel) {
+	            for (var i in Cfg.levels[level].collectors) {
+	                if (Cfg.levels[level].collectors[i].type == 'floor') {
+                        // сбрасываем кол-во входов
+	                    Cfg.levels[level].collectors[i].entries = 0;
+	                }
+	            }
+	        }
+	    }
+
+	    // по всем этажам считаем кол-во петель
+	    for (var level in Cfg.levels) {
+	        // если этаж активный
+	        if (Cfg.levels[level].isLevel) {
+	            // общее кол-во петель на этаже
+	            var level_loops_count = 0;
+	            // по всем комнатам этажа	            
+	            for (var room = 0; room < Cfg.levels[level].roomsCount; room++) {
+	                // если есть теплый пол	                
+	                if (Cfg.levels[level].rooms[room].floors.isFloors) {
+	                    // считаем количество петель
+	                    level_loops_count += Cfg.levels[level].rooms[room].floors.loops;
+	                }
+	            }
+	            // кол-во коллекторов = кол-во петель / 12
+	            if (level_loops_count > 0)
+	                var collectors_count = Math.ceil(level_loops_count / 24) || 1;
+	            else
+	                var collectors_count = 0;
+
+	            if (collectors_count > 1) {
+	                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
+	                return false;
+	            }
+
+	            Cfg.levels[level].floor_loops_count = level_loops_count;	            
+	        }
+	    }
+
+	    // по всем этажам - по всем коллекторам - рассовываем петли (в имеющейся конфигурации)
+	    for (var level in Cfg.levels) {
+	        // если этаж активный
+	        if (Cfg.levels[level].isLevel) {
+	            for (var i in Cfg.levels[level].collectors) {
+	                if (Cfg.levels[level].collectors[i].type == 'floor') {
+	                    if (Cfg.levels[level].collectors[i].isCollector) {
+	                        // смотрим к каким этажам подключен коллектор
+
+                            // 1 этаж
+	                        if (Cfg.levels[level].collectors[i].levels[1]) {
+	                            if (Cfg.levels[level].collectors[i].entries + Cfg.levels[0].floor_loops_count > 24) {
+	                                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
+	                                return false;
+	                            }
+	                            Cfg.levels[level].collectors[i].entries +=  Cfg.levels[0].floor_loops_count;
+	                            Cfg.levels[0].floor_loops_count = 0;
+	                        }
+
+                            // 2 этаж
+	                        if (Cfg.levels[level].collectors[i].levels[2]) {
+	                            if (Cfg.levels[level].collectors[i].entries + Cfg.levels[1].floor_loops_count > 24) {
+	                                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
+	                                return false;
+	                            }
+	                            Cfg.levels[level].collectors[i].entries += Cfg.levels[1].floor_loops_count;
+	                            Cfg.levels[1].floor_loops_count = 0;
+	                        }
+
+                            // 3 этаж
+	                        if (Cfg.levels[level].collectors[i].levels[3]) {
+	                            if (Cfg.levels[level].collectors[i].entries + Cfg.levels[2].floor_loops_count > 24) {
+	                                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
+	                                return false;
+	                            }
+	                            Cfg.levels[level].collectors[i].entries += Cfg.levels[2].floor_loops_count;
+	                            Cfg.levels[2].floor_loops_count = 0;
+	                        }
+	                    } 
+	                }
+	            }
+	        }
+	    }
+	}
+
     // @private пересчет кол-ва коллекторов для каждого этажа
 	var refreshCollectorsCount = function () {
 	    // по всем этажам
@@ -826,12 +916,9 @@ appConfigurator.factory('Configurator', function(){
 	    refreshRadiatorCollectorsCount();
 	}
 
-    // @public пересчет входов коллекторов
-	Cfg.UpdateCollectorsCount = function () {
-
-	    refreshCollectorsCount();
-
-	    refreshRadiatorCollectorsCount();
+    // @public пересчет входов коллекторов без изменения конфигурации по этажам
+	Cfg.UpdateCollectorEntries = function () {
+	    setCollectorEntriesForLevel();
 	}
 
 
@@ -903,6 +990,9 @@ appConfigurator.factory('Configurator', function(){
 	        if (collector.entries > 0) {
 	            popupCallback(collector);
 	        }
+	    } else {
+	        // если коллектор на этаже включается, то пересчитать входы
+	        Cfg.UpdateCollectorEntries();
 	    }
 	}
 	

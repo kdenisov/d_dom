@@ -242,7 +242,7 @@
 	<div ng-tab-body class="tab-content">
 		<div class="group">
 			<label class="label-switchbox switchbox-{{FLOORS.isFloors}}"><h3>Наличие теплого пола</h3>
-			<input type="checkbox" ng-model="FLOORS.isFloors" ng-change="FLOORS.loops = FLOORS.isFloors ? 1 : 0;refreshRadiatorCollectorsCount()"></label>
+			<input type="checkbox" ng-model="FLOORS.isFloors" ng-change="FLOORS.loops = FLOORS.isFloors ? 1 : 0; UpdateCollectorEntries()"></label>
 		</div>
 		<div class="group hidden-{{!FLOORS.isFloors}}">
 			<div class="field">
@@ -252,7 +252,7 @@
 						ng-model="FLOORS.loops"
 						ng-change="
 							FLOORS.fittings = FLOORS.loops == 1 && 0;
-                            UPDATE_RADIATORS_COUNT();
+                            UpdateCollectorEntries();
 						"
 					></div>
 					<span class="slider-value"><b>{{FLOORS.loops}}</b></span>
