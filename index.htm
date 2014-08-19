@@ -1,101 +1,98 @@
 ﻿<!doctype html>
 <html data-ng-app="appConfigurator">
-<head>
-<meta charset="utf-8">
-<title>Danfoss Конфигуратор</title>
-<link rel="stylesheet" type="text/css" href="common/css/default.css" media="all">
-<link rel="stylesheet" type="text/css" href="common/css/jquery-ui.css" media="all">
-<link rel="stylesheet" type="text/css" href="common/css/ui.angular.modal.css" media="all">
-<!-- <link rel="stylesheet" type="text/css" href="common/css/perfect-scrollbar.css" media="all"> -->
-<!-- <link rel="stylesheet" type="text/css" href="common/css/angular.ng-scrollbar.css" media="all"> -->
-<!--[if lte IE 8]><link rel="stylesheet" type="text/css" href="common/css/ie8.css" media="all"><![endif]-->
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-<link href="common/img/favicon.ico" type="image/x-icon" rel="icon">
-<link href="common/img/favicon.ico" type="image/x-icon" rel="shortcut icon">
-</head>
-<body>
+    <head>
+        <meta charset="utf-8">
+        <title>Danfoss Конфигуратор</title>
+        <link rel="stylesheet" type="text/css" href="common/css/default.css" media="all">
+        <link rel="stylesheet" type="text/css" href="common/css/jquery-ui.css" media="all">
+        <link rel="stylesheet" type="text/css" href="common/css/ui.angular.modal.css" media="all">
+        <link rel="stylesheet" type="text/css" href="common/css/perfect-scrollbar.css" media="all">
+        <!--[if lte IE 8]><link rel="stylesheet" type="text/css" href="common/css/ie8.css" media="all"><![endif]-->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+        <link href="common/img/favicon.ico" type="image/x-icon" rel="icon">
+        <link href="common/img/favicon.ico" type="image/x-icon" rel="shortcut icon">
+    </head>
+    <body>
 
-<div id="sidebar">
-	<div id="sidebar-panel">
-		<div id="sidebar-panel-top" ng-init="SIDEBAR.HIDE = true" ng-mouseenter="SIDEBAR.HIDE = false" ng-mouseleave="SIDEBAR.HIDE = true">
-			<a class="button-icon button-menu" ui-sref-active="active" ng-href="#"></a>
-		</div>
-		<!-- <div id="nav" class="hidden-{{SIDEBAR.HIDE}}">
-			<div class="button-icon button-save" title="Сохранить"></div>
-			<div class="button-icon button-load" title="Загрузить"></div>
-		</div> -->
-		<!-- <div class="button-icon button-clear" title="Удалить"></div> -->
-		<!-- <div id="nav">
-			<a ui-sref-active="active" ui-sref="cottage" title="Параметры коттеджа">1</a>
-			<a ui-sref-active="active" ui-sref="room({levelId:2,roomId:1})" title="Настройка комнат">2</a>
-			<a ui-sref-active="active" ui-sref="collector({levelId:1,collectorId:1})" title="Настройка коллекторов">3</a>
-			<a ui-sref-active="active" ui-sref="boiler" title="Настройка котельной" class="last">4</a>
-			<a ui-sref-active="active" ng-href="#" title="Информация по заказу">5</a>
-			<a class="button-icon button-basket-white" ui-sref-active="active" ng-href="#" title="Оформление заказа"></a>
-		</div> -->
-		<!-- <div id="sidebar-panel-bottom"><div class="button-icon button-help"></div></div> -->
-	</div>
-	<div id="sidebar-content">
-		<h2>Конфигуратор</h2>
-		<div id="sidebar-view" ui-view="sidebar"></div>
-	</div><!-- #sidebar-content -->
-</div><!-- #sidebar -->
+        <div id="sidebar">
+            <div id="sidebar-panel">
+                <div id="sidebar-panel-top" ng-init="SIDEBAR.HIDE = true" ng-mouseenter="SIDEBAR.HIDE = false" ng-mouseleave="SIDEBAR.HIDE = true">
+                    <a class="button-icon button-menu" ui-sref-active="active" ng-href="#"></a>
+                </div>
+                <!-- <div id="nav" class="hidden-{{SIDEBAR.HIDE}}">
+                         <div class="button-icon button-save" title="Сохранить"></div>
+                         <div class="button-icon button-load" title="Загрузить"></div>
+                     </div> -->
+                <!-- <div class="button-icon button-clear" title="Удалить"></div> -->
+                <!-- <div id="nav">
+                         <a ui-sref-active="active" ui-sref="cottage" title="Параметры коттеджа">1</a>
+                         <a ui-sref-active="active" ui-sref="room({levelId:2,roomId:1})" title="Настройка комнат">2</a>
+                         <a ui-sref-active="active" ui-sref="collector({levelId:1,collectorId:1})" title="Настройка коллекторов">3</a>
+                         <a ui-sref-active="active" ui-sref="boiler" title="Настройка котельной" class="last">4</a>
+                         <a ui-sref-active="active" ng-href="#" title="Информация по заказу">5</a>
+                         <a class="button-icon button-basket-white" ui-sref-active="active" ng-href="#" title="Оформление заказа"></a>
+                     </div> -->
+                <!-- <div id="sidebar-panel-bottom"><div class="button-icon button-help"></div></div> -->
+            </div>
+            <div id="sidebar-content">
+                <h2><span>Конфигуратор</span></h2>
+                <div id="sidebar-view" ui-view="sidebar">
+	        
+                </div>
+            </div><!-- #sidebar-content -->
+        </div><!-- #sidebar -->
 
-<div id="viewport">
-	<div id="viewport-inner" ui-view="content"></div>
-</div><!-- #viewport -->
+        <div id="viewport">
+            <div id="viewport-inner" ui-view="content"></div>
+        </div><!-- #viewport -->
 
 
-<div id="basket" ng-controller="BasketCtrl" ng-init="TOGGLE_BASKET = true" ng-cloak ng-class="{'basket-opened': !TOGGLE_BASKET}">
-	<div class="basket-sum" ng-click="TOGGLE_BASKET = !TOGGLE_BASKET">
-		<span class="sum" id="basket-sum">{{BASKET_TOTAL_PRICE()}}</span> руб.
-	</div>
-	<div class="basket-count" ng-click="TOGGLE_BASKET = !TOGGLE_BASKET">
-		<span class="sum" id="basket-count">{{BASKET_TOTAL_COUNT()}}</span>
-	</div>
-	<div id="basket-popup" class="hidden-{{TOGGLE_BASKET}} autoscroll">
-		<div class="button-close" ng-click="TOGGLE_BASKET = !TOGGLE_BASKET"></div>
-		<h2>Корзина</h2>
-		<table>
-			<tr>
-				<th>Наименование</th>
-				<th>Кол-во</th>
-				<th>Цена</th>
-			</tr>
-			<tbody>
-				<tr ng-repeat="(CODE, COUNT) in BASKET()">
-					<td>{{CODE}} - {{CATALOG[CODE].name || CODE}}</td>
-					<td>{{COUNT | number:0 | formatNumber}}</td>
-					<td>{{CATALOG[CODE].price * COUNT | number:0 | formatNumber}}</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="basket-total">
-			<span class="title left">Итого</span>
-			<span class="right">
-				<span class="sum" id="basket-total">{{BASKET_TOTAL_PRICE()}}</span>
-				<span class="rub">руб.</span>
-			</span>
-		</div>
-	</div><!-- #basket-popup -->
-</div>
+        <div id="basket" ng-controller="BasketCtrl" ng-init="TOGGLE_BASKET = true" ng-cloak ng-class="{'basket-opened': !TOGGLE_BASKET}">
+            <div class="basket-sum" ng-click="TOGGLE_BASKET = !TOGGLE_BASKET">
+                <span class="sum" id="basket-sum">{{BASKET_TOTAL_PRICE()}}</span> руб.
+            </div>
+            <div class="basket-count" ng-click="TOGGLE_BASKET = !TOGGLE_BASKET">
+                <span class="sum" id="basket-count">{{BASKET_TOTAL_COUNT()}}</span>
+            </div>
+            <div id="basket-popup" class="hidden-{{TOGGLE_BASKET}} autoscroll">
+                <div class="button-close" ng-click="TOGGLE_BASKET = !TOGGLE_BASKET"></div>
+                <h2>Корзина</h2>
+                <table>
+                    <tr>
+                        <th>Наименование</th>
+                        <th>Кол-во</th>
+                        <th>Цена</th>
+                    </tr>
+                    <tbody>
+                        <tr ng-repeat="(CODE, COUNT) in BASKET()">
+                            <td>{{CODE}} - {{CATALOG[CODE].name || CODE}}</td>
+                            <td>{{COUNT | number:0 | formatNumber}}</td>
+                            <td>{{CATALOG[CODE].price * COUNT | number:0 | formatNumber}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="basket-total">
+                    <span class="title left">Итого</span>
+                    <span class="right">
+                        <span class="sum" id="basket-total">{{BASKET_TOTAL_PRICE()}}</span>
+                        <span class="rub">руб.</span>
+                    </span>
+                </div>
+            </div><!-- #basket-popup -->
+        </div>
 
-<script src="common/js/jquery.js"></script>
-<script src="common/js/jquery-ui.min.js"></script>
-<!-- <script src="common/js/jquery.mousewheel.js"></script>
-<script src="common/js/jquery.perfect-scrollbar.js"></script> -->
-<script src="common/js/angular.min.js"></script>
-<script src="common/js/angular-ui-router.min.js"></script>
-<script src="common/js/angular.tabs.js"></script>
-<script src="common/js/angular-locale_ru.js"></script>
-<script src="common/js/angular.jquery-ui.slider.js"></script>
-<script src="common/js/ui-bootstrap-tpls-0.11.0.js"></script>
-<!-- <script src="common/js/angular.perfect-scrollbar.js"></script> -->
-<!-- <script src="common/js/angular.mb-scrollbar.min.js"></script> -->
-<!-- <script src="common/js/angular.ng-scrollbar.js"></script> -->
-<script src="common/js/app-model.js"></script>
-<script src="common/js/app-views.js"></script>
-<script src="common/js/app-controllers.js"></script>
-
-</body>
+        <script src="common/js/jquery.js"></script>
+        <script src="common/js/jquery-ui.min.js"></script>
+        <script src="common/js/jquery.mousewheel.js"></script>
+        <script src="common/js/angular.min.js"></script>
+        <script src="common/js/angular-ui-router.min.js"></script>
+        <script src="common/js/angular.tabs.js"></script>
+        <script src="common/js/angular-locale_ru.js"></script>
+        <script src="common/js/angular.jquery-ui.slider.js"></script>
+        <script src="common/js/ui-bootstrap-tpls-0.11.0.js"></script>
+        <script src="common/js/perfect-scrollbar.js"></script>
+        <script src="common/js/app-model.js"></script>
+        <script src="common/js/app-views.js"></script>
+        <script src="common/js/app-controllers.js"></script>
+    </body>
 </html>

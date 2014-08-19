@@ -160,6 +160,7 @@ body {
 
 
 #sidebar-content {
+    display: table;
 	width: 254px;
 	height: 100%;
 	float: left;
@@ -167,10 +168,14 @@ body {
 	background: #F3F3F3;
 }
 #sidebar-content h2 {
-	height: 36px;
+    display: table-row;
 	color: #FFF;
 	text-transform: uppercase;
 	background: #424242;
+}
+#sidebar-content h2 span{
+    display: table-cell;
+	height: 36px;
 	padding: 20px 20px 0;
 }
 #sidebar-content h3 {
@@ -202,23 +207,24 @@ body {
 }
 
 #sidebar-view {
+    display: table-row;
 	position: relative;
-	height: 100%;
 }
 
 .autoscroll {
-	max-height: 100%;
+	height: 100%;
 	position: absolute;
-	top: 0;
-	bottom: 56px;
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: hidden;
 }
-.tabs .autoscroll {
+/*.tabs .autoscroll {
 	top: 50px;
-}
+}*/
 #sidebar .autoscroll {
 	width: 100%;
+}
+
+.tab-autoscroll-filler {
+    height: 49px; /*todo: this is a temporary solution, find a better one */
 }
 
 
@@ -461,6 +467,22 @@ label.tab-item-add {
 	left: 0;*/
 }
 
+
+#sidebar-view > .tabs {
+    display: table;
+    width: 100%;
+}
+#sidebar-view > .tabs  > .tab-items{
+    display: table-row;
+    height: 49px;
+}
+
+#sidebar-view > .tabs > .tab-content{
+    display: none;
+}
+#sidebar-view > .tabs > .tab-content.ng-show {
+    display: table-row;
+}
 
 /* Cottage */
 .cottage {

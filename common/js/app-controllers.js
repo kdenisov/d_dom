@@ -76,6 +76,7 @@ appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderBy
         return lastLevel.isBasement == basement && count == level && rooms == size;
     };
 
+    setCustomScroll();
     /*if(Configurator.initialized) return;
 	Configurator.initialized = true;
 
@@ -145,6 +146,8 @@ appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configura
         $scope.EDITED_COLLECTOR = null;
         $modalInstance.close(false);
     }
+
+    setCustomScroll();
 });
 
 appConfigurator.controller('LevelCtrl', function($scope, Configurator, $stateParams, $modal){
@@ -234,6 +237,8 @@ appConfigurator.controller('LevelCtrl', function($scope, Configurator, $statePar
     $scope.refreshRadiatorCollectorsCount = function() {
         Configurator.RefreshCollectorsCount();
     };
+
+    setCustomScroll();
 });
 
 
@@ -388,6 +393,8 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	$scope.UpdateCollectorEntries = function () {
 	    Configurator.UpdateCollectorEntries();
 	}
+
+	setCustomScroll();
 });
 
 
@@ -455,6 +462,7 @@ appConfigurator.controller('BoilerCtrl', function($scope, Configurator, $statePa
 	    $scope.RADIATOR = obj;
 	}
 
+	setCustomScroll();
 });
 
 appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stateParams, $modal){
@@ -635,6 +643,8 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
     $scope.CLOSE_ALERT = function () {
         $scope.alertInstance.close();
     };
+
+    setCustomScroll();
 });
 
 
@@ -773,3 +783,7 @@ appConfigurator.filter('formatNumber', function () {
 		return( n.replace(',',' ') );
 	}
 });
+
+function setCustomScroll() {
+    $('.autoscroll').perfectScrollbar({ wheelSpeed: 100, includePadding: false });
+}

@@ -11,279 +11,271 @@
 		<div class="tab-item" ng-tab-head="true">Радиаторы</div>
 		<div class="tab-item" ng-tab-head>Теплые полы</div>
 	</div>
-	<div ng-tab-body class="tab-content autoscroll">
-        <div class="group">
-            <label class="label-switchbox switchbox-false">
-			    <h3 class="ng-binding">Для всех комнат</h3>
-			    <input type="checkbox" ng-change="SET_PARAMS_FOR_ALL();" ng-model="SET_PARAMS_FOR_ALL_ROOMS" class="ng-scope ng-pristine ng-valid">
-		    </label>
-        </div>
-		<div class="group" ng-if="RADIATOR.type == 1">
-			<h3>Регулирование температуры</h3>
-			<div class="choicebox">
-				<label ng-repeat="ITEM in PARAMS.radiators.controlType" class="choicebox-{{ITEM.id == RADIATORS.controlType}}">{{ITEM.name}}
-					<input type="radio"
-						ng-model="RADIATORS.controlType"
-						ng-value="{{ITEM.id}}"
-						ng-change="
+    <div ng-tab-body class="tab-content ">
+        <div class="autoscroll">
+            <div class="group">
+                <label class="label-switchbox switchbox-false">
+                    <h3 class="ng-binding">Для всех комнат</h3>
+                    <input type="checkbox" ng-change="SET_PARAMS_FOR_ALL();" ng-model="SET_PARAMS_FOR_ALL_ROOMS" class="ng-scope ng-pristine ng-valid">
+                </label>
+            </div>
+            <div class="group" ng-if="RADIATOR.type == 1">
+                <h3>Регулирование температуры</h3>
+                <div class="choicebox">
+                    <label ng-repeat="ITEM in PARAMS.radiators.controlType" class="choicebox-{{ITEM.id == RADIATORS.controlType}}">
+                        {{ITEM.name}}
+                        <input type="radio"
+                               ng-model="RADIATORS.controlType"
+                               ng-value="{{ITEM.id}}"
+                               ng-change="
 							RADIATORS.commonControl = (PARAMS.radiators.control | filter: {controlType: 2})[0].id;
 							RADIATOR.control = RADIATORS.controlType == 2 && RADIATORS.commonControl || (PARAMS.radiators.control | filter: {builtinValve: RADIATOR.builtinValve, controlType: RADIATORS.controlType})[0].id;
                             RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATORS.commonControl}) || {use: RADIATOR.use}))[0].id;
                             RADIATOR.preview_valves = RADIATOR.valves;
-						"
-					>
-				</label>
-			</div>
-			<div class="field" ng-if="RADIATORS.controlType == 2 && RADIATOR.type == 1">
-				<h3>Термостат</h3>
-				<div class="selectbox clearfix">
-					<label class="option-{{RADIATORS.commonControl == ITEM.id}}"
-						ng-repeat="ITEM in PARAMS.radiators.control | filter: {controlType: RADIATORS.controlType}"
-					>
-						<span class="pseudo-radio"><input type="radio"
-							ng-model="RADIATORS.commonControl"
-							ng-value="{{ITEM.id}}"
-							ng-change="
+						">
+                    </label>
+                </div>
+                <div class="field" ng-if="RADIATORS.controlType == 2 && RADIATOR.type == 1">
+                    <h3>Термостат</h3>
+                    <div class="selectbox clearfix">
+                        <label class="option-{{RADIATORS.commonControl == ITEM.id}}"
+                               ng-repeat="ITEM in PARAMS.radiators.control | filter: {controlType: RADIATORS.controlType}">
+                            <span class="pseudo-radio">
+                                <input type="radio"
+                                       ng-model="RADIATORS.commonControl"
+                                       ng-value="{{ITEM.id}}"
+                                       ng-change="
 								RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATORS.commonControl}) || {use: RADIATOR.use}))[0].id;
 								RADIATORS.controlType == 2 && (RADIATOR.control = RADIATORS.commonControl);
                                 RADIATOR.preview_valves = RADIATOR.valves;
-							"
-						>
-						</span>
-						<span class="title"> <img src="common/img/products/{{ITEM.preview}}" title="{{ITEM.name}}" /><br />{{ITEM.name}}</span>
-					</label>
-				</div><!-- .selectbox -->
-			</div>
-		</div>
-		<div class="tab-items">
-			<label ng-repeat="ITEM in RADIATORS_LIST | limitTo:RADIATORS.radiatorsTypes" class="tab-item {{ITEM.id == RADIATORS.current && 'active'}}">Тип {{ITEM.id}}
-				<input type="radio"
-					ng-model="RADIATORS.current"
-					ng-value="{{ITEM.id}}"
-					ng-change="
+							">
+                            </span>
+                            <span class="title"> <img src="common/img/products/{{ITEM.preview}}" title="{{ITEM.name}}" /><br />{{ITEM.name}}</span>
+                        </label>
+                    </div><!-- .selectbox -->
+                </div>
+            </div>
+            <div class="tab-items">
+                <label ng-repeat="ITEM in RADIATORS_LIST | limitTo:RADIATORS.radiatorsTypes" class="tab-item {{ITEM.id == RADIATORS.current && 'active'}}">
+                    Тип {{ITEM.id}}
+                    <input type="radio"
+                           ng-model="RADIATORS.current"
+                           ng-value="{{ITEM.id}}"
+                           ng-change="
 						scopeUpdateRADIATOR(RADIATORS_LIST[RADIATORS.current-1]);
 						RADIATORS.controlType == 2 && (RADIATOR.control = RADIATORS.commonControl)
-					"
-					>
-			</label>
-			<label class="tab-item tab-item-add hidden-{{RADIATORS.radiatorsTypes > 2}}">+
-				<input
-					ng-model="RADIATORS.radiatorsTypes"
-					ng-click="RADIATORS.radiatorsTypes = RADIATORS.radiatorsTypes + 1;RADIATORS_LIST[RADIATORS.radiatorsTypes-1].count = 1;"
-				>
-			</label>
-		</div>
-		<div class="bg-white">
-			<div class="group">
-				<div class="field">
-					<div class="slider-wrap">
-						Количество радиаторов
-						<div ui-slider="{range: 'min'}" min="1" max="9" ng-model="RADIATOR.count"  ng-change="UPDATE_RADIATORS_COUNT()"></div>
-						<span class="slider-value"><b>{{RADIATOR.count}}</b></span>
-					</div>
-				</div>
-				<div class="field">
-					<h3>Вид радиатора</h3>
-					<div class="choicebox">
-						<label ng-repeat="ITEM in PARAMS.radiators.type" class="choicebox-{{ITEM.id == RADIATOR.type}}">{{ITEM.name}}
-							<input type="radio"
-								ng-model="RADIATOR.type"
-								ng-value="{{ITEM.id}}"
-								ng-change="
+					">
+                </label>
+                <label class="tab-item tab-item-add hidden-{{RADIATORS.radiatorsTypes > 2}}">
+                    +
+                    <input ng-model="RADIATORS.radiatorsTypes"
+                           ng-click="RADIATORS.radiatorsTypes = RADIATORS.radiatorsTypes + 1;RADIATORS_LIST[RADIATORS.radiatorsTypes-1].count = 1;">
+                </label>
+            </div>
+            <div class="bg-white">
+                <div class="group">
+                    <div class="field">
+                        <div class="slider-wrap">
+                            Количество радиаторов
+                            <div ui-slider="{range: 'min'}" min="1" max="9" ng-model="RADIATOR.count" ng-change="UPDATE_RADIATORS_COUNT()"></div>
+                            <span class="slider-value"><b>{{RADIATOR.count}}</b></span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <h3>Вид радиатора</h3>
+                        <div class="choicebox">
+                            <label ng-repeat="ITEM in PARAMS.radiators.type" class="choicebox-{{ITEM.id == RADIATOR.type}}">
+                                {{ITEM.name}}
+                                <input type="radio"
+                                       ng-model="RADIATOR.type"
+                                       ng-value="{{ITEM.id}}"
+                                       ng-change="
 									RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
 									RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
                                     RADIATOR.preview_valves = RADIATOR.valves;
-								"
-							>
-						</label>
-					</div>
-				</div>
-                <div ng-if="RADIATOR.type == 2">
-				    <div class="field">
-					    <h3>Применение</h3>
-					    <div class="choicebox">
-						    <label ng-repeat="ITEM in PARAMS.radiators.use" class="choicebox-{{ITEM.id == RADIATOR.use}}">{{ITEM.name}}
-							    <input type="radio"
-								    ng-model="RADIATOR.use"
-								    ng-value="{{ITEM.id}}"
-								    ng-change="
+								">
+                            </label>
+                        </div>
+                    </div>
+                    <div ng-if="RADIATOR.type == 2">
+                        <div class="field">
+                            <h3>Применение</h3>
+                            <div class="choicebox">
+                                <label ng-repeat="ITEM in PARAMS.radiators.use" class="choicebox-{{ITEM.id == RADIATOR.use}}">
+                                    {{ITEM.name}}
+                                    <input type="radio"
+                                           ng-model="RADIATOR.use"
+                                           ng-value="{{ITEM.id}}"
+                                           ng-change="
                                     RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
-                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;"
-							    >
-						    </label>
-					    </div>
-				    </div>
-                    <div class="field">
-					    <div class="field">
-					        <h3>Сторона</h3>
-					        <select 
-                                ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.connectSide" 
-                                ng-model="RADIATOR.connectSide"
-                                ng-change="
+                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="field">
+                                <h3>Сторона</h3>
+                                <select ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.connectSide"
+                                        ng-model="RADIATOR.connectSide"
+                                        ng-change="
                                     RADIATOR.valves = (PARAMS.radiators.valves | filter: (RADIATOR.type == 2 && {type: 2, connectSide: RADIATOR.connectSide, use: RADIATOR.use}))[0].id;
-                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;"
-                                ></select>
-				        </div>
-				    </div>
-                    <div class="field">
-				        <h3>Исполнение</h3>
-				        <select ng-options="ITEM.id as ITEM.name for ITEM in GET_EXTERNAL_VIEW_ITEMS()" ng-model="RADIATOR.valves"></select>
-			        </div>
-                </div>
-				<div ng-if="RADIATOR.type == 1">
-					<div class="field">
-						<h3>Подключение к радиатору</h3>
-						<div class="choicebox">
-							<label ng-repeat="ITEM in PARAMS.radiators.connection" class="choicebox-{{ITEM.id == RADIATOR.connection}}">{{ITEM.name}}
-								<input type="radio"
-									ng-model="RADIATOR.connection"
-									ng-value="{{ITEM.id}}"
-									ng-change="
+                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;"></select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <h3>Исполнение</h3>
+                            <select ng-options="ITEM.id as ITEM.name for ITEM in GET_EXTERNAL_VIEW_ITEMS()" ng-model="RADIATOR.valves"></select>
+                        </div>
+                    </div>
+                    <div ng-if="RADIATOR.type == 1">
+                        <div class="field">
+                            <h3>Подключение к радиатору</h3>
+                            <div class="choicebox">
+                                <label ng-repeat="ITEM in PARAMS.radiators.connection" class="choicebox-{{ITEM.id == RADIATOR.connection}}">
+                                    {{ITEM.name}}
+                                    <input type="radio"
+                                           ng-model="RADIATOR.connection"
+                                           ng-value="{{ITEM.id}}"
+                                           ng-change="
 										RADIATOR.builtinValve = (PARAMS.radiators.builtinValve | filter: {connection: RADIATOR.connection})[0].id;
 										RADIATOR.pipework = (PARAMS.radiators.pipework | filter: {connection: RADIATOR.connection})[0].id;
 										RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
 										RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
                                         RADIATOR.preview_valves = RADIATOR.valves;
-									"
-								>
-							</label>
-						</div>
-					</div>
-					<div class="field hidden-{{RADIATOR.connection == 1}}">
-						<h3>Тип клапана радиатора</h3>
-						<select
-							ng-model="RADIATOR.builtinValve"
-							ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.builtinValve | filter: {connection: RADIATOR.connection}"
-							ng-change="
+									">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="field hidden-{{RADIATOR.connection == 1}}">
+                            <h3>Тип клапана радиатора</h3>
+                            <select ng-model="RADIATOR.builtinValve"
+                                    ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.builtinValve | filter: {connection: RADIATOR.connection}"
+                                    ng-change="
 								RADIATOR.control = (PARAMS.radiators.control | filter: {builtinValve: RADIATOR.builtinValve})[0].id;
 								RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
                                 RADIATOR.preview_valves = RADIATOR.valves;
                                 RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
-							"
-						></select>
-					</div>
-					<div class="field">
-						<h3>Разводка трубопроводов</h3>
-						<select
-							ng-model="RADIATOR.pipework"
-							ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.pipework | filter: {connection: RADIATOR.connection}"
-							ng-change="
+							"></select>
+                        </div>
+                        <div class="field">
+                            <h3>Разводка трубопроводов</h3>
+                            <select ng-model="RADIATOR.pipework"
+                                    ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.pipework | filter: {connection: RADIATOR.connection}"
+                                    ng-change="
 								RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
                                 RADIATOR.preview_valves = RADIATOR.valves;
                                 RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
-							"
-						></select>
-					</div>
-					<div class="field hidden-{{RADIATORS.controlType == 2}}">
-						<h3>Радиаторный термостат</h3>
-						<div class="selectbox clearfix">
-							<label class="option-{{RADIATOR.control == ITEM.id}}"
-								ng-repeat="ITEM in PARAMS.radiators.control | filter: {builtinValve: RADIATOR.builtinValve, controlType: RADIATORS.controlType}"
-							>
-								<span class="pseudo-radio"><input type="radio"
-									ng-model="RADIATOR.control"
-									ng-value="{{ITEM.id}}"
-								>
-								</span>
-								<span class="title">
-                                    <img src="common/img/products/{{ITEM.preview}}" title="{{ITEM.name}}" /><br />{{ITEM.name}}
-                                </span>
-							</label>
-						</div><!-- .selectbox -->
-					</div>				
-				    <div class="field">
-					    <h3>Обвязка радиаторов</h3>
-					    <div class="selectbox clearfix">
-						    <label class="option-{{RADIATOR.preview_valves == ITEM.id}}"
-							    ng-repeat="ITEM in PARAMS.distinctValves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use})"
-						    >
-							    <span class="pseudo-radio"><input type="radio"
-								    ng-model="RADIATOR.preview_valves"
-								    ng-value="{{ITEM.id}}"
-								    ng-change="RADIATOR.valves = RADIATOR.preview_valves;RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;"
-							    >
-							    </span>
-							    <span class="title"><img src="{{PREVIEW(ITEM.id)}}" title="{{ITEM.name}}" /></span>
-						    </label>
-					    </div><!-- .selectbox -->
-				    </div>
-                    <div class="field hidden-{{GET_EXTERNAL_VIEW_ITEMS().length == 0}}">
-				        <h3>Исполнение</h3>
-				        <select ng-options="ITEM.id as ITEM.name for ITEM in GET_EXTERNAL_VIEW_ITEMS()" ng-model="RADIATOR.valves"></select>
-			        </div>
+							"></select>
+                        </div>
+                        <div class="field hidden-{{RADIATORS.controlType == 2}}">
+                            <h3>Радиаторный термостат</h3>
+                            <div class="selectbox clearfix">
+                                <label class="option-{{RADIATOR.control == ITEM.id}}"
+                                       ng-repeat="ITEM in PARAMS.radiators.control | filter: {builtinValve: RADIATOR.builtinValve, controlType: RADIATORS.controlType}">
+                                    <span class="pseudo-radio">
+                                        <input type="radio"
+                                               ng-model="RADIATOR.control"
+                                               ng-value="{{ITEM.id}}">
+                                    </span>
+                                    <span class="title">
+                                        <img src="common/img/products/{{ITEM.preview}}" title="{{ITEM.name}}" /><br />{{ITEM.name}}
+                                    </span>
+                                </label>
+                            </div><!-- .selectbox -->
+                        </div>
+                        <div class="field">
+                            <h3>Обвязка радиаторов</h3>
+                            <div class="selectbox clearfix">
+                                <label class="option-{{RADIATOR.preview_valves == ITEM.id}}"
+                                       ng-repeat="ITEM in PARAMS.distinctValves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use})">
+                                    <span class="pseudo-radio">
+                                        <input type="radio"
+                                               ng-model="RADIATOR.preview_valves"
+                                               ng-value="{{ITEM.id}}"
+                                               ng-change="RADIATOR.valves = RADIATOR.preview_valves;RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;">
+                                    </span>
+                                    <span class="title"><img src="{{PREVIEW(ITEM.id)}}" title="{{ITEM.name}}" /></span>
+                                </label>
+                            </div><!-- .selectbox -->
+                        </div>
+                        <div class="field hidden-{{GET_EXTERNAL_VIEW_ITEMS().length == 0}}">
+                            <h3>Исполнение</h3>
+                            <select ng-options="ITEM.id as ITEM.name for ITEM in GET_EXTERNAL_VIEW_ITEMS()" ng-model="RADIATOR.valves"></select>
+                        </div>
+                    </div>
                 </div>
-			</div>
-			<div class="field hidden-{{RADIATOR.fittingsType == 0}}">
-				<h3>Комплектация</h3>	
-                <div class="selectbox clearfix">			
-                    <label class="label-checkbox checkbox-{{RADIATOR.fittings != 0}}">
-                        <span class="pseudo-checkbox"></span>
-                        <input type="checkbox"
-                                ng-click="RADIATOR.fittings = 0;"
-				            >
-				        <span class="title"><img src="common/img/products/config-prod-fittings.png" title="Фитинги для труб" />Фитинги для труб</span>
-			        </label>
-			        <label class="label-checkbox checkbox-{{RADIATOR.fittings != 0}}">
-                        <select ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.fittingsMaterial" ng-model="RADIATOR.fittingsMaterial"></select>
-                        <select ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.fittings | filter: {type: RADIATOR.fittingsType, fittingsMaterial: RADIATOR.fittingsMaterial}" ng-model="RADIATOR.fittings"></select>
-			        </label>
+                <div class="field hidden-{{RADIATOR.fittingsType == 0}}">
+                    <h3>Комплектация</h3>
+                    <div class="selectbox clearfix">
+                        <label class="label-checkbox checkbox-{{RADIATOR.fittings != 0}}">
+                            <span class="pseudo-checkbox"></span>
+                            <input type="checkbox"
+                                   ng-click="RADIATOR.fittings = 0;">
+                            <span class="title"><img src="common/img/products/config-prod-fittings.png" title="Фитинги для труб" />Фитинги для труб</span>
+                        </label>
+                        <label class="label-checkbox checkbox-{{RADIATOR.fittings != 0}}">
+                            <select ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.fittingsMaterial" ng-model="RADIATOR.fittingsMaterial"></select>
+                            <select ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.fittings | filter: {type: RADIATOR.fittingsType, fittingsMaterial: RADIATOR.fittingsMaterial}" ng-model="RADIATOR.fittings"></select>
+                        </label>
+                    </div>
                 </div>
-			</div>
-			<div class="button hidden-{{RADIATORS.radiatorsTypes == 1}}"
-				ng-click="
+                <div class="button hidden-{{RADIATORS.radiatorsTypes == 1}}"
+                     ng-click="
 					RADIATORS.radiatorsTypes = RADIATORS.radiatorsTypes - 1;
 					(RADIATORS.current = RADIATORS.radiatorsTypes) && (RADIATORS.current > RADIATORS.radiatorsTypes);
 					scopeUpdateRADIATOR(RADIATORS_LIST[RADIATORS.current-1]);
-				"
-			>Удалить тип</div>
-		</div>
-	</div><!-- .tab-content -->
+				">Удалить тип</div>
+            </div>
 
-	<div ng-tab-body class="tab-content">
-		<div class="group">
-			<label class="label-switchbox switchbox-{{FLOORS.isFloors}}"><h3>Наличие теплого пола</h3>
-			<input type="checkbox" ng-model="FLOORS.isFloors" ng-change="FLOORS.loops = FLOORS.isFloors ? 1 : 0; UpdateCollectorEntries()"></label>
-		</div>
-		<div class="group hidden-{{!FLOORS.isFloors}}">
-			<div class="field">
-				<div class="slider-wrap">
-					Количество петель
-					<div ui-slider="{range: 'min'}" min="1" max="8"
-						ng-model="FLOORS.loops"
-						ng-change="
+            <div class="tab-autoscroll-filler"></div>
+        </div>
+    </div><!-- .tab-content -->
+
+    <div ng-tab-body class="tab-content">
+        <div class="autoscroll">
+            <div class="group">
+                <label class="label-switchbox switchbox-{{FLOORS.isFloors}}">
+                    <h3>Наличие теплого пола</h3>
+                    <input type="checkbox" ng-model="FLOORS.isFloors" ng-change="FLOORS.loops = FLOORS.isFloors ? 1 : 0; UpdateCollectorEntries()">
+                </label>
+            </div>
+            <div class="group hidden-{{!FLOORS.isFloors}}">
+                <div class="field">
+                    <div class="slider-wrap">
+                        Количество петель
+                        <div ui-slider="{range: 'min'}" min="1" max="8"
+                             ng-model="FLOORS.loops"
+                             ng-change="
 							FLOORS.fittings = FLOORS.loops == 1 && 0;
                             UpdateCollectorEntries();
-						"
-					></div>
-					<span class="slider-value"><b>{{FLOORS.loops}}</b></span>
-				</div>
-			</div>
-			<div class="field">
-				<h3>Регулирование температуры</h3>
-				<div class="selectbox clearfix">
-					<label class="option-{{FLOORS.control == ITEM.id}}"
-						ng-repeat="ITEM in PARAMS.floors.control | filter: filterFunction"
-					>
-						<span class="pseudo-radio"><input type="radio"
-							ng-model="FLOORS.control"
-							ng-value="{{ITEM.id}}"
-						>
-						</span>
-						<span class="title">
-                            <img src="common/img/products/{{ITEM.preview}}" title="{{ITEM.name}}" /><br />{{ITEM.name}}
-						</span>
-					</label>
-				</div><!-- .selectbox -->
-			</div>
-			<div class="field" ng-if="FLOORS.loops == 1">
-				<h3>Фитинги</h3>
-				<select
-					ng-model="FLOORS.fittings"
-					ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.fittings | filter: {type: (FLOORS.loops == 1 && 2)}"
-				></select>
-			</div>
-		</div>
-	</div><!-- .tab-content -->
+						"></div>
+                        <span class="slider-value"><b>{{FLOORS.loops}}</b></span>
+                    </div>
+                </div>
+                <div class="field">
+                    <h3>Регулирование температуры</h3>
+                    <div class="selectbox clearfix">
+                        <label class="option-{{FLOORS.control == ITEM.id}}"
+                               ng-repeat="ITEM in PARAMS.floors.control | filter: filterFunction">
+                            <span class="pseudo-radio">
+                                <input type="radio"
+                                       ng-model="FLOORS.control"
+                                       ng-value="{{ITEM.id}}">
+                            </span>
+                            <span class="title">
+                                <img src="common/img/products/{{ITEM.preview}}" title="{{ITEM.name}}" /><br />{{ITEM.name}}
+                            </span>
+                        </label>
+                    </div><!-- .selectbox -->
+                </div>
+                <div class="field" ng-if="FLOORS.loops == 1">
+                    <h3>Фитинги</h3>
+                    <select ng-model="FLOORS.fittings"
+                            ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.fittings | filter: {type: (FLOORS.loops == 1 && 2)}"></select>
+                </div>
+            </div>
+        </div>
+    </div><!-- .tab-content -->
 </div><!-- .tabs -->
 <script type="text/ng-template" id="alert.html">
     <div class="modal-header">
