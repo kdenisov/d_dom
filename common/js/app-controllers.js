@@ -776,6 +776,86 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 
 });
 
+appConfigurator.controller('SummaryCtrl', function ($scope, Configurator) {
+    $scope.PAGE_GENERAL = {
+        orderNum: '1234567',
+        clauses: [
+            { title: 'Параметры дома', src: 'common/img/summary/general-cottage.jpg', html: 'Расчет системы отопления произведен для 6 помещений в 2 этажном доме, с котлом в отдельном помещении в подвале.', },
+            { title: 'Параметры котла и узла', src: 'common/img/summary/general-boiler.jpg', html: 'Нагрев теплоносителя производится {1/2 контурным} котлом с последующим распределением с помощью {насосного узла обвязки DSM-BPU 2xUPS 25-60} позволяющим {???}.', thumbs: [{ src: 'common/img/summary/thumbs/boiler.jpg', count: 1 }], },
+            {
+                title: 'Тип разводки',
+                src: 'common/img/summary/general-interconnections.jpg',
+                html: 'Типы клапанов для подключения к радиаторам трубы подобраны с учетом разводки труб {в стене/по полу/…/...} и {в стене/по полу/…/...}.',
+                thumbs: [
+                    { src: 'common/img/summary/thumbs/interconnection.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/interconnection.jpg', count: 2 },
+                    { src: 'common/img/summary/thumbs/interconnection.jpg', count: 3 },
+                    { src: 'common/img/summary/thumbs/interconnection.jpg', count: 4 }
+                ]
+            },
+            {
+                title: 'Коллекторы радиаторов',
+                src: 'common/img/summary/general-radiator-collector.jpg',
+                html: 'Для распределения теплоносителя по радиаторам используются коллекторы {с расходомером} {и воздухоотводчиком} {в комплекте с кронштейнами для крепления в коробе}. оснащёнными вставками, позволяющими настроить расход в каждом контуре. Коллекторы с расходомерами позволяют измерить расход теплоносителя в каждом контуре, что значительно упрощает настройку системы отопления.',
+                thumbs: [
+                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 2 },
+                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 3 },
+                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 4 },
+                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 2 },
+                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 3 },
+                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 4 },
+                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 2 },
+                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 3 },
+                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 4 }
+                ]
+            },
+            {
+                title: 'Управление радиаторным отоплением',
+                src: 'common/img/summary/general-radiator-control.jpg',
+                html: 'Регулировка температуры в {название помещений} производится {беспроводный/ комнатный термостат с датчиком температуры пола} . Для {название помещений} выбраны радиаторные термостаты Термостат Living eco электронный программируемый.',
+                thumbs: [
+                    { src: 'common/img/summary/thumbs/controls.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/controls.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/controls.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/controls.jpg', count: 3 },
+                    { src: 'common/img/summary/thumbs/controls.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/controls.jpg', count: 1 }
+                ]
+            },
+            {
+                title: 'Коллекторы теплого пола',
+                src: 'common/img/summary/general-floor-collector.jpg',
+                html: 'Для обеспечения подачи теплоносителя в 4 контура теплого пола 2 комнат первого этажа используется {кол-во входов} контурный коллектор {с расходомером} {и воздухоотводчиком} {в комплекте с кранштейнами для крепления в коробе}, при этом для обеспечения необходимой температуры используется компактный узел смешения с 3-х скоростным насосом UPS 15-40, с термостатом безопасности. Для удобства установки комфортной температуры в помещении рекомендован{беспроводный/ комнатный термостат с датчиком температуры пола} или {термостат и клапан}.',
+                thumbs: [
+                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/floors.jpg', count: 7 },
+                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/floors.jpg', count: 3 },
+                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/floors.jpg', count: 4 },
+                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/floors.jpg', count: 5 },
+                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
+                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 }
+                ]
+            }
+        ]
+    };
+
+    setCustomScroll();
+});
+
+appConfigurator.controller('HomeCtrl', function($scope, $location) {
+    $scope.TITLE = 'Конфигуратор';
+    if ($location.$$url.indexOf('/summary') == 0) {
+        $scope.TITLE = 'Информация по заказу';
+    }
+});
 
 appConfigurator.filter('formatNumber', function () {
 	return function (n) {

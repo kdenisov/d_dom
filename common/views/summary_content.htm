@@ -1,0 +1,18 @@
+﻿<div class="summary-page autoscroll" ng-show="true || SHOW_PAGE(1)">
+    <h2>Информация по заказу №{{PAGE_GENERAL.orderNum}}</h2>
+    <div class="summary-general" ng-repeat="clause in PAGE_GENERAL.clauses">
+        <img ng-src="{{clause.src}}" alt="{{clause.title}}" />
+        <div class="summary-general-content">
+            <h3>{{clause.title}}</h3>
+            <p>{{clause.html}}</p>
+            
+            <div class="thumbs" ng-if="clause.thumbs.length > 0">
+                <div ng-repeat="icon in clause.thumbs"><img ng-src="{{icon.src}}" alt="" /><span class="thumb-count" ng-if="icon.count > 1">{{icon.count}}</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="summary-page" ng-show="SHOW_PAGE(2)" ng-model="PAGE_SCHEME">
+    <h2></h2>
+</div>

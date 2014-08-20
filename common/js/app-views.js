@@ -7,6 +7,7 @@ appConfigurator.config(function($stateProvider, $urlRouterProvider) {
 		.when('/room', '/room/1/1')
 		.when('/level', '/level/1')
 		.when('/collector', '/collector/1/1')
+		.when('/summary', '/summary/1')
 		.otherwise('/');
 
 	$stateProvider
@@ -59,5 +60,12 @@ appConfigurator.config(function($stateProvider, $urlRouterProvider) {
 				'sidebar': { templateUrl: 'common/views/collector_sidebar.htm', controller: 'CollectorCtrl' },
 				'content': { templateUrl: 'common/views/collector_content.htm', controller: 'CollectorCtrl' }
 			}
+		})
+		.state('summary', {
+		    url: '/summary/:page',
+		    views: {
+		        'sidebar': { templateUrl: 'common/views/summary_sidebar.htm', controller: 'SummaryCtrl' },
+		        'content': { templateUrl: 'common/views/summary_content.htm', controller: 'SummaryCtrl' }
+		    }
 		})
 });

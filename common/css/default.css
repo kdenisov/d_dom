@@ -1559,6 +1559,136 @@ slider span.pointer + span.pointer {
 	margin: 0 0 -3px 22px;
 }
 
+/*SUMMARY*/
+.summary-sidebar-layout {
+    display: table;
+    height: 100%;
+    width: 100%;
+    background-color: #4c4c4c;
+}
+
+.summary-control-container {
+    height: 100%;
+    max-height: 730px;
+    min-height: 425px;
+}
+
+.summary-nav > a {
+    display: block;
+    padding: 20px 26px;
+    color: #a6a6a6;
+    border-bottom: 1px solid #575757 !important;
+}
+
+.summary-nav > a:first-child {
+    border-top: 1px solid #575757 !important;
+}
+
+.summary-nav > a.current {
+    color: white;
+}
+
+.summary-controls {
+    position: absolute;
+    bottom: 0;
+    width: 220px;
+    padding: 0 17px;
+    font-size: 110%;
+}
+
+.summary-controls > * {
+    display: block;
+    margin: 0 0 10px 0;
+    text-align: center;
+    padding: 15px;
+    border-radius: 3px;
+    color: white !important;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.summary-controls > .print {
+    border: 1px solid #a6a6a6;
+}
+
+.summary-controls > .order {
+    color: white;
+    border: 1px solid #00b06c;
+    background-color: #00b06c;
+}
+
+.summary-page {
+    height: 100%;
+}
+
+.summary-page > h2 {
+    font-size: 31px;
+    padding: 38px;
+    border-bottom: 2px solid #e93c37; 
+}
+
+.summary-general {
+    float: left;
+    width: 100%;
+    padding: 50px 5px 0;
+    box-sizing: border-box;
+    border-top: 1px solid #e2e3e3;
+    position: relative;
+}
+
+.summary-general > img {
+    float: left;
+    width: 264px;
+    margin-bottom: 30px;
+}
+
+.summary-general > .summary-general-content{
+    float: left;
+    width: 100%;
+    margin-left: -264px;
+    padding-left: 264px;
+    box-sizing: border-box;
+}
+
+.summary-general > .summary-general-content > h3 {
+    margin: 15px 0 25px;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.summary-general > .summary-general-content p {
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100px;
+}
+
+.summary-general > .summary-general-content > .thumbs {
+    float: left;
+    width: 100%;
+}
+
+.summary-general > .summary-general-content > .thumbs > * {
+    float: left;
+    position: relative;
+    width: 81px;
+    height: 81px;
+    border: 1px solid #e2e3e3;
+    margin: -1px -1px 0 0;
+}
+
+.summary-general > .summary-general-content > .thumbs .thumb-count {
+    display: block;
+    font-size: 10px;
+    min-width: 12px;
+    padding: 0 3px 0 2px;
+    text-align: center;
+    border-radius: 10px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    color: #fff;
+    background: none repeat scroll 0 0 #00b06d;
+}
 
 /* ======== */
 /* Content */
