@@ -799,7 +799,8 @@ a.collector-item {
 	height: 76px;
 	position: absolute;
 	top: 230px;
-	left: 1121px;
+	left: 50%;
+    margin-left: 150px;
 	/*margin: 577px 0 0 0;*/
 	opacity: 1;
 	transition: opacity 1s;
@@ -826,7 +827,8 @@ a.collector-item {
 	height: 76px;
 	position: absolute;
 	top: 165px;
-    left: 1120px;
+	left: 50%;
+    margin-left: 150px;
 	background: url('../img/thermo1.png') no-repeat center;
 	/*margin: 577px 0 0 0;*/
 	opacity: 1;
