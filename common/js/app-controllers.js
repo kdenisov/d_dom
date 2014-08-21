@@ -651,7 +651,6 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
 appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator, Catalog){
 
 	var params = Configurator.params;
-
 	Catalog.fetch().then(function(data) {
     $scope.CATALOG = data;
 
@@ -776,7 +775,24 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 
 });
 
-appConfigurator.controller('SummaryCtrl', function ($scope, Configurator) {
+appConfigurator.controller('SummaryCtrl', function ($scope, $stateParams, Configurator) {
+    var page = parseInt($stateParams.page);
+    page = isNaN(page) || page > 5 ? 1 : page; 
+    $scope.PAGE = page;
+
+    $scope.SHOW_PAGE = function(index) {
+        return index == $scope.PAGE;
+    };
+
+    $scope.OPEN = function (index, event) {
+        if (event && event.preventDefault) {
+            event.preventDefault();
+        }
+
+        $scope.PAGE = index;
+        $scope.$apply();
+    };
+
     $scope.PAGE_GENERAL = {
         orderNum: '1234567',
         clauses: [
@@ -847,14 +863,128 @@ appConfigurator.controller('SummaryCtrl', function ($scope, Configurator) {
         ]
     };
 
+    $scope.PAGE_SCHEME = {
+        levels: [
+            {
+                title: 'Этаж 2',
+                rooms: [
+                    { show: true, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: true, title: 'Комната 2', radiators: 2, floors: 2 },
+                    { show: true, title: 'Комната 3', radiators: 1, floors: 2 },
+                    { show: true, title: 'Комната 4', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 }
+                ]
+            },
+            {
+                title: 'Этаж 1',
+                rooms: [
+                    { show: true, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: true, title: 'Комната 2', radiators: 2, floors: 1 },
+                    { show: true, title: 'Комната 3', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 }
+                ]
+            },
+            {
+                title: 'Подвал',
+                rooms: [
+                    { show: true, title: 'Котельная', radiators: 0, floors: 0, boiler: true },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
+                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 }
+                ]
+            }
+        ],
+
+        radiatorCollectors: [
+            { installedLevelIndex: 2 , connectedLevelIndex: [ 1, 2 ], title: 'FHF' },
+            { installedLevelIndex: 0, connectedLevelIndex: [ 0 ], title: 'FHF' }
+        ],
+
+        floorCollectors: [
+            { installedLevelIndex: 2, connectedLevelIndex: [ 1, 2 ], title: 'FHF' },
+            { installedLevelIndex: 0, connectedLevelIndex: [ 0 ], title: 'FHF' }
+        ]
+    };
+
+    $scope.CSS_SCHEME_CONNECTION = function (installedAt, connectedTo) {
+        var top = 'top-' + Math.min(installedAt, connectedTo);
+        var displ = 'height-' + Math.abs(installedAt - connectedTo);
+        var placed = installedAt < connectedTo ? 'on-top' : 'on-bottom';
+
+        return top + ' ' + displ + ' ' + placed;
+    };
+
+    $scope.CSS_SCHEME_COLLECTOR = function (installedAt) {
+        var top = 'offset-' + installedAt;
+
+        return top;
+    };
+
+    $scope.PAGE_MERCHANDISE = {
+        totalRub: '123 456',
+        items: [
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4.', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' }
+        ]
+    };
+
     setCustomScroll();
 });
 
-appConfigurator.controller('HomeCtrl', function($scope, $location) {
-    $scope.TITLE = 'Конфигуратор';
-    if ($location.$$url.indexOf('/summary') == 0) {
-        $scope.TITLE = 'Информация по заказу';
-    }
+appConfigurator.controller('BaseCtrl', function($scope) {
+    $scope.BASE_PAGE = { title: 'Конфигуратор' };
+
+    $scope.$on('$locationChangeSuccess', function (event, toUrl, fromUrl) {
+        if (toUrl.indexOf('#/summary') >= 0) {
+            $scope.BASE_PAGE.title = 'Информация по заказу';
+            $('#basket').hide();
+        } else {
+            $scope.BASE_PAGE.title = 'Конфигуратор';
+            $('#basket').show();
+        }
+
+    });
 });
 
 appConfigurator.filter('formatNumber', function () {
@@ -865,5 +995,5 @@ appConfigurator.filter('formatNumber', function () {
 });
 
 function setCustomScroll() {
-    $('.autoscroll').perfectScrollbar({ wheelSpeed: 100, includePadding: false });
+    $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: false });
 }

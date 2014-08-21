@@ -12,7 +12,7 @@
         <link href="common/img/favicon.ico" type="image/x-icon" rel="icon">
         <link href="common/img/favicon.ico" type="image/x-icon" rel="shortcut icon">
     </head>
-    <body>
+    <body ng-controller="BaseCtrl">
 
         <div id="sidebar">
             <div id="sidebar-panel">
@@ -35,7 +35,7 @@
                 <!-- <div id="sidebar-panel-bottom"><div class="button-icon button-help"></div></div> -->
             </div>
             <div id="sidebar-content">
-                <h2><span ng-controller="HomeCtrl">{{TITLE}}</span></h2>
+                <h2><span>{{BASE_PAGE.title}}</span></h2>
                 <div id="sidebar-view" ui-view="sidebar">
 	        
                 </div>

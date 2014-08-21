@@ -1,4 +1,4 @@
-﻿<div class="summary-page autoscroll" ng-show="true || SHOW_PAGE(1)">
+﻿<div class="summary-page autoscroll" ng-show="SHOW_PAGE(1)">
     <h2>Информация по заказу №{{PAGE_GENERAL.orderNum}}</h2>
     <div class="summary-general" ng-repeat="clause in PAGE_GENERAL.clauses">
         <img ng-src="{{clause.src}}" alt="{{clause.title}}" />
@@ -13,6 +13,70 @@
     </div>
 </div>
 
-<div class="summary-page" ng-show="SHOW_PAGE(2)" ng-model="PAGE_SCHEME">
-    <h2></h2>
+<div class="summary-page autoscroll" ng-show="SHOW_PAGE(2)">
+    <h2>Схема дома</h2>
+    <div class="summary-schemes">
+        <div class="summary-schemes-level" ng-repeat="level in PAGE_SCHEME.levels">
+            <h3>{{level.title}}</h3>
+            <div>
+                <div class="summary-schemes-room" ng-repeat="room in level.rooms">
+                    <div ng-if="room.show">
+                        <div class="contents" ng-class="{ 'radiator' :  room.radiators > 0, 'floor' :  room.floors > 0, 'boiler' : room.boiler }">
+                            <span class="count radiator" ng-if="room.radiators > 1">{{room.radiators}}</span>
+                            <span class="count floor" ng-if="room.floors > 1">{{room.floors}}</span>
+                        </div>
+                        <div class="title">{{room.title}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-schemes-collectors">
+            <div ng-repeat="collector in PAGE_SCHEME.radiatorCollectors">
+                <div class="schemes-connection" ng-repeat="connection in collector.connectedLevelIndex" ng-class="CSS_SCHEME_CONNECTION(collector.installedLevelIndex, connection)"></div>
+                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><div><a href="#">{{collector.title}}</a></div></div>
+            </div>
+        </div>
+        <div class="summary-schemes-collectors floors">
+            <div ng-repeat="collector in PAGE_SCHEME.floorCollectors">
+                <div class="schemes-connection" ng-repeat="connection in collector.connectedLevelIndex" ng-class="CSS_SCHEME_CONNECTION(collector.installedLevelIndex, connection)"></div>
+                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><div><a href="#">{{collector.title}}</a></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="summary-page autoscroll" ng-show="SHOW_PAGE(3)">
+    <h2 class="no-border">Набор товаров</h2>
+        <table class="summary-merchandise">
+            <thead>
+                <tr>
+                    <th colspan="2">Наименование</th>
+                    <th class="qty">Кол-во</th>
+                    <th>Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in PAGE_MERCHANDISE.items">
+                    <td>
+                        <img class="thumb" ng-src="{{item.thumb}}" alt="{{item.title}}" />
+                    </td>
+                    <td>
+                        {{item.title}}
+                    </td>
+                    <td class="qty">
+                        {{item.count}}
+                    </td>
+                    <td>
+                        {{item.rub}} <span class="rub">руб.</span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Итого</td>
+                    <td>{{PAGE_MERCHANDISE.totalRub}} <span class="rub">руб.</span></td>
+                </tr>
+            </tfoot>
+        </table>
 </div>

@@ -1690,6 +1690,274 @@ slider span.pointer + span.pointer {
     background: none repeat scroll 0 0 #00b06d;
 }
 
+.summary-schemes {
+    position: relative;
+}
+
+.summary-schemes > .summary-schemes-level {
+    float: left;
+    width: 100%;
+    border-top: 1px solid #e2e3e3;
+    position: relative;
+}
+
+.summary-schemes > div:first-child {
+    border: none;
+}
+
+.summary-schemes-level > h3 {
+    float: left;
+    width: 100px;
+    padding: 35px 5px 0 30px;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.summary-schemes-level > div {
+    float: left;
+    width: 552px;
+    margin-left: -6px;
+    padding: 30px 0;
+}
+
+.summary-schemes-room {
+    float: left;
+    margin: 6px 0 0 6px;
+    width: 82px;
+    height: 82px;
+    border: 2px solid #e2e3e3;
+}
+
+.summary-schemes-room > div {
+    background-color: #f3f3f3;
+    width: 100%;
+    height: 100%;
+}
+
+.summary-schemes-room .contents{
+    background-image: url('../img/summary/scheme-floor-radiator-icons.png');
+    height: 60px;
+    background-repeat: no-repeat;
+    position: relative;
+}
+.summary-schemes-room .contents.floor {
+    background-position: right center;
+    width: 32px;
+    margin-left: 50px;
+}
+.summary-schemes-room .contents.radiator {
+    background-position: left center;
+    width: 32px;
+    margin-right: 50px;
+}
+.summary-schemes-room .contents.radiator.floor {
+    background-position: center center;
+    width: 82px;
+    margin: 0;
+}
+
+.summary-schemes-room .contents.boiler {
+    background-color: transparent;
+    background-image: url('../img/summary/scheme-boiler-icon.png');
+    background-position: 20px 20px;
+    width: 82px;
+}
+
+.summary-schemes-room .title{
+    font-size: 12px;
+    text-align: center;
+}
+
+.summary-schemes-room .contents .count {
+    display: block;
+    width: 15px;
+    position: absolute;
+    right: 5px;
+    top: 13px;
+    background-color: white;
+    border-radius: 10px;
+    line-height: 15px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.summary-schemes-room .contents .count.radiator {
+    right: 43px;
+}
+
+.summary-schemes-collectors {
+    position: absolute;
+    top: 85px;
+    left: 680px;
+}
+
+.summary-schemes-collectors.floors {
+    top: 65px;
+}
+
+.schemes-connection {
+    width: 60px;
+    border-right: 1px solid #e2e3e3;
+    position: absolute;
+}
+.summary-schemes-collectors.floors .schemes-connection {
+    width: 130px
+}
+
+.summary-schemes-collectors .schemes-connection.on-top {
+    border-bottom: 1px solid #e2e3e3;
+}
+.summary-schemes-collectors .on-bottom {
+    border-top: 1px solid #e2e3e3;
+}
+
+.summary-schemes-collectors .schemes-connection.top-0 {
+    top: 0;
+}
+.summary-schemes-collectors .schemes-connection.top-1 {
+    top: 244px;
+}
+.summary-schemes-collectors .schemes-connection.top-2 {
+    top: 488px;
+}
+
+.summary-schemes-collectors .schemes-connection.top-0.on-top {
+    top: 100px;
+}
+.summary-schemes-collectors .schemes-connection.top-1.on-top {
+    top: 344px;
+}
+
+.summary-schemes-collectors .schemes-connection.height-0 {
+    height: 20px;
+}
+.summary-schemes-collectors .schemes-connection.height-1 {
+    height: 244px;
+}
+.summary-schemes-collectors .schemes-connection.height-2 {
+    height: 488px;
+}
+
+.summary-schemes-collectors .schemes-connection.height-1.on-top {
+    height: 144px;
+}
+.summary-schemes-collectors .schemes-connection.height-2.on-top {
+    height: 388px;
+}
+
+.summary-schemes-collectors.floors  .schemes-connection.height-0 {
+    height: 40px;
+}
+.summary-schemes-collectors.floors > .schemes-connection.height-1 {
+    height: 284px;
+}
+.summary-schemes-collectors.floors > .schemes-connection.height-2 {
+    height: 528px;
+}
+
+.scheme-collector-placeholder {
+    position: absolute;
+    left: 32px;
+    top: 20px;
+    width: 60px;
+    height: 90px;
+    background: url('../img/summary/scheme-radiator-collector.jpg') center top no-repeat;
+}
+
+.scheme-collector-placeholder.offset-1{
+    top: 264px;
+}
+
+.scheme-collector-placeholder.offset-2{
+    top: 508px;
+}
+
+.summary-schemes-collectors.floors .scheme-collector-placeholder {
+    background: url('../img/summary/scheme-floors-collector.jpg') center top no-repeat;
+    left: 103px;
+}
+
+.summary-schemes-collectors.floors .scheme-collector-placeholder.offset-0{
+    top: 40px;
+}
+
+.summary-schemes-collectors.floors .scheme-collector-placeholder.offset-1{
+    top: 284px;
+}
+
+.summary-schemes-collectors.floors .scheme-collector-placeholder.offset-2{
+    top: 528px;
+}
+
+.scheme-collector-placeholder > div {
+    position: absolute;
+    text-align: center;
+    top: 100%;
+    width: 100%;
+}
+
+.scheme-collector-placeholder > div > a {
+    border-bottom: 1px black dashed;
+    background-color: white;
+}
+
+.summary-page > h2.no-border {
+    border-color: white;
+}
+
+table.summary-merchandise {
+    width: 100%;
+    position: relative;
+}
+
+table.summary-merchandise tr {
+    border-bottom: 1px solid #e2e3e3;
+}
+
+table.summary-merchandise th {
+    font-weight: bold;
+    font-size: 16px;
+    padding-top: 0 !important;
+}
+table.summary-merchandise th,
+table.summary-merchandise td {
+    padding: 18px 12px;
+    vertical-align: middle;
+    text-align: left;
+}
+table.summary-merchandise > thead > tr {
+    border-bottom: 2px solid #e93c36;
+}
+table.summary-merchandise th:first-child,
+table.summary-merchandise td:first-child {
+    padding-left: 38px;
+}
+table.summary-merchandise th:last-child,
+table.summary-merchandise td:last-child {
+    padding-right: 38px;
+    min-width: 100px;
+    text-align: right;
+}
+table.summary-merchandise th.qty,
+table.summary-merchandise td.qty {
+    min-width: 70px;
+    text-align: center;
+}
+table.summary-merchandise .thumb {
+    width: 55px;
+}
+
+table.summary-merchandise tfoot td {
+    font-size: 16px;
+    font-weight: bold;
+}
+table.summary-merchandise tfoot td:first-child {
+    text-transform: uppercase;
+}
+
+table.summary-merchandise .rub {
+    font-size: 12px;
+}
 /* ======== */
 /* Content */
 
