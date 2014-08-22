@@ -1642,6 +1642,8 @@ slider span.pointer + span.pointer {
 
 .summary-page {
     height: 100%;
+    width: 100%;
+    position: relative;
 }
 
 .summary-page > h2 {
@@ -2005,6 +2007,186 @@ table.summary-merchandise tfoot td:first-child {
 table.summary-merchandise .rub {
     font-size: 12px;
 }
+
+
+.summary-card-thumbs {
+    float: left;
+    width: 100%;
+    border-top: 1px solid #e2e3e3;
+}
+.summary-card-thumbs > div {
+    float: left;
+    width: 80px;
+    height: 80px;
+    border: 1px solid #e2e3e3;
+    border-left: none;
+    position: relative;
+    margin-top: -1px;
+    cursor: pointer;
+}
+.summary-card-thumbs .highlight {
+    background-color: #ccc;
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0.4;
+    filter: alpha(opacity = 40);
+}
+.summary-card-thumbs > div > img{
+    width: 100%;
+    height: 100%;
+}
+
+.summary-card-thumbs .count {
+    display: block;
+    width: 15px;
+    position: absolute;
+    right: 5px;
+    top: 13px;
+    background-color: #00b36c;
+    color: white;
+    border-radius: 10px;
+    line-height: 15px;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.summary-card-title {
+    float: left;
+    width: 100%;
+    border-top: 1px solid #e2e3e3;
+    margin-top: -1px;
+    padding: 38px 0;
+}
+
+.summary-card-title > div {
+    float: left;
+    width: 415px;
+    padding: 0 112px 0 38px;
+    margin-bottom: 38px;
+}
+
+.summary-card-title h3 {
+    font-size: 16px;
+    text-transform: uppercase;
+    margin-bottom: 38px;
+    height: 75px;
+}
+
+.summary-card-pricing {
+    float: left;
+    margin-left: 1px;
+}
+
+.summary-card-pricing > div {
+    float: left;
+    border: 1px solid #e2e3e3;
+    margin-left: -1px;
+    width: 140px;
+    padding: 15px 20px;
+}
+
+.summary-card-title > img {
+    float: left;
+    width: 190px;
+    height: 190px;
+    margin-left: 38px;
+    margin-bottom: 38px;
+}
+
+.summary-card-pricing > div > div {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #b8b8b8;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.summary-card-pricing .value {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.summary-card-tab {
+    float: left;
+    width: 100%;
+    clear: both;
+}
+
+.summary-card-tab-items {
+    float: left;
+    width: 100%;
+    border-bottom: 1px solid #e2e3e3;
+}
+
+.summary-card-tab-item {
+    float: left;
+    padding: 17px;
+    color: #a2a2a2;
+    border-top: 3px solid white;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    border-bottom: 1px solid #e2e3e3;
+    cursor: pointer;
+    margin-bottom: -1px;
+}
+.summary-card-tab-item:first-child {
+    margin-left: 38px;
+}
+.summary-card-tab-item.active {
+    border-top: 3px solid #00b06a;
+    border-left: 1px solid #e2e3e3;
+    border-right: 1px solid #e2e3e3;
+    border-bottom: 1px solid white;
+    color: black;
+    cursor: auto;
+}
+.summary-card-tab-content {
+    display: none;
+    padding: 38px;
+    float: left;
+}
+.summary-card-tab-content.ng-show {
+    display: block;
+}
+.summary-card-tab-content > div:first-child {
+    float: left;
+    width: 575px;
+    margin-left: 0px;
+}
+
+.summary-card-tab-content > div {
+    float: left;
+    margin-left: 30px;
+}
+
+.summary-card-tab-content > .links > h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #b8b8b8;
+    margin-bottom: 15px;
+}
+
+.summary-card-tab-content > .links > a {
+    display: block;
+    border: none;
+    padding: 15px 0 15px 30px;
+    position: relative;
+}
+
+.summary-card-tab-content > .links .icon-download {
+    display: block;
+    width: 24px;
+    height: 30px;
+    background: url('../img/summary/icon-download.png') center center no-repeat;
+    position: absolute;
+    left: 0px;
+    top: 6px;
+}
+
 /* ======== */
 /* Content */
 

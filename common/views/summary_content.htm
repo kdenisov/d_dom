@@ -118,3 +118,61 @@
         </tfoot>
     </table>
 </div>
+
+
+<div class="summary-page autoscroll" ng-show="SHOW_PAGE(5)">
+    <h2 class="no-border">Карточки товаров</h2>
+    <div class="summary-card-thumbs">
+        <div ng-click="SET_CARD(item)" ng-repeat="item in PAGE_CARDS.items">
+            <img alt="{{item.title}}" ng-src="{{item.thumb}}"/>
+            <div ng-show="CARD === item" class="highlight"></div>
+            <span class="count" ng-if="item.count > 1">{{item.count}}</span>
+        </div>
+    </div>
+
+    <div class="summary-card-title">
+        <div>
+            <h3>{{CARD.title}}</h3>
+            <div class="summary-card-pricing">
+                <div>
+                    <div>цена</div>
+                    <span class="value">{{CARD.rub}}</span> руб.
+                </div>
+                <div>
+                    <div>кол-во</div>
+                    <span class="value">{{CARD.count}}</span> шт.
+                </div>
+            </div>
+        </div>
+        <img ng-src="{{CARD.src}}" alt="{{CARD.title}}" />
+    </div>
+
+    <div class="summary-card-tab" ng-tabs>
+        <div class="summary-card-tab-items">
+            <div class="summary-card-tab-item" ng-tab-head="active">Описание</div>
+            <div class="summary-card-tab-item" ng-tab-head>Технические характеристик</div>
+        </div>
+
+        <div class="summary-card-tab-content" ng-tab-body>
+            <div ng-bind-html="RAW(CARD.description.html)"></div>
+            <div class="links">
+                <h4>{{CARD.description.linksTitle}}</h4>
+                <a ng-href="{{link.href}}" ng-repeat="link in CARD.description.links">
+                    <i ng-class="link.css"></i>
+                    {{link.text}}
+                </a>
+            </div>
+        </div>
+
+        <div class="summary-card-tab-content" ng-tab-body>
+            <div ng-bind-html="RAW(CARD.techData.html)"></div>
+            <div class="links">
+                <h4>{{CARD.techData.linksTitle}}</h4>
+                <a ng-href="{{link.href}}" ng-repeat="link in CARD.techData.links">
+                    <i ng-class="link.css"></i>
+                    {{link.text}}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
