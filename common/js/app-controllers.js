@@ -969,6 +969,67 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $stateParams, Config
         ]
     };
 
+    $scope.PAGE_INSTALLATION = {
+        totalRub: '123 456',
+        levels: [
+            {
+                title: 'Первый этаж',
+                groups: [
+                    {
+                        title: 'Комната 1',
+                        items: [
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4.', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                        ]
+                    },
+                    {
+                        title: 'Комната 2',
+                        items: [
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4.', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' }
+                        ]
+                    },
+                    {
+                        title: 'Коллектор на первом этаже',
+                        items: [
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4.', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' }
+                        ]
+                    }
+                ]
+            },
+            {
+                title: 'Второй этаж',
+                groups: [
+                    {
+                        title: 'Комната 1',
+                        items: [
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4.', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                        ]
+                    },
+                    {
+                        title: 'Комната 2',
+                        items: [
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4.', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
+                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+
     setCustomScroll();
 });
 
@@ -995,5 +1056,5 @@ appConfigurator.filter('formatNumber', function () {
 });
 
 function setCustomScroll() {
-    $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: false });
+    $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: true });
 }

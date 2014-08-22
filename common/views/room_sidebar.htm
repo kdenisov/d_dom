@@ -1,18 +1,18 @@
-<div class="group" ng-if="ROOM.isBoilerRoom && BOILER.isBoiler">
-	<div>
-		<div class="group">
-			<h3>Насосный узел обвязки котла</h3>
-			<select ng-options="ITEM.id as ITEM.name for ITEM in BOILER_PARAMS.pump" ng-model="BOILER.pump"></select>
-		</div>
-	</div>
-</div>
-<div ng-tabs class="tabs">
-	<div class="tab-items">
-		<div class="tab-item" ng-tab-head="true">Радиаторы</div>
-		<div class="tab-item" ng-tab-head>Теплые полы</div>
-	</div>
-    <div ng-tab-body class="tab-content ">
-        <div class="autoscroll">
+<div class="autoscroll">
+    <div class="group" ng-if="ROOM.isBoilerRoom && BOILER.isBoiler">
+        <div>
+            <div class="group">
+                <h3>Насосный узел обвязки котла</h3>
+                <select ng-options="ITEM.id as ITEM.name for ITEM in BOILER_PARAMS.pump" ng-model="BOILER.pump"></select>
+            </div>
+        </div>
+    </div>
+    <div ng-tabs class="tabs">
+        <div class="tab-items">
+            <div class="tab-item" ng-tab-head="true">Радиаторы</div>
+            <div class="tab-item" ng-tab-head>Теплые полы</div>
+        </div>
+        <div ng-tab-body class="tab-content ">
             <div class="group">
                 <label class="label-switchbox switchbox-false">
                     <h3 class="ng-binding">Для всех комнат</h3>
@@ -228,11 +228,9 @@
             </div>
 
             <div class="tab-autoscroll-filler"></div>
-        </div>
-    </div><!-- .tab-content -->
+        </div><!-- .tab-content -->
 
-    <div ng-tab-body class="tab-content">
-        <div class="autoscroll">
+        <div ng-tab-body class="tab-content">
             <div class="group">
                 <label class="label-switchbox switchbox-{{FLOORS.isFloors}}">
                     <h3>Наличие теплого пола</h3>
@@ -274,9 +272,9 @@
                             ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.fittings | filter: {type: (FLOORS.loops == 1 && 2)}"></select>
                 </div>
             </div>
-        </div>
-    </div><!-- .tab-content -->
-</div><!-- .tabs -->
+        </div><!-- .tab-content -->
+    </div><!-- .tabs -->
+</div>
 <script type="text/ng-template" id="alert.html">
     <div class="modal-header">
         <h3 class="modal-title">{{ALERT_MESSAGE}}</h3>

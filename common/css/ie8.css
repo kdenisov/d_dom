@@ -2,3 +2,7 @@
 .choicebox input {
 	filter: alpha(opacity=0);
 }
+
+.autoscroll {
+    overflow: auto !important;
+}

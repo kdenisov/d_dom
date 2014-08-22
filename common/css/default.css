@@ -160,21 +160,22 @@ body {
 
 
 #sidebar-content {
-    display: table;
 	width: 254px;
 	height: 100%;
 	float: left;
 	overflow: hidden;
 	background: #F3F3F3;
+    position: relative;
 }
 #sidebar-content h2 {
-    display: table-row;
 	color: #FFF;
 	text-transform: uppercase;
 	background: #424242;
+    position: absolute;
+    width: 100%;
 }
 #sidebar-content h2 span{
-    display: table-cell;
+    display: block;
 	height: 36px;
 	padding: 20px 20px 0;
 }
@@ -207,14 +208,18 @@ body {
 }
 
 #sidebar-view {
-    display: table-row;
 	position: relative;
+    box-sizing: border-box;
+    height: 100%;
+    padding-top: 56px; 
 }
 
 .autoscroll {
 	height: 100%;
 	position: absolute;
 	overflow: hidden;
+    padding-bottom: 56px;
+    box-sizing: border-box;
 }
 /*.tabs .autoscroll {
 	top: 50px;
@@ -225,6 +230,10 @@ body {
 
 .tab-autoscroll-filler {
     height: 49px; /*todo: this is a temporary solution, find a better one */
+}
+
+.autoscroll-filler {
+    height: 56px;
 }
 
 
@@ -774,6 +783,7 @@ a.collector-item {
 .current-item-3 .item-2 { margin-left: -50%; }
 
 .is-floors-false {
+    filter: alpha(opacity = 0);
 	opacity: 0;
 }
 .is-floors-true {
@@ -785,12 +795,14 @@ a.collector-item {
 	background: url('../img/floors.jpg') no-repeat;
 	background-size: 100% 100%;
 	margin: 577px 0 0 0;
+    filter: alpha(opacity = 1);
 	opacity: 1;
 	transition: opacity 0.5s;
 }
 
 .floor-control-false
 {
+    filter: alpha(opacity = 0);
     opacity: 0;
 }
 .floor-control-true
@@ -802,6 +814,7 @@ a.collector-item {
 	left: 50%;
     margin-left: 150px;
 	/*margin: 577px 0 0 0;*/
+    filter: alpha(opacity = 1);
 	opacity: 1;
 	transition: opacity 1s;
 }
@@ -819,6 +832,7 @@ a.collector-item {
 
 .radiators-control-type-1
 {
+    filter: alpha(opacity = 0);
     opacity: 0;
 }
 .radiators-control-type-2
@@ -831,6 +845,7 @@ a.collector-item {
     margin-left: 150px;
 	background: url('../img/thermo1.png') no-repeat center;
 	/*margin: 577px 0 0 0;*/
+    filter: alpha(opacity = 1);
 	opacity: 1;
 	transition: opacity 1s;
 }
@@ -1206,14 +1221,17 @@ label h3 {
 	background: none;
 }
 .label-switchbox input {
-	width: 48px;
+    width: 48px;
 	height: 22px;
 	float: right;
-	opacity: 0;
+    filter: alpha(opacity=0);
+    filter: alpha(opacity = 0);
+    opacity: 0;
 	vertical-align: top;
 	margin: 0;
 	cursor: pointer;
 }
+
 .switchbox-true {
 	/*transition: background-position .1s ease-out;*/
 	background-position: 100% -22px;
@@ -1242,8 +1260,10 @@ label h3 {
 	cursor: pointer;
 }
 .label-checkbox input {
-	opacity: 0;
+    filter: alpha(opacity=0);
+    opacity: 0;
 }
+
 .pseudo-checkbox {
 	background: url('../img/checkbox.png') no-repeat 100% 0;
 	z-index: 10;
@@ -1289,6 +1309,7 @@ label h3 {
 	left: 0;
 	vertical-align: top;
 	margin: 0;
+    filter: alpha(opacity = 0);
 	opacity: 0;
 	cursor: pointer;
 }
@@ -1310,6 +1331,7 @@ label.choicebox-true {
 .radio input {
 	width: 23px;
 	height: 23px;
+    filter: alpha(opacity = 0);
 	opacity: 0;
 	vertical-align: top;
 	margin: 0;
@@ -1357,6 +1379,7 @@ label.choicebox-true {
 	background-position: -100% -100%;
 }
 .pseudo-radio input {
+    filter: alpha(opacity = 0);
 	opacity: 0;
 }
 .selectbox .pseudo-checkbox {
@@ -1624,7 +1647,8 @@ slider span.pointer + span.pointer {
 .summary-page > h2 {
     font-size: 31px;
     padding: 38px;
-    border-bottom: 2px solid #e93c37; 
+    border-bottom: 2px solid #e93c37;
+    font-weight: normal;
 }
 
 .summary-general {
@@ -1905,7 +1929,11 @@ slider span.pointer + span.pointer {
     border-color: white;
 }
 
+
+
+
 table.summary-merchandise {
+    margin-top: -81px;
     width: 100%;
     position: relative;
 }
@@ -1914,20 +1942,39 @@ table.summary-merchandise tr {
     border-bottom: 1px solid #e2e3e3;
 }
 
-table.summary-merchandise th {
+table.summary-merchandise th,
+table.summary-merchandise .summary-merchandise-level td {
     font-weight: bold;
-    font-size: 16px;
-    padding-top: 0 !important;
+    font-size: 13px;
+    padding-top: 80px !important;
 }
+table.summary-merchandise th:first-child,
+table.summary-merchandise .summary-merchandise-level td:first-child {
+    font-size: 14px;
+    text-transform: uppercase;
+}
+table.summary-merchandise .summary-merchandise-group td {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left !important;
+    text-transform: uppercase;
+    height: 45px;
+}
+
 table.summary-merchandise th,
 table.summary-merchandise td {
     padding: 18px 12px;
     vertical-align: middle;
     text-align: left;
 }
-table.summary-merchandise > thead > tr {
+table.summary-merchandise > thead > tr,
+table.summary-merchandise .summary-merchandise-level {
     border-bottom: 2px solid #e93c36;
 }
+table.summary-merchandise .summary-merchandise-group {
+    border-bottom: 2px solid #c5c5c5;
+}
+
 table.summary-merchandise th:first-child,
 table.summary-merchandise td:first-child {
     padding-left: 38px;
