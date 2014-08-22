@@ -793,10 +793,34 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $stateParams, Config
         $scope.$apply();
     };
 
+    var homeClause = {
+        title: 'Параметры дома',
+        src: 'common/img/summary/general-cottage.jpg',
+        html: 'Расчет системы отопления произведен для 6 помещений в 2 этажном доме, с котлом в отдельном помещении в подвале.'
+    };
+
+    var roomsCount = Configurator.GetTotalRoomsCount();
+    if (roomsCount % 10 == 1)
+        roomsCount = roomsCount + " помещение";
+    else if (roomsCount % 10 >= 2 && roomsCount % 10 <= 4)
+        roomsCount = roomsCount + " помещения";
+    else
+        roomsCount = roomsCount + " помещений";
+
+    var levelsCount = Configurator.GetLevelsCount();
+    if (levelsCount == 1)
+        levelsCount = "одноэтажном";
+    else if (levelsCount == 2)
+        levelsCount = "двухэтажном";
+    else if (levelsCount == 3)
+        levelsCount = "трехэтажном";
+
+    homeClause.html = 'Расчет системы отопления произведен для ' + roomsCount + ' в ' + levelsCount + ' доме, с котлом в ' + (Configurator.boiler.roomType == 1 ? ' в отдельном помещении ' + (Configurator.boiler.level == 1 ? ' на первом этаже ' : ' в подвале') : ' на кухне ');
+
     $scope.PAGE_GENERAL = {
         orderNum: '1234567',
         clauses: [
-            { title: 'Параметры дома', src: 'common/img/summary/general-cottage.jpg', html: 'Расчет системы отопления произведен для 6 помещений в 2 этажном доме, с котлом в отдельном помещении в подвале.', },
+            homeClause,
             { title: 'Параметры котла и узла', src: 'common/img/summary/general-boiler.jpg', html: 'Нагрев теплоносителя производится {1/2 контурным} котлом с последующим распределением с помощью {насосного узла обвязки DSM-BPU 2xUPS 25-60} позволяющим {???}.', thumbs: [{ src: 'common/img/summary/thumbs/boiler.jpg', count: 1 }], },
             {
                 title: 'Тип разводки',

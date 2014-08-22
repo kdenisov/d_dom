@@ -818,6 +818,22 @@ appConfigurator.factory('Configurator', function(){
 	    }
 	}
 
+	var iterateActiveLevels = function (callback) {
+	    for (var level in Cfg.levels) {
+	        // если этаж активный
+	        if (Cfg.levels[level].isLevel) {
+	            callback(Cfg.levels[level]);
+	        }
+	    }
+	}
+
+	var iterateActiveRooms = function (level, callback) {
+	    for (var room = 0; room < level.roomsCount; room++) {
+	        if (level.rooms[room].isRoom) {
+	            callback(level.rooms[room]);
+	        }
+	    }
+	}	
 
     // @private пересчет кол-ва входов для конкретного этажа (не меняя конфигурацию коллекторов)
 	var setCollectorEntriesForLevel = function () {
@@ -942,6 +958,26 @@ appConfigurator.factory('Configurator', function(){
 	    refreshCollectorsCount();
 
 	    refreshRadiatorCollectorsCount();
+	}
+
+    // @public кол-во этажей
+	Cfg.GetLevelsCount = function () {
+	    var __c = 0;
+	    iterateActiveLevels(function () {
+	        __c++;
+	    });
+	    return __c;
+	}
+
+    // @public кол-во комнат всего
+	Cfg.GetTotalRoomsCount = function () {
+	    var __c = 0;
+	    iterateActiveLevels(function (level) {
+	        iterateActiveRooms(level, function () {
+	            __c++;
+	        });
+	    });
+	    return __c;
 	}
 
     // @public пересчет входов коллекторов без изменения конфигурации по этажам
