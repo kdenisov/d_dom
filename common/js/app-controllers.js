@@ -777,21 +777,43 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 
 appConfigurator.controller('SummaryCtrl', function ($scope, $stateParams, $sce, Configurator) {
     var page = parseInt($stateParams.page);
-    page = isNaN(page) || page > 5 ? 1 : page; 
-    $scope.PAGE = page;
+    page = isNaN(page) || page > 5 ? 1 : page;
 
-    $scope.SHOW_PAGE = function(index) {
-        return index == $scope.PAGE;
+    var getMenuPointerTop = function (selectedIndex) {
+        var dh = 58;
+        var h0 = 25;
+        return selectedIndex * dh + h0;
     };
 
-    $scope.OPEN = function (index, event) {
-        if (event && event.preventDefault) {
-            event.preventDefault();
-        }
+    var ViewModel = function(pageNum) {
+        var _this = this;
+        _this._page = pageNum;
 
-        $scope.PAGE = index;
-        $scope.$apply();
+        _this.visible = function(n) {
+            return _this._page == n;
+        };
+
+        _this.setPage = function(n, e) {
+            if (e) {
+                e.preventDefault();
+            }
+
+            $('#summary-menu-pointer').animate({ top: getMenuPointerTop(n - 1) + 'px' }, 300);
+            var scope = angular.element($('.summary-page:first')).scope();
+            scope.MODEL._page = n;
+            _this._page = n;
+        };
+
+        _this.productCard = {};
+
+        _this.showCard = function(card) {
+            _this.productCard = card;
+        };
+
+        return _this;
     };
+
+    $scope.MODEL = new ViewModel(page);
 
     var homeClause = {
         title: 'Параметры дома',
@@ -1106,14 +1128,16 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $stateParams, $sce, 
         ]
     };
 
-    $scope.CARD = $scope.PAGE_CARDS.items[0];
-    $scope.SET_CARD = function(item) {
-        $scope.CARD = item;
-    };
+    // set default product card
+    $scope.MODEL.showCard($scope.PAGE_CARDS.items[0]);
 
     $scope.RAW = function(html) {
         return $sce.trustAsHtml(html);
     };
+
+    $(function() {
+        $('#summary-menu-pointer').css('top', getMenuPointerTop(page-1) + 'px');
+    });
 
     setCustomScroll();
 });

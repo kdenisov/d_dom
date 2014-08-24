@@ -1,20 +1,33 @@
-﻿<div class="summary-page autoscroll" ng-show="SHOW_PAGE(1)">
+﻿<div class="summary-page autoscroll" ng-show="MODEL.visible(1)">
     <h2>Информация по заказу №{{PAGE_GENERAL.orderNum}}</h2>
+
+    <div id="summary-icons">
+        <a href="/#/summary/print" class="print"></a>
+        <a href="/#/summary/download" class="download"></a>
+    </div>
+
     <div class="summary-general" ng-repeat="clause in PAGE_GENERAL.clauses">
         <img ng-src="{{clause.src}}" alt="{{clause.title}}" />
         <div class="summary-general-content">
             <h3>{{clause.title}}</h3>
-            <p>{{clause.html}}</p>
+            <div class="text" ng-bind-html="RAW(clause.html)"></div>
             
             <div class="thumbs" ng-if="clause.thumbs.length > 0">
                 <div ng-repeat="icon in clause.thumbs"><img ng-src="{{icon.src}}" alt="" /><span class="thumb-count" ng-if="icon.count > 1">{{icon.count}}</span></div>
             </div>
         </div>
     </div>
+    <div class="summary-print-all-placeholder"></div>
 </div>
 
-<div class="summary-page autoscroll" ng-show="SHOW_PAGE(2)">
+<div class="summary-page autoscroll" ng-show="MODEL.visible(2)">
     <h2>Схема дома</h2>
+
+    <div id="summary-icons">
+        <a href="/#/summary/print" class="print"></a>
+        <a href="/#/summary/download" class="download"></a>
+    </div>
+
     <div class="summary-schemes">
         <div class="summary-schemes-level" ng-repeat="level in PAGE_SCHEME.levels">
             <h3>{{level.title}}</h3>
@@ -44,10 +57,17 @@
             </div>
         </div>
     </div>
+    <div class="summary-print-all-placeholder"></div>
 </div>
 
-<div class="summary-page autoscroll" ng-show="SHOW_PAGE(3)">
+<div class="summary-page autoscroll" ng-show="MODEL.visible(3)">
     <h2 class="no-border">Набор товаров</h2>
+
+    <div id="summary-icons">
+        <a href="/#/summary/print" class="print"></a>
+        <a href="/#/summary/download" class="download"></a>
+    </div>
+
     <table class="summary-merchandise">
         <thead>
             <tr>
@@ -79,12 +99,19 @@
             </tr>
         </tfoot>
     </table>
+    <div class="summary-print-all-placeholder"></div>
 </div>
 
 
 
-<div class="summary-page autoscroll" ng-show="SHOW_PAGE(4)">
+<div class="summary-page autoscroll" ng-show="MODEL.visible(4)">
     <h2 class="no-border">Куда устанавливать</h2>
+
+    <div id="summary-icons">
+        <a href="/#/summary/print" class="print"></a>
+        <a href="/#/summary/download" class="download"></a>
+    </div>
+
     <table class="summary-merchandise">
         <tbody ng-repeat="level in PAGE_INSTALLATION.levels">
             <tr class="summary-merchandise-level">
@@ -117,34 +144,41 @@
             </tr>
         </tfoot>
     </table>
+    <div class="summary-print-all-placeholder"></div>
 </div>
 
 
-<div class="summary-page autoscroll" ng-show="SHOW_PAGE(5)">
+<div class="summary-page autoscroll" ng-show="MODEL.visible(5)">
     <h2 class="no-border">Карточки товаров</h2>
+    
+    <div id="summary-icons">
+        <a href="/#/summary/print" class="print"></a>
+        <a href="/#/summary/download" class="download"></a>
+    </div>
+
     <div class="summary-card-thumbs">
-        <div ng-click="SET_CARD(item)" ng-repeat="item in PAGE_CARDS.items">
+        <div ng-click="MODEL.showCard(item)" ng-repeat="item in PAGE_CARDS.items">
             <img alt="{{item.title}}" ng-src="{{item.thumb}}"/>
-            <div ng-show="CARD === item" class="highlight"></div>
+            <div ng-show="MODEL.productCard === item" class="highlight"></div>
             <span class="count" ng-if="item.count > 1">{{item.count}}</span>
         </div>
     </div>
 
     <div class="summary-card-title">
         <div>
-            <h3>{{CARD.title}}</h3>
+            <h3>{{MODEL.productCard.title}}</h3>
             <div class="summary-card-pricing">
                 <div>
                     <div>цена</div>
-                    <span class="value">{{CARD.rub}}</span> руб.
+                    <span class="value">{{MODEL.productCard.rub}}</span> руб.
                 </div>
                 <div>
                     <div>кол-во</div>
-                    <span class="value">{{CARD.count}}</span> шт.
+                    <span class="value">{{MODEL.productCard.count}}</span> шт.
                 </div>
             </div>
         </div>
-        <img ng-src="{{CARD.src}}" alt="{{CARD.title}}" />
+        <img ng-src="{{MODEL.productCard.src}}" alt="{{MODEL.productCard.title}}" />
     </div>
 
     <div class="summary-card-tab" ng-tabs>
@@ -154,10 +188,10 @@
         </div>
 
         <div class="summary-card-tab-content" ng-tab-body>
-            <div ng-bind-html="RAW(CARD.description.html)"></div>
+            <div ng-bind-html="RAW(MODEL.productCard.description.html)"></div>
             <div class="links">
-                <h4>{{CARD.description.linksTitle}}</h4>
-                <a ng-href="{{link.href}}" ng-repeat="link in CARD.description.links">
+                <h4>{{MODEL.productCard.description.linksTitle}}</h4>
+                <a ng-href="{{link.href}}" ng-repeat="link in MODEL.productCard.description.links">
                     <i ng-class="link.css"></i>
                     {{link.text}}
                 </a>
@@ -165,14 +199,19 @@
         </div>
 
         <div class="summary-card-tab-content" ng-tab-body>
-            <div ng-bind-html="RAW(CARD.techData.html)"></div>
+            <div ng-bind-html="RAW(MODEL.productCard.techData.html)"></div>
             <div class="links">
-                <h4>{{CARD.techData.linksTitle}}</h4>
-                <a ng-href="{{link.href}}" ng-repeat="link in CARD.techData.links">
+                <h4>{{MODEL.productCard.techData.linksTitle}}</h4>
+                <a ng-href="{{link.href}}" ng-repeat="link in MODEL.productCard.techData.links">
                     <i ng-class="link.css"></i>
                     {{link.text}}
                 </a>
             </div>
         </div>
     </div>
+    <div class="summary-print-all-placeholder"></div>
+</div>
+
+<div id="summary-print-all">
+    <a href="/#/summary/print">Распечатать всю информацию <i class="icon-print-all"></i></a>
 </div>

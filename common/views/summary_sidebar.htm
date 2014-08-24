@@ -1,11 +1,12 @@
 ﻿<div class="summary-sidebar-layout">
     <div class="summary-control-container">
         <div class="summary-nav">
-            <a href="#/summary/1" ng-click="" ng-class="{'current':PAGE==1}">Вводные</a>
-            <a href="#/summary/2" ng-click="" ng-class="{'current':PAGE==2}">Схема</a>
-            <a href="#/summary/3" ng-click="" ng-class="{'current':PAGE==3}">Набор товаров</a>
-            <a href="#/summary/4" ng-click="" ng-class="{'current':PAGE==4}">Куда устанавливать</a>
-            <a href="#/summary/5" ng-click="" ng-class="{'current':PAGE==5}">Карточки товаров</a>
+            <a href="#/summary/1" ng-click="MODEL.setPage(1, $event);" ng-class="{'current':MODEL.visible(1)}">Вводные</a>
+            <a href="#/summary/2" ng-click="MODEL.setPage(2, $event);" ng-class="{'current':MODEL.visible(2)}">Схема</a>
+            <a href="#/summary/3" ng-click="MODEL.setPage(3, $event);" ng-class="{'current':MODEL.visible(3)}">Набор товаров</a>
+            <a href="#/summary/4" ng-click="MODEL.setPage(4, $event);" ng-class="{'current':MODEL.visible(4)}">Куда устанавливать</a>
+            <a href="#/summary/5" ng-click="MODEL.setPage(5, $event);" ng-class="{'current':MODEL.visible(5)}">Карточки товаров</a>
+            <div id="summary-menu-pointer"></div>
         </div>
         <div class="summary-controls">
             <a class="print" href="#" ng-click="PRINT()">Распечатать</a>

@@ -1596,6 +1596,10 @@ slider span.pointer + span.pointer {
     min-height: 425px;
 }
 
+.summary-nav {
+    position: relative;
+}
+
 .summary-nav > a {
     display: block;
     padding: 20px 26px;
@@ -1643,12 +1647,13 @@ slider span.pointer + span.pointer {
 .summary-page {
     height: 100%;
     width: 100%;
+    padding-bottom: 65px;
     position: relative;
 }
 
 .summary-page > h2 {
     font-size: 31px;
-    padding: 38px;
+    padding: 38px 130px 38px 38px;
     border-bottom: 2px solid #e93c37;
     font-weight: normal;
 }
@@ -1682,7 +1687,7 @@ slider span.pointer + span.pointer {
     text-transform: uppercase;
 }
 
-.summary-general > .summary-general-content p {
+.summary-general > .summary-general-content > .text {
     font-size: 14px;
     line-height: 1.5;
     min-height: 100px;
@@ -1940,7 +1945,7 @@ table.summary-merchandise {
     position: relative;
 }
 
-table.summary-merchandise tr {
+table.summary-merchandise tbody tr {
     border-bottom: 1px solid #e2e3e3;
 }
 
@@ -2152,15 +2157,15 @@ table.summary-merchandise .rub {
 .summary-card-tab-content.ng-show {
     display: block;
 }
-.summary-card-tab-content > div:first-child {
-    float: left;
-    width: 575px;
-    margin-left: 0px;
-}
 
 .summary-card-tab-content > div {
     float: left;
-    margin-left: 30px;
+}
+
+.summary-card-tab-content > div:first-child {
+    width: 575px;
+    margin-right: 30px;
+    margin-bottom: 30px;
 }
 
 .summary-card-tab-content > .links > h4 {
@@ -2187,6 +2192,77 @@ table.summary-merchandise .rub {
     top: 6px;
 }
 
+
+#summary-menu-pointer {
+	width: 0; 
+	height: 0; 
+	border-top: 5px solid transparent;
+	border-bottom: 5px solid transparent; 
+	border-right:5px solid white;
+
+    position: absolute;
+    top: 25px;
+    right: 0; 
+}
+
+#summary-icons {
+    position: absolute;
+    right: 38px;
+    top: 42px;
+    z-index: 2;
+}
+
+#summary-icons a{
+    float: left;
+    display: block;
+    width: 36.5px;
+    height: 35px;
+    border-bottom: none;
+    background: transparent url('../img/summary/icons-print-download.png') no-repeat;
+}
+
+#summary-icons .print {
+    background-position: left top;
+}
+
+#summary-icons .download {
+    background-position: right top;
+}
+
+#summary-print-all {
+    position: relative;
+}
+
+#summary-print-all > a {
+    display: block;
+    clear: both;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border: none;
+    font-size: 16px;
+    line-height: 65px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #e5e5e5;
+    color: #494949
+}
+
+#summary-print-all > a > .icon-print-all {
+    display: inline-block;
+    width: 24px;
+    height: 20px;
+    margin-bottom: -4px;
+    background-image: url('../img/summary/icon-print-all.png');
+    background-position: center center;
+}
+
+.summary-print-all-placeholder {
+    clear: both;
+    height: 90px;
+}
 /* ======== */
 /* Content */
 
