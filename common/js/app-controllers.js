@@ -556,7 +556,71 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
         return nodes;
     };
 
-    $scope.NODES = getNodes(); // Узлы коллектора, сгрупированные по секциям
+    var receiverTypes = { wired: 1, wireless: 2 };
+
+    var ReceiverModel = function(type) {
+        this.type = type;
+        return this;
+    };
+
+    var getThermoControls = function(targetCollector, levels) {
+        var controls = { receivers: [], valves: 0 };
+
+        var thermometersCount = { wired: 0, wireless: 0};
+        var controlOptions = Configurator.params.room.radiators.control;
+        for (var l = 0; l < levels.length; l++) {
+            var lvl = levels[l];
+            if (!targetCollector.levels[l + 1]) {
+                continue;
+            }
+
+            for (var r = 0; r < lvl.rooms.length; r++) {
+                var room = lvl.rooms[r];
+                if (!room.isRoom) {
+                    continue;
+                }
+
+                if (targetCollector.type == 'radiator' && room.radiators.commonControl) {
+                    var commonControl = controlOptions[room.radiators.commonControl - 1];
+
+                    if (commonControl.id == 5 || commonControl.id == 6) {
+                        thermometersCount.wired++;
+                        controls.valves += room.radiators.list.length;
+                    }
+
+                    if (commonControl.id == 7 || commonControl.id == 8) {
+                        thermometersCount.wireless++;
+                        controls.valves += room.radiators.list.length;
+                    }
+
+                } else if (room.floors.isFloors) {
+                    if (room.floors.control == 2) {
+                        thermometersCount.wired += room.floors.loops;
+                        controls.valves += room.floors.loops;
+                    }
+
+                    if (room.floors.control == 3) {
+                        thermometersCount.wireless += room.floors.loops;
+                        controls.valves += room.floors.loops;
+                    }
+                }
+
+            }
+        }
+
+        for (var i = 0; i < Math.ceil(thermometersCount.wired / 8) ; i++) {
+            controls.receivers.push(new ReceiverModel(receiverTypes.wired));
+        }
+
+        for (i = 0; i < Math.ceil(thermometersCount.wireless / 3) ; i++) {
+            controls.receivers.push(new ReceiverModel(receiverTypes.wireless));
+        }
+
+        return controls;
+    };
+
+    $scope.NODES = getNodes(); // массив узлов коллектора
+    $scope.THERMOCONTROLS = getThermoControls($scope.COLLECTOR, $scope.LEVELS);
 
     $scope.SET_TERMOMETRS_COUNT = function() {
         $scope.COLLECTOR.thermometersCount = (collector._thermometerIn ? 1 : 0) + (collector._thermometerOut ? 1 : 0);
@@ -568,12 +632,8 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
         $scope.UPDATE_NODES();
     };
 
-    $scope.UPDATE_COLLECTOR = function (toggleLevelId) {
-        Configurator.ToggleCollectorToLevel(collector.id, level.id, toggleLevelId)
-    };
-
     $scope.UPDATE_NODES = function() {
-        var items = $('.collector-nodes .node');
+        var items = $('.collector-nodes:first');
         var $currentScope = angular.element(items).scope();
         var count = $currentScope.COLLECTOR.entries;
 
@@ -605,6 +665,14 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
 
     $scope.SHOW_MIXER = function () {
         return $scope.COLLECTOR.mixing;
+    };
+
+    $scope.HAS_ELECTRO_VALVE = function(index) {
+        return index < $scope.THERMOCONTROLS.valves;
+    };
+
+    $scope.GET_RECEIVER_CCS_CLASS = function(receiverModel) {
+        return receiverModel.type == receiverTypes.wired ? 'wired' : 'wireless';
     };
 
     $scope.validateCollectors = function (currentLevel, levels, currentCollector) {

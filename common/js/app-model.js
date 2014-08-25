@@ -20,7 +20,6 @@ appConfigurator.factory('Configurator', function(){
 			collectors: [],
 			boiler: {},
 			RefreshCollectorsCount: function () { },
-		    // ToggleCollectorToLevel: function (collectorId, levelId) { },
 			ValidateCollectors: function(currentLevel, levels, collector, alertCallback, popupCallback) {},
 		};
 	};

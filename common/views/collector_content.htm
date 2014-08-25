@@ -33,8 +33,8 @@
                     <div class="collector-nodes">
                         <img class="brace" src="common/img/collector/brace.png" alt="" />
                         <div class="node" ng-repeat="node in NODES" ng-class="GET_NODE_CSS_CLASS($index)">
-                            <img class="valve-electro" src="common/img/collector/electro-valve.png" ng-show="IS_ELECTRO_VALVE($index)" />
-                            <img class="valve-cooling" src="common/img/collector/cooling-valve.png" ng-hide="IS_ELECTRO_VALVE($index)" />
+                            <img class="valve-electro" src="common/img/collector/electro-valve.png" ng-show="HAS_ELECTRO_VALVE($index)" />
+                            <img class="valve-cooling" src="common/img/collector/cooling-valve.png" ng-hide="HAS_ELECTRO_VALVE($index)" />
                             <img class="fitting" src="common/img/collector/fitting.png" />
                             <img class="pipe-out" src="common/img/collector/pipe-out-long.png" />
                             <img class="section-fitting" src="common/img/collector/section-fitting.png" ng-show="SHOW_SECTION_FITTING($index)" />
@@ -44,6 +44,10 @@
                         <img class="brace-second" src="common/img/collector/brace.png" alt="" />
                     </div>
                     <img class="air-vent" src="common/img/collector/air-vent.png" alt="" />
+                </div>
+
+                <div class="receivers">
+                    <div ng-repeat="receiver in THERMOCONTROLS.receivers" ng-class="GET_RECEIVER_CCS_CLASS(receiver)"></div>
                 </div>
             </div>
 

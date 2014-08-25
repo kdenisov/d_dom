@@ -943,16 +943,17 @@ a.collector-item {
 .collector-set {
     position: absolute;
     left: 0px;
-    top: 65px;
+    top: 120px;
 }
 
 .collector-set.cold {
     position: absolute;
     top: 255px;
+    z-index: 2;
 }
 
 .collector-floor .collector-set.cold {
-    top: 268px;
+    top: 322px;
 }
 
 .collector-set > * {
@@ -1117,6 +1118,27 @@ a.collector-item {
     float: left;
     width: 166px;
     height: 20px;
+}
+
+.receivers {
+    position: absolute;
+    left: 0px;
+}
+
+.receivers > * {
+    float: left;
+    height: 144px;
+}
+
+.receivers > .wired {
+    width: 265px;
+    background: transparent url('../img/collector/reciever.png') left top no-repeat;
+}
+
+.receivers > .wireless {
+    width: 127px;
+    margin-top: 6px;
+    background: transparent url('../img/collector/reciever2.png') left top no-repeat;
 }
 
 /* ========= */
