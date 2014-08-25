@@ -669,93 +669,8 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 		}
 	});
 
-	$scope.BASKET = function(){
-		var _basket = {};
-
-		angular.forEach(Configurator.levels, function(_level) {
-			_level.isLevel
-			&& 
-			(angular.forEach(_level.rooms, function(_room) {
-				_room.id <= _level.roomsCount && (
-					(angular.forEach(_room.radiators.list, function(_radiator) {
-						_radiator.id <= _room.radiators.radiatorsTypes && (
-							(_radiator.type == 1 && _radiator.control && angular.forEach(params.room.radiators.control[_radiator.control-1].basket, function(_control) {
-							    pushToBasket(_basket, _control[0], _radiator.count * eval(_control[1]));
-							}))
-							+
-							(angular.forEach(params.room.radiators.valves[_radiator.valves-1].basket, function(_valves) {
-							    pushToBasket(_basket, _valves[0], _radiator.count * _valves[1]);
-							}))
-							+
-							(_radiator.fittings && angular.forEach(params.fittings[_radiator.fittings-1].basket, function(_fittings) {
-								pushToBasket(_basket, _fittings[0], _radiator.count * 2);
-							}))
-						)
-					}))
-					+
-					(_room.floors.isFloors && 
-						(angular.forEach(params.room.floors.control[_room.floors.control - 1].basket, function (_control) {
-							pushToBasket(_basket, _control[0], eval(_control[1]));
-						}))
-						+
-						(_room.floors.fittings && angular.forEach(params.fittings[_room.floors.fittings-1].basket, function(_fittings) {
-							pushToBasket(_basket, _fittings[0], 2);
-						}))
-					)
-				)
-			}))
-			&&
-			(angular.forEach(_level.collectors, function (_collector) {
-
-			    if (_collector.isCollector) {
-			        
-			        var collector_1 = _collector.entries;
-			        angular.forEach(params.collector.sets, function (_set) {			           
-			            if (_collector.type == 'radiator' && _set.isFlowmeter == _collector.isFlowmeter && _set.entries == collector_1) {
-			                angular.forEach(_set.basket, function (_sets) {
-			                    pushToBasket(_basket, _sets[0], eval(_sets[1]));
-			                });
-			            }
-			            if (_collector.type == 'floor' && _set.isFlowmeter == _collector.isFlowmeter && _set.entries == collector_1) {
-			                angular.forEach(_set.basket, function (_sets) {
-			                    pushToBasket(_basket, _sets[0], eval(_sets[1]));
-			                });
-			            }
-			        });
-			    }
-
-				_collector.isCollector && (
-					(_collector.isBallValves && angular.forEach(params.collector.ballValves[0].basket, function(_ballValves) {
-						pushToBasket(_basket, _ballValves[0], _ballValves[1]);
-					}))
-					+
-					(_collector.isThermometers && angular.forEach(params.collector.thermometers[0].basket, function(_thermometers) {
-						pushToBasket(_basket, _thermometers[0], eval(_thermometers[1]));
-					}))
-					+
-					(_collector.fittings && angular.forEach(params.fittings[_collector.fittings-1].basket, function(_fittings) {
-						pushToBasket(_basket, _fittings[0], _collector.entries);
-					}))
-                    +
-					(_collector.fit_088U0305 && angular.forEach(params.collector.fit_088U0305[_collector.fit_088U0305 - 1].basket, function (_fittings) {
-					    pushToBasket(_basket, _fittings[0], _fittings[1]);
-					}))
-                    +
-					(_collector.fit_088U0301 && angular.forEach(params.collector.fit_088U0301[_collector.fit_088U0301 - 1].basket, function (_fittings) {
-					    pushToBasket(_basket, _fittings[0], _fittings[1]);
-					}))
-					+
-					(_collector.mixing && angular.forEach(params.collector.mixing[_collector.mixing-1].basket, function(_mixing) {
-						pushToBasket(_basket, _mixing[0], _mixing[1]);
-					})))				
-			}));
-		});
-
-		Configurator.boiler.isBoiler && pushToBasket(_basket, params.boiler.pump[Configurator.boiler.pump-1].basket[0][0], 1);
-		for (var k in _basket) {
-		    _basket[k] = Math.ceil(_basket[k]);
-		}
-		return _basket;
+	$scope.BASKET = function(){		
+		return Configurator.Basket();
 	}
 
 	$scope.BASKET_TOTAL_COUNT = function(){
@@ -765,14 +680,6 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 		}
 		return(count);
 	}
-
-	var pushToBasket = function(basket, key, val){
-		if(key in basket) {
-			basket[key] += parseFloat(val);
-		}else 
-		    basket[key] = parseFloat(val);
-	}
-
 });
 
 appConfigurator.controller('SummaryCtrl', function ($scope, $stateParams, $sce, Configurator) {
@@ -813,6 +720,8 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $stateParams, $sce, 
         return _this;
     };
 
+    var _basket = Configurator.Basket();
+
     $scope.MODEL = new ViewModel(page);
 
     var homeClause = {
@@ -839,75 +748,212 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $stateParams, $sce, 
 
     homeClause.html = 'Расчет системы отопления произведен для ' + roomsCount + ' в ' + levelsCount + ' доме, с котлом в ' + (Configurator.boiler.roomType == 1 ? ' в отдельном помещении ' + (Configurator.boiler.level == 1 ? ' на первом этаже ' : ' в подвале') : ' на кухне ');
 
-    $scope.PAGE_GENERAL = {
-        orderNum: '1234567',
-        clauses: [
-            homeClause,
-            { title: 'Параметры котла и узла', src: 'common/img/summary/general-boiler.jpg', html: 'Нагрев теплоносителя производится {1/2 контурным} котлом с последующим распределением с помощью {насосного узла обвязки DSM-BPU 2xUPS 25-60} позволяющим {???}.', thumbs: [{ src: 'common/img/summary/thumbs/boiler.jpg', count: 1 }], },
-            {
-                title: 'Тип разводки',
-                src: 'common/img/summary/general-interconnections.jpg',
-                html: 'Типы клапанов для подключения к радиаторам трубы подобраны с учетом разводки труб {в стене/по полу/…/...} и {в стене/по полу/…/...}.',
-                thumbs: [
-                    { src: 'common/img/summary/thumbs/interconnection.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/interconnection.jpg', count: 2 },
-                    { src: 'common/img/summary/thumbs/interconnection.jpg', count: 3 },
-                    { src: 'common/img/summary/thumbs/interconnection.jpg', count: 4 }
-                ]
-            },
-            {
-                title: 'Коллекторы радиаторов',
-                src: 'common/img/summary/general-radiator-collector.jpg',
-                html: 'Для распределения теплоносителя по радиаторам используются коллекторы {с расходомером} {и воздухоотводчиком} {в комплекте с кронштейнами для крепления в коробе}. оснащёнными вставками, позволяющими настроить расход в каждом контуре. Коллекторы с расходомерами позволяют измерить расход теплоносителя в каждом контуре, что значительно упрощает настройку системы отопления.',
-                thumbs: [
-                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 2 },
-                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 3 },
-                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 4 },
-                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 2 },
-                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 3 },
-                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 4 },
-                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 2 },
-                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 3 },
-                    { src: 'common/img/summary/thumbs/radiator.jpg', count: 4 }
-                ]
-            },
-            {
-                title: 'Управление радиаторным отоплением',
-                src: 'common/img/summary/general-radiator-control.jpg',
-                html: 'Регулировка температуры в {название помещений} производится {беспроводный/ комнатный термостат с датчиком температуры пола} . Для {название помещений} выбраны радиаторные термостаты Термостат Living eco электронный программируемый.',
-                thumbs: [
-                    { src: 'common/img/summary/thumbs/controls.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/controls.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/controls.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/controls.jpg', count: 3 },
-                    { src: 'common/img/summary/thumbs/controls.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/controls.jpg', count: 1 }
-                ]
-            },
-            {
-                title: 'Коллекторы теплого пола',
-                src: 'common/img/summary/general-floor-collector.jpg',
-                html: 'Для обеспечения подачи теплоносителя в 4 контура теплого пола 2 комнат первого этажа используется {кол-во входов} контурный коллектор {с расходомером} {и воздухоотводчиком} {в комплекте с кранштейнами для крепления в коробе}, при этом для обеспечения необходимой температуры используется компактный узел смешения с 3-х скоростным насосом UPS 15-40, с термостатом безопасности. Для удобства установки комфортной температуры в помещении рекомендован{беспроводный/ комнатный термостат с датчиком температуры пола} или {термостат и клапан}.',
-                thumbs: [
-                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/floors.jpg', count: 7 },
-                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/floors.jpg', count: 3 },
-                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/floors.jpg', count: 4 },
-                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/floors.jpg', count: 5 },
-                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 },
-                    { src: 'common/img/summary/thumbs/floors.jpg', count: 1 }
-                ]
-            }
+    if (Configurator.boiler.embodiment == 1) {
+        var boilerClause = {
+            title: 'Параметры котла и узла',
+            src: 'common/img/summary/general-boiler.jpg',
+            html: 'Источником тепловой энергии для теплоснабжения дома служит собственный котел, работающий на газообразном или жидком топливе. В данном проекте предусмотрен одноконтурный котел. <br/>Одноконтурные котлы предназначены для нагрева теплоносителя контура отопления. В состав котла, как правило, входит система управления и защиты горелки. Циркуляционные насосы и теплообменник нагрева горячей воды должны устанавливаться отдельно. Для приготовления горячей воды используется бойлер косвенного нагрева, представляющий собой накопительный бак горячей воды со встроенным в него теплообменником. Для подачи теплоносителя в контур отопления и нагрева ГВС применен насосный узел обвязки котла ' + Configurator.params.boiler.pump[Configurator.boiler.pump - 1].name + '. <br/> Насос контура отопления прокачивает теплоноситель через котел, радиаторы и (с помощью узла смешения) через конуры теплого пола. В контуре отопления устанавливаются термостатические регуляторы, которые изменяют сопротивление контура в зависимости от температуры в помещениях. Чтобы обеспечить циркуляцию теплоносителя через котел в любых режимах работы, в контуре отопления насосного узла DSM-BPU предусмотрен перепускной клапан AVDO. Клапан AVDO может быть настроен на поддержание необходимого минимального расхода в зависимости от применяемого котла. Насос контура ГВС прокачивает теплоноситель через котел и бойлер косвенного нагрева. Сопротивление контура нагрева ГВС постоянно, поэтому установка перепускного клапана не требуется. <br/>В состав насосного узла обвязки котла входят фильтры для каждого контура, предохранительный клапан, кран для подключения расширительного бака, запорные краны на каждом контуре для удобства сервисного обслуживания системы. Установка дополнительной трубопроводной арматуры не требуется.', thumbs: [{ src: 'common/img/summary/thumbs/boiler.jpg', count: 1 }]
+        };
+    } else {
+        var boilerClause = {
+            title: 'Параметры котла и узла',
+            src: 'common/img/summary/general-boiler.jpg',
+            html: 'Источником тепловой энергии для теплоснабжения дома служит собственный котел, работающий на газообразном или жидком топливе. В данном проекте предусмотрен двухконтурный котел. <br/>Двухконтурные котлы предназначены для нагрева и подачи теплоносителя в контур отопления, а также для приготовления горячей воды (ГВС). В состав двухконтурных котлов входит теплообменник нагрева горячей воды, трехходовой вентиль для переключения режима отопления / приготовления ГВС, циркуляционный насос, автоматика. Горячая вода приготавливается в проточном теплообменнике, поэтому котел должен иметь достаточную мощность, перекрывающую пиковую потребность в горячей воде.', thumbs: [{ src: 'common/img/summary/thumbs/boiler.jpg', count: 1 }]
+        };
+    }
+
+    var collectorClause = {
+        title: 'Коллекторы радиаторов',
+        src: 'common/img/summary/general-radiator-collector.jpg',
+        html: 'Разводка трубопроводов лучевая, то есть к каждому радиатору от расположенного на этаже коллектора проложен независимый подающий и обратный трубопроводы. Такая разводка позволяет скрыть трубопроводы в стене или стяжке, так как от коллектора до радиатора прокладывается цельный трубопровод, без стыков и соединений. Использование труб малого диаметра (так как тепловая нагрузка на каждый радиатор относительно мала) позволяет уменьшить толщину стяжки. Также лучевая разводка позволяет оптимально управлять температурой в помещении, так как изменение расхода отдельно взятого отопительного прибора не оказывает влияние на другие отопительные приборы.',
+        thumbs: [
         ]
     };
+
+    if (Configurator.ifBasketContainCodes(_basket, ['088U0722', '088U0723', '088U0724', '088U0725', '088U0726', '088U0727', '088U0728', '088U0729', '088U0730', '088U0731', '088U0732'])) {
+        collectorClause.html += '<br/>Для подключения применены распределительные коллекторы FHF-F, оснащенные расходомерами. Расходомеры позволяют визуально наблюдать поток теплоносителя в каждом контуре, что существенно упрощает наладку и обслуживание системы. Чтобы избежать попадания воздуха в трубопровод, коллекторы оснащены автоматическими воздухоотводчиками.';
+    }
+
+    if (Configurator.ifBasketContainCodes(_basket, ['088U0702', '088U0703', '088U0704', '088U0705', '088U0706', '088U0707', '088U0708', '088U0709', '088U0710', '088U0711', '088U0712'])) {
+        collectorClause.html += '<br/>Для подключения применены распределительные коллекторы FHF. Чтобы избежать попадания воздуха в трубопровод коллекторы оснащены автоматическими воздухоотводчиками.';
+    }
+
+    if (Configurator.ifBasketContainCodes(_basket, ['088H3112', '088H3113'])) {
+        collectorClause.html += '<br/>Коллекторы также оснащены термоэлектрическими приводами TWA-A, на которые через ресивер подается управляющий сигнал от комнатного термостата.';
+    }
+
+    var radiatorsClause = {
+        title: 'Обвязка радиатора',
+        src: 'common/img/summary/general-interconnections.jpg',
+        html: 'Обвязка радиатора выполняет следующие основные функции: регулировать мощность радиатора в зависимости от температуры в помещении, перекрывать поток теплоносителя в радиатор для обслуживания, ремонта или замены, обеспечивать возможность слива теплоносителя из радиатора на время ремонта',
+        thumbs: [
+            
+        ]
+    }
+
+    var _radiators = Configurator.RadiatorValves();
+
+    if (Configurator.ifBasketContainCodes(_radiators, ['1', '2', '3', '4', '5', '6'])) {
+        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с боковым подключением.<br/> Термостатический элемент устанавливается на клапан терморегулятора RA с боковым подключением трубопровода.<br/>Для возможности отключения радиаторов и слива из них теплоносителя для обвязки радиаторов применены специальные запорные клапаны RLV для радиаторов с боковым подключением. К этим клапанам можно подключить спускной кран с насадкой для шланга 3/4" и предотвратить попадание теплоносителя на отделочные материалы при обслуживании и ремонте.';
+    }
+
+    if (Configurator.ifBasketContainCodes(_radiators, ['7', '8'])) {
+        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с боковым подключением.<br/> Термостатический элемент устанавливается на клапан терморегулятора RA с боковым подключением трубопровода.<br/>Для возможности отключения радиаторов и слива из них теплоносителя для обвязки радиаторов применены специальные запорные клапаны RLV для радиаторов с боковым подключением. К этим клапанам можно подключить спускной кран с насадкой для шланга 3/4" и предотвратить попадание теплоносителя на отделочные материалы при обслуживании и ремонте.';
+    }
+
+    if (Configurator.ifBasketContainCodes(_radiators, ['40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51'])) {
+        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с нижним подключением. В конструкции радиатора предусмотрен терморегулирующий клапан, смонтированный на заводе. Клапан предусматривает установку термостатического элемента с {современным клипсовым соединением типа RA <br/>Для возможности отключения радиаторов и слива из них теплоносителя для обвязки применены специальные запорные клапаны RLV-KD для радиаторов с нижним подключением. К этим клапанам можно подключить спускной кран с насадкой для шланга 3/4" и предотвратить попадание теплоносителя на отделочные материалы при обслуживании и ремонте.<br/>';
+    }
+
+    if (Configurator.ifBasketContainCodes(_radiators, ['52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63'])) {
+        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с нижним подключением. В конструкции радиатора предусмотрен терморегулирующий клапан, смонтированный на заводе. Клапан предусматривает установку термостатического элемента с резьбовым М30х1,5 соединением.<br/>Для возможности отключения радиаторов и слива из них теплоносителя для обвязки применены специальные запорные клапаны RLV-KD для радиаторов с нижним подключением. К этим клапанам можно подключить спускной кран с насадкой для шланга 3/4" и предотвратить попадание теплоносителя на отделочные материалы при обслуживании и ремонте.<br/>';
+    }
+
+    if (Configurator.ifBasketContainCodes(_radiators, ['29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39'])) {
+        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с нижним подключением. В конструкции радиатора не предусмотрен терморегулирующий клапан, поэтому гарнитура VHS<br/>';
+    }
+
+    var radiatorControlClause = {
+        title: 'Управление радиаторным отоплением',
+        src: 'common/img/summary/general-radiator-control.jpg',
+        html: '',
+        thumbs: [            
+        ]
+    };
+
+    var _controlTypes = Configurator.RadiatorControlTypes();
+
+    var controlOne = [];
+    var controlTwo = [];
+    angular.forEach(Configurator.levels, function (_level) {
+        _level.isLevel
+        &&
+        (angular.forEach(_level.rooms, function (_room) {
+            if (_room.id <= _level.roomsCount) {
+                if (_room.controlType == 1) {
+                    controlOne.push(_room.name);
+                } else {
+                    controlTwo.push(_room.name);
+                }
+            }
+        }))
+    });
+
+    var _codesControl = [];
+    if (Configurator.ifBasketContainCodes(_basket, ['087N1110']))
+        _codesControl.push("087N1110");
+    if (Configurator.ifBasketContainCodes(_basket, ['087N791801']))
+        _codesControl.push("087N791801");
+    if (Configurator.ifBasketContainCodes(_basket, ['087N7270']))
+        _codesControl.push("087N7270");
+    if (Configurator.ifBasketContainCodes(_basket, ['087N791301']))
+        _codesControl.push("087N791301");
+
+    var _recievierControl = [];
+    if (Configurator.ifBasketContainCodes(_basket, ['088H0016']))
+        _recievierControl.push("088H0016");
+    if (Configurator.ifBasketContainCodes(_basket, ['087N6784']))
+        _recievierControl.push("087N6784");
+    
+    //   Регулирование только радиаторными (radiators: controlType: 1)
+    if (!Configurator.ifBasketContainCodes(_controlTypes, '2')) {
+        // только living eco radiators: control:1,3 (014G0050)
+        if (!Configurator.ifBasketContainCodes(_basket, ['013G2994'])) {
+            radiatorControlClause.html += '<br/>Для управления радиаторами использованы электронные термостатические элементы living eco, которые благодаря интеллектуальной программе позволяют достичь максимального уровня комфорта и экономии до 46% энергии на отопление помещения.';
+        } else if (!Configurator.ifBasketContainCodes(_basket, ['014G0050'])) { // только RA2994 radiators: control:2 (013G2994)
+            radiatorControlClause.html += '<br/>Для управления радиаторами использованы термостатические элементы с газовым наполнением RA2994, обеспечивающие высокий уровень комфорта и экономию до 36% энергии на отопление помещения.';
+        } else if (Configurator.ifBasketContainCodes(_basket, ['014G0050']) && Configurator.ifBasketContainCodes(_basket, ['013G2994'])) { // И RA2994 и living eco radiators: control:1,2,3 (013G2994, 014G0050)
+            radiatorControlClause.html += '<br/>Для управления радиаторами использованы термостатические элементы с газовым наполнением RA2994, обеспечивающие высокий уровень комфорта и экономию до 36% энергии на отопление помещения. А также электронный электронные термостатические элементы living eco, которые благодаря интеллектуальной программе позволяют достичь максимального уровня комфорта и экономии до 46% энергии на отопление помещения';
+        }
+    } else if (!Configurator.ifBasketContainCodes(_controlTypes, '1')) {
+        // только living eco radiators: control:1,3 (014G0050)
+        radiatorControlClause.html += '<br/>В данном проекте удобство управление радиаторами во всех помещениях предусмотрено с помощью комнатных термостатов. Установленные(ый) ';
+        
+        radiatorControlClause.html += _codesControl.join(',');
+        radiatorControlClause.html += ' подают(ет) сигнал к приемнику беспроводного сигнала ';
+        
+        radiatorControlClause.html += _recievierControl.join(',');
+        radiatorControlClause.html += '. Таким образом осуществляется единое управление всеми радиаторами, установленными в каждом отдельном помещении. В этом случае установка на каждый радиатор термостатического элемента не требуется. Комнатный термостат применяют, если радиаторы закрыты декоративной решеткой, в этом случае температура в месте установки радиатора значительно отличается от температуры в комнате, и радиаторный термостат будет работать некорректно. Также, если в комнате установлено большое количество радиаторов, удобнее регулировать температуру в помещении одним прибором – комнатным термостатом. В этом случае установка на каждый радиатор термостатического элемента не требуется.';
+    } else {
+        radiatorControlClause.html += 'Регулировать мощность радиаторного отопления производится двумя способами: ';
+        radiatorControlClause.html += '<br/>- управляя всеми радиаторами в одном помещении одновременно по комнатному термостату.';
+
+        radiatorControlClause.html += '<br/>Для удобства управления в комнатах ' + controlTwo.join(', ') + ': установлены ' +  _codes.join(',') + ' подающ' + (_codes.length == 1 ? 'ий' : 'ие') + ' сигнал к приемнику\ам беспроводного сигнала ' + _recievierControl.join(',') + '. Таким образом осуществляется единое управление всеми радиаторами, установленными в каждом отдельном помещении. <br/>';
+        radiatorControlClause.html += 'Комнатный термостат применяют, если радиаторы закрыты декоративной решеткой, в этом случае температура в месте установки радиатора значительно отличается от температуры в комнате, и радиаторный термостат будет работать некорректно. Также, если в комнате установлено большое количество радиаторов, удобнее регулировать температуру в помещении одним прибором – комнатным термостатом. В этом случае установка на каждый радиатор термостатического элемента не требуется.';
+
+        if (!Configurator.ifBasketContainCodes(_basket, ['013G2994'])) {
+            radiatorControlClause.html += '<br/>В  остальных помещениях данного проекта предусмотрено управление каждым радиатором с помощью электронных термостатических элементов living eco, которые благодаря интеллектуальной программе позволяют достичь максимального уровня комфорта и экономии до 46% энергии на отопление помещения.';
+        } else if (!Configurator.ifBasketContainCodes(_basket, ['014G0050'])) { // только RA2994 radiators: control:2 (013G2994)
+            radiatorControlClause.html += '<br/>В  остальных помещениях данного проекта предусмотрено управление каждым радиатором с помощью термостатических элементов с газовым наполнением RA2994, обеспечивающих высокий уровень комфорта и экономию до 36% энергии на отопление помещения';
+        } else if (Configurator.ifBasketContainCodes(_basket, ['014G0050']) && Configurator.ifBasketContainCodes(_basket, ['013G2994'])) { // И RA2994 и living eco radiators: control:1,2,3 (013G2994, 014G0050)
+            radiatorControlClause.html += '<br/>В  остальных помещениях данного проекта предусмотрено управление каждым радиатором с помощью элементов с газовым наполнением RA2994, обеспечивающие высокий уровень комфорта и экономию до 36% энергии на отопление помещения. А также электронных термостатических элементов living eco, которые благодаря интеллектуальной программе позволяют достичь максимального уровня комфорта и экономии до 46% энергии на отопление помещения.';
+        }
+    }
+
+    if (Configurator.ifBasketContainCodes(_basket, ['013G4003', '013G4004', '013G4007', '013G4008', '013G4009', '013G4010', '013G4132', ' 013G4133', '013G4136', '013G4137', '013G4138', '013G4139'])) {
+        if (Configurator.ifBasketContainCodes(_basket, ['013G4003', '013G4007', '013G4010', '013G4132', '013G4136', '013G4138']) && Configurator.ifBasketContainCodes(_basket, ['013G4004', '013G4008', '013G4009', '013G4133', '013G4137'])) {
+            radiatorControlClause.html += '<br/>Для подключения полотенцесушителей и дизайн-радиаторов к контуру отопления применены  комплекты из дизайн-серии X-tra Collection. Данный комплект подключается через невидимые снаружи переходники, таким образом обеспечивается безупречный внешний вид';
+        }else  if (Configurator.ifBasketContainCodes(_basket, ['013G4003', '013G4007', '013G4010', '013G4132', '013G4136', '013G4138'])) {
+            radiatorControlClause.html += '<br/>Для подключения полотенцесушителей к контуру отопления применены  комплекты из дизайн-серии X-tra Collection. Данный комплект подключается через невидимые снаружи переходники, таким образом обеспечивается безупречный внешний вид';
+        }else {
+            radiatorControlClause.html += '<br/>Для подключения дизайн-радиатора к контуру отопления применен  комплект из дизайн-серии X-tra Collection. Данный комплект подключается через невидимые снаружи переходники, таким образом обеспечивается безупречный внешний вид';
+        }
+    }
+
+    $scope.PAGE_GENERAL = {
+        orderNum: '-',
+        clauses: [
+            homeClause,
+            boilerClause,
+            radiatorsClause,
+            collectorClause,
+            radiatorControlClause
+        ]
+    };
+
+    // если есть теплый пол
+    if (Configurator.ifBasketContainCodes(_basket, ['003L1000', '087N791801', '087N791301'])) {
+        var floorsCollectors = {
+            title: 'Коллекторы теплого пола',
+            src: 'common/img/summary/general-floor-collector.jpg',
+            html: '',
+            thumbs: []
+        }
+
+        if (Configurator.ifBasketContainCodes(_basket, ['088U0722', '088U0723', '088U0724', '088U0725', '088U0726', '088U0727', '088U0728', '088U0729', '088U0730', '088U0731', '088U0732'])) {
+            floorsCollectors.html += '<br/>Для подключения контуров теплого пола применены распределительные коллекторы FHF-F, оснащенные расходомерами. Расходомеры позволяют визуально наблюдать поток теплоносителя в каждом контуре, что существенно упрощает наладку и обслуживание системы. Чтобы избежать попадания воздуха в петли теплого пола, коллекторы оснащены автоматическими воздухоотводчиками.';
+        }
+        if (Configurator.ifBasketContainCodes(_basket, ['088U0702', '088U0703', '088U0704', '088U0705', '088U0706', '088U0707', '088U0708', '088U0709', '088U0710', '088U0711', '088U0712'])) {
+            floorsCollectors.html += '<br/>Для подключения контуров теплого пола применены распределительные коллекторы FHF-F. Чтобы избежать попадания воздуха в петли теплого пола, коллекторы оснащены автоматическими воздухоотводчиками.';
+        }
+        if (Configurator.ifBasketContainCodes(_basket, ['088H3112', '088H3113'])) {
+            floorsCollectors.html += '<br/>Коллекторы также оснащены термоэлектрическими приводами TWA-A, на которые через ресивер подается управляющий сигнал от комнатного термостата.';
+        }
+
+        $scope.PAGE_GENERAL.clauses.push(floorsCollectors);
+
+        var floorControls = {
+            title: 'Управление теплым полом',
+            src: 'common/img/summary/general-floor-collector.jpg',
+            html: '',
+            thumbs: []
+        }
+
+        if (Configurator.ifBasketContainCodes(_basket, ['087N791801']) && Configurator.ifBasketContainCodes(_basket, ['087N791301'])) {
+            floorControls.html += '<br/>Для регулирования теплых полов применены проводные программируемые  комнатные термостаты TP5001МA и беспроводныйые программируемыйые  комнатныйые  термостаты TP5001A-RF. Использование беспроводных моделей позволяет легко менять размещение комнатного термостата, например, при перестановке мебели. Комнатный термостат устанавливается в каждой комнате с напольным отоплением. Управляющий сигнал комнатного термостата подается к приемнику беспроводного сигнала RX3 и коммутационному устройству FH-WC, которые передают сигнал к термоэлектрическим приводам TWA-A, установленным на распределительный коллектор теплых полов.';
+        }else if (Configurator.ifBasketContainCodes(_basket, ['087N791801'])) {
+            floorControls.html += '<br/>Для регулирования теплых полов применены проводные программируемые  комнатные  термостаты TP5001МA. Комнатный термостат устанавливается в каждой комнате с напольным отоплением. Управляющий сигнал комнатного термостата подается к приемнику беспроводного сигнала RX3, который передает сигнал к термоэлектрическим приводам TWA-A, установленным на распределительный коллектор теплых полов.';
+        } else if (Configurator.ifBasketContainCodes(_basket, ['087N791301'])) {
+            floorControls.html += '<br/>Для регулирования теплых полов применены беспроводные программируемые  комнатные  термостаты TP5001A-RF. Использование беспроводных моделей позволяет легко менять размещение комнатного термостата, например, при перестановке мебели. Комнатный термостат устанавливается в каждой комнате с напольным отоплением. Управляющий сигнал комнатного термостата подается к коммутационному устройству FH-WC, установленному совместно с коллектором теплых полов.';
+        }
+
+        if (Configurator.ifBasketContainCodes(_basket, ['003L1000'])) {
+            floorControls.html += '<br/>Для регулирования теплых полов в помещениях с повышенной влажностью использованы терморегуляторы FHV для напольного отопления. Модель FHV-R с термостатическим элементом FJVR регулирует температуру возвращаемого теплоносителя, таким образом поддерживая постоянную температуру поверхности пола.';
+        }
+
+        $scope.PAGE_GENERAL.clauses.push(floorControls);
+    }
+
 
     $scope.PAGE_SCHEME = {
         levels: [
@@ -1165,5 +1211,5 @@ appConfigurator.filter('formatNumber', function () {
 });
 
 function setCustomScroll() {
-    $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: true });
+    $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: false });
 }

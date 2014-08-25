@@ -1,6 +1,6 @@
 'use strict';
 
-var appConfigurator = angular.module('appConfigurator', ['ui.router', 'tabs', 'ui.slider', 'ui.bootstrap']);
+var appConfigurator = angular.module('appConfigurator', ['ngSanitize', 'ui.router', 'tabs', 'ui.slider', 'ui.bootstrap']);
 
 
 // Configurator Factory
@@ -1054,6 +1054,158 @@ appConfigurator.factory('Configurator', function(){
 	    }
 	}
 	
+	var pushToBasket = function (basket, key, val) {
+	    if (key in basket) {
+	        basket[key] += parseFloat(val);
+	    } else
+	        basket[key] = parseFloat(val);
+	}
+
+	Cfg.RadiatorControlTypes = function () {
+	    var _basket = {};
+
+	    var Configurator = Cfg;
+
+	    angular.forEach(Configurator.levels, function (_level) {
+	        _level.isLevel
+			&&
+			(angular.forEach(_level.rooms, function (_room) {
+			    if (_room.id <= _level.roomsCount) {
+			        pushToBasket(_basket, _room.controlType, 1)
+			    }			    
+			}))
+	    });
+
+	    return _basket;
+	}
+
+	Cfg.RadiatorValves = function () {
+	    var _basket = {};
+
+	    var Configurator = Cfg;
+
+	    angular.forEach(Configurator.levels, function (_level) {
+	        _level.isLevel
+			&&
+			(angular.forEach(_level.rooms, function (_room) {
+			    _room.id <= _level.roomsCount && (
+					(angular.forEach(_room.radiators.list, function (_radiator) {
+					    if (_radiator.id <= _room.radiators.radiatorsTypes)
+							pushToBasket(_basket, _radiator.valves, 1)
+					}))
+				)
+			}))
+	    });
+
+	    return _basket;
+	}
+
+	Cfg.Basket = function () {
+	    var _basket = {};
+
+	    var Configurator = Cfg;
+
+	    angular.forEach(Configurator.levels, function (_level) {
+	        _level.isLevel
+			&&
+			(angular.forEach(_level.rooms, function (_room) {
+			    _room.id <= _level.roomsCount && (
+					(angular.forEach(_room.radiators.list, function (_radiator) {
+					    _radiator.id <= _room.radiators.radiatorsTypes && (
+							(_radiator.type == 1 && _radiator.control && angular.forEach(Configurator.params.room.radiators.control[_radiator.control - 1].basket, function (_control) {
+							    pushToBasket(_basket, _control[0], _radiator.count * eval(_control[1]));
+							}))
+							+
+							(angular.forEach(Configurator.params.room.radiators.valves[_radiator.valves - 1].basket, function (_valves) {
+							    pushToBasket(_basket, _valves[0], _radiator.count * _valves[1]);
+							}))
+							+
+							(_radiator.fittings && angular.forEach(Configurator.params.fittings[_radiator.fittings - 1].basket, function (_fittings) {
+							    pushToBasket(_basket, _fittings[0], _radiator.count * 2);
+							}))
+						)
+					}))
+					+
+					(_room.floors.isFloors &&
+						(angular.forEach(Configurator.params.room.floors.control[_room.floors.control - 1].basket, function (_control) {
+						    pushToBasket(_basket, _control[0], eval(_control[1]));
+						}))
+						+
+						(_room.floors.fittings && angular.forEach(Configurator.params.fittings[_room.floors.fittings - 1].basket, function (_fittings) {
+						    pushToBasket(_basket, _fittings[0], 2);
+						}))
+					)
+				)
+			}))
+			&&
+			(angular.forEach(_level.collectors, function (_collector) {
+
+			    if (_collector.isCollector) {
+
+			        var collector_1 = _collector.entries;
+			        angular.forEach(Configurator.params.collector.sets, function (_set) {
+			            if (_collector.type == 'radiator' && _set.isFlowmeter == _collector.isFlowmeter && _set.entries == collector_1) {
+			                angular.forEach(_set.basket, function (_sets) {
+			                    pushToBasket(_basket, _sets[0], eval(_sets[1]));
+			                });
+			            }
+			            if (_collector.type == 'floor' && _set.isFlowmeter == _collector.isFlowmeter && _set.entries == collector_1) {
+			                angular.forEach(_set.basket, function (_sets) {
+			                    pushToBasket(_basket, _sets[0], eval(_sets[1]));
+			                });
+			            }
+			        });
+			    }
+
+			    _collector.isCollector && (
+					(_collector.isBallValves && angular.forEach(Configurator.params.collector.ballValves[0].basket, function (_ballValves) {
+					    pushToBasket(_basket, _ballValves[0], _ballValves[1]);
+					}))
+					+
+					(_collector.isThermometers && angular.forEach(Configurator.params.collector.thermometers[0].basket, function (_thermometers) {
+					    pushToBasket(_basket, _thermometers[0], eval(_thermometers[1]));
+					}))
+					+
+					(_collector.fittings && angular.forEach(Configurator.params.fittings[_collector.fittings - 1].basket, function (_fittings) {
+					    pushToBasket(_basket, _fittings[0], _collector.entries);
+					}))
+                    +
+					(_collector.fit_088U0305 && angular.forEach(Configurator.params.collector.fit_088U0305[_collector.fit_088U0305 - 1].basket, function (_fittings) {
+					    pushToBasket(_basket, _fittings[0], _fittings[1]);
+					}))
+                    +
+					(_collector.fit_088U0301 && angular.forEach(Configurator.params.collector.fit_088U0301[_collector.fit_088U0301 - 1].basket, function (_fittings) {
+					    pushToBasket(_basket, _fittings[0], _fittings[1]);
+					}))
+					+
+					(_collector.mixing && angular.forEach(Configurator.params.collector.mixing[_collector.mixing - 1].basket, function (_mixing) {
+					    pushToBasket(_basket, _mixing[0], _mixing[1]);
+					})))
+			}));
+	    });
+
+	    Configurator.boiler.isBoiler && pushToBasket(_basket, Configurator.params.boiler.pump[Configurator.boiler.pump - 1].basket[0][0], 1);
+	    for (var k in _basket) {
+	        _basket[k] = Math.ceil(_basket[k]);
+	    }
+	    return _basket;
+	}
+
+	Cfg.ifBasketContains = function (basket, code) {
+	    return basket[code] > 0;
+	}
+
+	Cfg.ifBasketContainCodes = function (basket, codes) {
+	    var res = false;
+	    for (var i = 0; i < codes.length; i++) {
+	        if (basket[codes[i]] > 0) {
+	            res = true;
+	            break;
+	        }
+	    }
+	    return res;
+	}
+
     updateCottageConfiguration();
 
 	return Cfg;
