@@ -1,58 +1,69 @@
-<div class="collector collector-{{COLLECTOR.type}}">
+<div class="collector">
 	<h1><b><a ng-href="{{LINK_RETURN}}">&lt;</a></b>{{TITLE}}</h1>
     <div class="info">Уточните количество коллекторов и&nbsp;отапливаемых комнат в&nbsp;вашем доме</div>
     <div class="collector-panel">
+        <div class="collector-slider">
+            <div class="collector-frame">
+                <div class="collector-frame-left"></div>
+                <div class="collector-inner">
+                    <div class="collector-set">
+                        <div class="pipe-in" ng-hide="SHOW_MIXER()"></div>
+                        <div class="mixer" ng-show="SHOW_MIXER()"></div>
+                        <img class="valve" src="common/img/collector/valve.png" alt="" ng-show="COLLECTOR.isBallValves" />
+                        <img class="clock-face" src="common/img/collector/valve-clock-face.png" ng-show="COLLECTOR._thermometerIn" alt="" data-no-width />
+                        <div class="collector-nodes" data-no-width>
+                            <img class="brace-long" src="common/img/collector/brace-long.png" alt="" data-no-width />
+                            <div class="node" ng-repeat="node in NODES" ng-class="GET_NODE_CSS_CLASS($index)">
+                                <img class="cap" src="common/img/collector/cap.png" ng-hide="COLLECTOR.isFlowmeter" />
+                                <img class="meter" src="common/img/collector/meter.png" ng-show="COLLECTOR.isFlowmeter" />
+                                <img class="fitting" src="common/img/collector/fitting.png" />
+                                <img class="pipe-out" src="common/img/collector/pipe-out-long.png" />
+                                <img class="section-fitting" src="common/img/collector/section-fitting.png" ng-show="SHOW_SECTION_FITTING($index)" />
+                                <img class="brace-long" src="common/img/collector/brace-long.png" alt="" ng-show="SHOW_SECTION_FITTING($index)" />
+                                <img class="brace-long-second" src="common/img/collector/brace-long.png" alt="" ng-show="SHOW_SECTION_FITTING($index)" />
+                            </div>
+                            <img class="brace-long-second" src="common/img/collector/brace-long.png" alt="" data-no-width />
+                        </div>
+                        <img class="air-vent" src="common/img/collector/air-vent.png" alt="" />
+                    </div>
+
+                    <div class="collector-set cold">
+                        <div class="pipe-in" ng-hide="SHOW_MIXER()"></div>
+                        <div class="mixer-filler" ng-show="SHOW_MIXER()"></div>
+                        <img class="valve" src="common/img/collector/valve-cold.png" alt="" ng-show="COLLECTOR.isBallValves" />
+                        <img class="clock-face" src="common/img/collector/valve-clock-face.png" ng-show="COLLECTOR._thermometerOut" alt="" />
+                        <div class="collector-nodes">
+                            <img class="brace" src="common/img/collector/brace.png" alt="" />
+                            <div class="node" ng-repeat="node in NODES" ng-class="GET_NODE_CSS_CLASS($index)">
+                                <img class="valve-electro" src="common/img/collector/electro-valve.png" ng-show="HAS_ELECTRO_VALVE($index)" />
+                                <img class="valve-cooling" src="common/img/collector/cooling-valve.png" ng-hide="HAS_ELECTRO_VALVE($index)" />
+                                <img class="fitting" src="common/img/collector/fitting.png" />
+                                <img class="pipe-out" src="common/img/collector/pipe-out-long.png" />
+                                <img class="section-fitting" src="common/img/collector/section-fitting.png" ng-show="SHOW_SECTION_FITTING($index)" />
+                                <img class="brace" src="common/img/collector/brace.png" alt="" ng-show="SHOW_SECTION_FITTING($index)" />
+                                <img class="brace-second" src="common/img/collector/brace.png" alt="" ng-show="SHOW_SECTION_FITTING($index)" />
+                            </div>
+                            <img class="brace-second" src="common/img/collector/brace.png" alt="" />
+                        </div>
+                        <img class="air-vent" src="common/img/collector/air-vent.png" alt="" />
+                    </div>
+
+                    <div class="receivers" ng-show="THERMOCONTROLS.receivers.length > 0">
+                        <div ng-repeat="receiver in THERMOCONTROLS.receivers" ng-class="GET_RECEIVER_CCS_CLASS(receiver)"></div>
+                    </div>
+                </div>
+                <div class="collector-frame-right"></div>
+            </div>
+        </div>
+
+        <a href="#" class="arrow-left" ng-click="SLIDE_LEFT($event)"></a>
+        <a href="#" class="arrow-right" ng-click="SLIDE_RIGHT($event)"></a>
+    </div>
+    <!--<div class="collector-panel">
         <div class="collector-frame">
             <div class="collector-inside">
-                <div class="collector-set">
-                    <div class="pipe-in" ng-hide="SHOW_MIXER()"></div>
-                    <div class="mixer" ng-show="SHOW_MIXER()"></div>
-                    <img class="valve" src="common/img/collector/valve.png" alt="" ng-show="COLLECTOR.isBallValves" />
-                    <img class="clock-face" src="common/img/collector/valve-clock-face.png" ng-show="COLLECTOR._thermometerIn" alt="" data-no-width />
-                    <div class="collector-nodes" data-no-width>
-                        <img class="brace-long" src="common/img/collector/brace-long.png" alt="" data-no-width />
-                        <div class="node" ng-repeat="node in NODES" ng-class="GET_NODE_CSS_CLASS($index)">
-                            <img class="cap" src="common/img/collector/cap.png" ng-hide="COLLECTOR.isFlowmeter" />
-                            <img class="meter" src="common/img/collector/meter.png" ng-show="COLLECTOR.isFlowmeter" />
-                            <img class="fitting" src="common/img/collector/fitting.png" />
-                            <img class="pipe-out" src="common/img/collector/pipe-out-long.png" />
-                            <img class="section-fitting" src="common/img/collector/section-fitting.png" ng-show="SHOW_SECTION_FITTING($index)" />
-                            <img class="brace-long" src="common/img/collector/brace-long.png" alt="" ng-show="SHOW_SECTION_FITTING($index)" />
-                            <img class="brace-long-second" src="common/img/collector/brace-long.png" alt="" ng-show="SHOW_SECTION_FITTING($index)" />
-                        </div>
-                        <img class="brace-long-second" src="common/img/collector/brace-long.png" alt="" data-no-width />
-                    </div>
-                    <img class="air-vent" src="common/img/collector/air-vent.png" alt="" />
-                </div>
-
-                <div class="collector-set cold">
-                    <div class="pipe-in" ng-hide="SHOW_MIXER()"></div>
-                    <div class="mixer-filler" ng-show="SHOW_MIXER()"></div>
-                    <img class="valve" src="common/img/collector/valve-cold.png" alt="" ng-show="COLLECTOR.isBallValves" />
-                    <img class="clock-face" src="common/img/collector/valve-clock-face.png" ng-show="COLLECTOR._thermometerOut" alt="" />
-                    <div class="collector-nodes">
-                        <img class="brace" src="common/img/collector/brace.png" alt="" />
-                        <div class="node" ng-repeat="node in NODES" ng-class="GET_NODE_CSS_CLASS($index)">
-                            <img class="valve-electro" src="common/img/collector/electro-valve.png" ng-show="HAS_ELECTRO_VALVE($index)" />
-                            <img class="valve-cooling" src="common/img/collector/cooling-valve.png" ng-hide="HAS_ELECTRO_VALVE($index)" />
-                            <img class="fitting" src="common/img/collector/fitting.png" />
-                            <img class="pipe-out" src="common/img/collector/pipe-out-long.png" />
-                            <img class="section-fitting" src="common/img/collector/section-fitting.png" ng-show="SHOW_SECTION_FITTING($index)" />
-                            <img class="brace" src="common/img/collector/brace.png" alt="" ng-show="SHOW_SECTION_FITTING($index)" />
-                            <img class="brace-second" src="common/img/collector/brace.png" alt="" ng-show="SHOW_SECTION_FITTING($index)" />
-                        </div>
-                        <img class="brace-second" src="common/img/collector/brace.png" alt="" />
-                    </div>
-                    <img class="air-vent" src="common/img/collector/air-vent.png" alt="" />
-                </div>
-
-                <div class="receivers">
-                    <div ng-repeat="receiver in THERMOCONTROLS.receivers" ng-class="GET_RECEIVER_CCS_CLASS(receiver)"></div>
-                </div>
+                
             </div>
-
-            <a href="#" class="arrow-left" ng-click="SLIDE_LEFT($event)" ng-show="SCROLLABLE_LEFT"></a>
-            <a href="#" class="arrow-right" ng-click="SLIDE_RIGHT($event)" ng-show="SCROLLABLE_RIGHT"></a>
         </div>
-    </div>
+    </div>-->
 </div>

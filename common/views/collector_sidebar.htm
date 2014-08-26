@@ -58,15 +58,16 @@
 			<label class="label-checkbox checkbox-{{COLLECTOR.isBallValves}}">
 				<span class="pseudo-checkbox"></span>
 				<input type="checkbox"
-					ng-model="COLLECTOR.isBallValves"
+				       ng-model="COLLECTOR.isBallValves"
+                       ng-change="TOGGLE_BALL_VALVES()"
 				>
 				<span class="title"><img src="common/img/products/config-prod-kran.png" title="Шаровые краны" />Шаровые краны</span>
 			</label>
-            <label class="label-checkbox">
-				<span class="title"><img src="common/img/products/config-prod-termometr.png" title="Термометры" />Термометры</span>
-			</label>
+            <label class="label-checkbox" ng-class="{'checkbox-true': COLLECTOR._thermometerIn || COLLECTOR._thermometerOut }" ng-click="TOGGLE_THERMOMETERS();">
+                <span class="title"><img src="common/img/products/config-prod-termometr.png" title="Термометры" />Термометры</span>
+            </label>
             <div class="switchboxes">
-                <label class="label-checkbox half-size checkbox-{{COLLECTOR._thermometerIn}}">
+                <label class="label-checkbox half-size collector-default-left-border checkbox-{{COLLECTOR._thermometerIn}}">
                     <span class="pseudo-checkbox"></span>
 				    <input type="checkbox"
 					    ng-model="COLLECTOR._thermometerIn"
@@ -74,12 +75,11 @@
 				    >
 				    <span class="title">Подача</span>
 		        </label>
-                <label class="label-checkbox half-size checkbox-{{COLLECTOR._thermometerOut}}">
+                <label class="label-checkbox half-size collector-default-left-border collector-default-top-border checkbox-{{COLLECTOR._thermometerOut}}">
                     <span class="pseudo-checkbox"></span>
-				    <input type="checkbox"
-					    ng-model="COLLECTOR._thermometerOut"
-                        ng-change="SET_TERMOMETRS_COUNT();"
-				    >
+                    <input type="checkbox"
+                           ng-model="COLLECTOR._thermometerOut"
+                           ng-change="SET_TERMOMETRS_COUNT();">
 				    <span class="title">Возврат</span>
 		        </label>
             </div>            
@@ -90,7 +90,7 @@
 				    >
 				<span class="title"><img src="common/img/products/config-prod-fittings.png" title="Фитинги для труб" />Фитинги для труб</span>
 			</label>
-			<label class="label-checkbox checkbox-{{COLLECTOR.fittings != 0}}">
+			<label class="label-checkbox collector-default-left-border checkbox-{{COLLECTOR.fittings != 0}}">
 				<select ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.fittings | filter: {type: 2}" ng-model="COLLECTOR.fittings"></select>
 			</label>
 		</div><!-- .selectbox -->

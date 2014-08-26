@@ -485,68 +485,6 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
 	$scope.LINK_RETURN = '#/level/' + level.id;
 	$scope.LINK_NEXT = '#/boiler';
 
-	var scrollThreshold = function () {
-	    return $scope.COLLECTOR.type == 'radiator' ? 8 : ($scope.COLLECTOR.mixing ? 5 : 7);
-	};
-
-	$scope.SCROLLABLE_LEFT = false;
-	$scope.SCROLLABLE_RIGHT = $scope.COLLECTOR.entries > scrollThreshold();
-
-	var leftBtn = function (show) {
-	    var btn = $('.collector-frame .arrow-left').eq(0);
-	    if (!show && !btn.hasClass('ng-hide')) {
-	        btn.addClass('ng-hide');
-	        return;
-	    }
-
-	    if (show && btn.hasClass('ng-hide')) {
-	        btn.removeClass('ng-hide');
-        }
-	};
-
-	var rightBtn = function (show) {
-	    var btn = $('.collector-frame .arrow-right').eq(0);
-	    if (!show && !btn.hasClass('ng-hide')) {
-	        btn.addClass('ng-hide');
-	        return;
-	    }
-
-	    if (show && $scope.COLLECTOR.entries > scrollThreshold() && btn.hasClass('ng-hide')) {
-	        btn.removeClass('ng-hide');
-        }
-	};
-
-	$scope.SLIDE_LEFT = function (e) {
-	    if (e && e.preventDefault) {
-	        e.preventDefault();
-	    }
-
-	    var set = $('.collector-set:first');
-	    var inner = set.parent();
-	    var left = -inner.position().left;
-
-	    leftBtn(false);
-	    inner.animate({ left: '+=' + left }, 1500, function () {
-	        rightBtn(true);
-	    });
-	};
-
-	$scope.SLIDE_RIGHT = function (e) {
-	    if (e && e.preventDefault) {
-	        e.preventDefault();
-	    }
-
-	    var set = $('.collector-set:first');
-	    var inner = set.parent();
-	    var frame = inner.parent();
-	    var left = set.width() - frame.width() + inner.position().left + 20;
-
-	    rightBtn(false);
-	    inner.animate({ left: '-=' + left }, 1500, function () {
-	        leftBtn(true);
-	    });
-	};
-
     var getNodes = function() {
         var nodes = [];
         while (nodes.length < $scope.COLLECTOR.entries) {
@@ -585,15 +523,15 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
 
                     if (commonControl.id == 5 || commonControl.id == 6) {
                         thermometersCount.wired++;
-                        controls.valves += room.radiators.list.length;
+                        controls.valves += room.getRadiatorsCount();
                     }
 
                     if (commonControl.id == 7 || commonControl.id == 8) {
                         thermometersCount.wireless++;
-                        controls.valves += room.radiators.list.length;
+                        controls.valves += room.getRadiatorsCount();
                     }
 
-                } else if (room.floors.isFloors) {
+                } else if (targetCollector.type == 'floor' && room.floors.isFloors) {
                     if (room.floors.control == 2) {
                         thermometersCount.wired += room.floors.loops;
                         controls.valves += room.floors.loops;
@@ -619,10 +557,59 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
         return controls;
     };
 
+    var sliderDefaultLeft = 70;
+    var nodeWidth = 39;
+
+    var toggleScrollButtons = function () {
+        var panel = $('.collector-panel');
+        var slider = $('.collector-slider');
+        var leftBtn = panel.children('.arrow-left');
+        var rightBtn = panel.children('.arrow-right');
+        if (slider.width() + sliderDefaultLeft > panel.width()) {
+            if (slider.position().left == sliderDefaultLeft) {
+                leftBtn.hide();
+                rightBtn.show();
+                return;
+            }
+
+            leftBtn.show();
+            rightBtn.hide();
+            return;
+        }
+
+        leftBtn.hide();
+        rightBtn.hide();
+
+        if (slider.position().left != sliderDefaultLeft) {
+            scrollLeft();
+        }
+    };
+
+    var scrollRight = function() {
+        var panel = $('.collector-panel');
+        var slider = $('.collector-slider');
+        slider.animate({ left: (panel.width() - slider.width() - sliderDefaultLeft) + 'px' }, 300);
+        panel.children('.arrow-left').show();
+        panel.children('.arrow-right').hide();
+    };
+
+    var scrollLeft = function () {
+        var panel = $('.collector-panel');
+        var slider = $('.collector-slider');
+        slider.animate({ left: sliderDefaultLeft + 'px' }, 300);
+        panel.children('.arrow-left').hide();
+        panel.children('.arrow-right').show();
+    };
+
     $scope.NODES = getNodes(); // массив узлов коллектора
     $scope.THERMOCONTROLS = getThermoControls($scope.COLLECTOR, $scope.LEVELS);
 
-    $scope.SET_TERMOMETRS_COUNT = function() {
+    $scope.SET_TERMOMETRS_COUNT = function () {
+        if (!$scope.COLLECTOR.isBallValves) {
+            $scope.COLLECTOR._thermometerIn = false;
+            $scope.COLLECTOR._thermometerOut = false;
+        }
+
         $scope.COLLECTOR.thermometersCount = (collector._thermometerIn ? 1 : 0) + (collector._thermometerOut ? 1 : 0);
         $scope.COLLECTOR.isThermometers = $scope.COLLECTOR.thermometersCount > 0;
     };
@@ -633,21 +620,23 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
     };
 
     $scope.UPDATE_NODES = function() {
-        var items = $('.collector-nodes:first');
-        var $currentScope = angular.element(items).scope();
+        var slider = $('.collector-slider');
+        var inner = slider.find('.collector-inner');
+        slider.css('left', sliderDefaultLeft + 'px');
+        var $currentScope = angular.element(slider).scope();
         var count = $currentScope.COLLECTOR.entries;
 
         while ($currentScope.NODES.length < count) {
+            inner.width(inner.width() + nodeWidth);
             $currentScope.NODES.push($currentScope.NODES.length);
         }
 
         while ($currentScope.NODES.length > count) {
             $currentScope.NODES.pop();
+            inner.width(inner.width() - nodeWidth);
         }
 
-        $('.collector-inside').css('left', 0);
-        leftBtn(false);
-        rightBtn(true);
+        toggleScrollButtons();
     };
 
 
@@ -673,6 +662,29 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
 
     $scope.GET_RECEIVER_CCS_CLASS = function(receiverModel) {
         return receiverModel.type == receiverTypes.wired ? 'wired' : 'wireless';
+    };
+
+    $scope.TOGGLE_THERMOMETERS = function(e) {
+        if (e) {
+            e.preventDefault();
+        }
+
+        if (!$scope.COLLECTOR.isBallValves) {
+            return;
+        }
+
+        if ($scope.COLLECTOR._thermometerIn && $scope.COLLECTOR._thermometerOut) {
+            $scope.COLLECTOR._thermometerIn = false;
+            $scope.COLLECTOR._thermometerOut = false;
+        } else {
+            $scope.COLLECTOR._thermometerIn = true;
+            $scope.COLLECTOR._thermometerOut = true;
+        }
+    };
+
+    $scope.TOGGLE_BALL_VALVES = function() {
+        $scope.COLLECTOR._thermometerIn &= $scope.COLLECTOR.isBallValves;
+        $scope.COLLECTOR._thermometerOut &= $scope.COLLECTOR.isBallValves;
     };
 
     $scope.validateCollectors = function (currentLevel, levels, currentCollector) {
@@ -713,6 +725,26 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
     };
 
     setCustomScroll();
+
+    $(function() {
+        $(window).resize(function () { setTimeout(toggleScrollButtons, 300); });
+        var panel = $('.collector-panel');
+        var leftBtn = panel.children('.arrow-left');
+        var rightBtn = panel.children('.arrow-right');
+        leftBtn.click(function(e) {
+            e.preventDefault();
+            scrollLeft();
+        });
+        rightBtn.click(function (e) {
+            e.preventDefault();
+            scrollRight();
+        });
+
+        $('.collector-inner').width($scope.COLLECTOR.entries * nodeWidth + 120);
+        if (panel.width() < $('.collector-slider').width() + sliderDefaultLeft) {
+            rightBtn.show();
+        }
+    });
 });
 
 
@@ -1274,5 +1306,5 @@ appConfigurator.filter('formatNumber', function () {
 });
 
 function setCustomScroll() {
-    $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: false });
+    $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: true });
 }

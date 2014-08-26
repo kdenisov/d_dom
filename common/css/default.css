@@ -907,25 +907,61 @@ a.collector-item {
 }
 
 .collector-panel {
-    background: transparent url('../img/collector/collector_panel.png') no-repeat center center;
     height: 452px;
-    width: 578px;
-    margin: 0 auto;
     position: relative;
-}
-
-.collector-frame {
-    position: absolute;
-    width: 513px;
-    height: 402px;
-    left: 35px;
-    top: 30px;
     overflow: hidden;
 }
 
-.collector-frame .arrow-left,
-.collector-frame .arrow-right {
-    display: block;
+.collector-slider {
+    position: absolute;
+    left: 70px;
+    top: 0;
+    height: 100%;
+}
+
+.collector-frame {
+    height: 100%;
+    float: left;
+    margin: 0 140px;
+    background-color: transparent;
+    background-position: left top;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.collector-frame-left {
+    position: absolute;
+    height: 100%;
+    width: 140px;
+    left: -140px;
+    background-image: url('../img/collector/collector-frame-left.png');
+}
+.collector-frame-right {
+    position: absolute;
+    height: 100%;
+    width: 140px;
+    right: -140px;
+    top: 0;
+    background-image: url('../img/collector/collector-frame-right.png');
+}
+.collector-frame {
+    background-image: url('../img/collector/collector-frame.png');
+    background-repeat: repeat-x;
+    position: relative;
+}
+
+.collector-inner {
+    height: 402px;
+    min-width: 100px;
+    margin: 30px -100px 0 -105px;
+    overflow: hidden;
+    padding: 0 110px;
+    position: relative;
+}
+
+.collector-panel .arrow-left,
+.collector-panel .arrow-right {
+    display: none;
     position: absolute;
     width: 59px;
     height: 59px;
@@ -939,28 +975,22 @@ a.collector-item {
     border: none;
 }
 
-.collector-frame .arrow-right {
+.collector-panel .arrow-right {
     left: 100%;
     margin-left: -59px;
     background-position: 0 -59px !important;
 }
 
-.collector-inside {
-    position: relative;
-    width: 1300px;
-    height: 100%;
-}
-
 .collector-set {
     position: absolute;
-    left: 0px;
-    top: 120px;
+    left: 0;
+    top: 110px;
 }
 
 .collector-set.cold {
     position: absolute;
-    top: 255px;
-    z-index: 2;
+    left: -25px;
+    top: 312px;
 }
 
 .collector-floor .collector-set.cold {
@@ -984,6 +1014,7 @@ a.collector-item {
 
 .collector-set.cold .pipe-in {
     width: 74px;
+    margin-left: 25px;
 }
 
 .collector-set.cold .valve {
@@ -1127,13 +1158,31 @@ a.collector-item {
 }
 .collector-set .mixer-filler {
     float: left;
-    width: 166px;
+    width: 190px;
     height: 20px;
+}
+
+.label-checkbox.checkbox-true.collector-default-left-border {
+    border-left-color: #ddd !important;
+}
+
+.label-checkbox.checkbox-true.collector-default-top-border {
+    border-top-color: #ddd !important;
+}
+
+.label-checkbox.collector-default-left-border {
+    border-left-color: #f3f3f3 !important;
+}
+
+.label-checkbox.collector-default-top-border {
+    border-top-color: #f3f3f3 !important;
 }
 
 .receivers {
     position: absolute;
-    left: 0px;
+    left: 0;
+    top: 0;
+    z-index: 2;
 }
 
 .receivers > * {
