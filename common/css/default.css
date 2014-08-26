@@ -411,6 +411,17 @@ body {
 	display: inline-block;
 }
 
+.basket-nav
+{
+    padding: 30px 25px;
+}
+
+    .basket-nav .button
+    {
+        display: inline-block;
+        padding:0 10px;
+    }
+
 
 /* Tabs */
 .tabs {
@@ -2347,4 +2358,10 @@ li ul {
 left: 31px;
 width: 70%;
 text-align: left;
+}
+
+.summary-general-content .thumbs a
+{
+    border:none;
+    text-decoration:none;
 }

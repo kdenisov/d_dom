@@ -1,5 +1,5 @@
 ﻿<div class="summary-page autoscroll" ng-show="MODEL.visible(1)">
-    <h2>Информация по заказу №{{PAGE_GENERAL.orderNum}}</h2>
+    <h2>Информация по заказу<!-- № {{PAGE_GENERAL.orderNum}}--> </h2>
 
     <div id="summary-icons">
         <a href="/#/summary/print" class="print"></a>
@@ -13,7 +13,7 @@
             <div class="text" ng-bind-html="RAW(clause.html)"></div>
             
             <div class="thumbs" ng-if="clause.thumbs.length > 0">
-                <div ng-repeat="icon in clause.thumbs"><img ng-src="{{icon.src}}" alt="" /><span class="thumb-count" ng-if="icon.count > 1">{{icon.count}}</span></div>
+                <div ng-repeat="icon in clause.thumbs"><a href="http://dom.danfoss.ru/katalog/Filtry/{{icon.src}}" target="_blank"><img ng-src="http://dom.danfoss.ru{{CATALOG[icon.src].image}}?w=83&h=83&mode=pad" alt="" /><span class="thumb-count" ng-if="icon.count > 1">{{icon.count}}</span></a></div>
             </div>
         </div>
     </div>
