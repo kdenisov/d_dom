@@ -29,7 +29,7 @@
                          <a ui-sref-active="active" ui-sref="room({levelId:2,roomId:1})" title="Настройка комнат">2</a>
                          <a ui-sref-active="active" ui-sref="collector({levelId:1,collectorId:1})" title="Настройка коллекторов">3</a>
                          <a ui-sref-active="active" ui-sref="boiler" title="Настройка котельной" class="last">4</a>
-                         <a ui-sref-active="active" ng-href="#" title="Информация по заказу">5</a>
+                         <a ui-sref-active="active" ng-href="summary" title="Информация по заказу">5</a>
                          <a class="button-icon button-basket-white" ui-sref-active="active" ng-href="#" title="Оформление заказа"></a>
                      </div> -->
                 <!-- <div id="sidebar-panel-bottom"><div class="button-icon button-help"></div></div> -->
@@ -77,6 +77,9 @@
                         <span class="sum" id="basket-total">{{BASKET_TOTAL_PRICE()}}</span>
                         <span class="rub">руб.</span>
                     </span>
+                </div>
+                <div class="basket-nav">
+                    <a ui-sref-active="active" ng-href="#/summary" class="button button-next" title="Информация по заказу">Информация по заказу</a>
                 </div>
             </div><!-- #basket-popup -->
         </div>
