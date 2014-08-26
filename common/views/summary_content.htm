@@ -47,13 +47,13 @@
         <div class="summary-schemes-collectors">
             <div ng-repeat="collector in PAGE_SCHEME.radiatorCollectors">
                 <div class="schemes-connection" ng-repeat="connection in collector.connectedLevelIndex" ng-class="CSS_SCHEME_CONNECTION(collector.installedLevelIndex, connection)"></div>
-                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><div><a href="#">{{collector.title}}</a></div></div>
+                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><div><a href="http://dom.danfoss.ru/katalog/Filtry/{{collector.title}}" target="_blank">{{collector.title}}</a></div></div>
             </div>
         </div>
         <div class="summary-schemes-collectors floors">
             <div ng-repeat="collector in PAGE_SCHEME.floorCollectors">
                 <div class="schemes-connection" ng-repeat="connection in collector.connectedLevelIndex" ng-class="CSS_SCHEME_CONNECTION(collector.installedLevelIndex, connection)"></div>
-                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><div><a href="#">{{collector.title}}</a></div></div>
+                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><div><a href="http://dom.danfoss.ru/katalog/Filtry/{{collector.title}}" target="_blank">{{collector.title}}</a></div></div>
             </div>
         </div>
     </div>
@@ -77,25 +77,25 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in PAGE_MERCHANDISE.items">
+            <tr ng-repeat="(CODE, COUNT) in BASKET()">
                 <td>
-                    <img class="thumb" ng-src="{{item.thumb}}" alt="{{item.title}}" />
+                    <img class="thumb" ng-src="http://dom.danfoss.ru{{CATALOG[CODE].image}}?w=83&h=83&mode=pad" alt="{{CATALOG[CODE].name}}" />
                 </td>
                 <td>
-                    {{item.title}}
+                    {{CATALOG[CODE].name}}
                 </td>
                 <td class="qty">
-                    {{item.count}}
+                    {{COUNT | number:0 | formatNumber}}
                 </td>
                 <td>
-                    {{item.rub}} <span class="rub">руб.</span>
+                    {{CATALOG[CODE].price * COUNT | number:0 | formatNumber}} <span class="rub">руб.</span>
                 </td>
             </tr>
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="3">Итого</td>
-                <td>{{PAGE_MERCHANDISE.totalRub}} <span class="rub">руб.</span></td>
+                <td>{{BASKET_TOTAL_PRICE()}} <span class="rub">руб.</span></td>
             </tr>
         </tfoot>
     </table>

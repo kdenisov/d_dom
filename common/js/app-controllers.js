@@ -750,7 +750,7 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 	}
 });
 
-appConfigurator.controller('SummaryCtrl', function ($scope, $stateParams, $sce, Configurator, Catalog) {
+appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams, $sce, Configurator, Catalog) {
     var page = parseInt($stateParams.page);
     page = isNaN(page) || page > 5 ? 1 : page;
 
@@ -789,8 +789,29 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $stateParams, $sce, 
     };
 
     Catalog.fetch().then(function (data) {
-        $scope.CATALOG = data;
+        $scope.CATALOG = data;        
     });
+
+    $scope.BASKET_TOTAL_PRICE = function () {
+        var
+            price = 0,
+            basket = $scope.BASKET(),
+            catalog = $scope.CATALOG
+        ;
+
+        if (typeof $scope.CATALOG == 'undefined') return 0;
+
+        for (var k in basket) {
+            if (catalog[k])
+                price += basket[k] * catalog[k].price;
+        }
+        price = Math.round(price);
+        return ($filter('formatNumber')(price));
+    }
+
+    $scope.BASKET = function () {
+        return Configurator.Basket();
+    }
 
     var _basket = Configurator.Basket();
     var _groupedBasket = Configurator.GetCodesBySection();
@@ -1045,72 +1066,48 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $stateParams, $sce, 
         $scope.PAGE_GENERAL.clauses.push(floorControls);
     }
 
-
     $scope.PAGE_SCHEME = {
-        levels: [
-            {
-                title: 'Этаж 2',
-                rooms: [
-                    { show: true, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: true, title: 'Комната 2', radiators: 2, floors: 2 },
-                    { show: true, title: 'Комната 3', radiators: 1, floors: 2 },
-                    { show: true, title: 'Комната 4', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 }
-                ]
-            },
-            {
-                title: 'Этаж 1',
-                rooms: [
-                    { show: true, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: true, title: 'Комната 2', radiators: 2, floors: 1 },
-                    { show: true, title: 'Комната 3', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 }
-                ]
-            },
-            {
-                title: 'Подвал',
-                rooms: [
-                    { show: true, title: 'Котельная', radiators: 0, floors: 0, boiler: true },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 },
-                    { show: false, title: 'Комната 1', radiators: 2, floors: 1 }
-                ]
-            }
-        ],
-
-        radiatorCollectors: [
-            { installedLevelIndex: 2 , connectedLevelIndex: [ 1, 2 ], title: 'FHF' },
-            { installedLevelIndex: 0, connectedLevelIndex: [ 0 ], title: 'FHF' }
-        ],
-
-        floorCollectors: [
-            { installedLevelIndex: 2, connectedLevelIndex: [ 1, 2 ], title: 'FHF' },
-            { installedLevelIndex: 0, connectedLevelIndex: [ 0 ], title: 'FHF' }
-        ]
+        levels: [],
+        radiatorCollectors: [],
+        floorCollectors: []
     };
+
+    angular.forEach(Configurator.levels, function (_level) {
+        if (_level.isLevel){
+            var _l = { title: _level.name, rooms: [] };
+
+            (angular.forEach(_level.rooms, function (_room) {
+                _l.rooms.push({ show: _room.id <= _level.roomsCount, title: _room.name, radiators: _room.getRadiatorsCount(), floors: _room.floors.isFloors ? _room.floors.loops : 0, boiler: _room.isBoilerRoom })
+            }))
+
+            $scope.PAGE_SCHEME.levels.push(_l);
+
+            angular.forEach(_level.collectors, function (_collector) {
+                if (_collector.isCollector) {
+                    var collector_1 = _collector.entries;
+                    angular.forEach(Configurator.params.collector.sets, function (_set) {
+                        if (_collector.type == 'radiator' && _set.isFlowmeter == _collector.isFlowmeter && _set.entries == collector_1) {
+                            var connectedTo = [];
+                            for (var i in _collector.levels) {
+                                if (_collector.levels[i] == true)
+                                    connectedTo.push(i - 1);
+                            }
+                            $scope.PAGE_SCHEME.radiatorCollectors.push({ installedLevelIndex: (_level.id - 1), connectedLevelIndex: connectedTo, title: _set.basket[0][0] });
+                        }
+
+                        if (_collector.type == 'floor' && _set.isFlowmeter == _collector.isFlowmeter && _set.entries == collector_1) {
+                            var connectedTo = [];
+                            for (var i in _collector.levels) {
+                                if (_collector.levels[i] == true)
+                                    connectedTo.push(i - 1);
+                            }
+                            $scope.PAGE_SCHEME.floorCollectors.push({ installedLevelIndex: _level.id - 1, connectedLevelIndex: connectedTo, title: _set.basket[0][0] });
+                        }
+                    });
+                }
+            });
+        }
+    });
 
     $scope.CSS_SCHEME_CONNECTION = function (installedAt, connectedTo) {
         var top = 'top-' + Math.min(installedAt, connectedTo);
@@ -1126,32 +1123,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $stateParams, $sce, 
         return top;
     };
 
-    $scope.PAGE_MERCHANDISE = {
-        totalRub: '123 456',
-        items: [
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4.', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' }
-        ]
-    };
-
+   
     $scope.PAGE_INSTALLATION = {
         totalRub: '123 456',
         levels: [
