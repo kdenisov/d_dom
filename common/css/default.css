@@ -1778,6 +1778,7 @@ slider span.pointer + span.pointer {
 .summary-general > .summary-general-content > .thumbs {
     float: left;
     width: 100%;
+    margin-top: 16px;
 }
 
 .summary-general > .summary-general-content > .thumbs > * {
@@ -1787,6 +1788,11 @@ slider span.pointer + span.pointer {
     height: 81px;
     border: 1px solid #e2e3e3;
     margin: -1px -1px 0 0;
+}
+
+.summary-general > .summary-general-content > .thumbs img {
+    width: 80px;
+    height: 80px;
 }
 
 .summary-general > .summary-general-content > .thumbs .thumb-count {
@@ -2233,7 +2239,7 @@ table.summary-merchandise .rub {
 }
 .summary-card-tab-content {
     display: none;
-    padding: 38px;
+    padding: 38px 28px 0;
     float: left;
 }
 .summary-card-tab-content.ng-show {
@@ -2311,11 +2317,14 @@ table.summary-merchandise .rub {
     background-position: right top;
 }
 
-#summary-print-all {
+.summary-footer {
     position: relative;
+    height: 65px;
+    clear: both;
+    padding-top: 38px;
 }
 
-#summary-print-all > a {
+.summary-footer > a {
     display: block;
     clear: both;
     position: absolute;
@@ -2332,12 +2341,21 @@ table.summary-merchandise .rub {
     color: #494949
 }
 
-#summary-print-all > a > .icon-print-all {
+.summary-footer > a > .icon-print-all {
     display: inline-block;
     width: 24px;
     height: 20px;
     margin-bottom: -4px;
     background-image: url('../img/summary/icon-print-all.png');
+    background-position: center center;
+}
+
+.summary-footer > a > .icon-next {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    margin-bottom: -4px;
+    background-image: url('../img/summary/icon-next.png');
     background-position: center center;
 }
 

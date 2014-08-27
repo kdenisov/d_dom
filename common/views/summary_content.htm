@@ -17,7 +17,10 @@
             </div>
         </div>
     </div>
-    <div class="summary-print-all-placeholder"></div>
+
+    <div class="summary-footer">
+        <a href="/#/summary/2" ng-click="MODEL.setPage(2, $event);">Схема дома <i class="icon-next"></i></a>
+    </div>
 </div>
 
 <div class="summary-page autoscroll" ng-show="MODEL.visible(2)">
@@ -57,7 +60,10 @@
             </div>
         </div>
     </div>
-    <div class="summary-print-all-placeholder"></div>
+
+    <div class="summary-footer">
+        <a href="/#/summary/3" ng-click="MODEL.setPage(3, $event);">Набор товаров <i class="icon-next"></i></a>
+    </div>
 </div>
 
 <div class="summary-page autoscroll" ng-show="MODEL.visible(3)">
@@ -99,7 +105,10 @@
             </tr>
         </tfoot>
     </table>
-    <div class="summary-print-all-placeholder"></div>
+
+    <div class="summary-footer">
+        <a href="/#/summary/4" ng-click="MODEL.setPage(4, $event);">Куда устанавливать <i class="icon-next"></i></a>
+    </div>
 </div>
 
 
@@ -144,7 +153,10 @@
             </tr>
         </tfoot>
     </table>
-    <div class="summary-print-all-placeholder"></div>
+
+    <div class="summary-footer">
+        <a href="/#/summary/5" ng-click="MODEL.setPage(5, $event);">Карточки товаров <i class="icon-next"></i></a>
+    </div>
 </div>
 
 
@@ -211,9 +223,8 @@
             </div>
         </div>
     </div>
-    <div class="summary-print-all-placeholder"></div>
-</div>
 
-<div id="summary-print-all">
-    <a href="/#/summary/print">Распечатать всю информацию <i class="icon-print-all"></i></a>
+    <div class="summary-footer">
+        <a href="/#/summary/print" ng-click="PRINT();">Распечатать всю информацию <i class="icon-print-all"></i></a>
+    </div>
 </div>
