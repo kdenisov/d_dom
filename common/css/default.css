@@ -1851,57 +1851,105 @@ slider span.pointer + span.pointer {
     background-color: #f3f3f3;
     width: 100%;
     height: 100%;
+    position: relative;
 }
 
 .summary-schemes-room .contents{
-    background-image: url('../img/summary/scheme-floor-radiator-icons.png');
+    background-image: url('../img/summary/scheme-rooms-icons.png');
     height: 60px;
+    width: 82px;
     background-repeat: no-repeat;
-    position: relative;
+    background-color: transparent;
+    position: absolute;
 }
 .summary-schemes-room .contents.floor {
-    background-position: right center;
-    width: 32px;
-    margin-left: 50px;
+    background-position: center -34px;
+    height: 32px;
+    margin-top: 14px;
 }
+.summary-schemes-room .contents.floor .count.floor {
+    display: block;
+    right: 17px;
+}
+
 .summary-schemes-room .contents.radiator {
-    background-position: left center;
-    width: 32px;
-    margin-right: 50px;
+    background-position: center 0;
+    height: 34px;
+    margin-top: 13px;
 }
-.summary-schemes-room .contents.radiator.floor {
-    background-position: center center;
-    width: 82px;
-    margin: 0;
+.summary-schemes-room .contents.radiator .count.radiator{
+    display: block;
+    right: 15px;    
 }
 
 .summary-schemes-room .contents.boiler {
-    background-color: transparent;
-    background-image: url('../img/summary/scheme-boiler-icon.png');
-    background-position: 20px 20px;
-    width: 82px;
+    background-position: center -66px;
+    height: 32px;
+    margin-top: 14px;
+}
+.summary-schemes-room .contents.radiator.floor {
+    background-position: center -98px;
+    height: 19px;
+    margin-top: 20.5px;
+}
+.summary-schemes-room .contents.radiator.floor .count.floor {
+    right: 6px;
+}
+.summary-schemes-room .contents.radiator.floor .count.radiator {
+    right: 37px;
+}
+
+.summary-schemes-room .contents.boiler.floor {
+    background-position: center -118px;
+    height: 24px;
+    margin-top: 18px;
+}
+.summary-schemes-room .contents.boiler.floor .count.floor {
+    right: 6px;
+}
+
+.summary-schemes-room .contents.boiler.radiator {
+    background-position: center -142px;
+    height: 24px;
+    margin-top: 18px;
+}
+.summary-schemes-room .contents.boiler.radiator .count.radiator {
+    right: 6px;
+}
+
+.summary-schemes-room .contents.boiler.radiator.floor {
+    background-position: center -166px;
+    height: 54px;
+    margin-top: 6px;
+}
+
+.summary-schemes-room .contents.boiler.radiator.floor .count{
+    top: 28px;
+}
+.summary-schemes-room .contents.boiler.radiator.floor .count.radiator{
+    right: 37px;
 }
 
 .summary-schemes-room .title{
     font-size: 12px;
     text-align: center;
+    position: absolute;
+    bottom: 2px;
+    width: 100%;
+    color: #8a8a8a;
 }
 
 .summary-schemes-room .contents .count {
-    display: block;
+    display: none;
     width: 15px;
     position: absolute;
     right: 5px;
-    top: 13px;
+    top: -5px;
     background-color: white;
     border-radius: 10px;
     line-height: 15px;
     font-size: 12px;
     text-align: center;
-}
-
-.summary-schemes-room .contents .count.radiator {
-    right: 43px;
 }
 
 .summary-schemes-collectors {
@@ -2318,17 +2366,16 @@ table.summary-merchandise .rub {
 }
 
 .summary-footer {
-    position: relative;
+    position: fixed;
+    bottom: 0;
+    left: 310px;
     height: 65px;
-    clear: both;
-    padding-top: 38px;
+    width: 100%;
 }
 
 .summary-footer > a {
     display: block;
     clear: both;
-    position: absolute;
-    bottom: 0;
     width: 100%;
     border: none;
     font-size: 16px;
@@ -2338,7 +2385,9 @@ table.summary-merchandise .rub {
     text-align: center;
     vertical-align: middle;
     background-color: #e5e5e5;
-    color: #494949
+    color: #494949;
+    box-sizing: border-box;
+    padding-right: 310px;
 }
 
 .summary-footer > a > .icon-print-all {
@@ -2359,7 +2408,7 @@ table.summary-merchandise .rub {
     background-position: center center;
 }
 
-.summary-print-all-placeholder {
+.summary-footer-placeholder {
     clear: both;
     height: 90px;
 }

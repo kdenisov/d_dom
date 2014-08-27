@@ -806,9 +806,11 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
             }
 
             $('#summary-menu-pointer').animate({ top: getMenuPointerTop(n - 1) + 'px' }, 300);
-            var scope = angular.element($('.summary-page:first')).scope();
-            scope.MODEL._page = n;
-            _this._page = n;
+            var contentScope = angular.element($('.summary-page:first')).scope();
+            contentScope.MODEL._page = n;
+
+            var sidebarScope = angular.element($('.summary-nav')).scope();
+            sidebarScope.MODEL._page = n;
         };
 
         _this.productCard = {};
