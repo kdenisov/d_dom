@@ -813,15 +813,18 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
 
         _this.productCard = {};
 
-        _this.showCard = function(card) {
+        _this.showCard = function(card, count) {
             _this.productCard = card;
+            _this.productCard.count = count;
         };
 
         return _this;
     };
 
     Catalog.fetch().then(function (data) {
-        $scope.CATALOG = data;        
+        $scope.CATALOG = data;
+        var first; for (first in _basket) break;
+        $scope.MODEL.showCard($scope.CATALOG[first], _basket[first]);
     });
 
     $scope.BASKET_TOTAL_PRICE = function () {
@@ -1178,60 +1181,8 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         }
     });
 
-    $scope.PAGE_CARDS = {
-        items: [
-            {
-                title: 'Термостат RA2994 с газонаполненным температурным датчиком',
-                count: 3,
-                rub: '900',
-                description: {
-                    html: '<p>Термостатический элемент - устройство автоматического регулирования температуры. Термостатический элемент - устройство автоматического регулирования температуры. Термостатический элемент - устройство автоматического регулирования температуры. </p>Термостатический элемент - устройство автоматического регулирования температуры. Термостатический элемент - устройство автоматического регулирования температуры. Термостатический элемент - устройство автоматического регулирования температуры. </p>Термостатический элемент - устройство автоматического регулирования температуры. Термостатический элемент - устройство автоматического регулирования температуры. Термостатический элемент - устройство автоматического регулирования температуры. </p>',
-                    linksTitle: 'Документация',
-                    links: [
-                        { href: '#/summary/download/1', text: 'Техническое описание', css: 'icon-download' },
-                        { href: '#/summary/download/2', text: 'Инструкция', css: 'icon-download' },
-                    ]
-                },
-                techData: {
-                    html: '<p>Sup!</p>',
-                    linksTitle: 'Документация 2',
-                    links: [
-                        { href: '#/summary/download/3', text: 'Техническое описание 2', css: 'icon-download' },
-                        { href: '#/summary/download/4', text: 'Инструкция 2', css: 'icon-download' },
-                    ]
-                },
-                thumb: 'common/img/summary/thumbs/controls.jpg',
-                src: 'common/img/summary/summary-card-control.png'
-            },
-
-            {
-                title: 'Бойлер etc',
-                count: 1,
-                rub: '3 000',
-                description: {
-                    html: '<p>Бойлер - это бойлер</p>',
-                    linksTitle: 'Документация 3',
-                    links: [
-                        { href: '#/summary/download/5', text: 'Техническое описание', css: 'icon-download' },
-                        { href: '#/summary/download/6', text: 'Инструкция', css: 'icon-download' },
-                    ]
-                },
-                techData: {
-                    html: '<p>Sup!</p>',
-                    linksTitle: 'Документация 4',
-                    links: [
-                        { href: '#/summary/download/7', text: 'Техническое описание 2', css: 'icon-download' },
-                        { href: '#/summary/download/8', text: 'Инструкция 2', css: 'icon-download' },
-                    ]
-                },
-                thumb: 'common/img/summary/thumbs/boiler.jpg',
-                src: 'common/img/summary/summary-card-control.png'
-            }
-        ]
-    };
-
     // set default product card
-    $scope.MODEL.showCard($scope.PAGE_CARDS.items[0]);
+    //
 
     $scope.RAW = function(html) {
         return $sce.trustAsHtml(html);

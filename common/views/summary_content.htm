@@ -157,20 +157,20 @@
     </div>
 
     <div class="summary-card-thumbs">
-        <div ng-click="MODEL.showCard(item)" ng-repeat="item in PAGE_CARDS.items">
-            <img alt="{{item.title}}" ng-src="{{item.thumb}}"/>
-            <div ng-show="MODEL.productCard === item" class="highlight"></div>
-            <span class="count" ng-if="item.count > 1">{{item.count}}</span>
+        <div ng-click="MODEL.showCard(CATALOG[CODE], COUNT)" ng-repeat="(CODE, COUNT) in BASKET()">
+            <img ng-src="http://dom.danfoss.ru{{CATALOG[CODE].image}}?w=83&h=83&mode=pad" alt="{{CATALOG[CODE].name}}" />
+            <div ng-show="MODEL.productCard === CATALOG[CODE]" class="highlight"></div>
+            <span class="count" ng-if="COUNT > 1"> {{COUNT | number:0 | formatNumber}}</span>
         </div>
     </div>
 
     <div class="summary-card-title">
         <div>
-            <h3>{{MODEL.productCard.title}}</h3>
+            <h3>{{MODEL.productCard.name}}</h3>
             <div class="summary-card-pricing">
                 <div>
                     <div>цена</div>
-                    <span class="value">{{MODEL.productCard.rub}}</span> руб.
+                    <span class="value">{{MODEL.productCard.price}}</span> руб.
                 </div>
                 <div>
                     <div>кол-во</div>
@@ -178,7 +178,7 @@
                 </div>
             </div>
         </div>
-        <img ng-src="{{MODEL.productCard.src}}" alt="{{MODEL.productCard.title}}" />
+        <img ng-src="{{MODEL.productCard.image}}?w=400&h=400&mode=pad" alt="{{MODEL.productCard.name}}" />
     </div>
 
     <div class="summary-card-tab" ng-tabs>
@@ -188,24 +188,26 @@
         </div>
 
         <div class="summary-card-tab-content" ng-tab-body>
-            <div ng-bind-html="RAW(MODEL.productCard.description.html)"></div>
+            <div ng-bind-html="RAW(MODEL.productCard.description)"></div>
             <div class="links">
-                <h4>{{MODEL.productCard.description.linksTitle}}</h4>
-                <a ng-href="{{link.href}}" ng-repeat="link in MODEL.productCard.description.links">
-                    <i ng-class="link.css"></i>
-                    {{link.text}}
-                </a>
+                <h4>Документация</h4>
+                <div class="thumbnail" ng-repeat="link in MODEL.productCard.docs">
+                    <a href="{{link.ActionUrl}}" target="_blank">
+                        <img src="{{link.IconSrc}}" />
+                    </a>
+                </div>
             </div>
         </div>
 
         <div class="summary-card-tab-content" ng-tab-body>
-            <div ng-bind-html="RAW(MODEL.productCard.techData.html)"></div>
             <div class="links">
-                <h4>{{MODEL.productCard.techData.linksTitle}}</h4>
-                <a ng-href="{{link.href}}" ng-repeat="link in MODEL.productCard.techData.links">
-                    <i ng-class="link.css"></i>
-                    {{link.text}}
-                </a>
+                <h4>Технические характеристики</h4>
+                 <table class="table table-stripped table-bordered">
+                    <tr ng-repeat="r in MODEL.productCard.itemHaracteristics">
+                        <th>{{r.name}}</th>
+                        <td>{{r.value}}</td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
