@@ -779,15 +779,23 @@ a.collector-item {
 	transition: all 0.5s;
 }
 
-    .radiators .item-valve
-    {
-        width: 100%;
-        height: 652px;
-        float: left;
-        background: url('../img/radiators/r1.png') no-repeat 50% -60px;
-        margin-right: -50%;
-        transition: all 0.5s;
-    }
+.radiators .item-valve
+{
+    width: 100%;
+    height: 652px;
+    float: left;
+    background: url('../img/radiators/r1.png') no-repeat 50% -60px;
+    margin-right: -50%;
+    transition: all 0.5s;
+    position: relative;
+}
+.radiators .item-valve > img {
+    position: absolute;
+    left: 50%;
+    margin-left: -372px;
+    top: -60px;
+}
+
 .current-item-1 .item-3 {	margin-right: -100%; }
 .current-item-2 .item-1 {	margin-left: -50%; }
 .current-item-3 .item-1 { margin-left: -100%; }

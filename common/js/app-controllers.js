@@ -251,7 +251,16 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	Configurator.params.room.fittings = Configurator.params.fittings;
 	Configurator.params.room.fittingsMaterial = Configurator.params.fittingsMaterial;
 
-	$scope.BOILER = Configurator.boiler;
+	$scope.LOG = function (data) {
+	    console.log(data);
+	};
+	$scope.LOG_ALL = function (data) {
+	    for (var i = 0; i < data.length; i++) {
+	        console.log(data[i]);
+	    }
+
+	};
+    $scope.BOILER = Configurator.boiler;
 	$scope.BOILER_PARAMS = Configurator.params.boiler;	
 	$scope.ROOM = room;
 	$scope.SET_PARAMS_FOR_ALL_ROOMS = true;
@@ -320,6 +329,7 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	    }
 	    return res;
 	}
+
 	$scope.PREVIEW = function (valves) {
 	    return "common/img/radiator-preview/" + Configurator.params.room.radiators.valves[valves-1].preview + ".png";
 	}
