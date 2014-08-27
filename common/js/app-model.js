@@ -450,7 +450,7 @@ appConfigurator.factory('Configurator', function(){
 	    var floor = {							// Теплые полы
 	        isFloors: level == 0,			// Теплые полы: есть
 	        loops: 1,						// Количество петель
-	        control: 1,					// Управление
+	        control: 2,					// Управление
 	        fittings: 0					// Фитинги
 	    };
 
@@ -1203,6 +1203,112 @@ appConfigurator.factory('Configurator', function(){
 	    /*for (var k in _basket) {
 	        _basket[k] = Math.ceil(_basket[k]);
 	    }*/
+
+	    return _basket;
+	};
+
+
+    /*возвращает все коды сгруппированные по комнатам */
+	Cfg.GetCodesByRooms = function () {
+	    var _basket = {};
+
+	    var pushToBasket = function (basket, key, val, room) {
+	        if (room in basket) {
+	            if (key in basket[room].equip) {
+	                basket[room].equip[key].value += parseFloat(val);
+	            } else {
+	                basket[room].equip[key] = { key: key, value: parseFloat(val) };
+	            }
+	        } else {
+	            var e = {};
+	            e[key] = { key: key, value: parseFloat(val) };
+	            basket[room] = { equip: e };
+	        }
+	    }
+
+	    var Configurator = Cfg;
+
+	    angular.forEach(Configurator.levels, function (_level) {
+	        _level.isLevel
+			&&
+			(angular.forEach(_level.rooms, function (_room) {
+			    _room.id <= _level.roomsCount && (
+					(angular.forEach(_room.radiators.list, function (_radiator) {
+					    _radiator.id <= _room.radiators.radiatorsTypes && (
+							(_radiator.type == 1 && _radiator.control && angular.forEach(Configurator.params.room.radiators.control[_radiator.control - 1].basket, function (_control) {
+							    pushToBasket(_basket, _control[0], _radiator.count * eval(_control[1]), _level.name + '|' + _room.name);
+							}))
+							+
+							(angular.forEach(Configurator.params.room.radiators.valves[_radiator.valves - 1].basket, function (_valves) {
+							    pushToBasket(_basket, _valves[0], _radiator.count * _valves[1], _level.name + '|' + _room.name);
+							}))
+							+
+							(_radiator.fittings && angular.forEach(Configurator.params.fittings[_radiator.fittings - 1].basket, function (_fittings) {
+							    pushToBasket(_basket, _fittings[0], _radiator.count * 2, _level.name + '|' + _room.name);
+							}))
+						)
+					}))
+					+
+					(_room.floors.isFloors &&
+						(angular.forEach(Configurator.params.room.floors.control[_room.floors.control - 1].basket, function (_control) {
+						    pushToBasket(_basket, _control[0], eval(_control[1]), _level.name + '|' + _room.name);
+						}))
+						+
+						(_room.floors.fittings && angular.forEach(Configurator.params.fittings[_room.floors.fittings - 1].basket, function (_fittings) {
+						    pushToBasket(_basket, _fittings[0], 2, _level.name + '|' + _room.name);
+						}))
+					)
+                    +
+                    (_room.isBoilerRoom
+                        && pushToBasket(_basket, Configurator.params.boiler.pump[Configurator.boiler.pump - 1].basket[0][0], 1, _level.name + '|' + _room.name))
+				)
+			}))
+			&&
+			(angular.forEach(_level.collectors, function (_collector) {
+
+			    if (_collector.isCollector) {
+
+			        var collector_1 = _collector.entries;
+			        angular.forEach(Configurator.params.collector.sets, function (_set) {
+			            if (_collector.type == 'radiator' && _set.isFlowmeter == _collector.isFlowmeter && _set.entries == collector_1) {
+			                angular.forEach(_set.basket, function (_sets) {
+			                    pushToBasket(_basket, _sets[0], eval(_sets[1]), _level.name + '|Коллектор');
+			                });
+			            }
+			            if (_collector.type == 'floor' && _set.isFlowmeter == _collector.isFlowmeter && _set.entries == collector_1) {
+			                angular.forEach(_set.basket, function (_sets) {
+			                    pushToBasket(_basket, _sets[0], eval(_sets[1]), _level.name + '|Коллектор');
+			                });
+			            }
+			        });
+			    }
+
+			    _collector.isCollector && (
+					(_collector.isBallValves && angular.forEach(Configurator.params.collector.ballValves[0].basket, function (_ballValves) {
+					    pushToBasket(_basket, _ballValves[0], _ballValves[1], _level.name + '|collector');
+					}))
+					+
+					(_collector.isThermometers && angular.forEach(Configurator.params.collector.thermometers[0].basket, function (_thermometers) {
+					    pushToBasket(_basket, _thermometers[0], eval(_thermometers[1]), _level.name + '|collector');
+					}))
+					+
+					(_collector.fittings && angular.forEach(Configurator.params.fittings[_collector.fittings - 1].basket, function (_fittings) {
+					    pushToBasket(_basket, _fittings[0], _collector.entries, _level.name + '|collector');
+					}))
+                    +
+					(_collector.fit_088U0305 && angular.forEach(Configurator.params.collector.fit_088U0305[_collector.fit_088U0305 - 1].basket, function (_fittings) {
+					    pushToBasket(_basket, _fittings[0], _fittings[1], _level.name + '|collector');
+					}))
+                    +
+					(_collector.fit_088U0301 && angular.forEach(Configurator.params.collector.fit_088U0301[_collector.fit_088U0301 - 1].basket, function (_fittings) {
+					    pushToBasket(_basket, _fittings[0], _fittings[1], _level.name + '|collector');
+					}))
+					+
+					(_collector.mixing && angular.forEach(Configurator.params.collector.mixing[_collector.mixing - 1].basket, function (_mixing) {
+					    pushToBasket(_basket, _mixing[0], _mixing[1], _level.name + '|collector');
+					})))
+			}));
+	    });
 
 	    return _basket;
 	};

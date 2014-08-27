@@ -124,23 +124,23 @@
             </tr>
             <tr ng-repeat="item in group.items" ng-repeat-end>
                 <td>
-                    <img class="thumb" ng-src="{{item.thumb}}" alt="{{item.title}}" />
+                    <img class="thumb" ng-src="http://dom.danfoss.ru{{CATALOG[item.title].image}}?w=83&h=83&mode=pad" alt="{{CATALOG[item.title].name}}" />
                 </td>
                 <td>
-                    {{item.title}}
+                     {{CATALOG[item.title].name}}
                 </td>
                 <td class="qty">
-                    {{item.count}}
+                    {{item.count | number:0 | formatNumber}}
                 </td>
                 <td>
-                    {{item.rub}} <span class="rub">руб.</span>
+                    {{CATALOG[item.title].price * item.count | number:0 | formatNumber}} <span class="rub">руб.</span>
                 </td>
             </tr>
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="3">Итого</td>
-                <td>{{PAGE_INSTALLATION.totalRub}} <span class="rub">руб.</span></td>
+                <td>{{BASKET_TOTAL_PRICE()}} <span class="rub">руб.</span></td>
             </tr>
         </tfoot>
     </table>

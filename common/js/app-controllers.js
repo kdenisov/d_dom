@@ -847,6 +847,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
 
     var _basket = Configurator.Basket();
     var _groupedBasket = Configurator.GetCodesBySection();
+    var _groupedByRooms = Configurator.GetCodesByRooms();
 
     $scope.MODEL = new ViewModel(page);
 
@@ -1155,67 +1156,27 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         return top;
     };
 
-   
-    $scope.PAGE_INSTALLATION = {
-        totalRub: '123 456',
-        levels: [
-            {
-                title: 'Первый этаж',
-                groups: [
-                    {
-                        title: 'Комната 1',
-                        items: [
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4.', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                        ]
-                    },
-                    {
-                        title: 'Комната 2',
-                        items: [
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4.', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' }
-                        ]
-                    },
-                    {
-                        title: 'Коллектор на первом этаже',
-                        items: [
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4.', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' }
-                        ]
+    $scope.PAGE_INSTALLATION = { levels: [] };
+
+    angular.forEach(Configurator.levels, function (_level) {
+        if (_level.isLevel) {
+            var _l = { title: _level.name, groups: [] };
+            for (var _groupName in _groupedByRooms) {
+                if (_groupName.indexOf(_level.name + "|") >= 0){
+                    var _group = {
+                        title: _groupName.split("|")[1],
+                        items: []
+                    };
+
+                    for (var _el in _groupedByRooms[_groupName].equip) {
+                        _group.items.push({ title: _el, count: _groupedByRooms[_groupName].equip[_el].value });
                     }
-                ]
-            },
-            {
-                title: 'Второй этаж',
-                groups: [
-                    {
-                        title: 'Комната 1',
-                        items: [
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4.', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                        ]
-                    },
-                    {
-                        title: 'Комната 2',
-                        items: [
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4, Прямой, G3/4A x G3/4.', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' },
-                            { title: 'Прямой, G3/4A x G3/4', thumb: 'common/img/summary/thumbs/merchandise.jpg', count: 8, rub: '24 000' }
-                        ]
-                    }
-                ]
+                    _l.groups.push(_group);
+                }
             }
-        ]
-    };
+            $scope.PAGE_INSTALLATION.levels.push(_l);
+        }
+    });
 
     $scope.PAGE_CARDS = {
         items: [
