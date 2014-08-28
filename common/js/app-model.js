@@ -651,6 +651,11 @@ appConfigurator.factory('Configurator', function(){
 	    for (var level in Configurator.levels) {
 	        var total_radiators_count = Math.ceil(Math.sqrt(area * levels_count / 5) / levels_count);
 	        for (var room in Configurator.levels[level].rooms) {
+
+	            //make room available if it is required
+	            var roomInstance = Configurator.levels[level].rooms[room];
+	            roomInstance.isRoom = roomInstance.id <= Configurator.levels[level].roomsCount;
+
 	            // пересчет количества радиаторов = корень(S * levels_count / 5)
 	            for (var r in Configurator.levels[level].rooms[room].radiators.list) {
 	                // считаем что есть только один тип радиаторов (заполняем только нулевой)
