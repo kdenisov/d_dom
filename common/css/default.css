@@ -499,6 +499,33 @@ label.tab-item-add {
 	left: 0;*/
 }
 
+.tab-items.icons .tab-item{
+    font-size: 10px;
+}
+
+.tab-items.icons i {
+    display: inline-block;
+    width: 28px;
+    height: 22px;
+    background-image: url('../img/icons-tab-radiator-floor.png');
+    background-repeat: no-repeat;
+}
+
+.tab-items.icons .icon-radiator {
+    background-position: 0 0;
+    margin-bottom: -7px;
+}
+.tab-items.icons .active .icon-radiator {
+    background-position: -28px 0;
+}
+.tab-items.icons .icon-floor {
+    background-position: 0 -21px;
+    margin-bottom: -5px;
+}
+.tab-items.icons .active .icon-floor {
+    background-position: -28px -21px;
+}
+
 
 #sidebar-view > .tabs {
     display: table;
