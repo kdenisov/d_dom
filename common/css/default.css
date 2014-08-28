@@ -1502,6 +1502,11 @@ label.choicebox-true {
 	border: 0;
 	background: #01B06D;
 }
+.button-order {
+	color: #FFF !important;
+	border: 0;
+	background: #ADADAD;
+}
 a.button,
 div.button {
 }
