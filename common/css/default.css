@@ -477,9 +477,11 @@ label.tab-item-add {
 	background: none;
 	border-color: #00B16D;
 	cursor: default;
+    font-weight: bold;
 }
 .tab-items label.active {
 	background: #FFF;
+    font-weight: bold;
 }
 .tab-item input {
 	display: none;
@@ -1445,6 +1447,7 @@ label h3 {
 label.choicebox-true {
 	color: #000;
 	background: #DADADA;
+    font-weight: bold;
 }
 
 
@@ -1491,6 +1494,7 @@ label.choicebox-true {
 .selectbox .checkbox-true {
 	background: #DDD;
 	border-color: #F3F3F3;
+    font-weight: bold;
 }
 .selectbox .title {
 	width: 96%;
