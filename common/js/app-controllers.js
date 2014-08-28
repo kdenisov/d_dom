@@ -783,6 +783,10 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 		return Configurator.Basket();
 	}
 
+	$scope.ORDER = function () {
+	    Catalog.makeOrder(Configurator.Basket());
+	}
+
 	$scope.BASKET_TOTAL_COUNT = function(){
 		var count = 0;
 		for (var k in $scope.BASKET()) {
@@ -838,6 +842,10 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         var first; for (first in _basket) break;
         $scope.MODEL.showCard($scope.CATALOG[first], _basket[first]);
     });
+
+    $scope.ORDER = function () {
+        Catalog.makeOrder(Configurator.Basket());
+    }
 
     $scope.BASKET_TOTAL_PRICE = function () {
         var

@@ -1368,6 +1368,23 @@ appConfigurator.factory('Catalog', function($q, $timeout, $http) {
 
 			}, 30);
 			return deferred.promise;
+		},
+		makeOrder: function (basket) {
+		    var deferred = $q.defer();
+		    $timeout(function () {
+		        var data = {codes : ""};
+		        for (var b in basket){
+		            data.codes += b + " " + basket[b] + "; ";
+		        }
+		        $http.post("http://dom.danfoss.ru/checkout/express/", data)
+				.success(function (data) {
+				    document.location.href = "http://dom.danfoss.ru/Checkout/Cart";
+				})
+				.error(function (data) {
+				    return;
+				});
+
+		    }, 30);
 		}
 	}
 
