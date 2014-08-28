@@ -446,7 +446,7 @@ appConfigurator.factory('Configurator', function(){
 	    return radiators;
 	}
 
-	var room = function (level, room_id) {
+	var room = function (level, room_id, active) {
 	    var floor = {							// Теплые полы
 	        isFloors: level == 0,			// Теплые полы: есть
 	        loops: 1,						// Количество петель
@@ -463,7 +463,7 @@ appConfigurator.factory('Configurator', function(){
 
 	    return { // Комнаты по умолчанию
 	        id: room_id,
-	        isRoom: false,
+	        isRoom: active,
 	        name: Cfg.params.room.roomNames[level][room_id - 1],
 	        radiators: radiators,
 	        floors: floor, // объект теплого пола
@@ -515,10 +515,10 @@ appConfigurator.factory('Configurator', function(){
 	    }
 	}
 
-	var initRooms = function (level) {
+	var initRooms = function (level, roomsPerLevel) {
 	    // "Конструктор" комнат
 	    for (var room_id = 1, rooms = []; room_id <= 12; room_id++) {
-	        rooms.push(room(level, room_id));
+	        rooms.push(room(level, room_id, room_id <= roomsPerLevel));
 	    }
 	    return rooms;
 	}
@@ -578,7 +578,7 @@ appConfigurator.factory('Configurator', function(){
 				//isCollectors: true, //level_id == 1 || false,
 				//isFloors: false,
 				collectors: collectors,
-				rooms: initRooms(level_id - 1)
+				rooms: initRooms(level_id - 1, rooms_per_level)
 			});
 		}
 		        // параметры по умолчанию

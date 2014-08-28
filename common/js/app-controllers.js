@@ -242,11 +242,15 @@ appConfigurator.controller('LevelCtrl', function($scope, Configurator, $statePar
 });
 
 
-appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, $modal) {
+appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, $modal, $location) {
 	var
 		level = Configurator.levels[$stateParams.levelId - 1],
 		room = level.rooms[$stateParams.roomId - 1]
-	;
+    ;
+
+    if (!room.isRoom) {
+        $location.path('/level/' + $stateParams.levelId);
+    }
 
 	Configurator.params.room.fittings = Configurator.params.fittings;
 	Configurator.params.room.fittingsMaterial = Configurator.params.fittingsMaterial;
@@ -390,14 +394,41 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 		$scope.RADIATOR = obj;
 	}
 
-	$scope.ALERT = function (alert) {
+	$scope.ALERT = function (alert, confirm, cancel) {
 	    $scope.ALERT_MESSAGE = alert;
+	    $scope.CONFIRM_ALERT = function () {
+	        $scope.alertInstance && $scope.alertInstance.close();
+	        confirm && confirm();
+	    };
+	    $scope.CLOSE_ALERT = cancel && function() {
+	        $scope.alertInstance && $scope.alertInstance.dismiss('cancel');
+	        cancel();
+	    };
 
 	    $scope.alertInstance = $modal.open({
 	        templateUrl: 'alert.html',
 	        size: 'sm',
 	        scope: $scope
 	    });
+	}
+
+	$scope.DELETE_ROOM = function (evt) {
+	    evt && evt.preventDefault();
+
+        if (level.roomsCount > 1) {
+            $scope.ALERT('Вы хотите убрать эту комнату?',
+                function() {
+                    room.isRoom = false;
+                    level.roomsCount--;
+                    $location.path('/level/' + $stateParams.levelId);
+                }, function() {
+
+                });
+
+            return;
+        }
+
+	    $scope.ALERT('Это последняя комната на этаже. Уберите этаж, чтобы убрать комнату.');
 	}
 
 	$scope.refreshRadiatorCollectorsCount = function () {

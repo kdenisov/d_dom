@@ -66,6 +66,7 @@ h1 b {
 	position: absolute;
 	text-align: center;
 	color: #999;
+    background-color: white;
 	font-size: 14px;
 	font-weight: normal;
 	line-height: 26px;
@@ -80,6 +81,17 @@ h1 b a {
 	border: 0;
 	padding: 0 11px 0 8px;
 }
+
+h1 a.delete {
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    margin-bottom: 2px;
+    margin-left: 12px;
+    background: url("../img/icon_delete.png") no-repeat scroll center bottom rgba(0, 0, 0, 0);
+    border: none;
+}
+
 h1 input {
 	line-height: 41px;
 	background: none;
@@ -1501,6 +1513,11 @@ label.choicebox-true {
 	color: #FFF !important;
 	border: 0;
 	background: #01B06D;
+}
+.button-cancel {
+	color: #FFF !important;
+	border: 0;
+	background: #ADADAD;
 }
 .button-order {
 	color: #FFF !important;
