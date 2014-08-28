@@ -71,7 +71,7 @@ appConfigurator.factory('Configurator', function(){
 					control: [
 						{ id: 1, builtinValve: [1, 2], previewPrefix: 'living_Eco', preview:'config-prod-living-eco.png', controlType: 1, name: 'Living eco RA', basket: [['014G0050', 1]] },
 						{ id: 2, builtinValve: [1, 2], previewPrefix: 'RA2994', controlType: 1, preview: 'config-prod-ra.png', name: 'RA2994', basket: [['013G2994', 1]] },
-						{ id: 3, builtinValve: 3, previewPrefix: 'Livin-eco', controlType: 1, preview: 'config-prod-living-eco.png', name: 'Living eco RA+K', basket: [['014G0052', 1]] },
+						{ id: 3, builtinValve: 3, previewPrefix: 'living_Eco', controlType: 1, preview: 'config-prod-living-eco.png', name: 'Living eco RA+K', basket: [['014G0052', 1]] },
 						{ id: 4, builtinValve: 3, previewPrefix: 'RAW-K', controlType: 1, preview: 'config-prod-ra.png', name: 'RAW-K', basket: [['013G5030', 1]] },
 						{ id: 5, builtinValve: [1, 2, 3], controlType: 2, preview: 'config-prod-termo-3.png', name: 'Простой', basket: [['087N1110', '1/_radiator.count'], ['088H3112', '1'], ['088H0016', 1/8]] },
 						{ id: 6, builtinValve: [1, 2, 3], controlType: 2, preview: 'config-prod-termo-1.png', name: 'Программируемый', basket: [['087N791801', '1/_radiator.count'], ['088H3112', '1'], ['088H0016', 1/8]] },

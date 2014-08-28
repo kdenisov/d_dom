@@ -334,10 +334,14 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	    return "common/img/radiator-preview/" + Configurator.params.room.radiators.valves[valves-1].preview + ".png";
 	}
 	$scope.VIEW = function (valves, connection, control) {
-	    if ($scope.PARAMS.radiators.control[$scope.RADIATOR.control - 1].previewPrefix)
-	        return "common/img/radiators/n/" + Configurator.params.room.radiators.valves[valves - 1].preview + "_" + $scope.PARAMS.radiators.control[control - 1].previewPrefix + "_r" + (connection == 1 ? "2" : "1") + ".png";
-	    else
-	        return "common/img/radiators/n/" + Configurator.params.room.radiators.valves[valves - 1].preview + "_r" + (connection == 1 ? "2" : "1") + ".png";
+	    var preview = Configurator.params.room.radiators.valves[valves - 1].preview;
+	    var connectionNum = (connection == 1 ? "2" : "1");
+	    if ($scope.PARAMS.radiators.control[$scope.RADIATOR.control - 1].previewPrefix) {
+	        var prefix = $scope.PARAMS.radiators.control[control - 1].previewPrefix;
+	        return "common/img/radiators/n/" + preview + "_" + prefix + "_r" + connectionNum + ".png";
+	    } else {
+	        return "common/img/radiators/n/" + preview + "_r" + connectionNum + ".png";
+	    }
 	}
 
 	$scope.UPDATE_VALVE = function (valveId) {
