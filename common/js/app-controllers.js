@@ -282,7 +282,7 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
                 && el.builtinValve == r.builtinValve
                 && el.pipework == r.pipework
                 && el.controlType == r.controlType
-                && el.connectSide == 1
+                /*&& (el.connectSide == 1 || el.connectSide == 0)*/
                 ) {
 	            exists = true;
 	        }
@@ -329,14 +329,15 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	$scope.PREVIEW = function (valves) {
 	    return "common/img/radiator-preview/" + Configurator.params.room.radiators.valves[valves-1].preview + ".png";
 	}
-	$scope.VIEW = function (valves, connection, control) {
+	$scope.VIEW = function (valves, connection, control, connectSide) {
 	    var preview = Configurator.params.room.radiators.valves[valves - 1].preview;
+	    var side = connectSide == 2 ? "_right" : "";
 	    var connectionNum = (connection == 1 ? "2" : "1");
 	    if ($scope.PARAMS.radiators.control[$scope.RADIATOR.control - 1].previewPrefix) {
 	        var prefix = $scope.PARAMS.radiators.control[control - 1].previewPrefix;
-	        return "common/img/radiators/n/" + preview + "_" + prefix + "_r" + connectionNum + ".png";
+	        return "common/img/radiators/n/" + preview + "_" + prefix + "_r" + connectionNum + side + ".png";
 	    } else {
-	        return "common/img/radiators/n/" + preview + "_r" + connectionNum + ".png";
+	        return "common/img/radiators/n/" + preview + "_r" + connectionNum + side + ".png";
 	    }
 	}
 

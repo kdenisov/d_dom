@@ -94,6 +94,7 @@
 									RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
 									RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
                                     RADIATOR.preview_valves = RADIATOR.valves;
+                                    RADIATOR.connectSide = 1;
 								">
                             </label>
                         </div>
@@ -109,7 +110,7 @@
                                            ng-value="{{ITEM.id}}"
                                            ng-change="
                                     RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
-                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;">
+                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;RADIATOR.connectSide = 1;">
                                 </label>
                             </div>
                         </div>
@@ -120,7 +121,7 @@
                                         ng-model="RADIATOR.connectSide"
                                         ng-change="
                                     RADIATOR.valves = (PARAMS.radiators.valves | filter: (RADIATOR.type == 2 && {type: 2, connectSide: RADIATOR.connectSide, use: RADIATOR.use}))[0].id;
-                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;"></select>
+                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;RADIATOR.connectSide = 1;"></select>
                             </div>
                         </div>
                         <div class="field">
@@ -143,6 +144,7 @@
 										RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
 										RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
                                         RADIATOR.preview_valves = RADIATOR.valves;
+                                        RADIATOR.connectSide = 1;
 									">
                                 </label>
                             </div>
@@ -156,6 +158,7 @@
 								RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
                                 RADIATOR.preview_valves = RADIATOR.valves;
                                 RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
+                                RADIATOR.connectSide = 1;
 							"></select>
                         </div>
                         <div class="field">
@@ -166,6 +169,7 @@
 								RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
                                 RADIATOR.preview_valves = RADIATOR.valves;
                                 RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
+                                RADIATOR.connectSide = 1;
 							"></select>
                         </div>
                         <div class="field hidden-{{RADIATORS.controlType == 2}}">
@@ -193,18 +197,18 @@
                                         <input type="radio"
                                                ng-model="RADIATOR.preview_valves"
                                                ng-value="{{ITEM.id}}"
-                                               ng-change="RADIATOR.valves = RADIATOR.preview_valves;RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;RADIATOR.connectSide=1">
+                                               ng-change="RADIATOR.valves = RADIATOR.preview_valves;RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;RADIATOR.connectSide = 1">
                                     </span>
                                     <span class="title"><img src="{{PREVIEW(ITEM.id)}}" title="{{ITEM.name}}" /></span>
                                 </label>
                             </div><!-- .selectbox -->
                         </div>
-                        <div class="field hidden-{{RADIATOR.preview_valves != 3 && RADIATOR.preview_valves != 4}}">
+                        <div class="field">
                             <div class="field">
                                 <h3>Сторона</h3>
                                 <select ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.connectSide"
                                         ng-model="RADIATOR.connectSide"
-                                        ng-change="RADIATOR.valves = RADIATOR.connectSide == 1 ? RADIATOR.preview_valves : RADIATOR.preview_valves + 2;
+                                        ng-change="RADIATOR.valves = ((RADIATOR.preview_valves == 3 || RADIATOR.preview_valves == 4) && RADIATOR.connectSide == 2) ? RADIATOR.preview_valves + 2 : RADIATOR.preview_valves;
                                     RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;"></select>
                             </div>
                         </div>
