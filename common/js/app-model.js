@@ -819,12 +819,12 @@ appConfigurator.factory('Configurator', function(){
 
 	    if (rebuild_floor_collectors) {
 	        refreshCollectorsCount();
-	        return;
+	        //return;
 	    }
 
 	    if (rebuild_radiator_collectors) {
 	        refreshRadiatorCollectorsCount();
-	        return;
+	        //return;
 	    }
 
 	    // по всем этажам - по всем коллекторам - рассовываем петли (в имеющейся конфигурации)
@@ -837,9 +837,9 @@ appConfigurator.factory('Configurator', function(){
 	                    for (var __l = 0; __l < 3; __l++) {
 	                        // __l-ый этаж
 	                        if (Cfg.levels[level].collectors[i].levels[__l + 1]) {
-
                                 // если __l-ый этаж подключен к этому коллектору, то считаем сколько входов есть
 	                            var _entries = Cfg.levels[level].collectors[i].type == 'floor' ? Cfg.levels[__l].floor_loops_count : Cfg.levels[__l].radiators_count;
+	                            
 	                            if (Cfg.levels[level].collectors[i].entries + _entries > 24) {
 	                                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
 	                                return false;
