@@ -192,11 +192,20 @@
                                         <input type="radio"
                                                ng-model="RADIATOR.preview_valves"
                                                ng-value="{{ITEM.id}}"
-                                               ng-change="RADIATOR.valves = RADIATOR.preview_valves;RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;">
+                                               ng-change="RADIATOR.valves = RADIATOR.preview_valves;RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;RADIATOR.connectSide=1">
                                     </span>
                                     <span class="title"><img src="{{PREVIEW(ITEM.id)}}" title="{{ITEM.name}}" /></span>
                                 </label>
                             </div><!-- .selectbox -->
+                        </div>
+                        <div class="field hidden-{{RADIATOR.preview_valves != 3 && RADIATOR.preview_valves != 4}}">
+                            <div class="field">
+                                <h3>Сторона</h3>
+                                <select ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.connectSide"
+                                        ng-model="RADIATOR.connectSide"
+                                        ng-change="RADIATOR.valves = RADIATOR.connectSide == 1 ? RADIATOR.preview_valves : RADIATOR.preview_valves + 2;
+                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;"></select>
+                            </div>
                         </div>
                         <div class="field hidden-{{GET_EXTERNAL_VIEW_ITEMS().length == 0}}">
                             <h3>Исполнение</h3>

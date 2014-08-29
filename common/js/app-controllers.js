@@ -291,6 +291,7 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
                 && el.builtinValve == r.builtinValve
                 && el.pipework == r.pipework
                 && el.controlType == r.controlType
+                && el.connectSide == 1
                 ) {
 	            exists = true;
 	        }
