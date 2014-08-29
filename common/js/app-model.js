@@ -476,7 +476,7 @@ appConfigurator.factory('Configurator', function(){
 			levels.push({ // Этажи по умолчанию
 				id: level_id,
 				//name: level_id == 3 && 'Подвал' || 'Этаж ' + (level_id),
-				name: 'Этаж ' + level_id,
+				name: level_id == 1 ? 'Первый этаж' : level_id == 2 ? 'Второй этаж' : 'Третий этаж',
 				canonicalName: function(){
 					return(this.isBasement && 'Подвал' || this.name);
 				},
