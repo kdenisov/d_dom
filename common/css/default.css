@@ -498,25 +498,30 @@ label.tab-item-add {
 
 .tab-items.icons i {
     display: inline-block;
-    width: 28px;
+    width: 27px;
     height: 22px;
+    margin-bottom: -5px;
     background-image: url('../img/icons-tab-radiator-floor.png');
     background-repeat: no-repeat;
 }
 
 .tab-items.icons .icon-radiator {
     background-position: 0 0;
-    margin-bottom: -7px;
 }
 .tab-items.icons .active .icon-radiator {
-    background-position: -28px 0;
+    background-position: -27px 0;
 }
 .tab-items.icons .icon-floor {
     background-position: 0 -21px;
-    margin-bottom: -5px;
 }
 .tab-items.icons .active .icon-floor {
-    background-position: -28px -21px;
+    background-position: -27px -21px;
+}
+.tab-items.icons .icon-boiler {
+    background-position: 0 -44px;
+}
+.tab-items.icons .active .icon-boiler {
+    background-position: -27px -44px;
 }
 
 
@@ -1390,6 +1395,18 @@ label h3 {
 	background: url('../img/checkbox.png') no-repeat 100% 0;
 	z-index: 10;
 }
+
+.label-checkbox.inline {
+    text-align: left;
+    padding: 10px 30px;
+}
+.label-checkbox.checkbox-true.inline {
+    background-color: transparent;
+}
+.label-checkbox.inline .pseudo-checkbox {
+    left: 0;
+    top: 7px;
+}
 .checkbox-true .pseudo-checkbox {
 	/*transition: background-position .1s ease-out;*/
 	background-position: 100% -20px;
@@ -1402,6 +1419,9 @@ label h3 {
 }
 .checkbox-true .is-room {
 	background: #CACACA;
+}
+.checkbox-true {
+    font-weight: bold;
 }
 
 .choicebox {

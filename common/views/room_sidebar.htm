@@ -1,16 +1,17 @@
 <div class="autoscroll">
-    <div class="group" ng-if="ROOM.isBoilerRoom && BOILER.isBoiler">
+    <!--<div class="group" ng-if="BOILER_ACTIVE()">
         <div>
             <div class="group">
                 <h3>Насосный узел обвязки котла</h3>
                 <select ng-options="ITEM.id as ITEM.name for ITEM in BOILER_PARAMS.pump" ng-model="BOILER.pump"></select>
             </div>
         </div>
-    </div>
+    </div>-->
     <div ng-tabs class="tabs">
         <div class="tab-items icons">
-            <div class="tab-item" ng-tab-head="true"><i class="icon-radiator"></i> Радиаторы</div>
-            <div class="tab-item" ng-tab-head><i class="icon-floor"></i> Теплые полы</div>
+            <div class="tab-item" ng-tab-head="true"><i class="icon-radiator"></i><span ng-if="!BOILER_ACTIVE()"> Радиаторы</span></div>
+            <div class="tab-item" ng-tab-head><i class="icon-floor"></i><span ng-if="!BOILER_ACTIVE()"> Теплые полы</span></div>
+            <div class="tab-item" ng-tab-head ng-if="BOILER_ACTIVE()"><i class="icon-boiler"></i></div>
         </div>
         <div ng-tab-body class="tab-content ">
             <div class="group">
@@ -282,6 +283,27 @@
                 </div>
             </div>
         </div><!-- .tab-content -->
+    
+        <div class="tab-content" ng-tab-body>
+            <div class="group">
+                <h3>Тип котла</h3>
+                <div class="choicebox">
+                    <label ng-repeat="item in BOILER_PARAMS.embodiment" ng-class="{ 'choicebox-true': item.id == BOILER.embodiment }">
+                        {{item.name}}
+                        <input type="radio" ng-model="BOILER.embodiment" ng-value="{{item.id}}">
+                    </label>
+                </div>
+            </div>
+            <div class="group">
+                <h3>Насосный узел обвязки котла</h3>
+                <label class="label-checkbox inline" ng-repeat="pump in BOILER_PARAMS.pump" ng-class="{ 'checkbox-true': pump.id == BOILER.pump }">
+                    <span class="pseudo-checkbox">
+                        <input type="radio" ng-model="BOILER.pump" ng-value="{{pump.id}}" />
+                    </span>
+                    {{pump.name}}
+                </label>
+            </div>
+        </div><!-- .tab-content-->
     </div><!-- .tabs -->
 </div>
 <script type="text/ng-template" id="alert.html">

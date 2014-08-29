@@ -255,15 +255,6 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	Configurator.params.room.fittings = Configurator.params.fittings;
 	Configurator.params.room.fittingsMaterial = Configurator.params.fittingsMaterial;
 
-	$scope.LOG = function (data) {
-	    console.log(data);
-	};
-	$scope.LOG_ALL = function (data) {
-	    for (var i = 0; i < data.length; i++) {
-	        console.log(data[i]);
-	    }
-
-	};
     $scope.BOILER = Configurator.boiler;
 	$scope.BOILER_PARAMS = Configurator.params.boiler;	
 	$scope.ROOM = room;
@@ -363,6 +354,10 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	$scope.UPDATE_RADIATORS_COUNT = function () {
 	    Configurator.UpdateCollectorEntries();
 	}
+
+    $scope.BOILER_ACTIVE = function() {
+        return $scope.ROOM.isBoilerRoom && $scope.BOILER.isBoiler;
+    };
 
 	$scope.SET_PARAMS_FOR_ALL = function () {
 	    $scope.modalInstance = $modal.open({

@@ -1,8 +1,9 @@
 <div class="boiler" ng-if="ROOM.isBoilerRoom && BOILER.isBoiler">
-	<h1><b><a ng-href="{{LINK_RETURN}}">&lt;</a></b>{{BOILER.canonicalName()}}></h1>
-	<div class="info">
-	</div>
+    <h1><b><a ng-href="{{LINK_RETURN}}">&lt;</a></b>{{BOILER.canonicalName()}}</h1>
+    <div class="info">
+    </div>
 </div>
+
 <div class="room"  ng-if="!ROOM.isBoilerRoom">
     <h1 class="edit-mode-{{EDITOR.editMode}}"><b><a ng-href="{{LINK_RETURN}}">&lt;</a></b><label ng-click="EDITOR.editMode = true"><span>{{ROOM.name}}</span><input type="text" ng-model="ROOM.name" ng-blur="EDITOR.editMode = false" ng-keyup="EDITOR.pressEnter($event)"></label><a class="delete" ng-href="{{LINK_RETURN}}" ng-click="DELETE_ROOM($event)"></a></h1>
     <div class="info">Уточните количество радиаторов в&nbsp;комнате и&nbsp;какого они типа</div>
