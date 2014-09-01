@@ -14,9 +14,7 @@
 <div class="room-items">
 	<a
 		ng-repeat="ROOM in CURRENT_LEVEL.rooms | orderBy:'-isRoom'"
-		ng-init="
-			ROOM.isBoilerRoom = BOILER.isBoiler && BOILER.level == CURRENT_LEVEL.id && ROOM.id == CURRENT_LEVEL.roomsCount;
-		"
+		ng-init=""
 		ng-class="{'is-room': ROOM.isRoom, 'is-room-boiler': ROOM.isBoilerRoom, 'is-floors': ROOM.floors.isFloors && ROOM.isRoom}"
 		ng-href="{{ROOM.isRoom && ('#/' + 'room/' + CURRENT_LEVEL.id + '/' + ROOM.id) || ''}}"
 		class="room-item"
@@ -24,7 +22,7 @@
 		<div class="room-radiators"><b>{{ROOM.getRadiatorsCount()}}</b></div>
 		<div class="room-floors"><b>{{ROOM.floors.loops}}</b></div>
 		<h4 class="room-title">{{ROOM.name}}</h4>
-		<h4 class="boiler-title">{{BOILER.canonicalName()}}</h4>
+		<h4 class="boiler-title">{{ROOM.name}}</h4>
 	</a>
 </div>
 

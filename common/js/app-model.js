@@ -374,6 +374,7 @@ appConfigurator.factory('Configurator', function(){
 	        id: room_id,
 	        isRoom: active,
 	        name: Cfg.params.room.roomNames[level][room_id - 1],
+	        canonicalName: Cfg.params.room.roomNames[level][room_id - 1],
 	        radiators: radiators,
 	        floors: floor, // объект теплого пола
 
@@ -430,6 +431,36 @@ appConfigurator.factory('Configurator', function(){
 	        rooms.push(room(level, room_id, room_id <= roomsPerLevel));
 	    }
 	    return rooms;
+	}
+
+	var setBoilerRoom = function () {
+	    iterateActiveLevels(function (level) {
+	        iterateActiveRooms(level, function (room) {
+	            if (room.isBoilerRoom) {
+	                room.name = room.canonicalName;
+	                room.isBoilerRoom = false;
+	            }
+	        });
+	    });
+	    
+	    var onRoom = 1; // котельная на кухне
+
+	    // если в отдельном помещении - то занимаем последнюю комнату
+	    if (Cfg.boiler.roomType == 1) {
+	        for (room = Cfg.levels[Cfg.boiler.level - 1].rooms.length - 1; room >= 0 ; room--) {
+	            if (Cfg.levels[Cfg.boiler.level - 1].rooms[room].isRoom) {
+	                onRoom = Cfg.levels[Cfg.boiler.level - 1].rooms[room].id;
+	                break;
+	            }
+	        }
+	    }
+
+	    
+	    Cfg.levels[Cfg.boiler.level - 1].rooms[onRoom - 1].isBoilerRoom = true;
+
+	    if (Cfg.levels[Cfg.boiler.level - 1].rooms[onRoom - 1].name != 'Кухня') {
+	        Cfg.levels[Cfg.boiler.level - 1].rooms[onRoom - 1].name = 'Котельная';
+	    }
 	}
 
 	var initLevels = function(){
@@ -511,20 +542,18 @@ appConfigurator.factory('Configurator', function(){
 		levels[1].rooms[2].isRoom = true;
 		levels[1].rooms[2].radiators.list[0].count = 2;
 
+		Cfg.levels = levels;
+
 		if (Cfg.boiler.isBoiler) {
-		    for (room = levels[Cfg.boiler.level - 1].rooms.length - 1; room >= 0 ; room--) {
-		        if (levels[Cfg.boiler.level - 1].rooms[room].isRoom) {
-		            levels[Cfg.boiler.level - 1].rooms[room].isBoilerRoom = true;
-		            break;
-		        }
-		    }
+		    // Котельная на первом этаже в отдельном помещении
+		    Cfg.boiler.level = 1;
+		    Cfg.boiler.roomType = 1;
+		    setBoilerRoom();
 		}
 
-
-
-		Cfg.levels = levels;
-	}
-
+		
+	}	
+	
 	Cfg.supportsLocalStorage = function() {
 		try {
 			return 'localStorage' in window && window['localStorage'] !== null;
@@ -866,6 +895,12 @@ appConfigurator.factory('Configurator', function(){
 	//initCollectors();
 
     // @public автоконфигурирование коллекторов радиаторов и теплых полов
+
+	Cfg.SetBoilerRoom = function () {
+	    setBoilerRoom();
+	}
+
+
 	Cfg.RefreshCollectorsCount = function () {
 
 	    refreshCollectorsCount();
@@ -1095,15 +1130,15 @@ appConfigurator.factory('Configurator', function(){
 					}))
 					+
 					(_collector.fittings && angular.forEach(Configurator.params.fittings[_collector.fittings - 1].basket, function (_fittings) {
-					    pushToBasket(_basket, _fittings[0], _collector.entries, _collector.type == 'radiator' ? 'radiator-collector' : 'floor-collector');
+					    pushToBasket(_basket, _fittings[0], _collector.entries, _collector.type == 'radiator' ? 'radiator-collector-fitting' : 'floor-collector-fitting');
 					}))
                     +
 					(_collector.fit_088U0305 && angular.forEach(Configurator.params.collector.fit_088U0305[_collector.fit_088U0305 - 1].basket, function (_fittings) {
-					    pushToBasket(_basket, _fittings[0], _fittings[1], _collector.type == 'radiator' ? 'radiator-collector' : 'floor-collector');
+					    pushToBasket(_basket, _fittings[0], _fittings[1], _collector.type == 'radiator' ? 'radiator-collector-fitting' : 'floor-collector-fitting');
 					}))
                     +
 					(_collector.fit_088U0301 && angular.forEach(Configurator.params.collector.fit_088U0301[_collector.fit_088U0301 - 1].basket, function (_fittings) {
-					    pushToBasket(_basket, _fittings[0], _fittings[1], _collector.type == 'radiator' ? 'radiator-collector' : 'floor-collector');
+					    pushToBasket(_basket, _fittings[0], _fittings[1], _collector.type == 'radiator' ? 'radiator-collector-fitting' : 'floor-collector-fitting');
 					}))
 					+
 					(_collector.mixing && angular.forEach(Configurator.params.collector.mixing[_collector.mixing - 1].basket, function (_mixing) {

@@ -22,6 +22,9 @@ appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderBy
 	$scope.LEVELS = Configurator.levels;
 	$scope.BOILER = Configurator.boiler;
 	
+	$scope.SET_BOILER = function () {
+	    Configurator.SetBoilerRoom();
+	}
 	$scope.UPDATE_ROOMS_COUNT = function () {
 	    Configurator.UpdateRoomsConfiguration();
 	}
@@ -1020,7 +1023,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
     else if (levelsCount == 3)
         levelsCount = "трехэтажном";
 
-    homeClause.html = 'Расчет системы отопления произведен для ' + roomsCount + ' в ' + levelsCount + ' доме, с котлом в ' + (Configurator.boiler.roomType == 1 ? ' в отдельном помещении ' + (Configurator.boiler.level == 1 ? ' на первом этаже ' : ' в подвале') : ' на кухне ');
+    homeClause.html = 'Расчет системы отопления произведен для ' + roomsCount + ' в ' + levelsCount + ' доме, с котлом ' + (Configurator.boiler.roomType == 1 ? ' в отдельном помещении ' + (Configurator.boiler.level == 1 ? ' на первом этаже ' : ' в подвале') : ' на кухне ');
 
     if (Configurator.boiler.embodiment == 1) {
         var boilerClause = {
@@ -1050,17 +1053,19 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
 
     for (var k in _groupedBasket["radiator-collector"].equip)
         collectorClause.thumbs.push({ src: k, count: _groupedBasket["radiator-collector"].equip[k].value });
-
+    
     if (Configurator.ifBasketContainCodes(_groupedBasket["radiator-collector"].equip, ['088U0722', '088U0723', '088U0724', '088U0725', '088U0726', '088U0727', '088U0728', '088U0729', '088U0730', '088U0731', '088U0732'])) {
-        collectorClause.html += '<br/>Для подключения применены распределительные коллекторы FHF-F, оснащенные расходомерами. Расходомеры позволяют визуально наблюдать поток теплоносителя в каждом контуре, что существенно упрощает наладку и обслуживание системы. Чтобы избежать попадания воздуха в трубопровод, коллекторы оснащены автоматическими воздухоотводчиками.';
+        collectorClause.html += '<br/>Для подключения применены распределительные коллекторы FHF-F, оснащенные расходомерами. Расходомеры позволяют визуально наблюдать поток теплоносителя в каждом контуре, что существенно упрощает наладку и обслуживание системы. Чтобы избежать попадания воздуха в трубопровод, коллекторы оснащены автоматическими воздухоотводчиками.Каждый контур коллектора оснащен вентильной вставкой с предварительной настройкой пропускной способности, что позволяет обеспечить оптимальную гидравлическую балансировку системы. Кроме того, коллекторы позволяют перекрыть любой контур для проведения ремонта или обслуживания.';
     }
 
     if (Configurator.ifBasketContainCodes(_groupedBasket["radiator-collector"].equip, ['088U0702', '088U0703', '088U0704', '088U0705', '088U0706', '088U0707', '088U0708', '088U0709', '088U0710', '088U0711', '088U0712'])) {
-        collectorClause.html += '<br/>Для подключения применены распределительные коллекторы FHF. Чтобы избежать попадания воздуха в трубопровод коллекторы оснащены автоматическими воздухоотводчиками.';
+        collectorClause.html += '<br/>Для подключения применены распределительные коллекторы FHF. Чтобы избежать попадания воздуха в трубопровод коллекторы оснащены автоматическими воздухоотводчиками. Каждый контур коллектора оснащен вентильной вставкой с предварительной настройкой пропускной способности, что позволяет обеспечить оптимальную гидравлическую балансировку системы. Кроме того, коллекторы позволяют перекрыть любой контур для проведения ремонта или обслуживания';
     }
 
     if (Configurator.ifBasketContainCodes(_groupedBasket["radiator-control"].equip, ['088H3112', '088H3113'])) {
         collectorClause.html += '<br/>Коллекторы также оснащены термоэлектрическими приводами TWA-A, на которые через ресивер подается управляющий сигнал от комнатного термостата.';
+        if (Configurator.ifBasketContainCodes(_groupedBasket["radiator-control"].equip, ['088H3112']))
+            collectorClause.thumbs.push({ src: '088H3112', count: _groupedBasket["radiator-control-twa"].equip['088H3112'].value });
     }
 
     var radiatorsClause = {
@@ -1077,11 +1082,19 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
     var _radiators = Configurator.RadiatorValves();
 
     if (Configurator.ifBasketContainCodes(_radiators, ['1', '2', '3', '4', '5', '6'])) {
-        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с боковым подключением.<br/> Термостатический элемент устанавливается на клапан терморегулятора RA с боковым подключением трубопровода.<br/>Для возможности отключения радиаторов и слива из них теплоносителя для обвязки радиаторов применены специальные запорные клапаны RLV для радиаторов с боковым подключением. К этим клапанам можно подключить спускной кран с насадкой для шланга 3/4" и предотвратить попадание теплоносителя на отделочные материалы при обслуживании и ремонте.';
+        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с боковым подключением.<br/> К системе отопления данные радиаторы подключены с помощью регулирующего клапана RA и запорного клапана RLV. Регулирующий клапан RA позволяет поддерживать заданную температуру в помещении – для этого на клапан необходимо установить термостатический элемент. Кроме того, клапан оснащен вставкой с предварительной настройкой пропускной способности, что позволяет обеспечить оптимальную гидравлическую балансировку системы. Запорный клапан RLV позволяет отключить радиатор для обслуживания и ремонта, а также с помощью спускного крана с насадкой для шланга 3/4" аккуратно опорожнить радиатор, не допуская попадания теплоносителя на отделочные материалы.';
     }
 
-    if (Configurator.ifBasketContainCodes(_radiators, ['7', '8'])) {
-        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с боковым подключением.<br/> Термостатический элемент устанавливается на клапан терморегулятора RA с боковым подключением трубопровода.<br/>Для возможности отключения радиаторов и слива из них теплоносителя для обвязки радиаторов применены специальные запорные клапаны RLV для радиаторов с боковым подключением. К этим клапанам можно подключить спускной кран с насадкой для шланга 3/4" и предотвратить попадание теплоносителя на отделочные материалы при обслуживании и ремонте.';
+    if (Configurator.ifBasketContainCodes(_radiators, ['8', '18'])) {
+        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с боковым подключением. К системе отопления данные радиаторы подключены с помощью гарнитуры RA 15/6TB, которая обеспечивает простоту монтажа и современный дизайн. Гарнитура RA 15/6TB включает в себя регулирующий клапан RA и запорный клапан. Регулирующий клапан RA позволяет поддерживать заданную температуру в помещении – для этого на клапан необходимо установить термостатический элемент. Запорный клапан позволяет отключить радиатор для обслуживания и ремонта.';
+    }
+
+    if (Configurator.ifBasketContainCodes(_radiators, ['7'])) {
+        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с боковым подключением. К системе отопления данные радиаторы подключены с помощью гарнитуры RA-K, которая обеспечивает простоту монтажа и современный дизайн. Гарнитура RA-K состоит из отвода, регулирующего клапана RA, соединительной трубки и запорного клапана. Регулирующий клапан RA позволяет поддерживать заданную температуру в помещении – для этого на клапан необходимо установить термостатический элемент. Кроме того, клапан оснащен вставкой с предварительной настройкой пропускной способности, что позволяет обеспечить оптимальную гидравлическую балансировку системы. Запорный клапан позволяет отключить радиатор для обслуживания и ремонта, а также с помощью спускного крана с насадкой для шланга 3/4" аккуратно опорожнить радиатор, не допуская попадания теплоносителя на отделочные материалы.';
+    }
+
+    if (Configurator.ifBasketContainCodes(_radiators, ['17'])) {
+        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с боковым подключением. К системе отопления данные радиаторы подключены с помощью гарнитуры RA-KW, которая обеспечивает простоту монтажа и современный дизайн. Гарнитура RA-KW состоит из отвода, регулирующего клапана RA, соединительной трубки и запорного клапана. Регулирующий клапан RA позволяет поддерживать заданную температуру в помещении – для этого на клапан необходимо установить термостатический элемент. Кроме того, клапан оснащен вставкой с предварительной настройкой пропускной способности, что позволяет обеспечить оптимальную гидравлическую балансировку системы. Запорный клапан позволяет отключить радиатор для обслуживания и ремонта, а также с помощью спускного крана с насадкой для шланга 3/4" аккуратно опорожнить радиатор, не допуская попадания теплоносителя на отделочные материалы.';
     }
 
     if (Configurator.ifBasketContainCodes(_radiators, ['40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51'])) {
@@ -1089,11 +1102,11 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
     }
 
     if (Configurator.ifBasketContainCodes(_radiators, ['52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63'])) {
-        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с нижним подключением. В конструкции радиатора предусмотрен терморегулирующий клапан, смонтированный на заводе. Клапан предусматривает установку термостатического элемента с резьбовым М30х1,5 соединением.<br/>Для возможности отключения радиаторов и слива из них теплоносителя для обвязки применены специальные запорные клапаны RLV-KD для радиаторов с нижним подключением. К этим клапанам можно подключить спускной кран с насадкой для шланга 3/4" и предотвратить попадание теплоносителя на отделочные материалы при обслуживании и ремонте.<br/>';
+        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с нижним подключением. В конструкции радиатора предусмотрен терморегулирующий клапан, смонтированный на заводе. Клапан предусматривает установку термостатического элемента с резьбовым М30х1,5 соединением.<br/>К системе отопления данные радиаторы подключены с помощью запорного клапана RLV-KD. Запорный клапан RLV-KD позволяет отключить радиатор для обслуживания и ремонта, а также с помощью спускного крана с насадкой для шланга 3/4" аккуратно опорожнить радиатор, не допуская попадания теплоносителя на отделочные материалы.<br/>';
     }
 
     if (Configurator.ifBasketContainCodes(_radiators, ['29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39'])) {
-        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с нижним подключением. В конструкции радиатора не предусмотрен терморегулирующий клапан, поэтому гарнитура VHS<br/>';
+        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с нижним подключением. В конструкции радиатора не предусмотрен терморегулирующий клапан. К системе отопления данные радиаторы подключены с помощью гарнитуры VHS, включающей в себя регулирующий клапан RA и запорный клапан. Регулирующий клапан RA позволяет поддерживать заданную температуру в помещении – для этого на клапан необходимо установить термостатический элемент. Кроме того, клапан оснащен вставкой с предварительной настройкой пропускной способности, что позволяет обеспечить оптимальную гидравлическую балансировку системы. Запорный клапан позволяет отключить радиатор для обслуживания и ремонта, а также с помощью спускного крана с насадкой для шланга 3/4" аккуратно опорожнить радиатор, не допуская попадания теплоносителя на отделочные материалы. <br/>';
     }
 
     var radiatorControlClause = {
@@ -1176,9 +1189,9 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
     }
 
     if (Configurator.ifBasketContainCodes(_basket, ['013G4003', '013G4004', '013G4007', '013G4008', '013G4009', '013G4010', '013G4132', ' 013G4133', '013G4136', '013G4137', '013G4138', '013G4139'])) {
-        if (Configurator.ifBasketContainCodes(_basket, ['013G4003', '013G4007', '013G4010', '013G4132', '013G4136', '013G4138']) && Configurator.ifBasketContainCodes(_basket, ['013G4004', '013G4008', '013G4009', '013G4133', '013G4137'])) {
+        if (Configurator.ifBasketContainCodes(_basket, ['013G4003', '013G4004', '013G4007', '013G4008', '013G4009', '013G4010']) && Configurator.ifBasketContainCodes(_basket, ['013G4132', ' 013G4133', '013G4136', '013G4137', '013G4138', '013G4139'])) {
             radiatorControlClause.html += '<br/>Для подключения полотенцесушителей и дизайн-радиаторов к контуру отопления применены  комплекты из дизайн-серии X-tra Collection. Данный комплект подключается через невидимые снаружи переходники, таким образом обеспечивается безупречный внешний вид';
-        }else  if (Configurator.ifBasketContainCodes(_basket, ['013G4003', '013G4007', '013G4010', '013G4132', '013G4136', '013G4138'])) {
+        } else if (Configurator.ifBasketContainCodes(_basket, ['013G4132', ' 013G4133', '013G4136', '013G4137', '013G4138', '013G4139'])) {
             radiatorControlClause.html += '<br/>Для подключения полотенцесушителей к контуру отопления применены  комплекты из дизайн-серии X-tra Collection. Данный комплект подключается через невидимые снаружи переходники, таким образом обеспечивается безупречный внешний вид';
         }else {
             radiatorControlClause.html += '<br/>Для подключения дизайн-радиатора к контуру отопления применен  комплект из дизайн-серии X-tra Collection. Данный комплект подключается через невидимые снаружи переходники, таким образом обеспечивается безупречный внешний вид';
@@ -1205,17 +1218,37 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
             thumbs: []
         }
         
+        floorsCollectors.html = 'Теплый пол обеспечивает особый комфорт в помещении. В данном проекте напольное отопление предусмотрено на первом этаже, а также в санузле и ванной на втором этаже.<br/>';
+
+        if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0095', '088U0096', '088U0097', '088U0098', '088U0099'])) {
+            var floorMixing = [];
+            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0095'])) floorMixing.push('088U0095');
+            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0096'])) floorMixing.push('088U0096');
+            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0097'])) floorMixing.push('088U0097');
+            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0098'])) floorMixing.push('088U0098');
+            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0099'])) floorMixing.push('088U0099');
+            
+            floorsCollectors.html += '<br/>Для радиаторов и для теплых полов требуется разная температура теплоносителя. Классические параметры для радиаторов – это 80 С на подаче и 60 С на возврате. Для комфортного и безопасного проживания средняя температура поверхности пола не должна быть выше +26 С для помещений с постоянным пребыванием людей, это значение регламентировано Сводом Правил СП60.13330.2012 (актуализированная редакция СНиП 41-01). Для достижения такой температуры поверхности пола температура подаваемого теплоносителя должна быть около 40 С. Чтобы температура поверхности пола была равномерной, температура возвращаемого теплоносителя должна отличаться от температуры подачи не более чем на 5…10 С. Для получения таких параметров теплоносителя теплого пола применяют узлы смешения.<br/>В данном проекте применен компактный узел смешения ' + floorMixing.join(', ') + '. Глубина компактного узла в сборе с коллектором составляет 110 мм, что позволяет установить сборку в стандартный шкаф.';
+        }
+
         for (var k in _groupedBasket["floor-collector"].equip)
             floorsCollectors.thumbs.push({ src: k, count: _groupedBasket["floor-collector"].equip[k].value });
 
         if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0722', '088U0723', '088U0724', '088U0725', '088U0726', '088U0727', '088U0728', '088U0729', '088U0730', '088U0731', '088U0732'])) {
-            floorsCollectors.html += '<br/>Для подключения контуров теплого пола применены распределительные коллекторы FHF-F, оснащенные расходомерами. Расходомеры позволяют визуально наблюдать поток теплоносителя в каждом контуре, что существенно упрощает наладку и обслуживание системы. Чтобы избежать попадания воздуха в петли теплого пола, коллекторы оснащены автоматическими воздухоотводчиками.';
+            floorsCollectors.html += '<br/>Для подключения контуров теплого пола применены распределительные коллекторы FHF-F, оснащенные расходомерами. Расходомеры позволяют визуально наблюдать поток теплоносителя в каждом контуре, что существенно упрощает наладку и обслуживание системы. Чтобы избежать попадания воздуха в петли теплого пола, коллекторы оснащены автоматическими воздухоотводчиками. Каждый контур коллектора оснащен вентильной вставкой с предварительной настройкой пропускной способности, что позволяет обеспечить оптимальную гидравлическую балансировку системы. Кроме того, коллекторы позволяют перекрыть любой контур для проведения ремонта или обслуживания.';
         }
         if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0702', '088U0703', '088U0704', '088U0705', '088U0706', '088U0707', '088U0708', '088U0709', '088U0710', '088U0711', '088U0712'])) {
-            floorsCollectors.html += '<br/>Для подключения контуров теплого пола применены распределительные коллекторы FHF-F. Чтобы избежать попадания воздуха в петли теплого пола, коллекторы оснащены автоматическими воздухоотводчиками.';
+            floorsCollectors.html += '<br/>Для подключения контуров теплого пола применены распределительные коллекторы FHF-F. Чтобы избежать попадания воздуха в петли теплого пола, коллекторы оснащены автоматическими воздухоотводчиками. Каждый контур коллектора оснащен вентильной вставкой с предварительной настройкой пропускной способности, что позволяет обеспечить оптимальную гидравлическую балансировку системы. Кроме того, коллекторы позволяют перекрыть любой контур для проведения ремонта или обслуживания.';
         }
         if (Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['088H3112', '088H3113'])) {
             floorsCollectors.html += '<br/>Коллекторы также оснащены термоэлектрическими приводами TWA-A, на которые через ресивер подается управляющий сигнал от комнатного термостата.';
+        }
+
+        if (_groupedBasket["floor-collector-fitting"]) {
+            for (var k in _groupedBasket["floor-collector-fitting"].equip)
+                floorsCollectors.thumbs.push({ src: k, count: _groupedBasket["floor-collector-fitting"].equip[k].value });
+
+            floorsCollectors.html += '<br/>Для подключения трубопроводов к запорно-регулирующей арматуре применены уплотнительные фитинги, обеспечивающие надежное и долговременное соединение при температуре до 95 С и давлении до 6 бар.';
         }
     
         $scope.PAGE_GENERAL.clauses.push(floorsCollectors);
@@ -1229,6 +1262,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         }
         for (var k in _groupedBasket["floor-control"].equip)
             floorControls.thumbs.push({ src: k, count: _groupedBasket["floor-control"].equip[k].value });
+
 
         if (Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['087N791801']) && Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['087N791301'])) {
             floorControls.html += '<br/>Для регулирования теплых полов применены проводные программируемые  комнатные термостаты TP5001МA и беспроводныйые программируемыйые  комнатныйые  термостаты TP5001A-RF. Использование беспроводных моделей позволяет легко менять размещение комнатного термостата, например, при перестановке мебели. Комнатный термостат устанавливается в каждой комнате с напольным отоплением. Управляющий сигнал комнатного термостата подается к приемнику беспроводного сигнала RX3 и коммутационному устройству FH-WC, которые передают сигнал к термоэлектрическим приводам TWA-A, установленным на распределительный коллектор теплых полов.';
@@ -1245,7 +1279,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         $scope.PAGE_GENERAL.clauses.push(floorControls);
     }
 
-    $scope.PAGE_SCHEME = {
+    var _scheme = {
         levels: [],
         radiatorCollectors: [],
         floorCollectors: []
@@ -1253,13 +1287,13 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
 
     angular.forEach(Configurator.levels, function (_level) {
         if (_level.isLevel){
-            var _l = { title: _level.name, rooms: [] };
+            var _l = { title: _level.canonicalName(), rooms: [] };
 
             (angular.forEach(_level.rooms, function (_room) {
                 _l.rooms.push({ show: _room.id <= _level.roomsCount, title: _room.name, radiators: _room.getRadiatorsCount(), floors: _room.floors.isFloors ? _room.floors.loops : 0, boiler: _room.isBoilerRoom })
             }))
 
-            $scope.PAGE_SCHEME.levels.push(_l);
+            _scheme.levels.push(_l);
 
             angular.forEach(_level.collectors, function (_collector) {
                 if (_collector.isCollector) {
@@ -1271,7 +1305,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
                                 if (_collector.levels[i] == true)
                                     connectedTo.push(i - 1);
                             }
-                            $scope.PAGE_SCHEME.radiatorCollectors.push({ installedLevelIndex: (_level.id - 1), connectedLevelIndex: connectedTo, title: _set.basket[0][0] });
+                            _scheme.radiatorCollectors.push({ installedLevelIndex: (_level.id - 1), connectedLevelIndex: connectedTo, title: _set.basket[0][0], entries: _collector.entries });
                         }
 
                         if (_collector.type == 'floor' && _set.isFlowmeter == _collector.isFlowmeter && _set.entries == collector_1) {
@@ -1280,7 +1314,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
                                 if (_collector.levels[i] == true)
                                     connectedTo.push(i - 1);
                             }
-                            $scope.PAGE_SCHEME.floorCollectors.push({ installedLevelIndex: _level.id - 1, connectedLevelIndex: connectedTo, title: _set.basket[0][0] });
+                            _scheme.floorCollectors.push({ installedLevelIndex: _level.id - 1, connectedLevelIndex: connectedTo, title: _set.basket[0][0], entries: _collector.entries });
                         }
                     });
                 }
@@ -1288,7 +1322,31 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         }
     });
 
+    $scope.PAGE_SCHEME = _scheme;
+
+    if ($scope.PAGE_SCHEME.levels.length == 3 && Configurator.levels[2].isBasement) {
+        $scope.PAGE_SCHEME.levels = [_scheme.levels[1], _scheme.levels[0], _scheme.levels[2]];
+    } else if ($scope.PAGE_SCHEME.levels.length == 3) {
+        $scope.PAGE_SCHEME.levels = [_scheme.levels[2], _scheme.levels[1], _scheme.levels[0]];
+    } else if ($scope.PAGE_SCHEME.levels.length == 2) {
+        $scope.PAGE_SCHEME.levels = [_scheme.levels[1], _scheme.levels[0]];
+    }
+
+    var getSchemeLevelIndex = function (level) {
+        if ($scope.PAGE_SCHEME.levels.length == 3 && Configurator.levels[2].isBasement) {
+            return level == 0 ? 1 : level == 1 ? 0 : 2;
+        } else if ($scope.PAGE_SCHEME.levels.length == 3) {
+            $scope.PAGE_SCHEME.levels = [_scheme.levels[2], _scheme.levels[1], _scheme.levels[0]];
+            return level == 0 ? 2 : level == 1 ? 1 : 0;
+        } else if ($scope.PAGE_SCHEME.levels.length == 2) {
+            return level == 0 ? 1 : 0;
+        }
+        return level;
+    }
+
     $scope.CSS_SCHEME_CONNECTION = function (installedAt, connectedTo) {
+        installedAt = getSchemeLevelIndex(installedAt);
+        connectedTo = getSchemeLevelIndex(connectedTo);
         var top = 'top-' + Math.min(installedAt, connectedTo);
         var displ = 'height-' + Math.abs(installedAt - connectedTo);
         var placed = installedAt < connectedTo ? 'on-top' : 'on-bottom';
@@ -1297,6 +1355,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
     };
 
     $scope.CSS_SCHEME_COLLECTOR = function (installedAt) {
+        installedAt = getSchemeLevelIndex(installedAt);
         var top = 'offset-' + installedAt;
 
         return top;

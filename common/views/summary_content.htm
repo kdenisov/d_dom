@@ -13,7 +13,7 @@
             <div class="text" ng-bind-html="RAW(clause.html)"></div>
             
             <div class="thumbs" ng-if="clause.thumbs.length > 0">
-                <div ng-repeat="icon in clause.thumbs"><a href="http://dom.danfoss.ru/katalog/Filtry/{{icon.src}}" target="_blank"><img ng-src="http://dom.danfoss.ru{{CATALOG[icon.src].image}}?w=83&h=83&mode=pad" alt="" /><span class="thumb-count" ng-if="icon.count > 1">{{icon.count}}</span></a></div>
+                <div ng-repeat="icon in clause.thumbs"><a href="http://dom.danfoss.ru/katalog/Filtry/{{icon.src}}" target="_blank"><img ng-src="http://dom.danfoss.ru{{CATALOG[icon.src].image}}?w=83&h=83&mode=pad" alt="" /><span class="thumb-count">{{icon.count}}</span></a></div>
             </div>
         </div>
     </div>
@@ -39,8 +39,8 @@
                 <div class="summary-schemes-room" ng-repeat="room in level.rooms">
                     <div ng-if="room.show">
                         <div class="contents" ng-class="{ 'radiator' :  room.radiators > 0, 'floor' :  room.floors > 0, 'boiler' : room.boiler }">
-                            <span class="count radiator" ng-if="room.radiators > 1">{{room.radiators}}</span>
-                            <span class="count floor" ng-if="room.floors > 1">{{room.floors}}</span>
+                            <span class="count radiator">{{room.radiators}}</span>
+                            <span class="count floor" >{{room.floors}}</span>
                         </div>
                         <div class="title">{{room.title}}</div>
                     </div>
@@ -51,13 +51,13 @@
         <div class="summary-schemes-collectors">
             <div ng-repeat="collector in PAGE_SCHEME.radiatorCollectors">
                 <div class="schemes-connection" ng-repeat="connection in collector.connectedLevelIndex" ng-class="CSS_SCHEME_CONNECTION(collector.installedLevelIndex, connection)"></div>
-                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><div><a href="http://dom.danfoss.ru/katalog/Filtry/{{collector.title}}" target="_blank">{{collector.title}}</a></div></div>
+                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><span class="count" >{{collector.entries}}</span><div></div></div>
             </div>
         </div>
         <div class="summary-schemes-collectors floors">
             <div ng-repeat="collector in PAGE_SCHEME.floorCollectors">
                 <div class="schemes-connection" ng-repeat="connection in collector.connectedLevelIndex" ng-class="CSS_SCHEME_CONNECTION(collector.installedLevelIndex, connection)"></div>
-                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><div><a href="http://dom.danfoss.ru/katalog/Filtry/{{collector.title}}" target="_blank">{{collector.title}}</a></div></div>
+                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><span class="count" >{{collector.entries}}</span><div></div></div>
             </div>
         </div>
     </div>

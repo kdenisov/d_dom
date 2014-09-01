@@ -2168,6 +2168,20 @@ slider span.pointer + span.pointer {
     background-color: white;
 }
 
+
+.scheme-collector-placeholder .count
+{
+    width: 15px;
+    position: absolute;
+    right: -4px;
+    top: 32px;
+    background-color: #D3D3D3;
+    border-radius: 10px;
+    line-height: 15px;
+    font-size: 12px;
+    text-align: center;
+}
+
 .summary-page > h2.no-border {
     border-color: white;
 }
