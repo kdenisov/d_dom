@@ -14,9 +14,6 @@
 <div class="room-items">
 	<a
 		ng-repeat="ROOM in CURRENT_LEVEL.rooms | orderBy:'-isRoom'"
-		ng-init="
-			ROOM.isBoilerRoom = BOILER.isBoiler && BOILER.level == CURRENT_LEVEL.id && ROOM.id == CURRENT_LEVEL.roomsCount;
-		"
 		ng-class="{'is-room': ROOM.isRoom, 'is-room-boiler': ROOM.isBoilerRoom, 'is-floors': ROOM.floors.isFloors && ROOM.isRoom}"
 		ng-href="{{ROOM.isRoom && ('#/' + 'room/' + CURRENT_LEVEL.id + '/' + ROOM.id) || ''}}"
 		class="room-item"

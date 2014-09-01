@@ -328,7 +328,8 @@ appConfigurator.factory('Configurator', function(){
 		Cfg.boiler.pump = 1;
 		Cfg.boiler.hose_05 = 0;
 		Cfg.boiler.hose_08 = 0;
-		Cfg.boiler.hose_10 = 0
+		Cfg.boiler.hose_10 = 0;
+	    return Cfg.boiler;
 	}
 
 	var initRadiators = function () {
@@ -355,7 +356,7 @@ appConfigurator.factory('Configurator', function(){
 	    return radiators;
 	}
 
-	var room = function (level, room_id, active) {
+	var room = function (level, room_id, active, hasBoiler) {
 	    var floor = {							// Теплые полы
 	        isFloors: level == 0,			// Теплые полы: есть
 	        loops: 1,						// Количество петель
@@ -372,7 +373,8 @@ appConfigurator.factory('Configurator', function(){
 
 	    return { // Комнаты по умолчанию
 	        id: room_id,
-	        isRoom: active,
+	        isRoom: active && true,
+            isBoilerRoom: hasBoiler && true,
 	        name: Cfg.params.room.roomNames[level][room_id - 1],
 	        radiators: radiators,
 	        floors: floor, // объект теплого пола
@@ -424,15 +426,15 @@ appConfigurator.factory('Configurator', function(){
 	    }
 	}
 
-	var initRooms = function (level, roomsPerLevel) {
+	var initRooms = function (level, roomsPerLevel, levelHasBoiler) {
 	    // "Конструктор" комнат
 	    for (var room_id = 1, rooms = []; room_id <= 12; room_id++) {
-	        rooms.push(room(level, room_id, room_id <= roomsPerLevel));
+	        rooms.push(room(level, room_id, room_id <= roomsPerLevel, levelHasBoiler && room_id == roomsPerLevel));
 	    }
 	    return rooms;
 	}
 
-	var initLevels = function(){
+	var initLevels = function(boiler){
 		var
 			rooms_per_level = 5
 		;
@@ -443,7 +445,9 @@ appConfigurator.factory('Configurator', function(){
 		}
 
 		// "Конструктор" этажей
-		for(var level_id = 1, levels = []; level_id <= 3; level_id++){
+		for(var level_id = 1, levels = []; level_id <= 3; level_id++) {
+
+		    var levelHasBoiler = boiler.level == level_id;
 
 		    // "Конструктор" коллекторов
 		    // всего коллекторов - 4 (два теплого пола + 2 радиаторов)
@@ -483,11 +487,11 @@ appConfigurator.factory('Configurator', function(){
 				isLevel: level_id <= Cfg.cottage.levelsCount, //level_id != 3,
 				roomsCount: rooms_per_level,
 				isBasement: false,
-				isBoiler: level_id == 1,
+				isBoiler: levelHasBoiler,
 				//isCollectors: true, //level_id == 1 || false,
 				//isFloors: false,
 				collectors: collectors,
-				rooms: initRooms(level_id - 1, rooms_per_level)
+				rooms: initRooms(level_id - 1, rooms_per_level, levelHasBoiler)
 			});
 		}
 		        // параметры по умолчанию
@@ -861,8 +865,8 @@ appConfigurator.factory('Configurator', function(){
 
 	initStructure();
 	initParams();
-	initBoiler();
-	initLevels();
+	var boiler = initBoiler();
+	initLevels(boiler);
 	//initCollectors();
 
     // @public автоконфигурирование коллекторов радиаторов и теплых полов

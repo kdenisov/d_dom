@@ -1223,7 +1223,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
     if ("floor-control" in _groupedBasket) {
         var floorControls = {
             title: 'Управление теплым полом',
-            src: 'common/img/summary/general-floor-collector.jpg',
+            src: 'common/img/summary/general-floor-control.jpg',
             html: '',
             thumbs: []
         }
