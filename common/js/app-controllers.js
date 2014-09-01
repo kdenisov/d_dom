@@ -1,6 +1,14 @@
 'use strict';
 // Controllers
 
+appConfigurator.filter('formatNumber', function () {
+    return function (n) {
+        n = "" + n;
+        if (n && n > 9999) return (n.toString().replace(/(?=\B(?:\d{3})+\b)/g, ' '));
+        return (n.replace(',', ' '));
+    }
+});
+
 appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderByFilter){
 
 	//Configurator = loadLocalStorage({key:'Configurator',val:Configurator});
@@ -86,7 +94,7 @@ appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderBy
     //$scope.$watch('CONFIGURATOR.roomsTotal', setParamsCottage);
 });
 
-appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configurator, $modalInstance, EDITED_COLLECTOR) {
+appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configurator, $timeout, $modalInstance, EDITED_COLLECTOR) {
 
     var
 		levels = Configurator.levels
@@ -114,21 +122,32 @@ appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configura
                     && _collector.isCollector
                     && _collector != $scope.EDITED_COLLECTOR) {
                     _collector.setup_level = _level;
+                    _collector.disabled = 24 - _collector.entries < $scope.EDITED_COLLECTOR.entries;
+                    _collector._id = _collector.setup_level.id + '|' + _collector.id;
                     res.push(_collector);
                 }
             });
         });
-
+        if (res.length > 0 && $modalInstance.TO_COLLECTOR_ID == 0) {
+            $modalInstance.TO_COLLECTOR_ID = res[0]._id;
+            $modalInstance.TO_COLLECTOR_LEVEL_ID = res[0].setup_level.id;
+        }
         return res;
     }
 
+    $scope.SET = function (coll) {
+        if (!coll.disabled)
+            $modalInstance.TO_COLLECTOR_ID = coll._id;
+    }
     $scope.SET_COLLECTOR = function () {
+        var _to = $modalInstance.TO_COLLECTOR_ID.split("|")[1];
+        var _toLevel = $modalInstance.TO_COLLECTOR_ID.split("|")[0];
         angular.forEach($scope.LEVELS, function (_level) {
             angular.forEach(_level.collectors, function (_collector, key2) {
-                if (_collector.id == $modalInstance.TO_COLLECTOR_ID && _level.id == $modalInstance.TO_COLLECTOR_LEVEL_ID) {
+                if (_collector.id == _to && _level.id == _toLevel) {
                     if (_collector.entries + $scope.EDITED_COLLECTOR.entries > 24) {
                         alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
-                        $modalInstance.close(false);
+                        return;
                     }
                     _collector.levels[1] = _collector.levels[1] || $scope.EDITED_COLLECTOR.levels[1];
                     _collector.levels[2] = _collector.levels[2] || $scope.EDITED_COLLECTOR.levels[2];
@@ -137,6 +156,7 @@ appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configura
                 }
             });
         });
+        $scope.EDITED_COLLECTOR.entries = 0;
         $scope.EDITED_COLLECTOR = null;
         $modalInstance.close(true);
     }
@@ -227,10 +247,12 @@ appConfigurator.controller('LevelCtrl', function($scope, Configurator, $statePar
 
             $scope.modalInstance.result.then(function (res) {
                 if (res == false) {
-                    $scope.EDITED_COLLECTOR.isCollector = true;
+                    currentCollector.isCollector = true;
+                } else {
+                    currentCollector.entries = 0;
                 }
                 $scope.EDITED_COLLECTOR = null;
-            });
+            }, function () { currentCollector.isCollector = true; });
         });
     };
 
@@ -746,9 +768,11 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
 
             $scope.modalInstance.result.then(function (res) {
                 if (res == false) {
-                    $scope.COLLECTOR.isCollector = true;
+                    currentCollector.isCollector = true;
+                } else {
+                    currentCollector.entries = 0;
                 }
-            });
+            }, function () { currentCollector.isCollector = true; });
         });
     };
 
@@ -794,21 +818,23 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 
 	var params = Configurator.params;
 	Catalog.fetch().then(function(data) {
-    $scope.CATALOG = data;
+        $scope.CATALOG = data;
 
-		$scope.BASKET_TOTAL_PRICE = function(){
-			var
-				price = 0,
-				basket = $scope.BASKET(),
-				catalog = $scope.CATALOG
-			;
+        $scope.BASKET_TOTAL_PRICE = function () {
+            var
+                price = 0,
+                basket = $scope.BASKET(),
+                catalog = $scope.CATALOG
+            ;
 
-			for (var k in basket) {
-				price += basket[k] * catalog[k].price;
-			}
-			price = Math.round(price);
-			return($filter('formatNumber')(price));
-		}
+            if (typeof $scope.CATALOG == 'undefined') return 0;
+            for (var k in basket) {
+                if (catalog[k])
+                    price += basket[k] * catalog[k].price;
+            }
+            price = Math.round(price);
+            return ($filter('formatNumber')(price));
+        }
 	});
 
 	$scope.BASKET = function(){		
@@ -967,7 +993,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         collectorClause.html += '<br/>Для подключения применены распределительные коллекторы FHF. Чтобы избежать попадания воздуха в трубопровод коллекторы оснащены автоматическими воздухоотводчиками.';
     }
 
-    if (Configurator.ifBasketContainCodes(_groupedBasket["radiator-collector"].equip, ['088H3112', '088H3113'])) {
+    if (Configurator.ifBasketContainCodes(_groupedBasket["radiator-control"].equip, ['088H3112', '088H3113'])) {
         collectorClause.html += '<br/>Коллекторы также оснащены термоэлектрическими приводами TWA-A, на которые через ресивер подается управляющий сигнал от комнатного термостата.';
     }
 
@@ -993,7 +1019,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
     }
 
     if (Configurator.ifBasketContainCodes(_radiators, ['40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51'])) {
-        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с нижним подключением. В конструкции радиатора предусмотрен терморегулирующий клапан, смонтированный на заводе. Клапан предусматривает установку термостатического элемента с {современным клипсовым соединением типа RA <br/>Для возможности отключения радиаторов и слива из них теплоносителя для обвязки применены специальные запорные клапаны RLV-KD для радиаторов с нижним подключением. К этим клапанам можно подключить спускной кран с насадкой для шланга 3/4" и предотвратить попадание теплоносителя на отделочные материалы при обслуживании и ремонте.<br/>';
+        radiatorsClause.html += '<br/>В данном проекте используются радиаторы с нижним подключением. В конструкции радиатора предусмотрен терморегулирующий клапан, смонтированный на заводе. Клапан предусматривает установку термостатического элемента с современным клипсовым соединением типа RA <br/>Для возможности отключения радиаторов и слива из них теплоносителя для обвязки применены специальные запорные клапаны RLV-KD для радиаторов с нижним подключением. К этим клапанам можно подключить спускной кран с насадкой для шланга 3/4" и предотвратить попадание теплоносителя на отделочные материалы при обслуживании и ремонте.<br/>';
     }
 
     if (Configurator.ifBasketContainCodes(_radiators, ['52', '53', '54', '55', '56', '57', '58', '59', '60', '61', '62', '63'])) {
@@ -1016,7 +1042,6 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         radiatorControlClause.thumbs.push({ src: k, count: _groupedBasket["radiator-control"].equip[k].value });
 
     var _controlTypes = Configurator.RadiatorControlTypes();
-
     var controlOne = [];
     var controlTwo = [];
     angular.forEach(Configurator.levels, function (_level) {
@@ -1123,7 +1148,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0702', '088U0703', '088U0704', '088U0705', '088U0706', '088U0707', '088U0708', '088U0709', '088U0710', '088U0711', '088U0712'])) {
             floorsCollectors.html += '<br/>Для подключения контуров теплого пола применены распределительные коллекторы FHF-F. Чтобы избежать попадания воздуха в петли теплого пола, коллекторы оснащены автоматическими воздухоотводчиками.';
         }
-        if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088H3112', '088H3113'])) {
+        if (Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['088H3112', '088H3113'])) {
             floorsCollectors.html += '<br/>Коллекторы также оснащены термоэлектрическими приводами TWA-A, на которые через ресивер подается управляющий сигнал от комнатного термостата.';
         }
     
@@ -1260,13 +1285,6 @@ appConfigurator.controller('BaseCtrl', function($scope) {
         }
 
     });
-});
-
-appConfigurator.filter('formatNumber', function () {
-	return function (n) {
-		if(n && n > 9999) return(n.toString().replace(/(?=\B(?:\d{3})+\b)/g, ' '));
-		return( n.replace(',',' ') );
-	}
 });
 
 function setCustomScroll() {
