@@ -2480,9 +2480,6 @@ table.summary-merchandise .rub {
 }
 
 .summary-footer {
-    position: fixed;
-    bottom: 0;
-    left: 310px;
     height: 65px;
     width: 100%;
 }
@@ -2500,8 +2497,6 @@ table.summary-merchandise .rub {
     vertical-align: middle;
     background-color: #e5e5e5;
     color: #494949;
-    box-sizing: border-box;
-    padding-right: 310px;
 }
 
 .summary-footer > a > .icon-print-all {
