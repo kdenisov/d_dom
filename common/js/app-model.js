@@ -984,7 +984,7 @@ appConfigurator.factory('Configurator', function(){
 			&&
 			(angular.forEach(_level.rooms, function (_room) {
 			    if (_room.id <= _level.roomsCount) {
-			        pushToBasket(_basket, _room.controlType, 1)
+			        pushToBasket(_basket, _room.radiators.controlType, 1)
 			    }			    
 			}))
 	    });
@@ -1266,13 +1266,15 @@ appConfigurator.factory('Configurator', function(){
 
 // Catalog Factory
 
-appConfigurator.factory('Catalog', function($q, $timeout, $http) {
+appConfigurator.factory('Catalog', function ($q, $timeout, $http) {
+    var appPath = "http://localhost/Danfoss.Web.Cottage/"; // http://dom.danfoss.ru
+
 	var _Catalog = {
 		fetch: function() {
 			var deferred = $q.defer();
 			$timeout(function() {
-			
-			    $http.jsonp("http://dom.danfoss.ru/json/all?jsonp=JSON_CALLBACK")
+			    
+			    $http.jsonp(appPath + "/json/all?jsonp=JSON_CALLBACK")
 				.success(function(data) {
 					deferred.resolve(data.data);
 				})
@@ -1290,9 +1292,9 @@ appConfigurator.factory('Catalog', function($q, $timeout, $http) {
 		        for (var b in basket){
 		            data.codes += b + " " + basket[b] + "; ";
 		        }
-		        $http.post("http://dom.danfoss.ru/checkout/express/", data)
+		        $http.post(appPath + "/checkout/express/", data)
 				.success(function (data) {
-				    document.location.href = "http://dom.danfoss.ru/Checkout/Cart";
+				    document.location.href = appPath + "/Checkout/Cart";
 				})
 				.error(function (data) {
 				    return;
