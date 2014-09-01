@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html data-ng-app="appConfigurator">
     <head>
         <meta charset="utf-8">
@@ -24,12 +24,14 @@
                          <div class="button-icon button-load" title="Загрузить"></div>
                      </div> -->
                 <!-- <div class="button-icon button-clear" title="Удалить"></div> -->
-                <div id="nav">
-                    <a ui-sref-active="active" ui-sref="cottage" title="Редактирование"></a>
-                    <a ui-sref-active="active" ui-sref="summary" title="Информация по заказу" class="summary"></a>
-                    <a ui-sref-active="active" ng-href="#/order" title="Оформление заказа" class="order"></a>
-                    <a ui-sref-active="active" ng-href="/" title="Выход" class="exit"></a>
-                </div>
+                <!-- <div id="nav">
+                         <a ui-sref-active="active" ui-sref="cottage" title="Параметры коттеджа">1</a>
+                         <a ui-sref-active="active" ui-sref="room({levelId:2,roomId:1})" title="Настройка комнат">2</a>
+                         <a ui-sref-active="active" ui-sref="collector({levelId:1,collectorId:1})" title="Настройка коллекторов">3</a>
+                         <a ui-sref-active="active" ui-sref="boiler" title="Настройка котельной" class="last">4</a>
+                         <a ui-sref-active="active" ng-href="summary" title="Информация по заказу">5</a>
+                         <a class="button-icon button-basket-white" ui-sref-active="active" ng-href="#" title="Оформление заказа"></a>
+                     </div> -->
                 <!-- <div id="sidebar-panel-bottom"><div class="button-icon button-help"></div></div> -->
             </div>
             <div id="sidebar-content">
@@ -99,5 +101,27 @@
         <script src="common/js/app-views.js"></script>
         <script src="common/js/app-animate.js"></script>
         <script src="common/js/app-controllers.js"></script>
+
+        <script type="text/ng-template" id="set-dest-collector.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Удаление коллектора {{EDITED_COLLECTOR.type == "floor" ? "теплого пола" : "радиатора"}}</h3>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body-content">{{TITLE}}
+                    <p>На этаже не осталось коллекторов.<br/> К какому коллектору подключить этаж?</p>{{TO_COLLECTOR_ID}}
+                    <div class="radio">
+                        <label ng-repeat="COLLECTOR in GET_FREE_COLLECTORS()" class="radio radio-{{MODAL.TO_COLLECTOR_ID == COLLECTOR._id}} hidden-{{!COLLECTOR.isCollector}}" ng-click="SET(COLLECTOR)">
+                            <input type="radio"/>
+                            <span class="title disabled-{{COLLECTOR.disabled}}" > <strong>{{COLLECTOR.setup_level.name}}</strong>&nbsp;{{COLLECTOR.name}}&nbsp;(свободно: {{24 - COLLECTOR.entries}} вх.)
+                            </span><span class="validation hidden-{{!COLLECTOR.disabled}}">Подключение к коллектору невозможно</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="button" ng-click="CANCEL_SET_COLLECTOR()">Отмена</div>    
+                <div class="button button-next" ng-click="SET_COLLECTOR()">Применить</div>
+            </div>
+        </script>
     </body>
 </html>
