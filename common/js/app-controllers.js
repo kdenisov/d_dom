@@ -277,10 +277,13 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	Configurator.params.room.fittings = Configurator.params.fittings;
 	Configurator.params.room.fittingsMaterial = Configurator.params.fittingsMaterial;
 
-    $scope.BOILER = Configurator.boiler;
-	$scope.BOILER_PARAMS = Configurator.params.boiler;	
 	$scope.ROOM = room;
-	$scope.SET_PARAMS_FOR_ALL_ROOMS = true;
+
+	$scope.BOILER = Configurator.boiler;
+	$scope.BOILER_PARAMS = Configurator.params.boiler;	
+	$scope.BOILER_VISIBLE = function () { return $scope.ROOM.isBoilerRoom && $scope.BOILER.isBoiler; };
+
+    $scope.SET_PARAMS_FOR_ALL_ROOMS = true;
 	$scope.RADIATORS = room.radiators;
 	$scope.RADIATORS.current = 1;
 	$scope.RADIATORS_LIST = room.radiators.list;
@@ -378,10 +381,6 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	    Configurator.UpdateCollectorEntries();
 	}
 
-    $scope.BOILER_ACTIVE = function() {
-        return $scope.ROOM.isBoilerRoom && $scope.BOILER.isBoiler;
-    };
-
 	$scope.SET_PARAMS_FOR_ALL = function () {
 	    $scope.modalInstance = $modal.open({
 	        templateUrl: 'set-room-params-confirm.html',
@@ -431,8 +430,8 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	    });
 	}
 
-	$scope.DELETE_ROOM = function (evt) {
-	    evt && evt.preventDefault();
+    $scope.DELETE_ROOM = function(evt) {
+        evt && evt.preventDefault();
 
         if (level.roomsCount > 1) {
             $scope.ALERT('Вы хотите убрать эту комнату?',
@@ -447,8 +446,75 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
             return;
         }
 
-	    $scope.ALERT('Это последняя комната на этаже. Уберите этаж, чтобы убрать комнату.');
-	}
+        $scope.ALERT('Это последняя комната на этаже. Уберите этаж, чтобы убрать комнату.');
+    };
+
+    //Room scroll controlls
+    $scope.ARROWS = function() {
+        return $scope.RADIATORS.radiatorsTypes > 1 || ($scope.RADIATORS.radiatorsTypes > 0 && $scope.BOILER_VISIBLE());
+    };
+
+    $scope.BOILER_FOCUS = $scope.BOILER_VISIBLE();
+    $scope.ARROW_LEFT = function() {
+        return $scope.RADIATORS.current > 1 || ($scope.BOILER_VISIBLE() && !$scope.BOILER_FOCUS);
+    };
+    $scope.ARROW_RIGHT = function() {
+        return $scope.RADIATORS.current < $scope.RADIATORS.radiatorsTypes || ($scope.BOILER_VISIBLE() && $scope.BOILER_FOCUS);
+    };
+
+    var resetActiveTab = function() {
+        var tabs = $('[ng-tabs]:first');
+        if (tabs.length == 0) {
+            return;
+        }
+
+        var tabScope = angular.element(tabs).scope();
+        tabScope.tabs.index = $scope.BOILER_FOCUS ? 3 : 1;
+    };
+
+    $scope.FOCUS_LEFT = function () {
+        if (!$scope.BOILER_FOCUS && $scope.RADIATORS.current == 1) {
+            $scope.BOILER_FOCUS = $scope.BOILER_VISIBLE();
+            resetActiveTab();
+            return;
+        }
+
+        $scope.RADIATORS.current = $scope.RADIATORS.current - 1;
+        $scope.scopeUpdateRADIATOR($scope.RADIATORS_LIST[$scope.RADIATORS.current - 1]);
+    };
+
+    $scope.FOCUS_RIGHT = function () {
+        if ($scope.BOILER_FOCUS) {
+            $scope.BOILER_FOCUS = false;
+            resetActiveTab();
+            return;
+        }
+
+        $scope.RADIATORS.current = $scope.RADIATORS.current + 1;
+        $scope.scopeUpdateRADIATOR($scope.RADIATORS_LIST[$scope.RADIATORS.current - 1]);
+    };
+
+    $scope.BOILER_UNFOCUS = function () {
+        var focusItem = $('.radiators');
+        if (focusItem.length == 0) {
+            return;
+        }
+
+        var scope = angular.element(focusItem).scope();
+        scope.BOILER_FOCUS = false;
+    };
+
+    $scope.BOILER_SET_FOCUS = function () {
+        var focusItem = $('.radiators');
+        if (focusItem.length == 0) {
+            return;
+        }
+
+        var scope = angular.element(focusItem).scope();
+        scope.BOILER_FOCUS = true;
+        scope.RADIATORS.current = 1;
+        scope.RADIATOR = scope.RADIATORS_LIST[0];
+    };
 
 	$scope.refreshRadiatorCollectorsCount = function () {
 	    Configurator.UpdateCollectorEntries();

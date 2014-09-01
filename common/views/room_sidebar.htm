@@ -7,11 +7,17 @@
             </div>
         </div>
     </div>-->
-    <div ng-tabs class="tabs">
+    <div ng-tabs class="tabs" ng-init="tabs.index = BOILER_FOCUS ? 3 : 1">
         <div class="tab-items icons">
-            <div class="tab-item" ng-tab-head="true"><i class="icon-radiator"></i><span ng-if="!BOILER_ACTIVE()"> Радиаторы</span></div>
-            <div class="tab-item" ng-tab-head><i class="icon-floor"></i><span ng-if="!BOILER_ACTIVE()"> Теплые полы</span></div>
-            <div class="tab-item" ng-tab-head ng-if="BOILER_ACTIVE()"><i class="icon-boiler"></i></div>
+            <div class="tab-item" ng-tab-head ng-click="BOILER_UNFOCUS()">
+                <i class="icon-radiator"></i><span ng-if="!BOILER_VISIBLE()"> Радиаторы</span>
+            </div>
+            <div class="tab-item" ng-tab-head ng-click="BOILER_UNFOCUS()">
+                <i class="icon-floor"></i><span ng-if="!BOILER_VISIBLE()"> Теплые полы</span>
+            </div>
+            <div class="tab-item" ng-tab-head ng-if="BOILER_VISIBLE()" ng-click="BOILER_SET_FOCUS()">
+                <i class="icon-boiler"></i>
+            </div>
         </div>
         <div ng-tab-body class="tab-content ">
             <div class="group">
@@ -63,6 +69,7 @@
                            ng-model="RADIATORS.current"
                            ng-value="{{ITEM.id}}"
                            ng-change="
+                        BOILER_UNFOCUS();
 						scopeUpdateRADIATOR(RADIATORS_LIST[RADIATORS.current-1]);
 						RADIATORS.controlType == 2 && (RADIATOR.control = RADIATORS.commonControl)
 					">
@@ -287,7 +294,7 @@
                 </div>
             </div>
         </div><!-- .tab-content -->
-    
+
         <div class="tab-content" ng-tab-body>
             <div class="group">
                 <h3>Тип котла</h3>

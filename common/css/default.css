@@ -799,25 +799,34 @@ a.collector-item {
 }
 .radiators {
 	width: 100%;
-	height: 652px;
+	height: 802px;
+    margin-top: -150px;
 	overflow: hidden;
 }
-.radiators .item-type1 {
+.radiators .item {
 	width: 100%;
 	height: 652px;
 	float: left;
-	background: url('../img/radiators/r2.png') no-repeat 50% -60px;
 	margin-right: -50%;
+    margin-top: 150px;
 	transition: all 0.5s;
 }
 
-.radiators .item-type2 {
-	width: 100%;
-	height: 652px;
-	float: left;
+.radiators .item.type1 {
+	background: url('../img/radiators/r2.png') no-repeat 50% -60px;
+}
+
+.radiators .item.type2 {
 	background: url('../img/radiators/r1.png') no-repeat 50% -60px;
-	margin-right: -50%;
-	transition: all 0.5s;
+}
+
+.radiators .item.type-boiler {
+    margin-top: 0;
+    background: url('../img/boiler-1-contour.png') no-repeat 50% top;
+}
+
+.radiators .item.type-boiler.alt {
+	background: url('../img/boiler-2-contour.png') no-repeat 50% 150px;
 }
 
 .radiators .item-valve
@@ -825,7 +834,6 @@ a.collector-item {
     width: 100%;
     height: 652px;
     float: left;
-    background: url('../img/radiators/r1.png') no-repeat 50% -60px;
     margin-right: -50%;
     transition: all 0.5s;
     position: relative;
@@ -841,6 +849,20 @@ a.collector-item {
 .current-item-2 .item-1 {	margin-left: -50%; }
 .current-item-3 .item-1 { margin-left: -100%; }
 .current-item-3 .item-2 { margin-left: -50%; }
+
+.boiler-focus.current-item-1 .type-boiler {
+    margin-right: -50%;
+    margin-left: 0;
+}
+.current-item-1 .type-boiler {
+    margin-left: -50%;
+}
+.current-item-2 .type-boiler {
+    margin-left: -100%;
+}
+.current-item-3 .type-boiler {
+    margin-left: -150%;
+}
 
 .is-floors-false {
     filter: alpha(opacity = 0);
@@ -872,7 +894,7 @@ a.collector-item {
 	position: absolute;
 	top: 230px;
 	left: 50%;
-    margin-left: 150px;
+    margin-left: 250px;
 	/*margin: 577px 0 0 0;*/
     filter: alpha(opacity = 1);
 	opacity: 1;
@@ -902,7 +924,7 @@ a.collector-item {
 	position: absolute;
 	top: 165px;
 	left: 50%;
-    margin-left: 150px;
+    margin-left: 250px;
 	background: url('../img/thermo1.png') no-repeat center;
 	/*margin: 577px 0 0 0;*/
     filter: alpha(opacity = 1);
