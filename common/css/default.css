@@ -251,31 +251,40 @@ body {
 
 
 #nav {
+	margin: 40px 0 0 0;
 }
 #nav a {
+	width: 28px;
+	height: 28px;
 	display: block;
-	width: 56px;
-	height: 57px;
-    background: transparent url('../img/icons-stages.png') no-repeat left top;
-    border: none;
+	text-align: center;
+	color: #FFF;
+	font-size: 14px;
+	line-height: 26px;
+	border: 1px solid rgba(255,255,255,.3);
+	border-radius: 20px;
+	padding: 0 0 0 0;
+	margin: 0 auto 30px;
 }
-#nav a.active {
-    background-position: right top;
+#nav a:after {
+	width: 1px;
+	height: 30px;
+	display: block;
+	content: '';
+	border-left: 1px solid rgba(255,255,255,.3);
+	margin: 3px auto 0;
 }
-#nav a.summary {
-    background-position: left -57px;
+#nav .active {
+	color: #777;
+	background: #FFF;
 }
-#nav a.summary.active {
-    background-position: right -57px;
+#nav .button-icon {
+	border: 0;
+	border-radius: 0;
 }
-#nav a.order {
-    background-position: left -114px;
-}
-#nav a.order.active {
-    background-position: right -114px;
-}
-#nav a.exit {
-    background-position: left -171px;
+#nav .last:after,
+#nav .button-icon:after {
+	display: none;
 }
 
 
@@ -498,30 +507,25 @@ label.tab-item-add {
 
 .tab-items.icons i {
     display: inline-block;
-    width: 27px;
+    width: 28px;
     height: 22px;
-    margin-bottom: -5px;
     background-image: url('../img/icons-tab-radiator-floor.png');
     background-repeat: no-repeat;
 }
 
 .tab-items.icons .icon-radiator {
     background-position: 0 0;
+    margin-bottom: -7px;
 }
 .tab-items.icons .active .icon-radiator {
-    background-position: -27px 0;
+    background-position: -28px 0;
 }
 .tab-items.icons .icon-floor {
     background-position: 0 -21px;
+    margin-bottom: -5px;
 }
 .tab-items.icons .active .icon-floor {
-    background-position: -27px -21px;
-}
-.tab-items.icons .icon-boiler {
-    background-position: 0 -44px;
-}
-.tab-items.icons .active .icon-boiler {
-    background-position: -27px -44px;
+    background-position: -28px -21px;
 }
 
 
@@ -906,28 +910,28 @@ a.collector-item {
 	transition: opacity 1s;
 }
 
-/* Электронный простой */
+/* Р­Р»РµРєС‚СЂРѕРЅРЅС‹Р№ РїСЂРѕСЃС‚РѕР№ */
 .thermo-5
 {
     transition: background 1s;
     background: url('../img/thermo-r.png') no-repeat center;
 }
 
-/* Электронный программируемый */
+/* Р­Р»РµРєС‚СЂРѕРЅРЅС‹Р№ РїСЂРѕРіСЂР°РјРјРёСЂСѓРµРјС‹Р№ */
 .thermo-6
 {
     transition: background 1s;
     background: url('../img/thermo-e.png') no-repeat center;
 }
 
-/* Электронный простой беспроводной */
+/* Р­Р»РµРєС‚СЂРѕРЅРЅС‹Р№ РїСЂРѕСЃС‚РѕР№ Р±РµСЃРїСЂРѕРІРѕРґРЅРѕР№ */
 .thermo-7
 {
     transition: background 1s;
     background: url('../img/thermo-er.png') no-repeat center;
 }
 
-/* Электронный программируемый беспроводной */
+/* Р­Р»РµРєС‚СЂРѕРЅРЅС‹Р№ РїСЂРѕРіСЂР°РјРјРёСЂСѓРµРјС‹Р№ Р±РµСЃРїСЂРѕРІРѕРґРЅРѕР№ */
 .thermo-8
 {
     transition: background 1s;
@@ -1395,18 +1399,6 @@ label h3 {
 	background: url('../img/checkbox.png') no-repeat 100% 0;
 	z-index: 10;
 }
-
-.label-checkbox.inline {
-    text-align: left;
-    padding: 10px 30px;
-}
-.label-checkbox.checkbox-true.inline {
-    background-color: transparent;
-}
-.label-checkbox.inline .pseudo-checkbox {
-    left: 0;
-    top: 7px;
-}
 .checkbox-true .pseudo-checkbox {
 	/*transition: background-position .1s ease-out;*/
 	background-position: 100% -20px;
@@ -1419,9 +1411,6 @@ label h3 {
 }
 .checkbox-true .is-room {
 	background: #CACACA;
-}
-.checkbox-true {
-    font-weight: bold;
 }
 
 .choicebox {
@@ -2557,4 +2546,53 @@ text-align: left;
 /*ANIMATION CLASSES*/
 .animate-enter-leave {
     
+}
+
+.modal-title
+{
+    font-weight: normal;
+    font-size: 19px;
+    text-align: center;
+    padding-top: 7px;
+}
+.modal-content
+{
+    width:500px;
+}
+
+.modal-body-content
+{
+    padding-left: 40px;
+    padding-right:40px;
+}
+
+.modal-body-content p
+{
+    padding-bottom:20px;
+    line-height:23px;
+}
+.radio input[type=radio]
+{
+    float:left;
+}
+    .radio .title
+    {
+        display:block;
+        padding-left:6px;
+        padding-top:1px;
+        margin-left:23px;
+    }
+
+        .radio .title.disabled-true
+        {
+            color:#a0a0a0;
+        }
+
+.radio .validation
+{
+    display: block;
+    padding-left: 29px;
+    padding-top: 0px;
+    color:#E93C36;
+    margin-top:-6px;
 }
