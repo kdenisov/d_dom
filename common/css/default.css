@@ -185,6 +185,7 @@ body {
 	background: #424242;
     position: absolute;
     width: 100%;
+    z-index: 9000;
 }
 #sidebar-content h2 span{
     display: block;
@@ -221,31 +222,34 @@ body {
 
 #sidebar-view {
 	position: relative;
-    box-sizing: border-box;
     height: 100%;
-    padding-top: 56px; 
 }
 
 .autoscroll {
 	height: 100%;
 	position: absolute;
 	overflow: hidden;
-    padding-bottom: 56px;
-    box-sizing: border-box;
+}
+
+#sidebar-view > .autoscroll > :first-child {
+    margin-top: 56px;
+}
+
+#sidebar-view > .autoscroll > .tabs:first-child {
+    position: absolute;
+    margin-top: 0;
+    top: 0;
+    width: 100%;
+}
+
+#sidebar-view > .autoscroll > .tabs:first-child .tab-items {
+    margin-top: 56px;
 }
 /*.tabs .autoscroll {
 	top: 50px;
 }*/
 #sidebar .autoscroll {
 	width: 100%;
-}
-
-.tab-autoscroll-filler {
-    height: 49px; /*todo: this is a temporary solution, find a better one */
-}
-
-.autoscroll-filler {
-    height: 56px;
 }
 
 
