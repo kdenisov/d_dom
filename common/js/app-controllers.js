@@ -263,6 +263,118 @@ appConfigurator.controller('LevelCtrl', function($scope, Configurator, $statePar
         Configurator.RefreshCollectorsCount();
     };
 
+    //room equipment sidebar
+    var getEquipmentPerRoom = function(Configurator) {
+        var equipment = {
+            items: [],
+            radiatorEnding: function(count) {
+                count = count % 10;
+                if (count == 1) {
+                    return '';
+                }
+
+                if (count > 1 && count < 5) {
+                    return 'а';
+                }
+
+                if (count >= 5) {
+                    return 'ов';
+                }
+
+                return 'ов';
+            },
+            floorEnding: function(count) {
+                if (count == 1) {
+                    return 'ля';
+                }
+
+                if (count > 1 && count < 5) {
+                    return 'ли';
+                }
+
+                if (count >= 5) {
+                    return 'ель';
+                }
+
+                return 'ель';
+            }
+        };
+
+        for (var l = 0; l < Configurator.levels.length; l++) {
+            var levelInstance = levels[l];
+            if (!levelInstance.isLevel) {
+                continue;
+            }
+
+            for (var r = 0; r < levelInstance.rooms.length; r++) {
+                var roomInstance = levelInstance.rooms[r];
+                var roomEquipment = {
+                    id: roomInstance.id,
+                    levelId: levelInstance.id,
+                    thermostats: [],
+                    radiators: [],
+                    floors: 0
+                };
+
+                if (roomInstance.radiators.commonControl) {
+                    var control = Configurator.params.room.radiators.control[roomInstance.radiators.commonControl - 1];
+                    roomEquipment.thermostats.push({
+                        title: 'Комнатный термостат',
+                        src: 'common/img/products/' + control.preview,
+                    });
+                }
+
+                if (roomInstance.floors.control > 1) {
+                    control = Configurator.params.room.floors.control[roomInstance.floors.control - 1];
+                    roomEquipment.thermostats.push({
+                        title: 'Термостат теплых полов',
+                        src: 'common/img/products/' + control.preview
+                    });
+                }
+
+                roomEquipment.floors = roomInstance.floors.loops;
+
+                for (var radIndex = 0; radIndex < roomInstance.radiators.list.length; radIndex++) {
+                    var radiatorType = roomInstance.radiators.list[radIndex];
+                    control = radiatorType.control > 4 ? null : Configurator.params.room.radiators.control[radiatorType.control - 1];
+                    var valves = Configurator.params.room.radiators.valves[radiatorType.valves - 1];
+                    if (radiatorType.count > 0) {
+                        roomEquipment.radiators.push({
+                            type: radIndex + 1,
+                            thermostat: control ? {
+                                title: control.name,
+                                src: 'common/img/products/' + control.preview
+                            } : null,
+                            interconnection: {
+                                title: 'Обвязка',
+                                src: 'common/img/radiator-preview/' + valves.preview + '.png'
+                            },
+                            count: radiatorType.count
+                        });
+                    }
+                }
+
+                equipment.items.push(roomEquipment);
+            }
+        }
+
+        return equipment;
+    };
+
+    $scope.HOVER = 0;
+    $scope.EQUIPMENT = getEquipmentPerRoom(Configurator);
+    $scope.mouseenter = function (room) {
+        if ($scope.LEVELS[$scope.CURRENT_LEVEL.id - 1].rooms[room - 1].isRoom) {
+            $scope.HOVER = room;
+        }
+    };
+    $scope.mouseleave = function (room) {
+        $scope.HOVER = null;
+    };
+    $scope.hover = function(room, lvl) {
+        return $scope.HOVER == room && lvl == $scope.CURRENT_LEVEL.id;
+    };
+
     setCustomScroll();
 });
 

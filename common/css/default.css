@@ -161,6 +161,8 @@ body {
 	height: 56px;
 	background: #D13631;
 	overflow: hidden;
+    position: relative;
+    z-index: 9000;
 }
 #sidebar-panel-bottom {
 	width: 100%;
@@ -693,6 +695,90 @@ a.room-item {
 	background-image: url('../img/icon_floors.png');
 }
 
+.room-equipment {
+    display: block;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 255px;
+    left: 56px;
+    background-color: #f3f3f3;
+    z-index: 8000;
+}
+
+.room-equipment > h2 {
+    margin-top: 56px;
+    text-transform: uppercase;
+    padding: 20px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.room-equipment > .group {
+    float: left;
+    width: 255px;
+}
+
+.room-equipment > .group > .room-controls {
+    float: left;
+    padding: 0 10px 0 10px;
+    width: 107.5px;
+    text-align: center;
+}
+
+.room-equipment > .radiator-type {
+    float: left;
+    padding: 20px 10px;
+    width: 235px;
+    border-bottom: 1px solid #e6e6e6;
+}
+.room-equipment > .radiator-type > h3,
+.room-equipment > .floor-loops > h3 {
+    font-size: 12px;
+    line-height: 16px;
+    vertical-align: middle;
+    text-transform: uppercase;
+}
+.room-equipment > .radiator-type > h3 > i,
+.room-equipment > .floor-loops > h3 > i {
+    background: none repeat scroll 0 0 #00b06d;
+    border-radius: 12px;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    min-width: 12px;
+    padding: 0 2px 0 2px;
+    margin-right: 5px;
+    font-style: normal;
+    text-align: center;
+}
+.room-equipment > .floor-loops {
+    float: left;
+    padding: 20px 10px;
+    width: 235px;
+}
+
+.room-equipment > .radiator-type > .radiator-equipment > * {
+    float: left;
+    height: 116px; 
+}
+
+.room-equipment > .radiator-type > .radiator-equipment > .valve {
+    padding-top: 20px;
+    width: 105px;
+    height: 96px;
+    text-align: center;
+}
+.room-equipment > .radiator-type > .radiator-equipment > .valve > img{
+    width: 80px;
+    height: 75px;
+}
+.room-equipment > .radiator-type > .radiator-equipment > .valve > div{
+    padding-top: 5px;
+}
+.room-equipment > .radiator-type > .radiator-equipment > .interconnection > img {
+    width: 127px;
+    height: 116px
+}
 
 /* Level items */
 #viewport .level-items {

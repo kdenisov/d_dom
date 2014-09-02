@@ -12,17 +12,17 @@
 <div class="info">Уточните количество коллекторов и&nbsp;отапливаемых <br>комнат в&nbsp;вашем доме</div>
 <!-- ng-href="{{ROOM.isRoom && ('#/' + (ROOM.isBoilerRoom && 'boiler' || 'room/' + CURRENT_LEVEL.id + '/' + ROOM.id)) || ''}}" -->
 <div class="room-items">
-	<a
-		ng-repeat="ROOM in CURRENT_LEVEL.rooms | orderBy:'-isRoom'"
-		ng-class="{'is-room': ROOM.isRoom, 'is-room-boiler': ROOM.isBoilerRoom, 'is-floors': ROOM.floors.isFloors && ROOM.isRoom}"
-		ng-href="{{ROOM.isRoom && ('#/' + 'room/' + CURRENT_LEVEL.id + '/' + ROOM.id) || ''}}"
-		class="room-item"
-	>
-		<div class="room-radiators"><b>{{ROOM.getRadiatorsCount()}}</b></div>
-		<div class="room-floors"><b>{{ROOM.floors.loops}}</b></div>
-		<h4 class="room-title">{{ROOM.name}}</h4>
-		<h4 class="boiler-title">{{BOILER.canonicalName()}}</h4>
-	</a>
+    
+    <a ng-repeat="ROOM in CURRENT_LEVEL.rooms | orderBy:'-isRoom'"
+       ng-class="{'is-room': ROOM.isRoom, 'is-room-boiler': ROOM.isBoilerRoom, 'is-floors': ROOM.floors.isFloors && ROOM.isRoom}"
+       ng-href="{{ROOM.isRoom && ('#/' + 'room/' + CURRENT_LEVEL.id + '/' + ROOM.id) || ''}}"
+       ng-mouseenter="mouseenter(ROOM.id);" ng-mouseleave="mouseleave(ROOM.id)"
+       class="room-item">
+        <div class="room-radiators"><b>{{ROOM.getRadiatorsCount()}}</b></div>
+        <div class="room-floors"><b>{{ROOM.floors.loops}}</b></div>
+        <h4 class="room-title">{{ROOM.name}}</h4>
+        <h4 class="boiler-title">{{BOILER.canonicalName()}}</h4>
+    </a>
 </div>
 
 <div class="level-items">
@@ -41,3 +41,28 @@
 
 <a ng-if="PREV_LEVEL.isLevel" ng-href="#/level/{{PREV_LEVEL.id}}" class="arrow arrow-down"></a>
 <a ng-if="NEXT_LEVEL.isLevel" ng-href="#/level/{{NEXT_LEVEL.id}}" class="arrow arrow-up"></a>
+
+<div class="room-equipment" ng-repeat="room in EQUIPMENT.items" ng-if="hover(room.id, room.levelId)">
+    <h2>Оборудование в комнате</h2>
+    <div class="group">
+        <div class="room-controls" ng-repeat="thermostat in room.thermostats">
+            <img ng-src="{{thermostat.src}}" alt="thermostat.title" />
+            <div>{{thermostat.title}}</div>
+        </div>
+    </div>
+    <div class="group radiator-type" ng-repeat="radiator in room.radiators">
+        <h3><i>{{radiator.count}}</i> радиатор{{EQUIPMENT.radiatorEnding(radiator.count)}} Тип №{{radiator.type}}</h3>
+        <div class="radiator-equipment">
+            <div class="valve" ng-if="radiator.thermostat">
+                <img ng-src="{{radiator.thermostat.src}}" alt="{{radiator.thermostat.title}}" />
+                <div>{{radiator.thermostat.title}}</div>
+            </div>
+            <div class="interconnection" ng-if="radiator.interconnection">
+                <img ng-src="{{radiator.interconnection.src}}" alt="{{radiator.interconnection.title}}" />
+            </div>
+        </div>
+    </div>
+    <div class="group floor-loops" ng-if="room.floors > 0">
+        <h3><i>{{room.floors}}</i> пет{{EQUIPMENT.floorEnding(room.floors)}} теплого пола</h3>
+    </div>
+</div>

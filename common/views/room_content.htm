@@ -28,28 +28,6 @@
     </div>
 </div>
 
-<div class="room-equipment" ng-repeat="room in EQUIPMENT" ng-if="room.id == HOVER_ID">
-    <h2>Оборудование в комнате</h2>
-    <div class="group">
-        <div class="room-controls" ng-repeat="thermostat in room.thermostats">
-            <img ng-src="thermostat.src" alt="thermostat.title"/>
-            <div>{{termostat.title}}</div>
-        </div>
-    </div>
-    <div class="group radiator-type" ng-repeat="radiator in room.radiators">
-        <h3><i>{{radiator.count}}</i> радиатор{{radiator.ending()}} {{radiator.title}}</h3>
-        <div class="radiator-equipment">
-            <div class="valve" ng-if="raditator.thermostat">
-                <img ng-src="radiator.thermostat.src" alt="radiator.thermostat.title" />
-                <div>{{radiator.thermostat.title}}</div>
-            </div>
-            <div class="interconnection" ng-if="raditator.interconnection">
-                <img ng-src="radiator.interconnection.src" alt="radiator.interconnection.title" />
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <script type="text/ng-template" id="alert.html">
     <div class="modal-header">
