@@ -13,7 +13,7 @@
             <div class="text" ng-bind-html="RAW(clause.html)"></div>
             
             <div class="thumbs" ng-if="clause.thumbs.length > 0">
-                <div ng-repeat="icon in clause.thumbs"><a href="http://dom.danfoss.ru/katalog/Filtry/{{icon.src}}" target="_blank"><img ng-src="http://dom.danfoss.ru{{CATALOG[icon.src].image}}?w=83&h=83&mode=pad" alt="" /><span class="thumb-count">{{icon.count}}</span></a></div>
+                <div ng-repeat="icon in clause.thumbs"><a href="#/summary/5/{{icon.src}}"><img ng-src="http://dom.danfoss.ru{{CATALOG[icon.src].image}}?w=83&h=83&mode=pad" alt="" /><span class="thumb-count">{{icon.count}}</span></a></div>
             </div>
         </div>
     </div>
@@ -184,13 +184,13 @@
         <div>
             <h3>{{MODEL.productCard.name}}</h3>
             <div class="summary-card-pricing">
-                <div>
+               <div>
                     <div>цена</div>
-                    <span class="value">{{MODEL.productCard.price}}</span> руб.
+                    <span class="value">{{MODEL.productCard.price | number:0 | formatNumber}}</span> руб.
                 </div>
                 <div>
                     <div>кол-во</div>
-                    <span class="value">{{MODEL.productCard.count}}</span> шт.
+                    <span class="value">{{MODEL.productCard.count | number:0 | formatNumber}}</span> шт.
                 </div>
             </div>
         </div>
