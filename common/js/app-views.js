@@ -7,7 +7,8 @@ appConfigurator.config(function($stateProvider, $urlRouterProvider) {
 		.when('/room', '/room/1/1')
 		.when('/level', '/level/1')
 		.when('/collector', '/collector/1/1')
-		.when('/summary', '/summary/1')
+        .when('/summary/5', '/summary/5')
+        .when('/summary', '/summary/1')
 		.otherwise('/');
 
 	$stateProvider
@@ -68,4 +69,11 @@ appConfigurator.config(function($stateProvider, $urlRouterProvider) {
 		        'content': { templateUrl: 'common/views/summary_content.htm', controller: 'SummaryCtrl' }
 		    }
 		})
+        .state('product', {
+            url: '/summary/:page/:itemCode',
+            views: {
+                'sidebar': { templateUrl: 'common/views/summary_sidebar.htm', controller: 'SummaryCtrl' },
+                'content': { templateUrl: 'common/views/summary_content.htm', controller: 'SummaryCtrl' }
+            }
+        })
 });

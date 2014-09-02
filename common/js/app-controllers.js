@@ -926,6 +926,7 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams, $sce, Configurator, Catalog) {
     var page = parseInt($stateParams.page);
     page = isNaN(page) || page > 5 ? 1 : page;
+    var itemCode = $stateParams.itemCode;
 
     var getMenuPointerTop = function (selectedIndex) {
         var dh = 58;
@@ -933,7 +934,8 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         return selectedIndex * dh + h0;
     };
 
-    var ViewModel = function(pageNum) {
+
+    var ViewModel = function(pageNum, itemCode) {
         var _this = this;
         _this._page = pageNum;
 
@@ -960,14 +962,23 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
             _this.productCard = card;
             _this.productCard.count = count;
         };
-
         return _this;
     };
 
+    $scope.BASKET = function () {
+        return Configurator.Basket();
+    }
+
+    var _basket = Configurator.Basket();
+    var _groupedBasket = Configurator.GetCodesBySection();
+    var _groupedByRooms = Configurator.GetCodesByRooms();
+
     Catalog.fetch().then(function (data) {
         $scope.CATALOG = data;
-        var first; for (first in _basket) break;
-        $scope.MODEL.showCard($scope.CATALOG[first], _basket[first]);
+        if (typeof itemCode == 'undefined' || !_basket[itemCode]) {
+            for (itemCode in _basket) break;
+        }
+        $scope.MODEL.showCard($scope.CATALOG[itemCode], _basket[itemCode]);
     });
 
     $scope.ORDER = function () {
@@ -989,17 +1000,9 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         }
         price = Math.round(price);
         return ($filter('formatNumber')(price));
-    }
+    }    
 
-    $scope.BASKET = function () {
-        return Configurator.Basket();
-    }
-
-    var _basket = Configurator.Basket();
-    var _groupedBasket = Configurator.GetCodesBySection();
-    var _groupedByRooms = Configurator.GetCodesByRooms();
-
-    $scope.MODEL = new ViewModel(page);
+    $scope.MODEL = new ViewModel(page, itemCode);
 
     var homeClause = {
         title: 'Параметры дома',
@@ -1064,7 +1067,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
 
     if (Configurator.ifBasketContainCodes(_groupedBasket["radiator-control"].equip, ['088H3112', '088H3113'])) {
         collectorClause.html += '<br/>Коллекторы также оснащены термоэлектрическими приводами TWA-A, на которые через ресивер подается управляющий сигнал от комнатного термостата.';
-        if (Configurator.ifBasketContainCodes(_groupedBasket["radiator-control"].equip, ['088H3112']))
+        if (_groupedBasket["radiator-control-twa"] && Configurator.ifBasketContainCodes(_groupedBasket["radiator-control-twa"].equip, ['088H3112']))
             collectorClause.thumbs.push({ src: '088H3112', count: _groupedBasket["radiator-control-twa"].equip['088H3112'].value });
     }
 
@@ -1176,7 +1179,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         radiatorControlClause.html += 'Регулировать мощность радиаторного отопления производится двумя способами: ';
         radiatorControlClause.html += '<br/>- управляя всеми радиаторами в одном помещении одновременно по комнатному термостату.';
 
-        radiatorControlClause.html += '<br/>Для удобства управления в комнатах ' + controlTwo.join(', ') + ': установлены ' +  _codes.join(',') + ' подающ' + (_codes.length == 1 ? 'ий' : 'ие') + ' сигнал к приемнику\ам беспроводного сигнала ' + _recievierControl.join(',') + '. Таким образом осуществляется единое управление всеми радиаторами, установленными в каждом отдельном помещении. <br/>';
+        radiatorControlClause.html += '<br/>Для удобства управления в комнатах ' + controlTwo.join(', ') + ': установлены ' + _codesControl.join(',') + ' подающ' + (_codesControl.length == 1 ? 'ий' : 'ие') + ' сигнал к приемнику\ам беспроводного сигнала ' + _recievierControl.join(',') + '. Таким образом осуществляется единое управление всеми радиаторами, установленными в каждом отдельном помещении. <br/>';
         radiatorControlClause.html += 'Комнатный термостат применяют, если радиаторы закрыты декоративной решеткой, в этом случае температура в месте установки радиатора значительно отличается от температуры в комнате, и радиаторный термостат будет работать некорректно. Также, если в комнате установлено большое количество радиаторов, удобнее регулировать температуру в помещении одним прибором – комнатным термостатом. В этом случае установка на каждый радиатор термостатического элемента не требуется.';
 
         if (!Configurator.ifBasketContainCodes(_basket, ['013G2994'])) {
