@@ -378,6 +378,7 @@ appConfigurator.factory('Configurator', function(){
 	        name: Cfg.params.room.roomNames[level][room_id - 1],
 	        radiators: radiators,
 	        floors: floor, // объект теплого пола
+            visited: false,
 
 	        // @public methods
 	        getRadiatorsCount: function () {

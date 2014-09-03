@@ -12,6 +12,15 @@
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>
         <link href="common/img/favicon.ico" type="image/x-icon" rel="icon">
         <link href="common/img/favicon.ico" type="image/x-icon" rel="shortcut icon">
+        
+        <script id="ui_template" type="text/template">
+            <div class="wrapper">
+                <div data-id='3' class="arrow arrow_top"></div>
+                <!--.arrow(data-id=1) Создать-->
+                <!--.arrow(data-id=2) Удалить-->
+            </div>
+            <div data-id='4' class="arrow arrow_bottom"></div>
+        </script>
     </head>
     <body ng-controller="BaseCtrl">
 
@@ -123,25 +132,16 @@
             </div>
         </script>
 
-        <script id="cell_template" type="text/template">
+        <!--<script id="cell_template" type="text/template">
             <div class="title"></div>
             <div class="circle animate_all circle_floor hide"></div>
             <div class="circle animate_all circle_wall hide"></div>
             <div class="door_switch"></div>
             <div class="wall_switch"></div>
-        </script>
+        </script>-->
 
-        <script id="ui_template" type="text/template">
-            <div class="wrapper">
-                <div data-id='3' class="arrow arrow_top"></div>
-                <!--.arrow(data-id=1) Создать-->
-                <!--.arrow(data-id=2) Удалить-->
-            </div>
-            <div data-id='4' class="arrow arrow_bottom"></div>
-        </script>
-
-        <script id="floor_template" type="text/template">
-        </script>
+        <!--<script id="floor_template" type="text/template">
+        </script>-->
 
     </body>
 </html>

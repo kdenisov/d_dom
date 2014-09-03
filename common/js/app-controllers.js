@@ -375,18 +375,19 @@ appConfigurator.controller('LevelCtrl', function($scope, Configurator, $statePar
         return $scope.HOVER == room && lvl == $scope.CURRENT_LEVEL.id;
     };
 
-    //var scheme = {
-    //    levels: Configurator.levels,
-    //    boilers: Configurator.boiler,
-    //    currentLevelId: level.id,
-    //    roomMouseEnter: function (levelId, roomId) { },
-    //    roomMouseLeave: function (levelId, roomId) { },
-    //    levelSwitched: function (levelId) { },
-    //    roomClicked: function (levelId, roomId) { },
-    //    roomAdded: function (levelId, roomId) { },
-    //    roomRemoved: function (levelId, roomId) { }
-    //};
+    var scheme = {
+        levels: Configurator.levels,
+        boilers: Configurator.boiler,
+        currentLevelId: level.id,
+        roomMouseEnter: function (levelId, roomId) { },
+        roomMouseLeave: function (levelId, roomId) { },
+        levelSwitched: function (levelId) { },
+        roomClicked: function (levelId, roomId) { },
+        roomAdded: function (levelId, roomId) { },
+        roomRemoved: function (levelId, roomId) { }
+    };
 
+    //console.log(JSON.stringify(scheme));
     //levelsModule.buildLevels('#levels', scheme);
 
     setCustomScroll();
@@ -1074,8 +1075,13 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
                 e.preventDefault();
             }
 
+            var contentPage = $('.summary-page:first');
+            var scroller = contentPage.closest('.autoscroll');
+            scroller.scrollTop(0);
+            scroller.perfectScrollbar('update');
+
             $('#summary-menu-pointer').animate({ top: getMenuPointerTop(n - 1) + 'px' }, 300);
-            var contentScope = angular.element($('.summary-page:first')).scope();
+            var contentScope = angular.element(contentPage).scope();
             contentScope.MODEL._page = n;
 
             var sidebarScope = angular.element($('.summary-nav')).scope();
@@ -1541,6 +1547,6 @@ appConfigurator.controller('BaseCtrl', function($scope) {
 
 function setCustomScroll() {
     $(function() {
-        $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: true });
+        $('.autoscroll').perfectScrollbar({ wheelSpeed: 150, includePadding: true });
     });
 }

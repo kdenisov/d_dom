@@ -1878,6 +1878,7 @@ slider span.pointer + span.pointer {
 
 .summary-nav {
     position: relative;
+    margin-top: 56px;
 }
 
 .summary-nav > a {
@@ -1927,7 +1928,6 @@ slider span.pointer + span.pointer {
 .summary-page {
     height: 100%;
     width: 100%;
-    padding-bottom: 65px;
     position: relative;
 }
 
@@ -2578,6 +2578,8 @@ table.summary-merchandise .rub {
 }
 
 .summary-footer {
+    clear: both;
+    padding-top: 30px;
     height: 65px;
     width: 100%;
 }
