@@ -1177,10 +1177,8 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         collectorClause.html += '<br/>Для подключения применены распределительные коллекторы FHF. Чтобы избежать попадания воздуха в трубопровод коллекторы оснащены автоматическими воздухоотводчиками. Каждый контур коллектора оснащен вентильной вставкой с предварительной настройкой пропускной способности, что позволяет обеспечить оптимальную гидравлическую балансировку системы. Кроме того, коллекторы позволяют перекрыть любой контур для проведения ремонта или обслуживания';
     }
 
-    if (Configurator.ifBasketContainCodes(_groupedBasket["radiator-control"].equip, ['088H3112', '088H3113'])) {
+    if (Configurator.ifBasketContainCodes(_groupedBasket["radiator-collector"].equip, ['088H3112', '088H3113'])) {
         collectorClause.html += '<br/>Коллекторы также оснащены термоэлектрическими приводами TWA-A, на которые через ресивер подается управляющий сигнал от комнатного термостата.';
-        if (_groupedBasket["radiator-control-twa"] && Configurator.ifBasketContainCodes(_groupedBasket["radiator-control-twa"].equip, ['088H3112']))
-            collectorClause.thumbs.push({ src: '088H3112', count: _groupedBasket["radiator-control-twa"].equip['088H3112'].value });
     }
 
     var radiatorsClause = {
@@ -1355,7 +1353,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
         if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0702', '088U0703', '088U0704', '088U0705', '088U0706', '088U0707', '088U0708', '088U0709', '088U0710', '088U0711', '088U0712'])) {
             floorsCollectors.html += '<br/>Для подключения контуров теплого пола применены распределительные коллекторы FHF-F. Чтобы избежать попадания воздуха в петли теплого пола, коллекторы оснащены автоматическими воздухоотводчиками. Каждый контур коллектора оснащен вентильной вставкой с предварительной настройкой пропускной способности, что позволяет обеспечить оптимальную гидравлическую балансировку системы. Кроме того, коллекторы позволяют перекрыть любой контур для проведения ремонта или обслуживания.';
         }
-        if (Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['088H3112', '088H3113'])) {
+        if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088H3112', '088H3113'])) {
             floorsCollectors.html += '<br/>Коллекторы также оснащены термоэлектрическими приводами TWA-A, на которые через ресивер подается управляющий сигнал от комнатного термостата.';
         }
 

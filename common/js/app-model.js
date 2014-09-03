@@ -176,7 +176,7 @@ appConfigurator.factory('Configurator', function(){
 						/*{id: 1, type: 1, name: 'С управлением по температуре воздуха в помещении', basket: [['003L1001', 1],['013G2994', 1]]}, - СНЯТ С ПРОИЗВОДСТВА */
 						{id: 1, type: 1, name: 'Механическое', preview: 'config-prod-termo-4.png', basket: [['003L1000', 1],['003L1040', 1]]},
                         // 
-                        { id: 2, type: 2, name: 'Проводное с датчиком', preview: 'config-prod-termo-1.png', basket: [['087N791801', 1], ['087N6784', 1], ['088H3112', '_room.floors.loops', 'floor-collector'], ['088H0016', 1, 'floor-collector']] },
+                        { id: 2, type: 2, name: 'Проводное с датчиком', preview: 'config-prod-termo-1.png', basket: [['087N791801', 1], ['087N6784', 1], ['088H3112', '_room.floors.loops', 'floor-collector'], ['088H0016', 1/8, 'floor-collector']] },
 	                    { id: 3, type: 2, name: 'Беспроводное с датчиком', preview: 'config-prod-termo-1.png', basket: [['087N791301', 1], ['087N6784', 1], ['087N7478', '1/3', 'floor-collector'], ['088H3112', '_room.floors.loops', 'floor-collector']] }
 					]
 				}
@@ -480,7 +480,7 @@ appConfigurator.factory('Configurator', function(){
 			levels.push({ // Этажи по умолчанию
 				id: level_id,
 				//name: level_id == 3 && 'Подвал' || 'Этаж ' + (level_id),
-				name: level_id == 1 ? 'Первый этаж' : level_id == 2 ? 'Второй этаж' : 'Третий этаж',
+				name: level_id == 1 ? '1 этаж' : level_id == 2 ? '2 этаж' : '3 этаж',
 				canonicalName: function(){
 					return(this.isBasement && 'Подвал' || this.name);
 				},
@@ -1045,7 +1045,11 @@ appConfigurator.factory('Configurator', function(){
 					(angular.forEach(_room.radiators.list, function (_radiator) {
 					    _radiator.id <= _room.radiators.radiatorsTypes && (
 							(_radiator.type == 1 && _radiator.control && angular.forEach(Configurator.params.room.radiators.control[_radiator.control - 1].basket, function (_control) {
-							    pushToBasket(_basket, _control[0], _radiator.count * eval(_control[1]), 'radiator-control');
+							    if (_control.length == 3) {
+							        pushToBasket(_basket, _control[0], eval(_control[1]), _control[2]);
+							    } else {
+							        pushToBasket(_basket, _control[0], _radiator.count * eval(_control[1]), 'radiator-control');
+							    }
 							}))
 							+
 							(angular.forEach(Configurator.params.room.radiators.valves[_radiator.valves - 1].basket, function (_valves) {
@@ -1060,7 +1064,11 @@ appConfigurator.factory('Configurator', function(){
 					+
 					(_room.floors.isFloors &&
 						(angular.forEach(Configurator.params.room.floors.control[_room.floors.control - 1].basket, function (_control) {
-						    pushToBasket(_basket, _control[0], eval(_control[1]), 'floor-control');
+						    if (_control.length == 3) {
+						        pushToBasket(_basket, _control[0], eval(_control[1]), _control[2]);
+						    } else {
+						        pushToBasket(_basket, _control[0], eval(_control[1]), 'floor-control');
+						    }
 						}))
 						+
 						(_room.floors.fittings && angular.forEach(Configurator.params.fittings[_room.floors.fittings - 1].basket, function (_fittings) {
@@ -1078,12 +1086,20 @@ appConfigurator.factory('Configurator', function(){
 			        angular.forEach(Configurator.params.collector.sets, function (_set) {
 			            if (_collector.type == 'radiator' && _set.isFlowmeter == _collector.isFlowmeter && _set.entries == collector_1) {
 			                angular.forEach(_set.basket, function (_sets) {
-			                    pushToBasket(_basket, _sets[0], eval(_sets[1]), 'radiator-collector');
+			                    if (_sets.length == 3) {
+			                        pushToBasket(_basket, _sets[0], eval(_sets[1]), _sets[2]);
+			                    }else{
+			                        pushToBasket(_basket, _sets[0], eval(_sets[1]), 'radiator-collector');
+			                    }
 			                });
 			            }
 			            if (_collector.type == 'floor' && _set.isFlowmeter == _collector.isFlowmeter && _set.entries == collector_1) {
 			                angular.forEach(_set.basket, function (_sets) {
-			                    pushToBasket(_basket, _sets[0], eval(_sets[1]), 'floor-collector');
+			                    if (_sets.length == 3) {
+			                        pushToBasket(_basket, _sets[0], eval(_sets[1]), _sets[2]);
+			                    } else {
+			                        pushToBasket(_basket, _sets[0], eval(_sets[1]), 'floor-collector');
+			                    }
 			                });
 			            }
 			        });
@@ -1195,7 +1211,7 @@ appConfigurator.factory('Configurator', function(){
 					    _radiator.id <= _room.radiators.radiatorsTypes && (
 							(_radiator.type == 1 && _radiator.control && angular.forEach(Configurator.params.room.radiators.control[_radiator.control - 1].basket, function (_control) {
 							    if (_control.length == 3) {
-							        pushToBasket(_basket, _control[0], _radiator.count * eval(_control[1]), _level.name + '|' + (_control[2] == 'floor-collector' ? 'Коллектор теплого пола' : 'Коллектор радиаторов'));
+							        pushToBasket(_basket, _control[0], eval(_control[1]), _level.name + '|' + (_control[2] == 'floor-collector' ? 'Коллектор теплого пола' : 'Коллектор радиаторов'));
 							    } else {
 							        pushToBasket(_basket, _control[0], _radiator.count * eval(_control[1]), _level.name + '|' + _room.name);
 							    }
