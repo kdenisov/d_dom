@@ -10,8 +10,11 @@
 </span>
 </h1>
 <div class="info">Уточните количество коллекторов и&nbsp;отапливаемых <br>комнат в&nbsp;вашем доме</div>
+<!--<div id="levels">
+    
+</div>-->
 <!-- ng-href="{{ROOM.isRoom && ('#/' + (ROOM.isBoilerRoom && 'boiler' || 'room/' + CURRENT_LEVEL.id + '/' + ROOM.id)) || ''}}" -->
-<div class="room-items">
+ <div class="room-items">
     
     <a ng-repeat="ROOM in CURRENT_LEVEL.rooms | orderBy:'-isRoom'"
        ng-class="{'is-room': ROOM.isRoom, 'is-room-boiler': ROOM.isBoilerRoom, 'is-floors': ROOM.floors.isFloors && ROOM.isRoom}"
@@ -36,12 +39,12 @@
 			>
 			</div>
 		</div>
-	</a><!-- .level-item -->
-</div><!-- .level-items -->
+	</a>
+</div>
 
 <a ng-if="PREV_LEVEL.isLevel" ng-href="#/level/{{PREV_LEVEL.id}}" class="arrow arrow-down"></a>
 <a ng-if="NEXT_LEVEL.isLevel" ng-href="#/level/{{NEXT_LEVEL.id}}" class="arrow arrow-up"></a>
-
+    
 <div class="room-equipment" ng-repeat="room in EQUIPMENT.items" ng-if="hover(room.id, room.levelId)">
     <h2>Оборудование в комнате</h2>
     <div class="group">

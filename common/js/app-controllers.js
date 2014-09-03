@@ -301,7 +301,7 @@ appConfigurator.controller('LevelCtrl', function($scope, Configurator, $statePar
         };
 
         for (var l = 0; l < Configurator.levels.length; l++) {
-            var levelInstance = levels[l];
+            var levelInstance = Configurator.levels[l];
             if (!levelInstance.isLevel) {
                 continue;
             }
@@ -324,7 +324,7 @@ appConfigurator.controller('LevelCtrl', function($scope, Configurator, $statePar
                     });
                 }
 
-                if (roomInstance.floors.control > 1) {
+                if (roomInstance.floors.isFloors && roomInstance.floors.control > 1) {
                     control = Configurator.params.room.floors.control[roomInstance.floors.control - 1];
                     roomEquipment.thermostats.push({
                         title: 'Термостат теплых полов',
@@ -374,6 +374,20 @@ appConfigurator.controller('LevelCtrl', function($scope, Configurator, $statePar
     $scope.hover = function(room, lvl) {
         return $scope.HOVER == room && lvl == $scope.CURRENT_LEVEL.id;
     };
+
+    //var scheme = {
+    //    levels: Configurator.levels,
+    //    boilers: Configurator.boiler,
+    //    currentLevelId: level.id,
+    //    roomMouseEnter: function (levelId, roomId) { },
+    //    roomMouseLeave: function (levelId, roomId) { },
+    //    levelSwitched: function (levelId) { },
+    //    roomClicked: function (levelId, roomId) { },
+    //    roomAdded: function (levelId, roomId) { },
+    //    roomRemoved: function (levelId, roomId) { }
+    //};
+
+    //levelsModule.buildLevels('#levels', scheme);
 
     setCustomScroll();
 });
@@ -1526,5 +1540,7 @@ appConfigurator.controller('BaseCtrl', function($scope) {
 });
 
 function setCustomScroll() {
-    $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: true });
+    $(function() {
+        $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: true });
+    });
 }
