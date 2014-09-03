@@ -120,7 +120,7 @@ appConfigurator.factory('Configurator', function(){
                         { id: 26, type: 1, connection: 1, builtinValve: 1, pipework: 3, controlType: 2, preview: '2_9', externalView: 3, connectSide: 0, fittingsType: 1, control: [5, 6, 7, 8], name: '003L0274 RLV-CX, прямой, хромированный - 2 шт.', basket: [['003L0274', 2]] },
                         { id: 27, type: 1, connection: 1, builtinValve: 1, pipework: 3, controlType: 2, preview: '2_9', externalView: 2, connectSide: 0, fittingsType: 0, control: [5, 6, 7, 8], name: '003L1824 RLV, прямой, никелированный, press - 2 шт.', basket: [['003L1824', 2]] },
                         { id: 28, type: 1, connection: 2, builtinValve: 1, pipework: 1, controlType: 1, preview: '19', externalView: 4, connectSide: 0, fittingsType: 2, control: [1, 2], name: '013G4742 Гарнитура VHS15 прямая, вход G1/2, выход R3/4', basket: [['013G4742', 1]] },
-                        { id:29,  type: 1, connection: 2, builtinValve: 1, pipework: 1, controlType: 1, preview: '19', externalView:5, connectSide: 0, fittingsType: 2, control:[1,2], name:'013G4744 Гарнитура VHS15 прямая, вход G3/4, выход G3/4', basket:[['013G4744',1]]},
+                        {id:29, type: 1, connection: 2, builtinValve : 1, pipework:1, controlType:1, preview: '19', externalView:5, connectSide: 0, fittingsType: 2, control:[1,2], name:'013G4744 Гарнитура VHS15 прямая, вход G3/4, выход G3/4', basket:[['013G4744',1]]},
                         { id: 30, type: 1, connection: 2, builtinValve: 1, pipework: 1, controlType: 1, preview: '19', externalView: -1, connectSide: 0, fittingsType: 2, control: [1, 2], name: '013G4742 Гарнитура VHS15 прямая, вход G1/2, выход R3/4', basket: [['013G4742', 1]] },
                         { id: 31, type: 1, connection: 2, builtinValve: 1, pipework: 1, controlType: 2, preview: '17', externalView: 4, connectSide: 0, fittingsType: 2, control: [5, 6, 7, 8], name: '003L0240 RLV-KD, прямой, с переходниками, G3/4A x G1/2A', basket: [['003L0240', 1]] },
                         { id: 32, type: 1, connection: 2, builtinValve: 1, pipework: 1, controlType: 2, preview: '17', externalView: 5, connectSide: 0, fittingsType: 2, control: [5, 6, 7, 8], name: '003L0241 RLV-KD, прямой, G3/4A x G3/4', basket: [['003L0241', 1]] },
@@ -1278,7 +1278,8 @@ appConfigurator.factory('Configurator', function(){
 // Catalog Factory
 
 appConfigurator.factory('Catalog', function ($q, $timeout, $http) {
-    var appPath = "http://localhost/Danfoss.Web.Cottage/"; // http://dom.danfoss.ru
+//  var appPath = "http://localhost/Danfoss.Web.Cottage";
+    var appPath = "http://dom.danfoss.ru"; // 
 
     var _jsonCatalogData = undefined;
 
