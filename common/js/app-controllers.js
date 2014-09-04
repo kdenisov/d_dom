@@ -1130,6 +1130,17 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
         }, 200);
     });
 
+    $scope.SAVE_CONFIGURATION = function () {
+        var prefix = "00001";
+        var orderNum = "00001";
+        for (var i = 0; i < 100; i++) {
+            orderNum = prefix + "-" + i;
+            if (!Configurator.loadLocalStorage({ key: orderNum })) {
+                break;
+            }
+        }
+        Configurator.saveConfiguration(orderNum);
+    }
     $scope.ORDER = function () {
         Catalog.makeOrder(Configurator.Basket());
     }
