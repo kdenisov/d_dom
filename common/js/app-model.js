@@ -1295,8 +1295,9 @@ appConfigurator.factory('Configurator', function(){
 // Catalog Factory
 
 appConfigurator.factory('Catalog', function ($q, $timeout, $http) {
-//  var appPath = "http://localhost/Danfoss.Web.Cottage";
-    var appPath = "http://dom.danfoss.ru"; // 
+    //var appPath = "http://localhost/Danfoss.Web.Cottage";
+    //var appPath = "http://dom.danfoss.ru"; // 
+    var appPath = "../"; 
 
     var _jsonCatalogData = undefined;
 

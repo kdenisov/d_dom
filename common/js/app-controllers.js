@@ -9,6 +9,12 @@ appConfigurator.filter('formatNumber', function () {
     }
 });
 
+appConfigurator.filter('ceilNumber', function () {
+    return function (n) {
+        return Math.ceil(n);
+    }
+});
+
 appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderByFilter){
 
 	//Configurator = loadLocalStorage({key:'Configurator',val:Configurator});
@@ -1013,7 +1019,9 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
 appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator, Catalog){
 
 	var params = Configurator.params;
-	Catalog.fetch().then(function(data) {
+	$scope.CATALOG = [];
+
+	Catalog.fetch().then(function (data) {
         $scope.CATALOG = data;
 
         $scope.BASKET_TOTAL_PRICE = function () {
@@ -1050,7 +1058,7 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 	}
 });
 
-appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams, $sce, Configurator, Catalog) {
+appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParams, $sce, $timeout, Configurator, Catalog) {
     var page = parseInt($stateParams.page);
     page = isNaN(page) || page > 5 ? 1 : page;
     var itemCode = $stateParams.itemCode;
@@ -1111,6 +1119,15 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
             for (itemCode in _basket) break;
         }
         $scope.MODEL.showCard($scope.CATALOG[itemCode], _basket[itemCode]);
+        $timeout(function () {
+            for (itemCode in _basket) {
+                for (var i in $scope.PAGE_GENERAL.clauses) {
+                    if ($scope.PAGE_GENERAL.clauses[i].html.indexOf(itemCode) >= 0) {
+                        $scope.PAGE_GENERAL.clauses[i].html = $scope.PAGE_GENERAL.clauses[i].html.split(itemCode).join($scope.CATALOG[itemCode].name);
+                    }
+                }
+            }
+        }, 200);
     });
 
     $scope.ORDER = function () {
@@ -1355,11 +1372,11 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
 
         if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0095', '088U0096', '088U0097', '088U0098', '088U0099'])) {
             var floorMixing = [];
-            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0095'])) floorMixing.push('088U0095');
-            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0096'])) floorMixing.push('088U0096');
-            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0097'])) floorMixing.push('088U0097');
-            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0098'])) floorMixing.push('088U0098');
-            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0099'])) floorMixing.push('088U0099');
+            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0095'])) floorMixing.push("088U0095");
+            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0096'])) floorMixing.push("088U0096");
+            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0097'])) floorMixing.push("088U0097");
+            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0098'])) floorMixing.push("088U0098");
+            if (Configurator.ifBasketContainCodes(_groupedBasket["floor-collector"].equip, ['088U0099'])) floorMixing.push("088U0099");
             
             floorsCollectors.html += '<br/>Для радиаторов и для теплых полов требуется разная температура теплоносителя. Классические параметры для радиаторов – это 80 С на подаче и 60 С на возврате. Для комфортного и безопасного проживания средняя температура поверхности пола не должна быть выше +26 С для помещений с постоянным пребыванием людей, это значение регламентировано Сводом Правил СП60.13330.2012 (актуализированная редакция СНиП 41-01). Для достижения такой температуры поверхности пола температура подаваемого теплоносителя должна быть около 40 С. Чтобы температура поверхности пола была равномерной, температура возвращаемого теплоносителя должна отличаться от температуры подачи не более чем на 5…10 С. Для получения таких параметров теплоносителя теплого пола применяют узлы смешения.<br/>В данном проекте применен компактный узел смешения ' + floorMixing.join(', ') + '. Глубина компактного узла в сборе с коллектором составляет 110 мм, что позволяет установить сборку в стандартный шкаф.';
         }
@@ -1383,7 +1400,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope,$filter, $stateParams
 
             floorsCollectors.html += '<br/>Для подключения трубопроводов к запорно-регулирующей арматуре применены уплотнительные фитинги, обеспечивающие надежное и долговременное соединение при температуре до 95 С и давлении до 6 бар.';
         }
-    
+
         $scope.PAGE_GENERAL.clauses.push(floorsCollectors);
     }
     if ("floor-control" in _groupedBasket) {
