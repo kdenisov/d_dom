@@ -3,24 +3,34 @@
     <head>
         <meta charset="utf-8">
         <title>Danfoss Конфигуратор</title>
+        <link rel="stylesheet" type="text/css" href="common/levels/css/main.css" media="all" />
         <link rel="stylesheet" type="text/css" href="common/css/default.css" media="all">
         <link rel="stylesheet" type="text/css" href="common/css/jquery-ui.css" media="all">
         <link rel="stylesheet" type="text/css" href="common/css/ui.angular.modal.css" media="all">
         <link rel="stylesheet" type="text/css" href="common/css/perfect-scrollbar.css" media="all">
-        <link rel="stylesheet" type="text/css" href="common/levels/css/main.css" media="all"/>
         <!--[if lte IE 8]><link rel="stylesheet" type="text/css" href="common/css/ie8.css" media="all"><![endif]-->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>
         <link href="common/img/favicon.ico" type="image/x-icon" rel="icon">
         <link href="common/img/favicon.ico" type="image/x-icon" rel="shortcut icon">
         
+        <script id="cell_template" type="text/template">
+            <div class="title"></div>
+            <div class="circle animate_all circle_floor hide"></div>
+            <div class="circle animate_all circle_wall hide"></div>
+            <div class="door_switch"></div>
+            <div class="wall_switch"></div>
+        </script>
         <script id="ui_template" type="text/template">
             <div class="wrapper">
                 <div data-id='3' class="arrow arrow_top"></div>
-                <!--.arrow(data-id=1) Создать-->
-                <!--.arrow(data-id=2) Удалить-->
+                <div data-id='1' class="arrow">Создать</div>
+                <div data-id='2' class="arrow">Удалить</div>
             </div>
             <div data-id='4' class="arrow arrow_bottom"></div>
         </script>
+        <script id="floor_template" type="text/template">
+        </script>
+
     </head>
     <body ng-controller="BaseCtrl">
 
@@ -103,12 +113,13 @@
         <script src="common/js/angular.jquery-ui.slider.js"></script>
         <script src="common/js/angular-sanitize.min.js"></script>
         <script src="common/js/ui-bootstrap-tpls-0.11.0.js"></script>
+        <script src="common/js/perfect-scrollbar.js"></script>
         <script src="common/levels/js/main.js"></script>
-        <!--<script src="common/js/perfect-scrollbar.js"></script>-->
         <script src="common/js/app-model.js"></script>
         <script src="common/js/app-views.js"></script>
         <script src="common/js/app-animate.js"></script>
         <script src="common/js/app-controllers.js"></script>
+        <!--<script src="common/js/app-test-data-gen.js"></script>-->
 
         <script type="text/ng-template" id="set-dest-collector.html">
             <div class="modal-header">
@@ -131,17 +142,5 @@
                 <div class="button button-next" ng-click="SET_COLLECTOR()">Применить</div>
             </div>
         </script>
-
-        <!--<script id="cell_template" type="text/template">
-            <div class="title"></div>
-            <div class="circle animate_all circle_floor hide"></div>
-            <div class="circle animate_all circle_wall hide"></div>
-            <div class="door_switch"></div>
-            <div class="wall_switch"></div>
-        </script>-->
-
-        <!--<script id="floor_template" type="text/template">
-        </script>-->
-
     </body>
 </html>

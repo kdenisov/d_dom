@@ -10,7 +10,6 @@ appConfigurator.filter('formatNumber', function () {
 });
 
 appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderByFilter){
-
 	//Configurator = loadLocalStorage({key:'Configurator',val:Configurator});
 
     //$scope.CONFIGURATOR = Configurator;
@@ -173,8 +172,8 @@ appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configura
     setCustomScroll();
 });
 
-appConfigurator.controller('LevelCtrl', function($scope, Configurator, $stateParams, $modal){
-
+appConfigurator.controller('LevelCtrl', function ($scope, Configurator, $stateParams, $modal, $location) {
+    
 	var
 		levels = Configurator.levels,
 		level = levels[$stateParams.levelId - 1]
@@ -361,38 +360,55 @@ appConfigurator.controller('LevelCtrl', function($scope, Configurator, $statePar
         return equipment;
     };
 
-    $scope.HOVER = 0;
+    $scope.HOVER_ROOM = 0;
+    $scope.HOVER_LEVEL = 0;
     $scope.EQUIPMENT = getEquipmentPerRoom(Configurator);
-    $scope.mouseenter = function (room) {
-        if ($scope.LEVELS[$scope.CURRENT_LEVEL.id - 1].rooms[room - 1].isRoom) {
-            $scope.HOVER = room;
-        }
-    };
-    $scope.mouseleave = function (room) {
-        $scope.HOVER = null;
-    };
-    $scope.hover = function(room, lvl) {
-        return $scope.HOVER == room && lvl == $scope.CURRENT_LEVEL.id;
+    
+    $scope.HOVER = function (room, lvl) {
+        console.log('hover ', $scope.HOVER_ROOM == room && $scope.HOVER_LEVEL == lvl);
+        return $scope.HOVER_ROOM == room && $scope.HOVER_LEVEL == lvl;
     };
 
     var scheme = {
         levels: Configurator.levels,
         boilers: Configurator.boiler,
         currentLevelId: level.id,
-        roomMouseEnter: function (levelId, roomId) { },
-        roomMouseLeave: function (levelId, roomId) { },
-        levelSwitched: function (levelId) { },
-        roomClicked: function (levelId, roomId) { },
-        roomAdded: function (levelId, roomId) { },
-        roomRemoved: function (levelId, roomId) { }
+        roomMouseEnter: function(levelId, roomId) {
+            $scope.HOVER_LEVEL = levelId;
+            $scope.HOVER_ROOM = roomId;
+            console.log('ENTERED room: ' + roomId + '; level: ' + levelId);
+        },
+        roomMouseLeave: function(levelId, roomId) {
+            $scope.HOVER_LEVEL = 0;
+            $scope.HOVER_ROOM = 0;
+        },
+        levelSwitched: function (levelId) {
+            $scope.CURRENT_LEVEL = $scope.LEVELS[levelId - 1];
+            console.log($scope.CURRENT_LEVEL);
+        },
+        roomClicked: function (levelId, roomId) {
+            $location.path('/room/' + levelId + '/' + roomId);
+            $scope.$apply();
+        },
+        roomAdded: function(levelId, roomId) {
+            $scope.LEVELS[levelId - 1].rooms[roomId - 1].isRoom = true;
+        },
+        roomRemoved: function(levelId, roomId) {
+            $scope.LEVELS[levelId - 1].rooms[roomId - 1].isRoom = false;
+        }
     };
 
-    //console.log(JSON.stringify(scheme));
-    //levelsModule.buildLevels('#levels', scheme);
+    $(function () {
+        $('#levels').width($('#viewport-inner').width());
+        $(window).resize(function () {
+            $('#levels').width($('#viewport-inner').width());
+        });
+    });
 
-    setCustomScroll();
+    levelsModule.buildLevels('#levels', scheme);
+
+    //setCustomScroll();
 });
-
 
 appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, $modal, $location) {
 	var
