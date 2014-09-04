@@ -357,40 +357,38 @@ appConfigurator.factory('Configurator', function(){
 	}
 
 	var room = function (level, room_id, active, hasBoiler) {
-	    var floor = {							// Теплые полы
-	        isFloors: level == 0,			// Теплые полы: есть
-	        loops: 1,						// Количество петель
-	        control: 2,					// Управление
-	        fittings: 0					// Фитинги
-	    };
-
-	    var radiators = {
-	        controlType: 1,			// Управление: Отдельное
-	        commonControl: null,// Общее управление
-	        radiatorsTypes: 1,	// Типов радиаторов
-	        list: initRadiators()			// Радиаторы
-	    }
-
+	    
 	    return { // Комнаты по умолчанию
 	        id: room_id,
 	        isRoom: active && true,
             isBoilerRoom: hasBoiler && true,
-	        name: Cfg.params.room.roomNames[level][room_id - 1],
-	        radiators: radiators,
-	        floors: floor, // объект теплого пола
+            name: Cfg.params.room.roomNames[level][room_id - 1],
+            canonicalName: Cfg.params.room.roomNames[level][room_id - 1],
+	        radiators: {
+	            controlType: 1,			// Управление: Отдельное
+	            commonControl: null,// Общее управление
+	            radiatorsTypes: 1,	// Типов радиаторов
+	            list: initRadiators()			// Радиаторы
+	        },
+	        floors: {							// Теплые полы
+	            isFloors: level == 0,			// Теплые полы: есть
+	            loops: 1,						// Количество петель
+	            control: 2,					// Управление
+	            fittings: 0					// Фитинги
+	        }, // объект теплого пола
             visited: false,
 
 	        // @public methods
 	        getRadiatorsCount: function () {
 	            var radiators_count = 0;
-	            for (var r in radiators.list) {	                
-	                radiators_count += radiators.list[r].count;
+	            for (var r in this.radiators.list) {	                
+	                radiators_count += this.radiators.list[r].count;
 	            }
 	            return radiators_count;
 	        },
 	        setFloorLoops: function (loops) { // метод устанавливающий значение петель для теплого пола
-	            floor.loops = loops;
-	            floor.isFloors = (loops > 0);
+	            this.floors.loops = loops;
+	            this.floors.isFloors = (loops > 0);
 
 	            setCollectorEntriesForLevel();
 	        },
@@ -399,30 +397,30 @@ appConfigurator.factory('Configurator', function(){
 	            if (destRoom.id == room_id) return; // самого в себя не копируем
                 // клонирование основных параметров
 	            destRoom.radiators = {
-	                controlType: radiators.controlType,
-	                commonControl: radiators.commonControl,
-	                radiatorsTypes: radiators.radiatorsTypes,
+	                controlType: this.radiators.controlType,
+	                commonControl: this.radiators.commonControl,
+	                radiatorsTypes: this.radiators.radiatorsTypes,
 	                list: destRoom.radiators.list
 	            };
 	            // клонирование радиаторов
 	            for (var r in radiators.list) {
-	                destRoom.radiators.list[r].type = radiators.list[r].type;					// Вид радиатора
-	                destRoom.radiators.list[r].connection = radiators.list[r].connection;		// Подключение
-	                destRoom.radiators.list[r].builtinValve = radiators.list[r].builtinValve;	// Встроенный клапан
-	                destRoom.radiators.list[r].pipework = radiators.list[r].pipework;			// Разводка трубопроводов
-	                destRoom.radiators.list[r].use = radiators.list[r].use;					    // Применение
-	                destRoom.radiators.list[r].control = radiators.list[r].control;			    // Управление
-	                destRoom.radiators.list[r].valves = radiators.list[r].valves;				// Клапаны
-	                destRoom.radiators.list[r].fittingsType = radiators.list[r].fittingsType;	// Тип фитингов
-	                destRoom.radiators.list[r].fittings = radiators.list[r].fittings;			// Фитинги
-	                destRoom.radiators.list[r].count = radiators.list[r].count;
+	                destRoom.radiators.list[r].type = this.radiators.list[r].type;					// Вид радиатора
+	                destRoom.radiators.list[r].connection = this.radiators.list[r].connection;		// Подключение
+	                destRoom.radiators.list[r].builtinValve = this.radiators.list[r].builtinValve;	// Встроенный клапан
+	                destRoom.radiators.list[r].pipework = this.radiators.list[r].pipework;			// Разводка трубопроводов
+	                destRoom.radiators.list[r].use = this.radiators.list[r].use;					    // Применение
+	                destRoom.radiators.list[r].control = this.radiators.list[r].control;			    // Управление
+	                destRoom.radiators.list[r].valves = this.radiators.list[r].valves;				// Клапаны
+	                destRoom.radiators.list[r].fittingsType = this.radiators.list[r].fittingsType;	// Тип фитингов
+	                destRoom.radiators.list[r].fittings = this.radiators.list[r].fittings;			// Фитинги
+	                destRoom.radiators.list[r].count = this.radiators.list[r].count;
 	            }
 
 	            // клонирование полов
-	            destRoom.floors.isFloors = destRoom.floors.isFloors;    // Теплые полы: есть
-	            destRoom.floors.loops = destRoom.floors.loops;       // Количество петель
-	            destRoom.floors.control = destRoom.floors.control;     // Управление
-	            destRoom.floors.fittings = destRoom.floors.fittings;
+	            destRoom.floors.isFloors = this.floors.isFloors;    // Теплые полы: есть
+	            destRoom.floors.loops = this.floors.loops;       // Количество петель
+	            destRoom.floors.control = this.floors.control;     // Управление
+	            destRoom.floors.fittings = this.floors.fittings;
 	        }
 	    }
 	}
@@ -433,6 +431,38 @@ appConfigurator.factory('Configurator', function(){
 	        rooms.push(room(level, room_id, room_id <= roomsPerLevel, levelHasBoiler && room_id == roomsPerLevel));
 	    }
 	    return rooms;
+	}
+
+	var setBoilerRoom = function () {
+	    iterateActiveLevels(function (level) {
+	        iterateActiveRooms(level, function (room) {
+	            if (room.isBoilerRoom) {
+	                room.name = room.canonicalName;
+	                room.isBoilerRoom = false;
+	            }
+	        });
+	        level.isBoiler = false;
+	    });
+
+	    var onRoom = 1; // котельная на кухне
+
+	    // если в отдельном помещении - то занимаем последнюю комнату
+	    if (Cfg.boiler.roomType == 1) {
+	        for (room = Cfg.levels[Cfg.boiler.level - 1].rooms.length - 1; room >= 0 ; room--) {
+	            if (Cfg.levels[Cfg.boiler.level - 1].rooms[room].isRoom) {
+	                onRoom = Cfg.levels[Cfg.boiler.level - 1].rooms[room].id;
+	                break;
+	            }
+	        }
+	    }
+
+
+	    Cfg.levels[Cfg.boiler.level - 1].rooms[onRoom - 1].isBoilerRoom = true;
+	    Cfg.levels[Cfg.boiler.level - 1].isBoiler = true;
+
+	    if (Cfg.levels[Cfg.boiler.level - 1].rooms[onRoom - 1].name != 'Кухня') {
+	        Cfg.levels[Cfg.boiler.level - 1].rooms[onRoom - 1].name = 'Котельная';
+	    }
 	}
 
 	var initLevels = function(boiler){
@@ -447,8 +477,6 @@ appConfigurator.factory('Configurator', function(){
 
 		// "Конструктор" этажей
 		for(var level_id = 1, levels = []; level_id <= 3; level_id++) {
-
-		    var levelHasBoiler = boiler.level == level_id;
 
 		    // "Конструктор" коллекторов
 		    // всего коллекторов - 4 (два теплого пола + 2 радиаторов)
@@ -488,11 +516,11 @@ appConfigurator.factory('Configurator', function(){
 				isLevel: level_id <= Cfg.cottage.levelsCount, //level_id != 3,
 				roomsCount: rooms_per_level,
 				isBasement: false,
-				isBoiler: levelHasBoiler,
+				isBoiler: false,
 				//isCollectors: true, //level_id == 1 || false,
 				//isFloors: false,
 				collectors: collectors,
-				rooms: initRooms(level_id - 1, rooms_per_level, levelHasBoiler)
+				rooms: initRooms(level_id - 1, rooms_per_level, false)
 			});
 		}
 		        // параметры по умолчанию
@@ -516,41 +544,14 @@ appConfigurator.factory('Configurator', function(){
 		levels[1].rooms[2].isRoom = true;
 		levels[1].rooms[2].radiators.list[0].count = 2;
 
-		if (Cfg.boiler.isBoiler) {
-		    for (room = levels[Cfg.boiler.level - 1].rooms.length - 1; room >= 0 ; room--) {
-		        if (levels[Cfg.boiler.level - 1].rooms[room].isRoom) {
-		            levels[Cfg.boiler.level - 1].rooms[room].isBoilerRoom = true;
-		            break;
-		        }
-		    }
-		}
-
-
-
 		Cfg.levels = levels;
-	}
 
-	Cfg.supportsLocalStorage = function() {
-		try {
-			return 'localStorage' in window && window['localStorage'] !== null;
-	} catch (e) {
-			return false;
+		if (Cfg.boiler.isBoiler) {
+		    // Котельная на первом этаже в отдельном помещении
+		    Cfg.boiler.level = 1;
+		    Cfg.boiler.roomType = 1;
+		    setBoilerRoom();
 		}
-	}
-
-	Cfg.saveLocalStorage = function(obj) {
-		if(Cfg.supportsLocalStorage()){
-			localStorage[obj.key] = JSON.stringify(obj.val);
-			return;
-		}
-		return false;
-	}
-
-	Cfg.loadLocalStorage = function(obj) {
-		if(Cfg.supportsLocalStorage() && localStorage[obj.key]){
-			return JSON.parse(localStorage[obj.key]);
-		}
-		return obj.val;
 	}
 
     //@private методы
@@ -870,6 +871,10 @@ appConfigurator.factory('Configurator', function(){
 	initLevels(boiler);
 	//initCollectors();
 
+	Cfg.SetBoilerRoom = function () {
+	    setBoilerRoom();
+	}
+
     // @public автоконфигурирование коллекторов радиаторов и теплых полов
 	Cfg.RefreshCollectorsCount = function () {
 
@@ -1116,15 +1121,15 @@ appConfigurator.factory('Configurator', function(){
 					}))
 					+
 					(_collector.fittings && angular.forEach(Configurator.params.fittings[_collector.fittings - 1].basket, function (_fittings) {
-					    pushToBasket(_basket, _fittings[0], _collector.entries, _collector.type == 'radiator' ? 'radiator-collector' : 'floor-collector');
+					    pushToBasket(_basket, _fittings[0], _collector.entries, _collector.type == 'radiator' ? 'radiator-collector-fitting' : 'floor-collector-fitting');
 					}))
                     +
 					(_collector.fit_088U0305 && angular.forEach(Configurator.params.collector.fit_088U0305[_collector.fit_088U0305 - 1].basket, function (_fittings) {
-					    pushToBasket(_basket, _fittings[0], _fittings[1], _collector.type == 'radiator' ? 'radiator-collector' : 'floor-collector');
+					    pushToBasket(_basket, _fittings[0], _fittings[1], _collector.type == 'radiator' ? 'radiator-collector-fitting' : 'floor-collector-fitting');
 					}))
                     +
 					(_collector.fit_088U0301 && angular.forEach(Configurator.params.collector.fit_088U0301[_collector.fit_088U0301 - 1].basket, function (_fittings) {
-					    pushToBasket(_basket, _fittings[0], _fittings[1], _collector.type == 'radiator' ? 'radiator-collector' : 'floor-collector');
+					    pushToBasket(_basket, _fittings[0], _fittings[1], _collector.type == 'radiator' ? 'radiator-collector-fitting' : 'floor-collector-fitting');
 					}))
 					+
 					(_collector.mixing && angular.forEach(Configurator.params.collector.mixing[_collector.mixing - 1].basket, function (_mixing) {
@@ -1286,7 +1291,69 @@ appConfigurator.factory('Configurator', function(){
 	    return res;
 	}
 
+	Cfg.supportsLocalStorage = function () {
+	    try {
+	        return 'localStorage' in window && window['localStorage'] !== null;
+	    } catch (e) {
+	        return false;
+	    }
+	}
+
+	Cfg.saveLocalStorage = function (obj) {
+	    if (Cfg.supportsLocalStorage()) {
+	        localStorage[obj.key] = JSON.stringify(obj.val);
+	        return;
+	    }
+	    return false;
+	}
+
+	Cfg.loadLocalStorage = function (obj) {
+	    if (Cfg.supportsLocalStorage() && localStorage[obj.key]) {
+	        return JSON.parse(localStorage[obj.key]);
+	    }
+	    return obj.val;
+	}
+
+    // функция которая мержит два объекта игнорируя методы - из obj2 -> obj1
+	var merge = function (obj1,obj2){ // Our merge function
+
+	    for (var i in obj2) { // add the remaining properties from object 2
+
+	        if (typeof obj2[i] == 'function') continue;
+
+	        if (typeof obj2[i] === "object" && obj2[i] != null) {
+	            if (!obj1[i])
+	                obj1[i] = {};
+
+	            merge(obj1[i], obj2[i]);
+	        } else {
+	            obj1[i] = obj2[i];
+	        }
+	    }
+	    return obj1;
+	}
+	Cfg.saveConfiguration = function (orderNumber) {
+	    var savedObj = {
+	        cottage: Cfg.cottage,
+	        levels: Cfg.levels,
+	        collectors: Cfg.collectors,
+	        boiler: Cfg.boiler
+	    }
+
+	    Cfg.saveLocalStorage({ key: orderNumber, val: savedObj });
+	}
+
+	Cfg.restoreConfiguration = function (orderNumber) {
+	    var restoredCfg = Cfg.loadLocalStorage({ key: orderNumber, val: null });
+	    merge(Cfg.cottage, restoredCfg.cottage);
+	    merge(Cfg.levels, restoredCfg.levels);
+	    merge(Cfg.collectors, restoredCfg.collectors);
+	    merge(Cfg.boiler, restoredCfg.boiler);
+	}
+
     updateCottageConfiguration();
+
+//    window.Conf = Cfg;
 
 	return Cfg;
 });
@@ -1295,8 +1362,9 @@ appConfigurator.factory('Configurator', function(){
 // Catalog Factory
 
 appConfigurator.factory('Catalog', function ($q, $timeout, $http) {
-//  var appPath = "http://localhost/Danfoss.Web.Cottage";
-    var appPath = "http://dom.danfoss.ru"; // 
+    //var appPath = "http://localhost/Danfoss.Web.Cottage";
+    //var appPath = "http://dom.danfoss.ru"; // 
+    var appPath = "../"; 
 
     var _jsonCatalogData = undefined;
 

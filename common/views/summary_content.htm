@@ -3,7 +3,7 @@
 
     <div id="summary-icons">
         <a href="/#/summary/print" class="print"></a>
-        <a href="/#/summary/download" class="download"></a>
+        <a class="download" ng-click="SAVE_CONFIGURATION()"></a>
     </div>
 
     <div class="summary-general" ng-repeat="clause in PAGE_GENERAL.clauses">
@@ -13,7 +13,13 @@
             <div class="text" ng-bind-html="RAW(clause.html)"></div>
             
             <div class="thumbs" ng-if="clause.thumbs.length > 0">
-                <div ng-repeat="icon in clause.thumbs"><a href="#/summary/5/{{icon.src}}"><img ng-src="http://dom.danfoss.ru{{CATALOG[icon.src].image}}?w=83&h=83&mode=pad" alt="" /><span class="thumb-count">{{icon.count}}</span></a></div>
+                <div ng-repeat="icon in clause.thumbs">
+                    <a href="#/summary/5/{{icon.src}}"><img ng-src="http://dom.danfoss.ru{{CATALOG[icon.src].image}}?w=83&h=83&mode=pad" alt="" />
+                        <span class="thumb-count">
+                            {{icon.count | number:0 | ceilNumber}}
+                        </span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -139,7 +145,7 @@
                      {{CATALOG[item.title].name}}
                 </td>
                 <td class="qty">
-                    {{item.count | number:0 | formatNumber}}
+                    {{item.count | number:0 | ceilNumber}}
                 </td>
                 <td>
                     {{CATALOG[item.title].price * item.count | number:0 | formatNumber}} <span class="rub">руб.</span>
@@ -190,7 +196,7 @@
                 </div>
             </div>
         </div>
-        <img ng-src="{{MODEL.productCard.image}}?w=400&h=400&mode=pad" alt="{{MODEL.productCard.name}}" />
+        <img ng-src="http://dom.danfoss.ru{{MODEL.productCard.image}}?w=400&h=400&mode=pad" alt="{{MODEL.productCard.name}}" />
     </div>
 
     <div class="summary-card-tab" ng-tabs>
