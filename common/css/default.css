@@ -920,6 +920,25 @@ a.collector-item {
 .radiators .item.type2 {
 	background: url('../img/radiators/r1.png') no-repeat 50% -60px;
 }
+.radiators .item.type2.design {
+	background: url("../img/radiators/design/design-left.jpg") no-repeat 50% -60px;
+    height: 700px;
+    margin-top: 110px;
+    transition: none;
+}
+.radiators .item.type1.design {
+	background: url("../img/radiators/design/design-right.jpg") no-repeat 50% -60px;
+    height: 700px;
+    margin-top: 110px;
+    transition: none;
+}
+.radiators .item.design.towelrail {
+	background: url("../img/radiators/design/r_d.png") no-repeat 50% -60px;
+    height: 700px;
+    margin-top: 110px;
+    transition: none;
+}
+
 
 .radiators .item.type-boiler {
     margin-top: 0;
@@ -2172,7 +2191,7 @@ slider span.pointer + span.pointer {
     position: absolute;
 }
 .summary-schemes-collectors.floors .schemes-connection {
-    width: 130px
+    width: 134px
 }
 
 .summary-schemes-collectors .schemes-connection.on-top {
@@ -2228,10 +2247,10 @@ slider span.pointer + span.pointer {
 
 .scheme-collector-placeholder {
     position: absolute;
-    left: 32px;
+    left: 30px;
     top: 20px;
     width: 60px;
-    height: 90px;
+    height: 99px;
     background: url('../img/summary/scheme-radiator-collector.jpg') center top no-repeat;
 }
 
@@ -2277,9 +2296,10 @@ slider span.pointer + span.pointer {
 {
     width: 15px;
     position: absolute;
-    right: -4px;
-    top: 32px;
-    background-color: #D3D3D3;
+    right: 10px;
+    top: 42px;
+    background-color: #00b06a;
+    color: white;
     border-radius: 10px;
     line-height: 15px;
     font-size: 12px;
