@@ -551,7 +551,7 @@
 
     var scheme = {
         levels: Cfg.levels,
-        boilers: Cfg.boiler,
+        boilers: Cfg.boilers,
 
         levelSwitched: function(level) {
             console.log('level ' + level);

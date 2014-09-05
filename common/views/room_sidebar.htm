@@ -98,10 +98,11 @@
                                        ng-model="RADIATOR.type"
                                        ng-value="{{ITEM.id}}"
                                        ng-change="
-									RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
+									RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {type: 2, use: RADIATOR.use, connectSide: RADIATOR.connectSide}))[0].id;
 									RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
                                     RADIATOR.preview_valves = RADIATOR.valves;
                                     RADIATOR.connectSide = 1;
+                                    RADIATOR.use = 1;
 								">
                             </label>
                         </div>
@@ -110,14 +111,15 @@
                         <div class="field">
                             <h3>Применение</h3>
                             <div class="choicebox">
-                                <label ng-repeat="ITEM in PARAMS.radiators.use" class="choicebox-{{ITEM.id == RADIATOR.use}}">
+                                <label ng-repeat="ITEM in PARAMS.radiators.use" ng-class="{'choicebox-true': ITEM.id == RADIATOR.use}">
                                     {{ITEM.name}}
                                     <input type="radio"
                                            ng-model="RADIATOR.use"
                                            ng-value="{{ITEM.id}}"
                                            ng-change="
-                                    RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
-                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;RADIATOR.connectSide = 1;">
+                                    RADIATOR.valves = (PARAMS.radiators.valves | filter: ({type: 2, use: RADIATOR.use, connectSide: RADIATOR.connectSide }))[0].id;
+                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
+                                    RADIATOR.connectSide = 1;">
                                 </label>
                             </div>
                         </div>
@@ -127,8 +129,9 @@
                                 <select ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.connectSide"
                                         ng-model="RADIATOR.connectSide"
                                         ng-change="
-                                    RADIATOR.valves = (PARAMS.radiators.valves | filter: (RADIATOR.type == 2 && {type: 2, connectSide: RADIATOR.connectSide, use: RADIATOR.use}))[0].id;
-                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;RADIATOR.connectSide = 1;"></select>
+                                    RADIATOR.valves = (PARAMS.radiators.valves | filter: ({type: 2, use: RADIATOR.use, connectSide: RADIATOR.connectSide}))[0].id;
+                                    RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
+                                    "></select>
                             </div>
                         </div>
                         <div class="field">
@@ -215,7 +218,8 @@
                                 <h3>Сторона</h3>
                                 <select ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.connectSide"
                                         ng-model="RADIATOR.connectSide"
-                                        ng-change="RADIATOR.valves = ((RADIATOR.preview_valves == 3 || RADIATOR.preview_valves == 4) && RADIATOR.connectSide == 2) ? RADIATOR.preview_valves + 2 : RADIATOR.preview_valves;
+                                        ng-change="
+                                    RADIATOR.valves = ((RADIATOR.preview_valves == 3 || RADIATOR.preview_valves == 4) && RADIATOR.connectSide == 2) ? RADIATOR.preview_valves + 2 : RADIATOR.preview_valves;
                                     RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;"></select>
                             </div>
                         </div>

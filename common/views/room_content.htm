@@ -12,9 +12,9 @@
         <div class="item type-boiler" ng-if="BOILER_VISIBLE()" ng-class="{'alt': BOILER.embodiment==2}">
              
         </div>
-        <div class="item type{{ITEM.connection}} item-{{$index + 1}}" ng-repeat="ITEM in RADIATORS_LIST | limitTo:RADIATORS.radiatorsTypes">
+        <div class="item type{{ITEM.connection}} item-{{$index + 1}}" ng-class="CSS_RADIATOR(ITEM)" ng-repeat="ITEM in RADIATORS_LIST | limitTo:RADIATORS.radiatorsTypes">
             <div class="item-valve">
-                <img alt="" ng-src="{{VIEW(ITEM.valves, ITEM.connection, ITEM.control, ITEM.connectSide)}}" />
+                <img alt="" ng-src="{{VIEW(ITEM)}}" />
             </div>
         </div>
     </div>

@@ -375,6 +375,12 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, $statePa
         return $scope.HOVER_ROOM == room && $scope.HOVER_LEVEL == lvl;
     };
 
+    var switchLevel = function(scope, levelId) {
+        level = levels[levelId - 1];
+        scope.CURRENT_LEVEL = level;
+        scope.COLLECTORS = level.collectors;
+    };
+
     var scheme = {
         levels: Configurator.levels,
         boilers: Configurator.boiler,
@@ -382,15 +388,21 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, $statePa
         roomMouseEnter: function(levelId, roomId) {
             $scope.HOVER_LEVEL = levelId;
             $scope.HOVER_ROOM = roomId;
+
             console.log('ENTERED room: ' + roomId + '; level: ' + levelId);
         },
         roomMouseLeave: function(levelId, roomId) {
             $scope.HOVER_LEVEL = 0;
             $scope.HOVER_ROOM = 0;
+
+            console.log('LEAVE room: ' + roomId + '; level: ' + levelId);
         },
         levelSwitched: function (levelId) {
-            $scope.CURRENT_LEVEL = $scope.LEVELS[levelId - 1];
-            console.log($scope.CURRENT_LEVEL);
+            switchLevel($scope, levelId);
+            $scope.$apply();
+            var scope = angular.element($('.params-collectors .group:first')).scope();
+            switchLevel(scope, levelId);
+            scope.$apply();
         },
         roomClicked: function (levelId, roomId) {
             $location.path('/room/' + levelId + '/' + roomId);
@@ -506,19 +518,45 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	$scope.PREVIEW = function (valves) {
 	    return "common/img/radiator-preview/" + Configurator.params.room.radiators.valves[valves-1].preview + ".png";
 	}
-	$scope.VIEW = function (valves, connection, control, connectSide) {
-	    var preview = Configurator.params.room.radiators.valves[valves - 1].preview;
-	    var side = connectSide == 2 ? "_right" : "";
-	    var connectionNum = (connection == 1 ? "2" : "1");
-	    if ($scope.PARAMS.radiators.control[$scope.RADIATOR.control - 1].previewPrefix) {
-	        var prefix = $scope.PARAMS.radiators.control[control - 1].previewPrefix;
-	        return "common/img/radiators/n/" + preview + "_" + prefix + "_r" + connectionNum + side + ".png";
-	    } else {
-	        return "common/img/radiators/n/" + preview + "_r" + connectionNum + side + ".png";
-	    }
-	}
+    $scope.VIEW = function(radiator) {
+        var side = radiator.connectSide == 2 ? "_right" : "";
+        if (radiator.type == 2) { //design radiator
+            var use = radiator.use == 1 ? 'radiator_valve' : 'towelrail_valve';
+            return 'common/img/radiators/design/' + use + side + '.png';
+        }
 
-	$scope.UPDATE_VALVE = function (valveId) {
+        var preview = Configurator.params.room.radiators.valves[radiator.valves - 1].preview;
+        var connectionNum = (radiator.connection == 1 ? "2" : "1");
+        if ($scope.PARAMS.radiators.control[radiator.control - 1].previewPrefix) {
+            var prefix = $scope.PARAMS.radiators.control[radiator.control - 1].previewPrefix;
+            return "common/img/radiators/n/" + preview + "_" + prefix + "_r" + connectionNum + side + ".png";
+        } else {
+            return "common/img/radiators/n/" + preview + "_r" + connectionNum + side + ".png";
+        }
+    };
+
+    $scope.CSS_RADIATOR = function(radiator) {
+        var cssClasses = 'type' + radiator.connection;
+        if (radiator.type == 2) {
+            cssClasses += ' design';
+        }
+
+        if (radiator.use == 2) {
+            cssClasses += ' towelrail';
+        }
+
+        if (radiator.connectSide == 1) {
+            cssClasses += ' connect-left';
+        }
+
+        if (radiator.connectSide == 2) {
+            cssClasses += ' connect-right';
+        }
+
+        return cssClasses;
+    };
+
+    $scope.UPDATE_VALVE = function (valveId) {
 	    return "common/img/radiators/" + Configurator.params.room.radiators.valves[$scope.RADIATOR.valves - 1].preview + ".png";
 	}
 
@@ -677,7 +715,13 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	}
 
 	setCustomScroll();
+
+    getRadiator = function() {
+        return $scope.RADIATOR;
+    };
 });
+
+var getRadiator = function() { return null; };
 
 
 appConfigurator.controller('BoilerCtrl', function($scope, Configurator, $stateParams, Editor, $modal){
