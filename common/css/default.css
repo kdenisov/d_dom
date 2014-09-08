@@ -924,7 +924,6 @@ a.collector-item {
 	background: url("../img/radiators/design/radiator.png") no-repeat 50% -60px;
     height: 700px;
     margin-top: 100px;
-    transition: none;
 }
 .radiators .item.design .item-valve img {
     margin-left: -70px;
@@ -935,7 +934,6 @@ a.collector-item {
 	background: url("../img/radiators/design/towelrail.png") no-repeat 50% -60px;
     height: 700px;
     margin-top: 110px;
-    transition: none;
 }
 .radiators .item.design.towelrail .item-valve img {
     margin-left: -94px;

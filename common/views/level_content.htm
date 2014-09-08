@@ -1,7 +1,7 @@
 <h1>Параметры<br>
-<span ng-switch on="CURRENT_LEVEL.isBasement">
+<span ng-switch on="MODEL.level.isBasement">
 	<span ng-switch-when="true">подвала</span>
-	<span ng-switch-default ng-switch on="CURRENT_LEVEL.id">
+	<span ng-switch-default ng-switch on="MODEL.level.id">
 		<span ng-switch-when="1">первого</span>
 		<span ng-switch-when="2">второго</span>
 		<span ng-switch-when="3">третьего</span>
@@ -45,7 +45,7 @@
 <a ng-if="PREV_LEVEL.isLevel" ng-href="#/level/{{PREV_LEVEL.id}}" class="arrow arrow-down"></a>
 <a ng-if="NEXT_LEVEL.isLevel" ng-href="#/level/{{NEXT_LEVEL.id}}" class="arrow arrow-up"></a>-->
     
-<div class="room-equipment" ng-repeat="room in EQUIPMENT.items" ng-if="HOVER(room.id, room.levelId)">
+<div class="room-equipment" ng-repeat="room in EQUIPMENT.items" ng-if="MODEL.hoverRoomId == room.id && MODEL.level.id == room.levelId">
     <h2>Оборудование в комнате</h2>
     <div class="group">
         <div class="room-controls" ng-repeat="thermostat in room.thermostats">

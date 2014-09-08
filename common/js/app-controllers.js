@@ -178,50 +178,31 @@ appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configura
     setCustomScroll();
 });
 
-appConfigurator.controller('LevelCtrl', function ($scope, Configurator, $stateParams, $modal, $location) {
-    
-	var
-		levels = Configurator.levels,
-		level = levels[$stateParams.levelId - 1]
-    ;
+appConfigurator
+    .service('levelsService', function(Configurator, $stateParams) {
+        var $this = this;
+        $this.levels = Configurator.levels;
+        $this.boiler = Configurator.boiler;
+        $this.level = this.levels[$stateParams.levelId - 1];
+        $this.collectors = $this.level.collectors;
 
-    //Выбор следующего уровня с учетом того, что подвал подставляется на место последнего этажа
-	var nextLevel = function () {
-	    if (level.isBasement) {
-	        return levels[0];
-	    }
+        $this.setLevel = function(id) {
+            $this.level = $this.levels[id - 1];
+            $this.collectors = $this.level.collectors;
+        };
 
-	    var res = levels[$stateParams.levelId];
-	    if (res == undefined) {
-	        return null;
-	    }
 
-	    if (res.isBasement) {
-	        return null;
-	    }
+        $this.hoverRoomId = 0;
+        $this.setHoverRoomId = function(id) {
+            $this.hoverRoomId = id;
+        };
+    });
 
-	    return res;
-	};
+appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsService, $stateParams, $modal, $location) {
 
-	var prevLevel = function () {
-	    if (level.isBasement) {
-	        return null;
-	    }
+    $scope.COTTAGE = Configurator.cottage;
+    $scope.MODEL = levelsService;
 
-	    if ($stateParams.levelId == 1 && levels[levels.length - 1].isBasement) {
-	        return levels[levels.length - 1];
-	    }
-
-	    return levels[$stateParams.levelId - 2];
-	};
-
-	$scope.COTTAGE = Configurator.cottage;
-	$scope.CURRENT_LEVEL = level;
-	$scope.PREV_LEVEL = prevLevel();
-	$scope.NEXT_LEVEL = nextLevel();
-	$scope.COLLECTORS = level.collectors;
-	$scope.LEVELS = levels;
-	$scope.BOILER = Configurator.boiler;
 	$scope.EDITED_COLLECTOR = null;
 
     $scope.ALERT = function(alert) {
@@ -268,12 +249,11 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, $statePa
         Configurator.RefreshCollectorsCount();
     };
 
-    //room equipment sidebar
-    var getEquipmentPerRoom = function(Configurator) {
+    //rooms equipment
+    var getEquipment = function(Configurator) {
         var equipment = {
             items: [],
             radiatorEnding: function(count) {
-                count = count % 10;
                 if (count == 1) {
                     return '';
                 }
@@ -282,12 +262,9 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, $statePa
                     return 'а';
                 }
 
-                if (count >= 5) {
-                    return 'ов';
-                }
-
                 return 'ов';
             },
+
             floorEnding: function(count) {
                 if (count == 1) {
                     return 'ля';
@@ -295,10 +272,6 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, $statePa
 
                 if (count > 1 && count < 5) {
                     return 'ли';
-                }
-
-                if (count >= 5) {
-                    return 'ель';
                 }
 
                 return 'ель';
@@ -366,55 +339,8 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, $statePa
         return equipment;
     };
 
-    $scope.HOVER_ROOM = 0;
-    $scope.HOVER_LEVEL = 0;
-    $scope.EQUIPMENT = getEquipmentPerRoom(Configurator);
-    
-    $scope.HOVER = function (room, lvl) {
-        console.log('hover ', $scope.HOVER_ROOM == room && $scope.HOVER_LEVEL == lvl);
-        return $scope.HOVER_ROOM == room && $scope.HOVER_LEVEL == lvl;
-    };
+    $scope.EQUIPMENT = getEquipment(Configurator);
 
-    var switchLevel = function(scope, levelId) {
-        level = levels[levelId - 1];
-        scope.CURRENT_LEVEL = level;
-        scope.COLLECTORS = level.collectors;
-    };
-
-    var scheme = {
-        levels: Configurator.levels,
-        boilers: Configurator.boiler,
-        currentLevelId: level.id,
-        roomMouseEnter: function(levelId, roomId) {
-            $scope.HOVER_LEVEL = levelId;
-            $scope.HOVER_ROOM = roomId;
-
-            console.log('ENTERED room: ' + roomId + '; level: ' + levelId);
-        },
-        roomMouseLeave: function(levelId, roomId) {
-            $scope.HOVER_LEVEL = 0;
-            $scope.HOVER_ROOM = 0;
-
-            console.log('LEAVE room: ' + roomId + '; level: ' + levelId);
-        },
-        levelSwitched: function (levelId) {
-            switchLevel($scope, levelId);
-            $scope.$apply();
-            var scope = angular.element($('.params-collectors .group:first')).scope();
-            switchLevel(scope, levelId);
-            scope.$apply();
-        },
-        roomClicked: function (levelId, roomId) {
-            $location.path('/room/' + levelId + '/' + roomId);
-            $scope.$apply();
-        },
-        roomAdded: function(levelId, roomId) {
-            $scope.LEVELS[levelId - 1].rooms[roomId - 1].isRoom = true;
-        },
-        roomRemoved: function(levelId, roomId) {
-            $scope.LEVELS[levelId - 1].rooms[roomId - 1].isRoom = false;
-        }
-    };
 
     $(function () {
         $('#levels').width($('#viewport-inner').width());
@@ -423,7 +349,39 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, $statePa
         });
     });
 
-    levelsModule.buildLevels('#levels', scheme);
+    var applyToSidebarScope = function(action) {
+        var scope = angular.element($('.params-collectors > .group:first')).scope();
+        scope.$apply(action);
+    };
+
+    levelsModule.buildLevels('#levels', {
+        levels: levelsService.levels,
+        boilers: levelsService.boiler,
+        currentLevelId: levelsService.level.id,
+        roomMouseEnter: function(levelId, roomId) {
+            $scope.$apply(levelsService.setHoverRoomId(roomId));
+        },
+        roomMouseLeave: function(levelId, roomId) {
+            $scope.$apply(levelsService.setHoverRoomId(0));
+        },
+        levelSwitched: function (levelId) {
+            var action = function() { levelsService.setLevel(levelId); };
+            $scope.$apply(action);
+            applyToSidebarScope(action);
+        },
+        roomClicked: function(levelId, roomId) {
+            $scope.$apply(function() {
+                levelsService.setHoverRoomId(0);
+                $location.path('/room/' + levelId + '/' + roomId);
+            });
+        },
+        roomAdded: function(levelId, roomId) {
+            levelsService.level.rooms[roomId - 1].isRoom = true;
+        },
+        roomRemoved: function(levelId, roomId) {
+            levelsService.level.rooms[roomId - 1].isRoom = false;
+        }
+    });
 
     //setCustomScroll();
 });
