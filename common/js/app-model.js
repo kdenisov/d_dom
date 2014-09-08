@@ -142,7 +142,7 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
             $http({
                 url: appConfig.appPath + "/JsonOperations/Register?jsonp=JSON_CALLBACK",
                 method: "POST",
-                data: { phone: phone, name: name, address: address, email },
+                data: { phone: phone, name: name, address: address, email: email },
                 headers: { 'Content-Type': 'application/json' }
             })
 			.success(function (data) {

@@ -245,7 +245,7 @@ body {
     width: 100%;
 }
 
-#sidebar-view > .autoscroll > .tabs:first-child .tab-items {
+#sidebar-view > .autoscroll > .tabs:first-child > .tab-items {
     margin-top: 56px;
 }
 /*.tabs .autoscroll {

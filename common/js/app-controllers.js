@@ -193,7 +193,8 @@ appConfigurator
 
 
         $this.hoverRoomId = 0;
-        $this.setHoverRoomId = function(id) {
+        $this.setHoverRoomId = function (id) {
+            id = isNaN(id) || id == undefined ? 0 : id;
             $this.hoverRoomId = id;
         };
     });
