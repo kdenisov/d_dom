@@ -1118,7 +1118,7 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 	}
 });
 
-appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParams, $sce, $timeout, Configurator, Catalog) {
+appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParams, $sce, $timeout, Configurator, Catalog, CurrentUser) {
     var page = parseInt($stateParams.page);
     page = isNaN(page) || page > 5 ? 1 : page;
     var itemCode = $stateParams.itemCode;
@@ -1191,15 +1191,29 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
     });
 
     $scope.SAVE_CONFIGURATION = function () {
-        var prefix = "00001";
-        var orderNum = "00001";
-        for (var i = 0; i < 100; i++) {
-            orderNum = prefix + "-" + i;
-            if (!Configurator.loadLocalStorage({ key: orderNum })) {
-                break;
-            }
-        }
-        Configurator.saveConfiguration(orderNum);
+        CurrentUser.isGuidExistsInDB().then(
+            function (user) { // success
+                Console.log(user);
+                Configurator.saveConfiguration();
+            },
+            function (msg) { // failure
+                alert(msg);
+                CurrentUser.Register("Денисов К", "+79631216973", "Односторонки гривки 10").then(
+                    function(user){ // success
+                        CurrentUser.SaveConfiguration(Configurator.name, Configurator.saveConfiguration()).then(
+                            function (m) { // success
+                                alert(m);
+                            },
+                            function (m) { //fail
+                                alert(m)
+                            }
+                        );
+                    }, 
+                    function(msg){ // fail
+                        alert(msg);
+                    }
+                )
+            });
     }
     $scope.ORDER = function () {
         Catalog.makeOrder(Configurator.Basket());

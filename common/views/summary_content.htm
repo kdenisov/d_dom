@@ -14,7 +14,7 @@
             
             <div class="thumbs" ng-if="clause.thumbs.length > 0">
                 <div ng-repeat="icon in clause.thumbs">
-                    <a href="#/summary/5/{{icon.src}}"><img ng-src="http://dom.danfoss.ru{{CATALOG[icon.src].image}}?w=83&h=83&mode=pad" alt="" />
+                    <a href="#/summary/5/{{icon.src}}"><img ng-src="{{CATALOG[icon.src].image}}?w=83&h=83&mode=pad" alt="" />
                         <span class="thumb-count">
                             {{icon.count | number:0 | ceilNumber}}
                         </span>
@@ -91,7 +91,7 @@
         <tbody>
             <tr ng-repeat="(CODE, COUNT) in BASKET()">
                 <td>
-                    <img class="thumb" ng-src="http://dom.danfoss.ru{{CATALOG[CODE].image}}?w=55&h=55&mode=pad" alt="{{CATALOG[CODE].name}}" />
+                    <img class="thumb" ng-src="{{CATALOG[CODE].image}}?w=55&h=55&mode=pad" alt="{{CATALOG[CODE].name}}" />
                 </td>
                 <td>
                     {{CATALOG[CODE].name}}
@@ -139,7 +139,7 @@
             </tr>
             <tr ng-repeat="item in group.items" ng-repeat-end>
                 <td>
-                    <img class="thumb" ng-src="http://dom.danfoss.ru{{CATALOG[item.title].image}}?w=55&h=55&mode=pad" alt="{{CATALOG[item.title].name}}" />
+                    <img class="thumb" ng-src="{{CATALOG[item.title].image}}?w=55&h=55&mode=pad" alt="{{CATALOG[item.title].name}}" />
                 </td>
                 <td>
                      {{CATALOG[item.title].name}}
@@ -176,7 +176,7 @@
 
     <div class="summary-card-thumbs">
         <div ng-click="MODEL.showCard(CATALOG[CODE], COUNT)" ng-repeat="(CODE, COUNT) in BASKET()">
-            <img ng-src="http://dom.danfoss.ru{{CATALOG[CODE].image}}?w=80&h=80&mode=pad" alt="{{CATALOG[CODE].name}}" />
+            <img ng-src="{{CATALOG[CODE].image}}?w=80&h=80&mode=pad" alt="{{CATALOG[CODE].name}}" />
             <div ng-show="MODEL.productCard === CATALOG[CODE]" class="highlight"></div>
             <span class="count" ng-if="COUNT > 1"> {{COUNT | number:0 | formatNumber}}</span>
         </div>
@@ -196,7 +196,7 @@
                 </div>
             </div>
         </div>
-        <img ng-src="http://dom.danfoss.ru{{MODEL.productCard.image}}?w=400&h=400&mode=pad" alt="{{MODEL.productCard.name}}" />
+        <img ng-src="{{MODEL.productCard.image}}?w=400&h=400&mode=pad" alt="{{MODEL.productCard.name}}" />
     </div>
 
     <div class="summary-card-tab" ng-tabs>
