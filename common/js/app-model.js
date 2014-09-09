@@ -224,6 +224,9 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 			levels: [],
 			collectors: [],
 			boiler: {},
+			properties: {
+			    autoCalcCollectorInputs: true // авторасчет входов коллектора
+			},
 			RefreshCollectorsCount: function () { },
 			ValidateCollectors: function(currentLevel, levels, collector, alertCallback, popupCallback) {},
 		};

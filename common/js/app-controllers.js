@@ -762,10 +762,10 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
 
     //$scope.ROOM = room;
 
-	$scope.AUTO_CALC_INPUT = false;
 	$scope.TITLE = collector.name;
 	$scope.COLLECTOR = collector;
 	$scope.LEVELS = Configurator.levels;
+	$scope.PROPERTIES = Configurator.properties;
 	$scope.PARAMS = Configurator.params.collector;
 	$scope.LINK_RETURN = '#/level/' + level.id;
 	$scope.LINK_NEXT = '#/boiler';
@@ -900,8 +900,10 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
     };
 
     $scope.AUTO_CALC_INPUTS = function () {
-        Configurator.RefreshCollectorsCount();
-        $scope.UPDATE_NODES();
+        if (PROPERTIES.autoCalcCollectorInputs) {
+            Configurator.RefreshCollectorsCount();
+            $scope.UPDATE_NODES();
+        }
     };
 
     $scope.UPDATE_NODES = function() {
