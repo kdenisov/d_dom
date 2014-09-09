@@ -15,6 +15,19 @@ appConfigurator.filter('ceilNumber', function () {
     }
 });
 
+appConfigurator.filter('formatDate', function() {
+    return function(date) {
+        var values = [date.getDate(), date.getMonth()];
+        var res = '';
+        for (var i in values) {
+            res += (values[i] > 9 ? values[i] : '0' + values[i]) + '.';
+        }
+
+        res += date.getFullYear();
+        return res;
+    };
+});
+
 appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderByFilter){
 	//Configurator = loadLocalStorage({key:'Configurator',val:Configurator});
 
@@ -1592,7 +1605,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
 });
 
 appConfigurator.controller('BaseCtrl', function($scope) {
-    $scope.BASE_PAGE = { title: 'Конфигуратор' };
+    $scope.BASE_PAGE = { title: 'Конфигуратор', sidebar: true };
 
     $scope.$on('$locationChangeSuccess', function (event, toUrl, fromUrl) {
         if (toUrl.indexOf('#/summary') >= 0) {
@@ -1603,7 +1616,83 @@ appConfigurator.controller('BaseCtrl', function($scope) {
             $('#basket').show();
         }
 
+        if (toUrl.indexOf('#/account') >= 0) {
+            $scope.BASE_PAGE.sidebar = false;
+        } else {
+            $scope.BASE_PAGE.sidebar = true;
+        }
+
     });
+});
+
+appConfigurator.directive('ngFocus', function () {
+    var FOCUS_CLASS = "ng-focused";
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, element, attrs, ctrl) {
+            ctrl.$focused = false;
+            element.bind('focus', function(evt) {
+                element.addClass(FOCUS_CLASS);
+                scope.$apply(function() { ctrl.$focused = true; });
+            }).bind('blur', function(evt) {
+                element.removeClass(FOCUS_CLASS);
+                scope.$apply(function() { ctrl.$focused = false; });
+            });
+        }
+    };
+});
+
+appConfigurator.controller('AccountCtrl', function ($scope, $stateParams) {
+    var tab = parseInt($stateParams.tab);
+    tab = isNaN(tab) || tab > 2 ? 1 : tab;
+
+    var OrderStatuses = { saved: 0, confirmed: 1 };
+
+    var OrderViewModel = function(id, date, rub, status) {
+        var $this = this;
+        $this.id = id;
+        $this.date = date;
+        $this.rub = rub;
+        $this.status = status;
+        return $this;
+    };
+
+    var ViewModel = function(tabNum) {
+        var $this = this;
+        $this.name = 'Иван Иванов';
+        $this.email = 'test@yandex.ru';
+        $this.phone = '+7 800 123 45 67';
+        $this.city = '';
+        $this.street = '';
+        $this.building = '';
+        $this.apartment = '';
+
+        $this.orders = [];
+
+        $this.activeTab = tabNum;
+
+        return $this;
+    };
+
+    var model = new ViewModel(tab);
+
+    //push test orders
+    for (var i = 0; i < 10; i++) {
+        var randomDate = new Date(Math.ceil(Math.random() * 2 + 2013), Math.floor(Math.random() * 12) + 1, Math.ceil(Math.random() * 27));
+        var randomStatus = Math.random() < 0.5 ? OrderStatuses.confirmed : OrderStatuses.saved;
+        model.orders.push(new OrderViewModel(i + 1, randomDate, '9 000 000', randomStatus));
+    }
+
+    $scope.STATUS = OrderStatuses;
+    $scope.MODEL = model;
+    $scope.FORM = {
+        invalid: function(ctrl) {
+            return ctrl.$dirty && ctrl.$invalid && !ctrl.$focused;
+        }
+    };
+
+    setCustomScroll();
 });
 
 function setCustomScroll() {
