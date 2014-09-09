@@ -224,6 +224,9 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 			levels: [],
 			collectors: [],
 			boiler: {},
+			properties: {
+			    autoCalcCollectorInputs: true // авторасчет входов коллектора
+			},
 			RefreshCollectorsCount: function () { },
 			ValidateCollectors: function(currentLevel, levels, collector, alertCallback, popupCallback) {},
 		};
@@ -797,6 +800,8 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 
     // @public автоконфигурирование коллекторов радиаторов и теплых полов
 	Cfg.RefreshCollectorsCount = function () {
+
+	    Cfg.properties.autoCalcCollectorInputs = true;
 
 	    refreshCollectorsCount();
 

@@ -9,7 +9,7 @@
             <!-- ng-if="!(COLLECTOR.id == 1 + COTTAGE.levelsCount > 1)" -->
         </label>
         <div class="hidden-{{!COLLECTOR.isCollector}}">
-            <a ng-href="#/collector/{{CURRENT_LEVEL.id}}/{{COLLECTOR.id}}"><img src="common/img/collector_small_{{COLLECTOR.type}}.jpg" alt=""></a>
+            <a ng-href="#/collector/{{MODEL.level.id}}/{{COLLECTOR.id}}"><img src="common/img/collector_small_{{COLLECTOR.type}}.jpg" alt=""></a>
             К этому коллектору подключены
             <!-- <div class="choicebox hidden-{{!BOILER.isBoiler}}">
                 <label ng-repeat="LEVEL in LEVELS" class="choicebox-{{LEVEL.id == COLLECTOR.level}} hidden-{{!LEVEL.isLevel}}">{{LEVEL.name}} <input type="radio" name="boiler_level" value="{{LEVEL.id}}" ng-model="COLLECTOR.level" ng-change="validateCollectors(CURRENT_LEVEL.id, COLLECTOR.level, COLLECTOR.id)"></label>
