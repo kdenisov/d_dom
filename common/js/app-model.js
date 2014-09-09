@@ -801,6 +801,8 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
     // @public автоконфигурирование коллекторов радиаторов и теплых полов
 	Cfg.RefreshCollectorsCount = function () {
 
+	    Cfg.properties.autoCalcCollectorInputs = true;
+
 	    refreshCollectorsCount();
 
 	    refreshRadiatorCollectorsCount();
