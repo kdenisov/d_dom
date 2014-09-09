@@ -2640,7 +2640,7 @@ table.summary-merchandise .rub {
     width: 22px;
     height: 22px;
     margin-bottom: -4px;
-    background-image: url('../img/summary/icon-next.png');
+    background-image: url('../img/icon-next.png');
     background-position: center center;
 }
 
@@ -2648,6 +2648,206 @@ table.summary-merchandise .rub {
     clear: both;
     height: 90px;
 }
+
+/*ACCOUNT*/
+.account-page {
+    background-color: #e6e6e6;
+    margin-left: -310px;
+    width: 100%;
+}
+.account-layout {
+    width: 890px;
+    margin: 0 auto;
+}
+
+.account-page h1 {
+    margin: 0;
+    padding: 35px;
+}
+
+.account-tabs {
+    background-color: #f9f9f9;
+}
+
+.account-tabs > .tab-items {
+    float: left;
+    width: 100%;
+    border-bottom: 1px solid #e2e3e3;
+}
+.account-tabs > .tab-items > * {
+    float: left;
+    padding: 35px;
+    margin: 0 0 -1px 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: #a0a0a0;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid #f9f9f9;
+    border-bottom: 1px solid #e2e3e3;
+    border-top: solid 3px #f9f9f9;
+}
+.account-tabs > .tab-items > .active {
+    margin-left: -1px;
+    color: black;
+    background-color: white;
+    border: 1px solid #e2e3e3;
+    border-top: 3px solid #00b06a;
+    border-bottom: 1px solid white;
+    cursor: default;
+}
+
+.account-profile, .account-orders {
+    background-color: white;
+    clear: both;
+    padding: 0 0 35px;
+    display: none;
+}
+.account-profile.ng-show, .account-orders.ng-show {
+    display: block;
+}
+.account-profile > * {
+    display: block;
+    padding: 10px 35px;
+}
+
+.account-profile > h2 {
+    padding-top: 35px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #e2e3e3;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.account-profile > label {
+}
+
+.account-profile > label > span {
+    float: left;
+    width: 218px;
+    padding: 14px 30px 14px 0;
+    color: #9f9f9f;
+    text-align: right;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14px;
+}
+.account-profile input {
+    width: 290px;
+    padding: 13px;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.account-profile .account-submit {
+    margin-top: 35px;
+    padding-top: 35px;
+    border-top: 1px solid #e2e3e3;
+    text-align: center;
+}
+
+.account-profile input[type=submit] {
+    padding: 20px 0px;
+    width: 240px;
+    font-size: 16px;
+    background-color: #00b06a;
+    color: white;
+    font-weight: bold;
+    border: none;
+}
+
+.account-profile .validation-message {
+    padding: 10px 35px 10px 285px; 
+}
+
+.account-orders table {
+    width: 100%;
+}
+
+.account-orders tr.account-orders-header {
+    font-weight: bold;
+    text-transform: uppercase;
+    border-top: none;
+}
+
+.account-orders tr {
+    border-top: 1px solid #e2e3e3;
+}
+.account-orders td {
+    height: 87px;
+    vertical-align: middle;
+}
+
+.account-orders td.name {
+    padding-left: 35px;
+}
+.account-orders .account-orders-header td.name {
+    height: auto;
+    padding: 50px 0 20px 35px;
+}
+.account-orders td.date {
+    text-align: center;
+}
+.account-orders td.price {
+    text-align: right;
+}
+.account-orders td.buttons {
+    width: 154px;
+    text-align: center;
+}
+
+.account-orders td.buttons button {
+    width: 57px;
+    height: 39px;
+    border: none;
+    background-color: transparent;
+    background-image: url('../img/account/buttons.png');
+    background-repeat: no-repeat;
+}
+
+.account-orders td.buttons .edit {
+    background-position: 0 0;
+}
+
+.account-orders td.buttons .delete {
+    background-position: -57px 0;
+}
+
+.account-orders td.buttons .review {
+    background-position: -114px 0;
+}
+
+.account-orders .no-orders {
+    padding-top: 150px;
+    text-align: center;
+    clear: both;
+}
+
+.account-orders .no-orders h2 {
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
+.account-orders .no-orders-link {
+    display: block;
+    margin-top: 150px;
+    padding-top: 35px;
+    border-top: #e2e3e3 1px solid;
+    border-bottom: none;
+}
+
+.account-orders .no-orders-link .icon-next {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    margin-bottom: -6px;
+    margin-left: 6px;
+    background-image: url('../img/account/icon-next.png');
+    background-position: center center;
+}
+
+
 /* ======== */
 /* Content */
 

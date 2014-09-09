@@ -552,6 +552,7 @@
     var scheme = {
         levels: Cfg.levels,
         boilers: Cfg.boilers,
+        currentLevelId: 1,
 
         levelSwitched: function(level) {
             console.log('level ' + level);
@@ -574,6 +575,18 @@
 
         roomClicked: function(levelId, roomId) {
             console.log('clicked room ' + roomId + ' on level ' + levelId);
+        },
+
+        addRoom: function(levelId, roomId) {
+            console.log('attempt to ENABLE room ' + roomId + ' on level ' + levelId);
+        },
+
+        removeRoom: function (levelId, roomId) {
+            console.log('attempt to DISABLE room ' + roomId + ' on level ' + levelId);
+        },
+
+        renameRoom: function (levelId, roomId, newName) {
+            console.log('attempt to change the name of the room ' + roomId + ' on level ' + levelId + ' to "' + newName + '"');
         },
     };
 

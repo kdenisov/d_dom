@@ -53,10 +53,10 @@
                     <a ui-sref-active="active" ui-sref="cottage" title="Сбросить параметры" class="reset"></a>
                 </div>
             </div>
-            <div id="sidebar-content">
+            <div id="sidebar-content" ng-if="BASE_PAGE.sidebar">
                 <h2><span>{{BASE_PAGE.title}}</span></h2>
                 <div id="sidebar-view" ui-view="sidebar">
-	        
+
                 </div>
             </div><!-- #sidebar-content -->
         </div><!-- #sidebar -->
