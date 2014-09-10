@@ -1606,8 +1606,110 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
     setCustomScroll();
 });
 
-appConfigurator.controller('BaseCtrl', function($scope) {
+appConfigurator.controller('AuthenticateModalCtrl', function ($scope, $modalInstance) {
+    var form = {
+        phone: '',
+        email: '',
+        rulesAccepted: false,
+        submitted: false,
+        valid: true,
+        validate: function (formCtrl) {
+            form.valid = !form.submitted || form.phone != '' || (form.email != '' && !form.email.$error.email);
+            return form.valid && form.rulesAccepted;
+        },
+        submit: function (formCtrl) {
+            form.submitted = true;
+            if (form.validate(formCtrl)) {
+                var authenticated = true; //todo some authentication code here
+                $modalInstance.close(authenticated);
+            }
+        },
+        dismiss: function () {
+            $modalInstance.dismiss('cancel');
+        }
+    };
+
+    $scope.FORM = form;
+});
+
+appConfigurator.controller('SaveModalCtrl', function ($scope, $modalInstance) {
+    var previouslySaved = ['123', '456', '789'];
+    //var previouslySaved = [];
+    var form = {
+        createId: '000', //initialize with some default value
+        replaceId: previouslySaved.length > 0 ? previouslySaved[0] : '', //replace first by default
+        orders: previouslySaved, //ids of previously saved items for current account 
+        submitted: false,
+        valid: true,
+        useCreateId: previouslySaved.length == 0,
+        duplicateId: false,
+        saved: false,
+        validate: function (formCtrl) {
+            form.duplicateId = form.submitted && form.useCreateId && $.inArray(form.createId, form.orders) > -1;
+            form.valid = !form.submitted || !form.useCreateId || form.createId != '';
+            return form.valid && !form.duplicateId;
+        },
+        submit: function (formCtrl) {
+            form.submitted = true;
+            if (form.validate(formCtrl)) {
+                //todo save data here with form.createId or replace with form.replaceId
+                form.saved = true;
+            }
+        },
+        dismiss: function () {
+            $modalInstance.dismiss('cancel');
+        }
+    };
+
+    $scope.FORM = form;
+});
+
+appConfigurator.controller('BaseCtrl', function($scope, $modal) {
     $scope.BASE_PAGE = { title: 'Конфигуратор', sidebar: true };
+
+    var save = function() {
+        var saveModal = $modal.open({
+            templateUrl: 'common/views/modal-save.htm',
+            controller: 'SaveModalCtrl',
+            size: 'sm',
+        });
+
+        saveModal.result.then(
+            function() {
+                //close it
+            },
+            function() {
+                //just close it
+            });
+    };
+
+    var authenticateAndSave = function() {
+        var authModal = $modal.open({
+            templateUrl: 'common/views/modal-save-authenticate.htm',
+            controller: 'AuthenticateModalCtrl',
+            size: 'sm',
+        });
+
+        authModal.result.then(
+            function(authenticationComplete) {
+                if (authenticationComplete) {
+                    save();
+                }
+            },
+            function() {
+                //just close it
+            });
+    };
+
+    var authenticated = false;
+    $scope.SAVE = function() {
+        if (!authenticated) {
+            authenticateAndSave();
+            return;
+        }
+
+        save();
+    };
 
     $scope.$on('$locationChangeSuccess', function (event, toUrl, fromUrl) {
         if (toUrl.indexOf('#/summary') >= 0) {

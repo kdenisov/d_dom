@@ -136,6 +136,9 @@ body {
 	overflow-y: hidden;
 }
 
+.text-center {
+    text-align: center;
+}
 
 
 /* ======= */
@@ -2970,4 +2973,82 @@ text-align: left;
     padding-top: 0px;
     color:#E93C36;
     margin-top:-6px;
+}
+
+.save-options, #authenticate-config .modal-body {
+    padding: 35px !important;
+}
+
+.save-options .save-options-desc {
+    margin-bottom: 35px;
+}
+
+.save-options label {
+    display: block;
+    padding: 5px 0;
+    line-height: 23px;
+    vertical-align: middle;
+}
+
+.save-options label input {
+    display: none;
+}
+
+.save-options label .tick {
+    display: inline-block;
+    width: 23px;
+    height: 23px;
+    margin-bottom: -6px;
+    background-image: url('../img/radio.png');
+    background-repeat: no-repeat;
+    background-position: top left;
+}
+
+.save-options label .tick.checked {
+    background-position: bottom left;
+}
+
+.save-options input.new-item-name,
+#authenticate-config input.contact-field {
+    display: block;
+    width: 410px;
+    padding: 5px 10px;
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.save-options .notice {
+    margin-top: 50px;
+}
+
+#save-config .modal-footer, #authenticate-config .modal-footer {
+    background-color: #f4f4f4;
+}
+
+#save-config .button, #authenticate-config .button {
+    border: 1px solid #d2d2d2;
+    line-height: 35px;
+    font-size: 12px;
+    color: black !important;
+    background-color: transparent;
+}
+
+#save-config .button.button-next, #authenticate-config .button.button-next {
+    border: 1px solid #00b06a;
+    color: white !important;
+    background-color: #00b06a;
+}
+
+#authenticate-config .button.button-next {
+    margin: 10px 0;
+}
+
+.validation-text {
+    color: red !important;
+}
+
+input.validation-field {
+    color: red !important;
+    border: 1px solid red;
+    background-color: #fcf7f7;
 }
