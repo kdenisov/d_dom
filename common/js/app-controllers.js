@@ -1092,6 +1092,15 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 	}
 });
 
+appConfigurator.controller('RestoreCtrl', function ($scope, $filter, $stateParams, $sce, $timeout, Configurator, Catalog, CurrentUser) {
+    var idLoad = parseInt($stateParams.idLoad);
+    if (!isNaN(idLoad)) {
+        Configurator.restoreConfiguration(idLoad, function () {
+            $scope.$apply(function() {$location.path("/summary");});
+        });
+    }
+
+});
 appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParams, $sce, $timeout, Configurator, Catalog, CurrentUser) {
     var page = parseInt($stateParams.page);
     page = isNaN(page) || page > 5 ? 1 : page;
@@ -1167,7 +1176,6 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
     $scope.SAVE_CONFIGURATION = function () {
         CurrentUser.isGuidExistsInDB().then(
             function (user) { // success
-                Console.log(user);
                 Configurator.saveConfiguration();
             },
             function (msg) { // failure
@@ -1606,7 +1614,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
     setCustomScroll();
 });
 
-appConfigurator.controller('AuthenticateModalCtrl', function ($scope, $modalInstance) {
+appConfigurator.controller('AuthenticateModalCtrl', function ($scope, $modalInstance, CurrentUser, Configurator) {
     var form = {
         phone: '',
         email: '',
@@ -1632,28 +1640,32 @@ appConfigurator.controller('AuthenticateModalCtrl', function ($scope, $modalInst
     $scope.FORM = form;
 });
 
-appConfigurator.controller('SaveModalCtrl', function ($scope, $modalInstance) {
-    var previouslySaved = ['123', '456', '789'];
-    //var previouslySaved = [];
+appConfigurator.controller('SaveModalCtrl', function ($scope, $modalInstance, CurrentUser, Configurator) {
+
+    $scope.CONFIGURATION_NAME = Configurator.name;
+
     var form = {
-        createId: '000', //initialize with some default value
-        replaceId: previouslySaved.length > 0 ? previouslySaved[0] : '', //replace first by default
-        orders: previouslySaved, //ids of previously saved items for current account 
+        createId: Configurator.name, //initialize with some default value
         submitted: false,
         valid: true,
-        useCreateId: previouslySaved.length == 0,
+        errorMessage:"",
         duplicateId: false,
         saved: false,
         validate: function (formCtrl) {
-            form.duplicateId = form.submitted && form.useCreateId && $.inArray(form.createId, form.orders) > -1;
-            form.valid = !form.submitted || !form.useCreateId || form.createId != '';
-            return form.valid && !form.duplicateId;
+            /*form.duplicateId = form.submitted && form.useCreateId && $.inArray(form.createId, form.orders) > -1;*/ // - эта проверка будет на сервере
+            form.valid = !form.submitted || !Configurator.name || Configurator.name != '';
+            return form.valid;
         },
         submit: function (formCtrl) {
             form.submitted = true;
             if (form.validate(formCtrl)) {
                 //todo save data here with form.createId or replace with form.replaceId
-                form.saved = true;
+                Configurator.saveConfiguration(function (message) {
+                    form.saved = true;
+                }, function (message) {
+                    form.errorMessage = message;
+                    form.saved = false;
+                });
             }
         },
         dismiss: function () {
@@ -1664,7 +1676,7 @@ appConfigurator.controller('SaveModalCtrl', function ($scope, $modalInstance) {
     $scope.FORM = form;
 });
 
-appConfigurator.controller('BaseCtrl', function($scope, $modal) {
+appConfigurator.controller('BaseCtrl', function($scope, $modal, CurrentUser, Configurator) {
     $scope.BASE_PAGE = { title: 'Конфигуратор', sidebar: true };
 
     var save = function() {
@@ -1702,13 +1714,11 @@ appConfigurator.controller('BaseCtrl', function($scope, $modal) {
     };
 
     var authenticated = false;
-    $scope.SAVE = function() {
-        if (!authenticated) {
-            authenticateAndSave();
-            return;
-        }
-
-        save();
+    $scope.SAVE = function () {
+        CurrentUser.isGuidExistsInDB().then(
+            function () { save(); }
+          , function () { authenticateAndSave(); }
+        );
     };
 
     $scope.$on('$locationChangeSuccess', function (event, toUrl, fromUrl) {

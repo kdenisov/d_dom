@@ -5,6 +5,7 @@ var appConfigurator = angular.module('appConfigurator', ['ngSanitize', 'ui.route
 appConfigurator.constant('appConfig', {
       appPath: "../" // = "http://dom.danfoss.ru"
     , DanfossAuthorisationID: "DanfossCottageAuthorisationID"
+    , DanfossAuthorisationCookieName: ".d-auth"
 });
 
 appConfigurator.service('StorageManager', function(){
@@ -34,6 +35,18 @@ appConfigurator.service('StorageManager', function(){
         return obj.val;
     }
 
+    Storage.saveCookie = function (obj) {
+        obj.val = obj.val != null ? encodeURIComponent(obj.val) : '';
+        var updatedCookie = obj.key + "=" + obj.val;
+        document.cookie = updatedCookie;
+    }
+
+    Storage.loadCookie = function (key) {
+        var matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + key.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : null;
+    }
     return Storage;
 });
 
@@ -43,9 +56,9 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
     // аксессры к гуиду пользователя (хранится в локальном хранилище)
     var _userGUID = function (guid) {
         if (typeof guid === 'undefined')
-            return StorageManager.loadLocalStorage({ key: appConfig.DanfossAuthorisationID });
+            return StorageManager.loadCookie(appConfig.DanfossAuthorisationCookieName);
         else
-            StorageManager.saveLocalStorage({ key: appConfig.DanfossAuthorisationID, val: guid });
+            StorageManager.saveCookie({ key: appConfig.DanfossAuthorisationCookieName, val: guid });
     }
 
     // генератор частей гуида
@@ -81,9 +94,8 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
                 deferred.resolve(_currentUser);
 
             $http({
-                url: appConfig.appPath + "/JsonOperations/GetUser?jsonp=JSON_CALLBACK",
+                url: appConfig.appPath + "/JsonOperations/GetCurrentUser?jsonp=JSON_CALLBACK",
                 method: "POST",
-                data: { guid: _userGUID() },
                 headers: { 'Content-Type': 'application/json' }
             })
 			.success(function (data) {
@@ -96,11 +108,12 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
 			    }
 			})
 			.error(function (data) {
-			    deferred.reject("Ошибка получения пользователя по GUID");
+			    deferred.reject("Пользователь не авторизован");
 			});
 
             return deferred.promise;
         },
+
         // Сгенерировать PIN по телефону или email
         GetPIN: function (phoneOrEmail) {
             var deferred = $q.defer();
@@ -110,7 +123,7 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
 			    deferred.resolve(data);
 			})
 			.error(function (data) {
-			    deferred.resolve("Ошибка отправки PIN кода");
+			    deferred.reject("Ошибка отправки PIN кода");
 			});
 
             return deferred.promise;
@@ -126,11 +139,11 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
 			        _userGUID(data.Guid);
 			        deferred.resolve(data);
 			    } else {
-			        deferred.resolve(_getMessage(data));
+			        deferred.reject(_getMessage(data));
 			    }
 			})
 			.error(function (data) {
-			    deferred.resolve("Ошибка при входе");
+			    deferred.reject("Ошибка при входе");
 			});
 
             return deferred.promise;
@@ -164,16 +177,16 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
         LoadConfiguration: function () {
             var deferred = $q.defer();
 
-            $http.jsonp(appConfig.appPath + "/JsonOperations/GetLastConfiguration?jsonp=JSON_CALLBACK", { guid: _userGUID() })
+            $http.jsonp(appConfig.appPath + "/JsonOperations/GetLastConfiguration?jsonp=JSON_CALLBACK")
 			.success(function (data) {
 			    if (_isSuccessResult(data)) {
 			        deferred.resolve(JSON.parse(data));
 			    } else {
-			        deferred.resolve(_getMessage(data));
+			        deferred.reject(_getMessage(data));
 			    }
 			})
 			.error(function (data) {
-			    deferred.resolve("Ошибка при загрузке конфигурации");
+			    deferred.reject("Ошибка при загрузке конфигурации");
 			});
 
             return deferred.promise;
@@ -182,7 +195,12 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
         SaveConfiguration: function (name, configuration) {
             var deferred = $q.defer();
 
-            $http.jsonp(appConfig.appPath + "/JsonOperations/SaveConfiguration?jsonp=JSON_CALLBACK", { guid: _userGUID(), configuration: configuration, name: name })
+            $http({
+                url: appConfig.appPath + "/JsonOperations/SaveConfiguration?jsonp=JSON_CALLBACK",
+                method: "POST",
+                data: { configuration: configuration, name: name },
+                headers: { 'Content-Type': 'application/json' }
+            })
 			.success(function (data) {
 			    if (_isSuccessResult(data)) {
 			        deferred.resolve("Конфигурация сохранена успешно");
@@ -1234,7 +1252,9 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 	    }
 	    return obj1;
 	}
-	Cfg.saveConfiguration = function () {
+
+    // Метод сохраняющий конфигурацию авторизованного пользователя
+	Cfg.saveConfiguration = function (successCallback, failCallback) {
 	    var savedObj = {
 	        cottage: Cfg.cottage,
 	        levels: Cfg.levels,
@@ -1243,20 +1263,55 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
             name: Cfg.name
 	    }
 
-	    StorageManager.saveLocalStorage({ key: "Danfoss.LastConfiguration", val: savedObj });
+	    if (typeof successCallback === 'undefined') {
+	        successCallback = function () { };
+	    }
 
-	    return JSON.stringify(savedObj);
+	    if (typeof failCallback === 'undefined') {
+	        failCallback = function () { };
+	    }
+        // В любом случае сохраняем в localStorage
+	    StorageManager.saveLocalStorage({ key: "Danfoss.LastConfiguration", val: savedObj });
+	    // если пользователь залогинен
+	    CurrentUser.isGuidExistsInDB().then(
+            function () {
+	            // сохраняем на сервере
+	            CurrentUser.SaveConfiguration(Cfg.name, JSON.stringify(savedObj)).then(function (res) {
+	                successCallback(res);
+	            }, function (res) {
+	                failCallback(res);
+	            });
+            },
+            function ()
+	        {
+	            successCallback();
+	        });
 	}
 
-	Cfg.restoreConfiguration = function () {
-	    var restoredCfg = StorageManager.loadLocalStorage({ key: "Danfoss.LastConfiguration", val: null });
-	    if (restoredCfg) {
-	        Cfg.name = restoredCfg.name;
-	        merge(Cfg.cottage, restoredCfg.cottage);
-	        merge(Cfg.levels, restoredCfg.levels);
-	        merge(Cfg.collectors, restoredCfg.collectors);
-	        merge(Cfg.boiler, restoredCfg.boiler);
+    // Восстанавливает конфигурацию по Id
+	Cfg.restoreConfiguration = function (id, callback) {
+	    var restoredCfg = null;
+
+	    if (typeof callback === 'undefined') {
+	        callback = function () { };
 	    }
+
+	    // если Id не задан то пытаемся из localStorage
+        if (typeof id === 'undefined')
+            var restoredCfg = StorageManager.loadLocalStorage({ key: "Danfoss.LastConfiguration", val: null });
+        // если не получилось или задан какой-то конкретный идентификатор, то достаем его
+        if (restoredCfg === null) {
+            CurrentUser.isGuidExistsInDB().then(
+                function() {
+                    CurrentUser.LoadConfiguration(id).then(function (r) {
+                        Cfg.restoreJsonConfiguration(r);
+                        callback();
+                    });
+                });
+        } else {
+            Cfg.restoreJsonConfiguration(restoredCfg)
+            callback();
+        }
 	}
 
 	Cfg.generateConfigurationName = function () {
@@ -1284,6 +1339,9 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
     updateCottageConfiguration();
 
     Cfg.name = Cfg.generateConfigurationName();
+
+    // при старте пытаемся достать последнюю конфигурацию с которой работали
+    Cfg.restoreConfiguration();
 
 	return Cfg;
 });
