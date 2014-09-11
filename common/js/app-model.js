@@ -1,4 +1,4 @@
-'use strict';
+'use strict'; 
  
 var appConfigurator = angular.module('appConfigurator', ['ngSanitize', 'ui.router', 'tabs', 'ui.slider', 'ui.bootstrap', 'ngAnimate']);
 
