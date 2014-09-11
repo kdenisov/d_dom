@@ -4,7 +4,7 @@
             Сохранить расчет
         </div>
     </div>
-    <div class="modal-body save-options" ng-if="!FORM.saved && FORM.orders.length > 0">
+    <!--<div class="modal-body save-options" ng-if="!FORM.saved">
         <div class="save-options-desc">Выберите вариант сохранения текущей конфигурации.</div>
         <label ng-repeat="option in FORM.orders"><input type="radio" ng-model="FORM.replaceId" name="replaceId" ng-value="option" ng-change="FORM.useCreateId = false;"/><i class="tick" ng-class="{'checked':FORM.replaceId == option}"></i> Заменить расчет № {{option}}</label>
         <label ng-click="FORM.useCreateId = true;"><input type="checkbox" ng-model="FORM.useCreateId" name="useCreateId" ng-change="FORM.replaceId = '';"/><i class="tick" ng-class="{'checked':FORM.useCreateId}"></i> Сохранить как новый расчет</label>
@@ -14,18 +14,24 @@
         <div class="validation-text" ng-if="!FORM.valid">
             Необходимо указать имя проекта.
         </div>
-        <input class="new-item-name" ng-show="FORM.useCreateId" type="text" ng-model="FORM.createId" name="createId" ng-class="{'validation-field': FORM.duplicateId || !FORM.valid}" />
-    </div>
-    <div class="modal-body save-options" ng-if="!FORM.saved && FORM.orders.length == 0">
+        <div class="validation-text" ng-if="FORM.errorMessage != ''">
+            {{FORM.errorMessage}}
+        </div>
+        <input class="new-item-name" type="text" ng-model="CONFIGURATION_NAME" name="CONFIGURATION_NAME" ng-class="{'validation-field': !FORM.valid}" />
+    </div>-->
+    <div class="modal-body save-options" ng-if="!FORM.saved">
         <div>Вы можете воспользоваться нумерацией по умолчанию или указать свое название для проекта.</div>
         <div class="validation-text" ng-if="!FORM.valid">
             Необходимо указать имя проекта.
         </div>
-        <input class="new-item-name" ng-model="FORM.createId" name="createId" type="text" ng-class="{'validation-field': !FORM.valid}" />
+        <div class="validation-text" ng-if="FORM.errorMessage != ''">
+            {{FORM.errorMessage}}
+        </div>
+        <input class="new-item-name" ng-model="CONFIGURATION_NAME" name="CONFIGURATION_NAME" type="text" ng-class="{'validation-field': !FORM.valid}" />
         <div class="notice">Расчет сохраняется в закладку "Мои заказы" личного кабинета.</div>
     </div>
     <div class="modal-body" ng-if="FORM.saved">
-        Расчет №{{FORM.useCreateId ? FORM.createId : FORM.replaceId}} успешно сохранен.<br>
+        Расчет №{{CONFIGURATION_NAME}} успешно сохранен.<br>
         Цена оборудования сохранена в Евро и будет пересчитана по курсу валюты ЦБ на день повторного открытия расчета
     </div>
     <div class="modal-footer" ng-if="!FORM.saved">

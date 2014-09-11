@@ -1662,6 +1662,7 @@ appConfigurator.controller('SaveModalCtrl', function ($scope, $modalInstance, Cu
                 //todo save data here with form.createId or replace with form.replaceId
                 Configurator.saveConfiguration(function (message) {
                     form.saved = true;
+                    Configurator.ReInitConfigurator();
                 }, function (message) {
                     form.errorMessage = message;
                     form.saved = false;

@@ -205,7 +205,7 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
 			    if (_isSuccessResult(data)) {
 			        deferred.resolve("Конфигурация сохранена успешно");
 			    } else {
-			        deferred.reject("Ошибка при сохранении конфигурации. " + _getMessage(data));
+			        deferred.reject(_getMessage(data));
 			    }
 			})
 			.error(function (data) {
@@ -810,7 +810,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 	initParams();
 	var boiler = initBoiler();
 	initLevels(boiler);
-	//initCollectors();
+    //initCollectors();
 
 	Cfg.SetBoilerRoom = function () {
 	    setBoilerRoom();
@@ -1334,6 +1334,25 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 	    merge(Cfg.levels, restoredCfg.levels);
 	    merge(Cfg.collectors, restoredCfg.collectors);
 	    merge(Cfg.boiler, restoredCfg.boiler);
+	}
+
+	Cfg.ReInitConfigurator = function () {
+
+	    Cfg.cottage = {
+	        area: 160,
+	        levelsCount: 2
+	    };
+	    Cfg.levels = [];
+	    Cfg.collectors = [];
+	    Cfg.boiler = {};
+	    Cfg.properties = {
+	        autoCalcCollectorInputs: true // авторасчет входов коллектора
+	    };
+
+	    boiler = initBoiler();
+	    initLevels(boiler);
+	    Cfg.name = Cfg.generateConfigurationName();
+	    updateCottageConfiguration();
 	}
 
     updateCottageConfiguration();
