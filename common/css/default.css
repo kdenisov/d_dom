@@ -577,7 +577,7 @@ label.tab-item-add {
 	top: 57px;
 	left: 0;
 	content: '';
-	background: url('../img/house/house.png') no-repeat 28px 0;
+	background: no-repeat 28px 0;
 }
 /*.cottage-size-1s:after {
 	background-image: url('../img/house/1s.png');	
