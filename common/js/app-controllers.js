@@ -191,77 +191,32 @@ appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configura
     setCustomScroll();
 });
 
-appConfigurator
-    .service('levelsService', function(Configurator, $stateParams) {
-        var $this = this;
-        $this.levels = Configurator.levels;
-        $this.boiler = Configurator.boiler;
-        $this.level = this.levels[$stateParams.levelId - 1];
+appConfigurator.service('levelsService', function(Configurator, $stateParams) {
+    var $this = this;
+    $this.levels = Configurator.levels;
+    $this.boiler = Configurator.boiler;
+    $this.level = this.levels[$stateParams.levelId - 1];
+    $this.collectors = $this.level.collectors;
+
+    $this.setLevel = function(id) {
+        $this.level = $this.levels[id - 1];
         $this.collectors = $this.level.collectors;
-
-        $this.setLevel = function(id) {
-            $this.level = $this.levels[id - 1];
-            $this.collectors = $this.level.collectors;
-        };
+    };
 
 
-        $this.hoverRoomId = 0;
-        $this.setHoverRoomId = function (id) {
-            id = isNaN(id) || id == undefined ? 0 : id;
-            $this.hoverRoomId = id;
-        };
-    });
+    $this.hoverRoomId = 0;
+    $this.setHoverRoomId = function(id) {
+        id = isNaN(id) || id == undefined ? 0 : id;
+        $this.hoverRoomId = id;
+    };
+});
 
 appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsService, $stateParams, $modal, $location) {
 
     $scope.COTTAGE = Configurator.cottage;
     $scope.MODEL = levelsService;
-
-	$scope.EDITED_COLLECTOR = null;
-
-    $scope.ALERT = function(alert) {
-        $scope.ALERT_MESSAGE = alert;
-
-        $scope.alertInstance = $modal.open({
-            templateUrl: 'alert.html',
-            size: 'sm',
-            scope: $scope
-        });
-    };
-
-    $scope.CLOSE_ALERT = function() {
-        $scope.alertInstance.close();
-    };
-
-    $scope.validateCollectors = function (current_level, collector_levels, collector) {
-        Configurator.ValidateCollectors(current_level, collector_levels, collector, $scope.ALERT, function (currentCollector) {
-            $scope.EDITED_COLLECTOR = currentCollector;
-
-            $scope.modalInstance = $modal.open({
-                templateUrl: 'set-dest-collector.html',
-                size: 'sm',
-                controller: 'SetCollectorDialogCtrl',
-                resolve: {
-                    EDITED_COLLECTOR: function () {
-                        return $scope.EDITED_COLLECTOR;
-                    }
-                }
-            });
-
-            $scope.modalInstance.result.then(function (res) {
-                if (res == false) {
-                    currentCollector.isCollector = true;
-                } else {
-                    currentCollector.entries = 0;
-                }
-                $scope.EDITED_COLLECTOR = null;
-            }, function () { currentCollector.isCollector = true; });
-        });
-    };
-
-    $scope.refreshRadiatorCollectorsCount = function() {
-        Configurator.RefreshCollectorsCount();
-    };
+    var currentLevelId = parseInt($stateParams.levelId);
+    currentLevelId = isNaN(currentLevelId) ? 1 : currentLevelId;
 
     //rooms equipment
     var getEquipment = function(Configurator) {
@@ -368,17 +323,17 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
         scope.$apply(action);
     };
 
-    levelsModule.buildLevels('#levels', {
+    window.levelsModule.buildLevels('#levels', {
         levels: levelsService.levels,
         boilers: levelsService.boiler,
-        currentLevelId: levelsService.level.id,
+        currentLevelId: currentLevelId,
         roomMouseEnter: function(levelId, roomId) {
             $scope.$apply(levelsService.setHoverRoomId(roomId));
         },
         roomMouseLeave: function(levelId, roomId) {
             $scope.$apply(levelsService.setHoverRoomId(0));
         },
-        levelSwitched: function (levelId) {
+        levelSwitched: function(levelId) {
             var action = function() { levelsService.setLevel(levelId); };
             $scope.$apply(action);
             applyToSidebarScope(action);
@@ -394,10 +349,69 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
         },
         roomRemoved: function(levelId, roomId) {
             levelsService.level.rooms[roomId - 1].isRoom = false;
-        }
+        },
+        addRoom: function(levelId, roomId) {
+            console.log('attempt to ENABLE room ' + roomId + ' on level ' + levelId);
+        },
+        removeRoom: function(levelId, roomId) {
+            console.log('attempt to DISABLE room ' + roomId + ' on level ' + levelId);
+        },
+        renameRoom: function(levelId, roomId, newName) {
+            console.log('attempt to change the name of the room ' + roomId + ' on level ' + levelId + ' to "' + newName + '"');
+        },
     });
 
     //setCustomScroll();
+});
+
+appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams, Configurator, levelsService) {
+    $scope.MODEL = levelsService;
+
+    $scope.EDITED_COLLECTOR = null;
+
+    $scope.ALERT = function (alert) {
+        $scope.ALERT_MESSAGE = alert;
+
+        $scope.alertInstance = $modal.open({
+            templateUrl: 'alert.html',
+            size: 'sm',
+            scope: $scope
+        });
+    };
+
+    $scope.CLOSE_ALERT = function () {
+        $scope.alertInstance.close();
+    };
+
+    $scope.validateCollectors = function (current_level, collector_levels, collector) {
+        Configurator.ValidateCollectors(current_level, collector_levels, collector, $scope.ALERT, function (currentCollector) {
+            $scope.EDITED_COLLECTOR = currentCollector;
+
+            $scope.modalInstance = $modal.open({
+                templateUrl: 'set-dest-collector.html',
+                size: 'sm',
+                controller: 'SetCollectorDialogCtrl',
+                resolve: {
+                    EDITED_COLLECTOR: function () {
+                        return $scope.EDITED_COLLECTOR;
+                    }
+                }
+            });
+
+            $scope.modalInstance.result.then(function (res) {
+                if (res == false) {
+                    currentCollector.isCollector = true;
+                } else {
+                    currentCollector.entries = 0;
+                }
+                $scope.EDITED_COLLECTOR = null;
+            }, function () { currentCollector.isCollector = true; });
+        });
+    };
+
+    $scope.refreshRadiatorCollectorsCount = function () {
+        Configurator.RefreshCollectorsCount();
+    };
 });
 
 appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, $modal, $location) {
@@ -1678,7 +1692,7 @@ appConfigurator.controller('SaveModalCtrl', function ($scope, $modalInstance, Cu
 });
 
 appConfigurator.controller('BaseCtrl', function($scope, $modal, CurrentUser, Configurator) {
-    $scope.BASE_PAGE = { title: 'Конфигуратор', sidebar: true };
+    $scope.BASE_PAGE = { title: 'Конфигуратор' };
 
     var save = function() {
         var saveModal = $modal.open({
@@ -1714,7 +1728,6 @@ appConfigurator.controller('BaseCtrl', function($scope, $modal, CurrentUser, Con
             });
     };
 
-    var authenticated = false;
     $scope.SAVE = function () {
         CurrentUser.isGuidExistsInDB().then(
             function () { save(); }
@@ -1730,13 +1743,6 @@ appConfigurator.controller('BaseCtrl', function($scope, $modal, CurrentUser, Con
             $scope.BASE_PAGE.title = 'Конфигуратор';
             $('#basket').show();
         }
-
-        if (toUrl.indexOf('#/account') >= 0) {
-            $scope.BASE_PAGE.sidebar = false;
-        } else {
-            $scope.BASE_PAGE.sidebar = true;
-        }
-
     });
 });
 

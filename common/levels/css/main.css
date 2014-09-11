@@ -8,201 +8,32 @@
 @font-face {
   font-family: 'gotham_promedium';
   src: local(gotham_promedium), url("fonts/gothapromed-webfont.eot");
-  src: local(gotham_promedium), url("fonts/gothapromed-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/gothapromed-webfont.woff") format("woff"), url("fonts/gothapromed-webfont.ttf") format("truetype"), url("fonts/gothapromed-webfont.svg#gotham_promedium") format("svg");
+  src: local(gotham_promedium), url("fonts/GothaProMed.eot?#iefix") format("embedded-opentype"), url("fonts/gothapromed-webfont.woff") format("woff"), url("fonts/gothapromed-webfont.ttf") format("truetype"), url("fonts/gothapromed-webfont.svg#gotham_promedium") format("svg");
   font-weight: normal;
   font-style: normal; }
 
-/* cyrillic-ext */
 @font-face {
-  font-family: 'Open Sans';
+  font-family: 'GothamProMedium';
+  src: url("fonts/GothaProMed.eot");
+  /* IE9 Compat Modes */
+  src: url("fonts/GothaProMed.eot?#iefix") format("embedded-opentype"), url("fonts/GothaProMed.woff") format("woff"), url("fonts/GothaProMed.ttf") format("truetype"), url("fonts/GothaProMed.svg#c2754b6f3b643100c0e26081327a284d") format("svg");
+  /* Legacy iOS */
   font-style: normal;
-  font-weight: 400;
-  src: local("Open Sans"), local("OpenSans"), url(http://fonts.gstatic.com/s/opensans/v10/K88pR3goAWT7BTt32Z01m5Bw1xU1rKptJj_0jans920.woff2) format("woff2");
-  unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F; }
+  font-weight: 400; }
 
-/* cyrillic */
 @font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Open Sans"), local("OpenSans"), url(http://fonts.gstatic.com/s/opensans/v10/RjgO7rYTmqiVp7vzi-Q5UZBw1xU1rKptJj_0jans920.woff2) format("woff2");
-  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+  font-family: 'OpenSans';
+  src: url("fonts/opensans-regular-webfont.eot");
+  src: url("fonts/opensans-regular-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/opensans-regular-webfont.woff") format("woff"), url("fonts/opensans-regular-webfont.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal; }
 
-/* devanagari */
 @font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Open Sans"), local("OpenSans"), url(http://fonts.gstatic.com/s/opensans/v10/ttwNtsRpgsxVmgGGmiUOEpBw1xU1rKptJj_0jans920.woff2) format("woff2");
-  unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200B-200D, U+20A8, U+20B9, U+25CC; }
-
-/* greek-ext */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Open Sans"), local("OpenSans"), url(http://fonts.gstatic.com/s/opensans/v10/LWCjsQkB6EMdfHrEVqA1KZBw1xU1rKptJj_0jans920.woff2) format("woff2");
-  unicode-range: U+1F00-1FFF; }
-
-/* greek */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Open Sans"), local("OpenSans"), url(http://fonts.gstatic.com/s/opensans/v10/xozscpT2726on7jbcb_pApBw1xU1rKptJj_0jans920.woff2) format("woff2");
-  unicode-range: U+0370-03FF; }
-
-/* vietnamese */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Open Sans"), local("OpenSans"), url(http://fonts.gstatic.com/s/opensans/v10/59ZRklaO5bWGqF5A9baEEZBw1xU1rKptJj_0jans920.woff2) format("woff2");
-  unicode-range: U+0102-0103, U+1EA0-1EF1, U+20AB; }
-
-/* latin-ext */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Open Sans"), local("OpenSans"), url(http://fonts.gstatic.com/s/opensans/v10/u-WUoqrET9fUeobQW7jkRZBw1xU1rKptJj_0jans920.woff2) format("woff2");
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF; }
-
-/* latin */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Open Sans"), local("OpenSans"), url(http://fonts.gstatic.com/s/opensans/v10/cJZKeOuBrn4kERxqtaUH3ZBw1xU1rKptJj_0jans920.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
-/* cyrillic-ext */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(http://fonts.gstatic.com/s/opensans/v10/MTP_ySUJH_bn48VBG8sNSqOCaDZZVv73zpFSwE4Va2k.woff2) format("woff2");
-  unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F; }
-
-/* cyrillic */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(http://fonts.gstatic.com/s/opensans/v10/MTP_ySUJH_bn48VBG8sNStWlIHla9B101mdmTHF3-q0.woff2) format("woff2");
-  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
-
-/* devanagari */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(http://fonts.gstatic.com/s/opensans/v10/MTP_ySUJH_bn48VBG8sNSlMRqIICSqEqsEoDxn8ddME.woff2) format("woff2");
-  unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200B-200D, U+20A8, U+20B9, U+25CC; }
-
-/* greek-ext */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(http://fonts.gstatic.com/s/opensans/v10/MTP_ySUJH_bn48VBG8sNSqWHppw2c1XOp6B2yhU8z7c.woff2) format("woff2");
-  unicode-range: U+1F00-1FFF; }
-
-/* greek */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(http://fonts.gstatic.com/s/opensans/v10/MTP_ySUJH_bn48VBG8sNSuji7H8UD0RUWSM-55zrR4g.woff2) format("woff2");
-  unicode-range: U+0370-03FF; }
-
-/* vietnamese */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(http://fonts.gstatic.com/s/opensans/v10/MTP_ySUJH_bn48VBG8sNSsw0n1X1lV_hRH3yZFpIE9Q.woff2) format("woff2");
-  unicode-range: U+0102-0103, U+1EA0-1EF1, U+20AB; }
-
-/* latin-ext */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(http://fonts.gstatic.com/s/opensans/v10/MTP_ySUJH_bn48VBG8sNSiYtBUPDK3WL7KRKS_3q7OE.woff2) format("woff2");
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF; }
-
-/* latin */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 600;
-  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(http://fonts.gstatic.com/s/opensans/v10/MTP_ySUJH_bn48VBG8sNShampu5_7CjHW5spxoeN3Vs.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
-
-/* cyrillic-ext */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(http://fonts.gstatic.com/s/opensans/v10/k3k702ZOKiLJc3WVjuplzKOCaDZZVv73zpFSwE4Va2k.woff2) format("woff2");
-  unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F; }
-
-/* cyrillic */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(http://fonts.gstatic.com/s/opensans/v10/k3k702ZOKiLJc3WVjuplzNWlIHla9B101mdmTHF3-q0.woff2) format("woff2");
-  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
-
-/* devanagari */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(http://fonts.gstatic.com/s/opensans/v10/k3k702ZOKiLJc3WVjuplzFMRqIICSqEqsEoDxn8ddME.woff2) format("woff2");
-  unicode-range: U+0900-097F, U+1CD0-1CF6, U+1CF8-1CF9, U+200B-200D, U+20A8, U+20B9, U+25CC; }
-
-/* greek-ext */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(http://fonts.gstatic.com/s/opensans/v10/k3k702ZOKiLJc3WVjuplzKWHppw2c1XOp6B2yhU8z7c.woff2) format("woff2");
-  unicode-range: U+1F00-1FFF; }
-
-/* greek */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(http://fonts.gstatic.com/s/opensans/v10/k3k702ZOKiLJc3WVjuplzOji7H8UD0RUWSM-55zrR4g.woff2) format("woff2");
-  unicode-range: U+0370-03FF; }
-
-/* vietnamese */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(http://fonts.gstatic.com/s/opensans/v10/k3k702ZOKiLJc3WVjuplzMw0n1X1lV_hRH3yZFpIE9Q.woff2) format("woff2");
-  unicode-range: U+0102-0103, U+1EA0-1EF1, U+20AB; }
-
-/* latin-ext */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(http://fonts.gstatic.com/s/opensans/v10/k3k702ZOKiLJc3WVjuplzCYtBUPDK3WL7KRKS_3q7OE.woff2) format("woff2");
-  unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF; }
-
-/* latin */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(http://fonts.gstatic.com/s/opensans/v10/k3k702ZOKiLJc3WVjuplzBampu5_7CjHW5spxoeN3Vs.woff2) format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000; }
+  font-family: 'OpenSansLight';
+  src: url("fonts/opensans-light-webfont.eot");
+  src: url("fonts/opensans-light-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/opensans-light-webfont.woff") format("woff"), url("fonts/opensans-light-webfont.ttf") format("truetype"), url("fonts/opensans-light-webfont.svg#open_sanslight") format("svg");
+  font-weight: normal;
+  font-style: normal; }
 
 body, html {
   margin: 0;
@@ -210,7 +41,7 @@ body, html {
   width: 100%;
   height: 100%;
   background: url(../assets/pattern.png);
-  font-family: "Open Sans", Tahoma, Arial, sans-serif; }
+  font-family: "OpenSansLight", Tahoma, Arial, sans-serif; }
 
 .page {
   width: 100%;
@@ -241,6 +72,20 @@ body, html {
   font-size: 12px;
   color: #262626; }
 
+.ie_circle {
+  position: absolute;
+  left: 2px;
+  top: 3px; }
+
+.circle_title {
+  z-index: 2;
+  position: relative;
+  top: 3px;
+  font-family: "GothamProMedium"; }
+
+.circle_title_ie {
+  top: 0; }
+
 .circle {
   border-radius: 50%;
   background-color: #c5c5c5;
@@ -253,6 +98,9 @@ body, html {
   font-family: "gotham_promedium";
   position: relative; }
 
+.circle_ie {
+  background-color: inherit; }
+
 .circle_floor {
   top: 45%;
   left: 32%; }
@@ -263,6 +111,10 @@ body, html {
 
 .circle_active {
   background-color: #00b06c; }
+
+.ie_bg {
+  position: absolute;
+  z-index: -1; }
 
 .kitchen_active_bg {
   background: url("../assets/kitchen_active.png");
@@ -289,27 +141,27 @@ body, html {
   background-size: cover; }
 
 .room_active_bg {
-  background: url(../assets/room_active.png);
+  background: url("../assets/room_active.png");
   background-size: cover; }
 
 .room_inactive_bg {
-  background: url(../assets/room_inactive.png);
+  background: url("../assets/room_inactive.png");
   background-size: cover; }
 
 .room_hover {
-  background: url(../assets/room_hover.png);
+  background: url("../assets/room_hover.png");
   background-size: cover; }
 
 .boiler_room_active_bg {
-  background: url(../assets/boiler_room_active.png);
+  background: url("../assets/room_room_active.png");
   background-size: cover; }
 
 .boiler_room_inactive_bg {
-  background: url(../assets/boiler_room_inactive.png);
+  background: url("../assets/boiler_room_inactive.png");
   background-size: cover; }
 
 .boiler_room_hover {
-  background: url(../assets/boiler_room_hover.png);
+  background: url("../assets/boiler_room_hover.png");
   background-size: cover; }
 
 .door_switch {
@@ -356,11 +208,11 @@ body, html {
   transition: all 1s ease-out; }
 
 .animate_floor {
-  -webkit-transition: all 1s ease-out;
-  -moz-transition: all 1s ease-out;
-  -ms-transition: all 1s ease-out;
-  -o-transition: all 1s ease-out;
-  transition: all 1s ease-out; }
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out; }
 
 .animate_alert {
   -webkit-transition: opacity 0.5s ease-out;

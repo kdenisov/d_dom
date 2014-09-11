@@ -23,7 +23,7 @@ appConfigurator.config(function($stateProvider, $urlRouterProvider) {
 		.state('level', {
 			url: '/level/:levelId',
 			views: {
-				'sidebar': { templateUrl: 'common/views/level_sidebar.htm', controller: 'LevelCtrl' },
+			    'sidebar': { templateUrl: 'common/views/level_sidebar.htm', controller: 'LevelCollectorsCtrl' },
 				'content': { templateUrl: 'common/views/level_content.htm', controller: 'LevelCtrl' }
 			}
 		})

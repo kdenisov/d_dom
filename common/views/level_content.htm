@@ -1,3 +1,29 @@
+<!--level page templates-->
+<script id="cell_template" type="text/template">
+    <div class="title"></div>
+    <div class="circle animate_all circle_floor hide">
+        <div class="circle_title"></div>
+    </div>
+    <div class="circle animate_all circle_wall hide">
+        <div class="circle_title"></div>
+    </div>
+    <div class="door_switch"></div>
+    <div class="wall_switch"></div>
+</script>
+<script id="ui_template" type="text/template">
+    <div class="wrapper">
+        <div data-id='3' class="level-arrow arrow_top"></div>
+        <div data-id='1' class="level-arrow">Создать</div>
+        <div data-id='2' class="level-arrow">Удалить</div>
+    </div>
+    <div data-id='4' class="level-arrow arrow_bottom"></div>
+</script>
+<script id="floor_template" type="text/template">
+    <div class="level_title"><%= title %></div>
+    <div class="level_map_container"></div>
+</script>
+<!--/level page templates-->
+
 <h1>Параметры<br>
 <span ng-switch on="MODEL.level.isBasement">
 	<span ng-switch-when="true">подвала</span>
@@ -69,3 +95,4 @@
         <h3><i>{{room.floors}}</i> пет{{EQUIPMENT.floorEnding(room.floors)}} теплого пола</h3>
     </div>
 </div>
+
