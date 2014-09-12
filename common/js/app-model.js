@@ -1123,7 +1123,8 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 			}));
 	    });
 
-	    Configurator.boiler.isBoiler && pushToBasket(_basket, Configurator.params.boiler.pump[Configurator.boiler.pump - 1].basket[0][0], 1, 'boiler');
+	    Configurator.boiler.isBoiler && Configurator.boiler.pump > 0
+            && pushToBasket(_basket, Configurator.params.boiler.pump[Configurator.boiler.pump - 1].basket[0][0], 1, 'boiler');
 
 	    return _basket;
 	};
@@ -1232,7 +1233,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 						}))
 					)
                     +
-                    (_room.isBoilerRoom
+                    (_room.isBoilerRoom && Configurator.boiler.pump > 0
                         && pushToBasket(_basket, Configurator.params.boiler.pump[Configurator.boiler.pump - 1].basket[0][0], 1, _level.name + '|' + _room.name))
 				)
 			}));

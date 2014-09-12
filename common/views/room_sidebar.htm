@@ -314,7 +314,7 @@
                 <div class="choicebox">
                     <label ng-repeat="item in BOILER_PARAMS.embodiment" ng-class="{ 'choicebox-true': item.id == BOILER.embodiment }">
                         {{item.name}}
-                        <input type="radio" ng-model="BOILER.embodiment" ng-value="{{item.id}}">
+                        <input type="radio" ng-model="BOILER.embodiment" ng-value="{{item.id}}" ng-change="BOILER.pump = BOILER.embodiment > 1 ? 0 : 1;">
                     </label>
                 </div>
             </div>

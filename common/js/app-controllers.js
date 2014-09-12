@@ -698,18 +698,12 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	    Configurator.UpdateCollectorEntries();
 	}
 
-	$scope.UpdateCollectorEntries = function () {
-	    Configurator.UpdateCollectorEntries();
-	}
-
-	setCustomScroll();
-
-    getRadiator = function() {
-        return $scope.RADIATOR;
+    $scope.UpdateCollectorEntries = function() {
+        Configurator.UpdateCollectorEntries();
     };
+    
+	setCustomScroll();
 });
-
-var getRadiator = function() { return null; };
 
 
 appConfigurator.controller('BoilerCtrl', function($scope, Configurator, $stateParams, Editor, $modal){
