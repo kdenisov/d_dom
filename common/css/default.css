@@ -1638,10 +1638,17 @@ label.choicebox-true {
 	margin: 0 0 -1px -1px;
 }
 .selectbox.merged label {
-    border-left: none;
-    border-right: none;
+    border-left: 0 none;
+    border-right: 0 none;
     margin-left: 0;
     margin-right: 0;
+}
+.selectbox.merged .merged label:first-child {
+    border-bottom: 0 none;
+    margin-bottom: 0;
+}
+.selectbox.merged .merged label:not(:first-child) {
+    border-top: 0 none;
 }
 .option-true,
 .selectbox .checkbox-true {
@@ -2893,7 +2900,7 @@ li ul {
 
 .selectbox label.half-size
 {
-    height:61px;
+    height:61.5px;
 }
 
 .selectbox .half-size .pseudo-checkbox
@@ -2904,7 +2911,7 @@ li ul {
 
 .selectbox .half-size .title
 {
-    top: 12px;
+    top: -17px;
 left: 31px;
 width: 70%;
 text-align: left;
