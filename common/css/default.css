@@ -1357,22 +1357,6 @@ a.collector-item {
     height: 20px;
 }
 
-.label-checkbox.checkbox-true.collector-default-left-border {
-    border-left-color: #ddd !important;
-}
-
-.label-checkbox.checkbox-true.collector-default-top-border {
-    border-top-color: #ddd !important;
-}
-
-.label-checkbox.collector-default-left-border {
-    border-left-color: #f3f3f3 !important;
-}
-
-.label-checkbox.collector-default-top-border {
-    border-top-color: #f3f3f3 !important;
-}
-
 .receivers {
     position: absolute;
     left: 0;
@@ -1649,9 +1633,15 @@ label.choicebox-true {
 	font-size: 12px;
 	text-align: center;
 	border: 1px solid #DADADA;
-	border-right: 0;
+    border-left: none;
 	cursor: pointer;
 	margin: 0 0 -1px -1px;
+}
+.selectbox.merged label {
+    border-left: none;
+    border-right: none;
+    margin-left: 0;
+    margin-right: 0;
 }
 .option-true,
 .selectbox .checkbox-true {
@@ -1686,6 +1676,11 @@ label.choicebox-true {
 .selectbox select {
 	width: 80%;
 	margin: 20px 0 0;
+}
+
+.label-checkbox .pseudo-checkbox {
+    top: 11px;
+    left: 6px;
 }
 
 
