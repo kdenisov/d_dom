@@ -318,7 +318,7 @@
                     </label>
                 </div>
             </div>
-            <div class="group">
+            <div class="group" ng-if="BOILER.embodiment == 1">
                 <h3>Насосный узел обвязки котла</h3>
                 <label class="label-checkbox inline" ng-repeat="pump in BOILER_PARAMS.pump" ng-class="{ 'checkbox-true': pump.id == BOILER.pump }">
                     <span class="pseudo-checkbox">
