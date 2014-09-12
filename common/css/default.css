@@ -1607,7 +1607,7 @@ label.choicebox-true {
 	cursor: pointer;
 }
 .radio input {
-	width: 23px;
+	width: 26px;
 	height: 23px;
     filter: alpha(opacity = 0);
 	opacity: 0;

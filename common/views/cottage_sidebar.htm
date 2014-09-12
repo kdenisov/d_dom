@@ -41,7 +41,7 @@
 			<label ng-repeat="LEVEL in LEVELS | filter: {id: '1,3'}:multipleValues" class="radio-{{LEVEL.id == BOILER.level}} hidden-{{!LEVEL.isLevel}}"><input type="radio" name="boiler_level" value="{{LEVEL.id}}" ng-model="BOILER.level"  ng-change="SET_BOILER()"> {{LEVEL.canonicalName()}}</label>
 		</div>
 		<div class="radio {{LEVELS[2].isBasement && 'right' || ''}}">
-			<label class="radio-{{BOILER.roomType == 1}}"><input type="radio" name="boiler_room_type" value="1" ng-model="BOILER.roomType" ng-change="SET_BOILER()"> В котельне</label>
+			<label class="radio-{{BOILER.roomType == 1}}"><input type="radio" name="boiler_room_type" value="1" ng-model="BOILER.roomType" ng-change="SET_BOILER()"> В котельной</label>
 			<label class="radio-{{BOILER.roomType == 2}}"><input type="radio" name="boiler_room_type" value="2" ng-model="BOILER.roomType" ng-change="SET_BOILER()"> На кухне</label>
 		</div>
 	</div>
