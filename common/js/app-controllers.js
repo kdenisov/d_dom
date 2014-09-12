@@ -318,47 +318,49 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
         });
     });
 
-    var applyToSidebarScope = function(action) {
-        var scope = angular.element($('.params-collectors > .group:first')).scope();
-        scope.$apply(action);
-    };
+    $(function() {
+        var applyToSidebarScope = function (action) {
+            var scope = angular.element($('.params-collectors > .group:first')).scope();
+            scope.$apply(action);
+        };
 
-    window.levelsModule.buildLevels('#levels', {
-        levels: levelsService.levels,
-        boilers: levelsService.boiler,
-        currentLevelId: currentLevelId,
-        roomMouseEnter: function(levelId, roomId) {
-            $scope.$apply(levelsService.setHoverRoomId(roomId));
-        },
-        roomMouseLeave: function(levelId, roomId) {
-            $scope.$apply(levelsService.setHoverRoomId(0));
-        },
-        levelSwitched: function(levelId) {
-            var action = function() { levelsService.setLevel(levelId); };
-            $scope.$apply(action);
-            applyToSidebarScope(action);
-        },
-        roomClicked: function(levelId, roomId) {
-            $scope.$apply(function() {
-                levelsService.setHoverRoomId(0);
-                $location.path('/room/' + levelId + '/' + roomId);
-            });
-        },
-        roomAdded: function(levelId, roomId) {
-            levelsService.level.rooms[roomId - 1].isRoom = true;
-        },
-        roomRemoved: function(levelId, roomId) {
-            levelsService.level.rooms[roomId - 1].isRoom = false;
-        },
-        addRoom: function(levelId, roomId) {
-            console.log('attempt to ENABLE room ' + roomId + ' on level ' + levelId);
-        },
-        removeRoom: function(levelId, roomId) {
-            console.log('attempt to DISABLE room ' + roomId + ' on level ' + levelId);
-        },
-        renameRoom: function(levelId, roomId, newName) {
-            console.log('attempt to change the name of the room ' + roomId + ' on level ' + levelId + ' to "' + newName + '"');
-        },
+        window.levelsModule && window.levelsModule.buildLevels('#levels', {
+            levels: levelsService.levels,
+            boilers: levelsService.boiler,
+            currentLevelId: currentLevelId,
+            roomMouseEnter: function(levelId, roomId) {
+                $scope.$apply(levelsService.setHoverRoomId(roomId));
+            },
+            roomMouseLeave: function(levelId, roomId) {
+                $scope.$apply(levelsService.setHoverRoomId(0));
+            },
+            levelSwitched: function(levelId) {
+                var action = function() { levelsService.setLevel(levelId); };
+                $scope.$apply(action);
+                applyToSidebarScope(action);
+            },
+            roomClicked: function(levelId, roomId) {
+                $scope.$apply(function() {
+                    levelsService.setHoverRoomId(0);
+                    $location.path('/room/' + levelId + '/' + roomId);
+                });
+            },
+            roomAdded: function(levelId, roomId) {
+                levelsService.level.rooms[roomId - 1].isRoom = true;
+            },
+            roomRemoved: function(levelId, roomId) {
+                levelsService.level.rooms[roomId - 1].isRoom = false;
+            },
+            addRoom: function(levelId, roomId) {
+                console.log('attempt to ENABLE room ' + roomId + ' on level ' + levelId);
+            },
+            removeRoom: function(levelId, roomId) {
+                console.log('attempt to DISABLE room ' + roomId + ' on level ' + levelId);
+            },
+            renameRoom: function(levelId, roomId, newName) {
+                console.log('attempt to change the name of the room ' + roomId + ' on level ' + levelId + ' to "' + newName + '"');
+            },
+        });
     });
 
     //setCustomScroll();
@@ -794,6 +796,9 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
 	$scope.LEVELS = Configurator.levels;
 	$scope.PROPERTIES = Configurator.properties;
 	$scope.PARAMS = Configurator.params.collector;
+	$scope.FITTINGS = Configurator.params.fittings;
+	$scope.MATERIALS = Configurator.params.fittingsMaterial;
+
 	$scope.LINK_RETURN = '#/level/' + level.id;
 	$scope.LINK_NEXT = '#/boiler';
 
