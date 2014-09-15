@@ -1,4 +1,4 @@
-'use strict';
+'use strict'; 
 // Controllers
 
 appConfigurator.filter('formatNumber', function () {
