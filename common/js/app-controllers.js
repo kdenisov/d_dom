@@ -1,6 +1,6 @@
 'use strict'; 
-// Controllers
-
+// Controllers  
+   
 appConfigurator.filter('formatNumber', function () {
     return function (n) {
         n = "" + n;
