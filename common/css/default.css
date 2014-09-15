@@ -263,7 +263,7 @@ body {
 	display: block;
     width: 56px;
 	height: 57px;
-    background: transparent url('../img/icon-sidebar-controls.png') no-repeat left top;
+    background: transparent url('../img/icons-sidebar-controls.png') no-repeat left top;
     border: none;
 }
 #nav a.active {
