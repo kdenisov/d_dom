@@ -416,7 +416,7 @@ appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams,
     };
 });
 
-appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, $modal, $location) {
+appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, alertService, $modal, $location) {
 	var
 		level = Configurator.levels[$stateParams.levelId - 1],
 		room = level.rooms[$stateParams.roomId - 1]
@@ -613,19 +613,20 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
         evt && evt.preventDefault();
 
         if (level.roomsCount > 1) {
-            $scope.ALERT('Вы хотите убрать эту комнату?',
-                function() {
+            alertService.open({
+                title: 'Вы хотите убрать эту комнату?',
+                hasCancel: true,
+                confirm: function () {
                     room.isRoom = false;
                     level.roomsCount--;
                     $location.path('/level/' + $stateParams.levelId);
-                }, function() {
-
-                });
+                },
+            });
 
             return;
         }
 
-        $scope.ALERT('Это последняя комната на этаже. Уберите этаж, чтобы убрать комнату.');
+        alertService.open({ title: 'Это последняя комната на этаже', message: 'Уберите этаж, чтобы убрать комнату.' });
     };
 
     //Room scroll controlls
@@ -651,13 +652,17 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
         tabScope.tabs.index = $scope.BOILER_FOCUS ? 3 : 1;
     };
 
-    var updateRadiatorToScope = function(scope, shift) {
+    var switchRadiatorInScope = function(scope, shift) {
         if (!scope) {
             return;
         }
 
         scope.RADIATORS.current += shift;
         scope.scopeUpdateRADIATOR(scope.RADIATORS_LIST[scope.RADIATORS.current - 1]);
+    };
+
+    var getSidebarTabScope = function() {
+        return angular.element($('#sidebar-view .radiator-types')).scope();
     };
 
     $scope.FOCUS_LEFT = function () {
@@ -667,10 +672,8 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
             return;
         }
 
-        updateRadiatorToScope($scope, -1);
-        var items = $('#sidebar-view .radiator-types');
-        var scope = angular.element(items).scope();
-        updateRadiatorToScope(scope, 0);
+        switchRadiatorInScope($scope, -1);
+        switchRadiatorInScope(getSidebarTabScope(), 0);
     };
 
     $scope.FOCUS_RIGHT = function () {
@@ -680,10 +683,8 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
             return;
         }
 
-        updateRadiatorToScope($scope, 1);
-        var items = $('#sidebar-view .radiator-types');
-        var scope = angular.element(items).scope();
-        updateRadiatorToScope(scope, 0);
+        switchRadiatorInScope($scope, 1);
+        switchRadiatorInScope(getSidebarTabScope(), 0);
     };
 
     $scope.BOILER_UNFOCUS = function () {
@@ -1835,56 +1836,52 @@ appConfigurator.directive('ngFocus', function () {
     };
 });
 
-appConfigurator.controller('AccountCtrl', function ($scope, $stateParams) {
-    var tab = parseInt($stateParams.tab);
-    tab = isNaN(tab) || tab > 2 ? 1 : tab;
+appConfigurator.service('alertService', function($modal) {
+    var $this = this;
 
-    var OrderStatuses = { saved: 0, confirmed: 1 };
+    $this.modalInstance = null;
 
-    var OrderViewModel = function(id, date, rub, status) {
-        var $this = this;
-        $this.id = id;
-        $this.date = date;
-        $this.rub = rub;
-        $this.status = status;
-        return $this;
+    $this.hasCancel = function() {
+        return typeof $this.cancel !== 'undefined';
     };
 
-    var ViewModel = function(tabNum) {
-        var $this = this;
-        $this.name = 'Иван Иванов';
-        $this.email = 'test@yandex.ru';
-        $this.phone = '+7 800 123 45 67';
-        $this.city = '';
-        $this.street = '';
-        $this.building = '';
-        $this.apartment = '';
-
-        $this.orders = [];
-
-        $this.activeTab = tabNum;
-
-        return $this;
+    $this.cancel = function() {
+        $this.modalInstance && $this.modalInstance.dismiss('close');
     };
 
-    var model = new ViewModel(tab);
+    $this.confirm = function() {
+        $this.modalInstance && $this.modalInstance.close();
+    };
 
-    //push test orders
-    for (var i = 0; i < 10; i++) {
-        var randomDate = new Date(Math.ceil(Math.random() * 2 + 2013), Math.floor(Math.random() * 12) + 1, Math.ceil(Math.random() * 27));
-        var randomStatus = Math.random() < 0.5 ? OrderStatuses.confirmed : OrderStatuses.saved;
-        model.orders.push(new OrderViewModel(i + 1, randomDate, '9 000 000', randomStatus));
-    }
-
-    $scope.STATUS = OrderStatuses;
-    $scope.MODEL = model;
-    $scope.FORM = {
-        invalid: function(ctrl) {
-            return ctrl.$dirty && ctrl.$invalid && !ctrl.$focused;
+    $this.open = function (params) {
+        if (!params) {
+            return;
         }
+
+        params = $.extend({
+            confirm: function() {
+                
+            },
+            cancel: function() {
+                
+            },
+            hasCancel: false,
+            message: '',
+            title: '',
+        }, params);
+
+        $this.title = params.title;
+        $this.message = params.message;
+        $this.hasCancel = params.hasCancel;
+        $this.modalInstance = $modal.open({ templateUrl: 'common/views/modal-alert.htm', size: 'sm', controller: 'AlertCtrl' });
+        $this.modalInstance.result.then(params.confirm, params.cancel);
     };
 
-    setCustomScroll();
+    return $this;
+});
+
+appConfigurator.controller('AlertCtrl', function($scope, alertService) {
+    $scope.MODEL = alertService;
 });
 
 function setCustomScroll() {
