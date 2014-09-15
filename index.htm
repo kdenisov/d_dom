@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html data-ng-app="appConfigurator">
     <head>
         <meta charset="utf-8">
@@ -43,6 +43,26 @@
             <div class="level_map_container"></div>
         </script>
         <!--/level page templates-->
+        <script id="cell_template" type="text/template">
+            <div class="title"></div>
+            <div class="circle animate_all circle_floor hide"></div>
+            <div class="circle animate_all circle_wall hide"></div>
+            <div class="door_switch"></div>
+            <div class="wall_switch"></div>
+        </script>
+        <script id="ui_template" type="text/template">
+            <div class="wrapper">
+                <div data-id='3' class="level-arrow arrow_top"></div>
+                <div data-id='1' class="level-arrow">Создать</div>
+                <div data-id='2' class="level-arrow">Удалить</div>
+            </div>
+            <div data-id='4' class="level-arrow arrow_bottom"></div>
+        </script>
+        <script id="floor_template" type="text/template">
+            <div class="level_title"><%= title %></div>
+            <div class="level_map_container"></div>
+        </script>
+
     </head>
     <body ng-controller="BaseCtrl">
 
@@ -63,7 +83,7 @@
                     <a ui-sref-active="active" ui-sref="cottage" title="Сбросить параметры" class="reset"></a>
                 </div>
             </div>
-            <div id="sidebar-content">
+            <div id="sidebar-content" ng-if="BASE_PAGE.sidebar">
                 <h2><span>{{BASE_PAGE.title}}</span></h2>
                 <div id="sidebar-view" ui-view="sidebar">
 
@@ -132,7 +152,6 @@
         <script src="common/js/app-animate.js"></script>
         <script src="common/js/app-controllers.js"></script>
         <!--<script src="common/js/app-test-data-gen.js"></script>-->
-
         <script src="common/levels/js/main.js"></script>
 
         <script type="text/ng-template" id="set-dest-collector.html">
