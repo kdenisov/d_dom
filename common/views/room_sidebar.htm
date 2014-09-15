@@ -62,7 +62,8 @@
                     </div><!-- .selectbox -->
                 </div>
             </div>
-            <div class="tab-items">
+
+            <div class="tab-items radiator-types">
                 <label ng-repeat="ITEM in RADIATORS_LIST | limitTo:RADIATORS.radiatorsTypes" class="tab-item {{ITEM.id == RADIATORS.current && 'active'}}">
                     Тип {{ITEM.id}}
                     <input type="radio"

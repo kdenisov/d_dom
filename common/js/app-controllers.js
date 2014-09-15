@@ -468,44 +468,45 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	        $scope.PARAMS.distinctValves.push(el);
 	}
 
-	$scope.GET_EXTERNAL_VIEW_ITEMS = function () {
-	    var all = Configurator.params.room.radiators.externalView;
-	    var res = [];
-	    var preview = Configurator.params.room.radiators.valves[$scope.RADIATOR.valves - 1].preview;
+    $scope.GET_EXTERNAL_VIEW_ITEMS = function() {
+        var all = Configurator.params.room.radiators.externalView;
+        var res = [];
+        var preview = Configurator.params.room.radiators.valves[$scope.RADIATOR.valves - 1].preview;
 
-	    if ($scope.RADIATOR.type == 1) {
-	        for (var i in Configurator.params.room.radiators.valves) {
-	            var el = Configurator.params.room.radiators.valves[i];	            
-	            if (el.preview == preview
-                    && el.type == $scope.RADIATOR.type
-                    && el.connection == $scope.RADIATOR.connection
-                    && el.builtinValve == $scope.RADIATOR.builtinValve
-                    && el.pipework == $scope.RADIATOR.pipework
-                    && el.controlType == $scope.RADIATORS.controlType
-                    ) {	                
-	                if (el.externalView > 0) {
-	                    res.push({ id: el.id, name: all[el.externalView - 1].name });
-	                }
-	            }
-	        }
-	    } else {
-	        for (var i in Configurator.params.room.radiators.valves) {
-	            var el = Configurator.params.room.radiators.valves[i];
-	            if (el.type == $scope.RADIATOR.type
-                    && el.use == $scope.RADIATOR.use
-                    && el.connectSide == $scope.RADIATOR.connectSide
-                    ) {
-	                if (el.externalView > 0)
-	                    res.push({ id: el.id, name: all[el.externalView - 1].name });
-	            }
-	        }
-	    }
-	    return res;
-	}
+        if ($scope.RADIATOR.type == 1) {
+            for (var i in Configurator.params.room.radiators.valves) {
+                var el = Configurator.params.room.radiators.valves[i];
+                if (el.preview == preview
+                        && el.type == $scope.RADIATOR.type
+                        && el.connection == $scope.RADIATOR.connection
+                        && el.builtinValve == $scope.RADIATOR.builtinValve
+                        && el.pipework == $scope.RADIATOR.pipework
+                        && el.controlType == $scope.RADIATORS.controlType
+                ) {
+                    if (el.externalView > 0) {
+                        res.push({ id: el.id, name: all[el.externalView - 1].name });
+                    }
+                }
+            }
+        } else {
+            for (var i in Configurator.params.room.radiators.valves) {
+                var el = Configurator.params.room.radiators.valves[i];
+                if (el.type == $scope.RADIATOR.type
+                        && el.use == $scope.RADIATOR.use
+                        && el.connectSide == $scope.RADIATOR.connectSide
+                ) {
+                    if (el.externalView > 0)
+                        res.push({ id: el.id, name: all[el.externalView - 1].name });
+                }
+            }
+        }
+        return res;
+    };
 
-	$scope.PREVIEW = function (valves) {
-	    return "common/img/radiator-preview/" + Configurator.params.room.radiators.valves[valves-1].preview + ".png";
-	}
+    $scope.PREVIEW = function(valves) {
+        return "common/img/radiator-preview/" + Configurator.params.room.radiators.valves[valves - 1].preview + ".png";
+    };
+
     $scope.VIEW = function(radiator) {
         var side = radiator.connectSide == 2 ? "_right" : "";
         if (radiator.type == 2) { //design radiator
@@ -544,69 +545,69 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
         return cssClasses;
     };
 
-    $scope.UPDATE_VALVE = function (valveId) {
-	    return "common/img/radiators/" + Configurator.params.room.radiators.valves[$scope.RADIATOR.valves - 1].preview + ".png";
-	}
+    $scope.UPDATE_VALVE = function(valveId) {
+        return "common/img/radiators/" + Configurator.params.room.radiators.valves[$scope.RADIATOR.valves - 1].preview + ".png";
+    };
 
 	$scope.filterFunction = function (element) {
 	    return ($scope.FLOORS.loops > 1 && element.type == 2) || ($scope.FLOORS.loops == 1) ? true : false;
 	};
 
-	$scope.GET_VALVES = function(){
-	}
+    $scope.GET_VALVES = function() {
+    };
 
-	$scope.UPDATE_RADIATORS_COUNT = function () {
-	    Configurator.UpdateCollectorEntries();
-	}
+    $scope.UPDATE_RADIATORS_COUNT = function() {
+        Configurator.UpdateCollectorEntries();
+    };
 
-	$scope.SET_PARAMS_FOR_ALL = function () {
-	    $scope.modalInstance = $modal.open({
-	        templateUrl: 'set-room-params-confirm.html',
-	        size: 'sm',
-	        scope: $scope,
-	        resolve: {
-	            selectedRoom: function () {
-	                return $scope.ROOM;
-	            }
-	        }
-	    });
-	}
-    
-	$scope.SET_PARAMS_FOR_ALL_CONFIRMED = function () {
-	    $scope.modalInstance.close();
-	    // TODO - Set FOR ALL
-	    for (var room = 0; room < level.roomsCount; room++) {
-	        $scope.ROOM.copyTo(level.rooms[room]);
-	    }
+    $scope.SET_PARAMS_FOR_ALL = function() {
+        $scope.modalInstance = $modal.open({
+            templateUrl: 'set-room-params-confirm.html',
+            size: 'sm',
+            scope: $scope,
+            resolve: {
+                selectedRoom: function() {
+                    return $scope.ROOM;
+                }
+            }
+        });
+    };
 
-	    Configurator.UpdateCollectorEntries();
-	}
+    $scope.SET_PARAMS_FOR_ALL_CONFIRMED = function() {
+        $scope.modalInstance.close();
+        // TODO - Set FOR ALL
+        for (var room = 0; room < level.roomsCount; room++) {
+            $scope.ROOM.copyTo(level.rooms[room]);
+        }
 
-	$scope.SET_PARAMS_FOR_ALL_DECLINED = function () {
-	    $scope.modalInstance.dismiss('cancel');
-	}
+        Configurator.UpdateCollectorEntries();
+    };
 
-	$scope.scopeUpdateRADIATOR = function (obj) {
-		$scope.RADIATOR = obj;
-	}
+    $scope.SET_PARAMS_FOR_ALL_DECLINED = function() {
+        $scope.modalInstance.dismiss('cancel');
+    };
 
-	$scope.ALERT = function (alert, confirm, cancel) {
-	    $scope.ALERT_MESSAGE = alert;
-	    $scope.CONFIRM_ALERT = function () {
-	        $scope.alertInstance && $scope.alertInstance.close();
-	        confirm && confirm();
-	    };
-	    $scope.CLOSE_ALERT = cancel && function() {
-	        $scope.alertInstance && $scope.alertInstance.dismiss('cancel');
-	        cancel();
-	    };
+    $scope.scopeUpdateRADIATOR = function(obj) {
+        $scope.RADIATOR = obj;
+    };
 
-	    $scope.alertInstance = $modal.open({
-	        templateUrl: 'alert.html',
-	        size: 'sm',
-	        scope: $scope
-	    });
-	}
+    $scope.ALERT = function(alert, confirm, cancel) {
+        $scope.ALERT_MESSAGE = alert;
+        $scope.CONFIRM_ALERT = function() {
+            $scope.alertInstance && $scope.alertInstance.close();
+            confirm && confirm();
+        };
+        $scope.CLOSE_ALERT = cancel && function() {
+            $scope.alertInstance && $scope.alertInstance.dismiss('cancel');
+            cancel();
+        };
+
+        $scope.alertInstance = $modal.open({
+            templateUrl: 'alert.html',
+            size: 'sm',
+            scope: $scope
+        });
+    };
 
     $scope.DELETE_ROOM = function(evt) {
         evt && evt.preventDefault();
@@ -650,6 +651,15 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
         tabScope.tabs.index = $scope.BOILER_FOCUS ? 3 : 1;
     };
 
+    var updateRadiatorToScope = function(scope, shift) {
+        if (!scope) {
+            return;
+        }
+
+        scope.RADIATORS.current += shift;
+        scope.scopeUpdateRADIATOR(scope.RADIATORS_LIST[scope.RADIATORS.current - 1]);
+    };
+
     $scope.FOCUS_LEFT = function () {
         if (!$scope.BOILER_FOCUS && $scope.RADIATORS.current == 1) {
             $scope.BOILER_FOCUS = $scope.BOILER_VISIBLE();
@@ -657,8 +667,10 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
             return;
         }
 
-        $scope.RADIATORS.current = $scope.RADIATORS.current - 1;
-        $scope.scopeUpdateRADIATOR($scope.RADIATORS_LIST[$scope.RADIATORS.current - 1]);
+        updateRadiatorToScope($scope, -1);
+        var items = $('#sidebar-view .radiator-types');
+        var scope = angular.element(items).scope();
+        updateRadiatorToScope(scope, 0);
     };
 
     $scope.FOCUS_RIGHT = function () {
@@ -668,8 +680,10 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
             return;
         }
 
-        $scope.RADIATORS.current = $scope.RADIATORS.current + 1;
-        $scope.scopeUpdateRADIATOR($scope.RADIATORS_LIST[$scope.RADIATORS.current - 1]);
+        updateRadiatorToScope($scope, 1);
+        var items = $('#sidebar-view .radiator-types');
+        var scope = angular.element(items).scope();
+        updateRadiatorToScope(scope, 0);
     };
 
     $scope.BOILER_UNFOCUS = function () {
