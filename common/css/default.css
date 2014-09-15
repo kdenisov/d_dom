@@ -364,7 +364,7 @@ body {
 	position: absolute;
 	top: 0;
 	right: 0;
-	z-index: 10;
+	z-index: 9000;
 	color: #FFF;
 	background: #424242;
 }
@@ -415,10 +415,12 @@ body {
 	padding: 30px 25px;
 }
 .basket-total .title {
-	font-size: 15px;
-	font-weight: bold;
-	text-transform: uppercase;
-	padding: 3px 0 0 0;
+	color: white;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 0;
+    padding: 3px 0 0;
+    text-transform: uppercase;
 }
 .basket-total .sum {
 	font-size: 24px;
@@ -428,17 +430,18 @@ body {
 .basket-total .t-right {
 	display: inline-block;
 }
-
 .basket-nav
 {
     padding: 30px 25px;
 }
-
-    .basket-nav .button
-    {
-        display: inline-block;
-        padding:0 10px;
-    }
+.basket-nav .button
+{
+    display: inline-block;
+    font-size: 16px;
+    width: 100%;
+    color: white !important;
+    border-color: white;
+}
 
 
 /* Tabs */
