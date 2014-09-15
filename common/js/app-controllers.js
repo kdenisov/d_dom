@@ -1111,15 +1111,17 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 	}
 });
 
-appConfigurator.controller('RestoreCtrl', function ($scope, $filter, $stateParams, $sce, $timeout, Configurator, Catalog, CurrentUser) {
+appConfigurator.controller('RestoreCtrl', function ($scope, $filter, $stateParams, $sce, $timeout,$location, Configurator, Catalog, CurrentUser) {
     var idLoad = parseInt($stateParams.idLoad);
     if (!isNaN(idLoad)) {
         Configurator.restoreConfiguration(idLoad, function () {
-            $scope.$apply(function() {$location.path("/summary");});
+            $timeout(function () {
+                $scope.$apply(function () { $location.path("/summary"); });
+            }, 0);
         });
     }
-
 });
+
 appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParams, $sce, $timeout, Configurator, Catalog, CurrentUser) {
     var page = parseInt($stateParams.page);
     page = isNaN(page) || page > 5 ? 1 : page;
@@ -1635,20 +1637,67 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
 
 appConfigurator.controller('AuthenticateModalCtrl', function ($scope, $modalInstance, CurrentUser, Configurator) {
     var form = {
+        name:'',
         phone: '',
         email: '',
+        modalError: '',
+        pin: '',
         rulesAccepted: false,
         submitted: false,
         valid: true,
-        validate: function (formCtrl) {
-            form.valid = !form.submitted || form.phone != '' || (form.email != '' && !form.email.$error.email);
-            return form.valid && form.rulesAccepted;
+        mode:'register',
+        validateReg: function (formCtrl) {
+            form.valid = form.phone != '' && (form.email == '' || (form.email != '' && !form.email.$error));
+            if (!form.valid) {
+                if (form.phone == '') {
+                    form.modalError = 'Телефон - обязательное поле';
+                } else {
+                    form.modalError = 'Email адрес имеет неверный формат';
+                }
+            }
+            return form.valid;
         },
         submit: function (formCtrl) {
-            form.submitted = true;
-            if (form.validate(formCtrl)) {
-                var authenticated = true; //todo some authentication code here
-                $modalInstance.close(authenticated);
+            if (form.validateReg(formCtrl)) {
+                CurrentUser.Register(form.name, form.phone, form.email, '').then(
+                    function (res) {
+                        $modalInstance.close(true);
+                    }, function (res) {
+                        form.modalError = res;
+                    }
+                );
+            }
+        },
+        validateGetPIN: function (formCtrl) {
+            form.valid = form.phone != '' || (form.email != '' && !form.email.$error);
+            if (!form.valid) {
+                form.modalError = 'Телефон или Email - обязательное поле';
+            }
+            return form.valid;
+        },
+        getPIN: function (formCtrl) {
+            if (form.validateGetPIN(formCtrl)) {
+                CurrentUser.GetPIN(form.phone || form.email).then(
+                    function (res) {
+                        form.modalError = res;
+                    }, function (res) {
+                        form.modalError = res;
+                    }
+                );
+            }
+        },
+        login: function (formCtrl) {
+            if (form.pin == '') {
+                form.modalError = 'Введите PIN';
+            }
+            if (form.validateGetPIN(formCtrl) && form.pin != '') {
+                CurrentUser.Login(form.phone || form.email, form.pin).then(
+                    function (res) {
+                        $modalInstance.close(true);
+                    }, function (res) {
+                        form.modalError = res;
+                    }
+                );
             }
         },
         dismiss: function () {
@@ -1657,6 +1706,15 @@ appConfigurator.controller('AuthenticateModalCtrl', function ($scope, $modalInst
     };
 
     $scope.FORM = form;
+
+    $scope.LOGIN = function () {
+        form.mode = 'login';
+    }
+
+    $scope.REGISTER = function () {
+        form.mode = 'register';
+    }
+    
 });
 
 appConfigurator.controller('SaveModalCtrl', function ($scope, $modalInstance, CurrentUser, Configurator) {

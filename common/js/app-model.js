@@ -118,7 +118,7 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
         GetPIN: function (phoneOrEmail) {
             var deferred = $q.defer();
 
-            $http.jsonp(appConfig.appPath + "/JsonOperations/GetPIN?jsonp=JSON_CALLBACK", { phoneOrEmail: phoneOrEmail })
+            $http.jsonp(appConfig.appPath + "/JsonOperations/GetPIN?jsonp=JSON_CALLBACK&phoneOrEmail=" + phoneOrEmail)
 			.success(function (data) {
 			    deferred.resolve(data);
 			})
@@ -132,7 +132,12 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
         Login: function (phoneOrEmail, pin) {
             var deferred = $q.defer();
 
-            $http.jsonp(appConfig.appPath + "/JsonOperations/Login?jsonp=JSON_CALLBACK", { phoneOrEmail: phoneOrEmail, pin: pin })
+            $http({
+                url: appConfig.appPath + "/JsonOperations/Login?jsonp=JSON_CALLBACK",
+                method: "POST",
+                data: { phoneOrEmail: phoneOrEmail, pin: pin },
+                headers: { 'Content-Type': 'application/json' }
+            })
 			.success(function (data) {
 			    if (_isSuccessResult(data)) {
 			        _currentUser = data;
@@ -174,20 +179,36 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
             return deferred.promise;
         },
         // Загрузить последнюю конфигурацию сохраненную на сервере
-        LoadConfiguration: function () {
+        LoadConfiguration: function (id) {
             var deferred = $q.defer();
 
-            $http.jsonp(appConfig.appPath + "/JsonOperations/GetLastConfiguration?jsonp=JSON_CALLBACK")
-			.success(function (data) {
-			    if (_isSuccessResult(data)) {
-			        deferred.resolve(JSON.parse(data));
-			    } else {
-			        deferred.reject(_getMessage(data));
-			    }
-			})
-			.error(function (data) {
-			    deferred.reject("Ошибка при загрузке конфигурации");
-			});
+            if (typeof id == 'undefined') {
+                $http.jsonp(appConfig.appPath + "/JsonOperations/GetLastConfiguration?jsonp=JSON_CALLBACK")
+                .success(function (data) {
+                    data = JSON.parse(data);
+                    if (typeof data === 'string') {
+                        deferred.resolve(JSON.parse(data));
+                    } else {
+                        deferred.reject(_getMessage(data));
+                    }
+                })
+                .error(function (data) {
+                    deferred.reject("Ошибка при загрузке конфигурации");
+                });
+            } else {
+                $http.get(appConfig.appPath + "/JsonOperations/GetConfigurationById?id=" + id)
+                .success(function (data) {
+                    data = JSON.parse(data);
+                    if (typeof data === 'string'){
+                        deferred.resolve(JSON.parse(data));
+                    } else {
+                        deferred.reject(_getMessage(data));
+                    }
+                })
+                .error(function (data) {
+                    deferred.reject("Ошибка при загрузке конфигурации");
+                });
+            }
 
             return deferred.promise;
         },
@@ -219,8 +240,29 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
             return _userGUID();
         },
         // префикс по умолчанию для номеров заказов  пользователя
-        GetOrderPrefix: function () {
-            return _userGUID().substring(0, 5);
+        SetOrderName: function () {
+            var deferred = $q.defer();
+            var defaultName = _userGUID().substring(0, 5) + "-01";
+            if (this.isGuidExistsInDB()) {
+                this.LoadConfiguration().then(function (cfg) {
+                    console.log(cfg);
+                    if (cfg && "name" in cfg) {
+                        console.log(cfg.name);
+                        var prevName = cfg.name;
+                        if (prevName.indexOf("-") > 0) {
+                            return prevName.split('-')[0] + '-' + (parseInt(prevName.split('-')[1]) + 1);
+                            deferred.resolve(prevName.split('-')[0] + '-' + (parseInt(prevName.split('-')[1]) + 1));
+                        } else {
+                            deferred.resolve(defaultName);
+                        }
+                    } else {
+                        deferred.resolve(defaultName);
+                    }
+                }, function () { deferred.resolve(defaultName); })
+            }
+            setTimeout(function () { deferred.resolve(defaultName); }, 100);
+
+            return deferred.promise;
         }
     }
 
@@ -297,7 +339,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 	    return radiators;
 	}
 
-	var room = function (level, room_id, active, hasBoiler) {
+	var initRoom = function (level, room_id, active, hasBoiler) {
 	    
 	    return { // Комнаты по умолчанию
 	        id: room_id,
@@ -369,7 +411,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 	var initRooms = function (level, roomsPerLevel, levelHasBoiler) {
 	    // "Конструктор" комнат
 	    for (var room_id = 1, rooms = []; room_id <= 12; room_id++) {
-	        rooms.push(room(level, room_id, room_id <= roomsPerLevel, levelHasBoiler && room_id == roomsPerLevel));
+	        rooms.push(initRoom(level, room_id, room_id <= roomsPerLevel, levelHasBoiler && room_id == roomsPerLevel));
 	    }
 	    return rooms;
 	}
@@ -389,7 +431,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 
 	    // если в отдельном помещении - то занимаем последнюю комнату
 	    if (Cfg.boiler.roomType == 1) {
-	        for (room = Cfg.levels[Cfg.boiler.level - 1].rooms.length - 1; room >= 0 ; room--) {
+	        for (var room = Cfg.levels[Cfg.boiler.level - 1].rooms.length - 1; room >= 0 ; room--) {
 	            if (Cfg.levels[Cfg.boiler.level - 1].rooms[room].isRoom) {
 	                onRoom = Cfg.levels[Cfg.boiler.level - 1].rooms[room].id;
 	                break;
@@ -1295,7 +1337,6 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 	    if (typeof callback === 'undefined') {
 	        callback = function () { };
 	    }
-
 	    // если Id не задан то пытаемся из localStorage
         if (typeof id === 'undefined')
             var restoredCfg = StorageManager.loadLocalStorage({ key: "Danfoss.LastConfiguration", val: null });
@@ -1315,17 +1356,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 	}
 
 	Cfg.generateConfigurationName = function () {
-	    var restoredCfg = StorageManager.loadLocalStorage({ key: "Danfoss.LastConfiguration", val: null });
-	    if (restoredCfg) {
-	        var name = restoredCfg.name;
-	        if (name.indexOf("-") > 0) {
-	            return name.split('-')[0] + '-' + (parseInt(name.split('-')[1]) + 1);
-	        } else {
-	            return name + '-1';
-	        }
-	    } else {
-	        return CurrentUser.GetOrderPrefix() + '-1';
-	    }
+	    CurrentUser.SetOrderName().then(function (name) { Cfg.name = name;})
 	}
 
 	Cfg.restoreJsonConfiguration = function (restoredCfg) {
@@ -1351,13 +1382,13 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 
 	    boiler = initBoiler();
 	    initLevels(boiler);
-	    Cfg.name = Cfg.generateConfigurationName();
+	    Cfg.generateConfigurationName();
 	    updateCottageConfiguration();
 	}
 
     updateCottageConfiguration();
 
-    Cfg.name = Cfg.generateConfigurationName();
+    Cfg.generateConfigurationName();
 
     // при старте пытаемся достать последнюю конфигурацию с которой работали
     Cfg.restoreConfiguration();
