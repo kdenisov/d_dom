@@ -1,32 +1,50 @@
 ﻿<div id="authenticate-config">
     <div class="modal-header">
         <div class="modal-title">
-            Сохранить расчет
+            Авторизация
         </div>
     </div>
     <form class="modal-body" name="auth" novalidate ng-submit="FORM.submit(auth)">
         <div>Введите контакные данные для регистрации и сохранения текущей конфигурации.</div>
-        <div class="validation-text" ng-if="!FORM.valid">
-            Телефон или E-mail - обязательные поля.
+        <div class="validation-text" ng-if="FORM.modalError != ''">
+            {{FORM.modalError}}
         </div>
-        <input class="contact-field" type="tel" name="phone" ng-model="FORM.phone" placeholder="Телефон" ng-class="{'validation-field': !FORM.valid}" />
-        <div class="text-center">
-            <small>или</small>
+        <div ng-if="FORM.mode != 'login'">
+            <input class="contact-field" type="text" name="name" ng-model="FORM.name" placeholder="Ваше имя" ng-class="{'validation-field': !FORM.valid}" />
+            <input class="contact-field" type="tel" name="phone" ng-model="FORM.phone" placeholder="Телефон" ng-class="{'validation-field': !FORM.valid}" />
+            <!--<div class="text-center">
+                <small>или</small>
+            </div>-->
+            <div class="validation-text" ng-if="!FORM.valid && auth.email.$error.email">
+                Проверьте формат E-mail.
+            </div>
+            <input class="contact-field" type="email" name="email" ng-model="FORM.email" placeholder="E-mail" ng-class="{'validation-field': !FORM.valid}" />
+            <a href="#" class="button button-next" ng-click="$event.preventDefault(); FORM.submit(auth)">Сохранить</a>
+            <div class="text-center">
+                <a href="#" ng-click="LOGIN()">Вы уже зарегистрированы?</a>
+            </div>
         </div>
-        <div class="validation-text" ng-if="!FORM.valid && auth.email.$error.email">
-            Проверьте формат E-mail.
-        </div>
-        <input class="contact-field" type="email" name="email" ng-model="FORM.email" placeholder="E-mail" ng-class="{'validation-field': !FORM.valid}" />
-
-        <a href="#" class="button button-next" ng-click="$event.preventDefault(); FORM.submit(auth)">Сохранить</a>
-        <div class="text-center">
-            <a href="#/login">Вы уже зарегестрированы?</a>
+        <div ng-if="FORM.mode == 'login'">
+            <input class="contact-field" type="tel" name="phone" ng-model="FORM.phone" placeholder="Телефон" ng-class="{'validation-field': !FORM.valid}" />
+            <div class="text-center">
+                <small>или</small>
+            </div>
+            <div class="validation-text" ng-if="!FORM.valid && auth.email.$error.email">
+                Проверьте формат E-mail.
+            </div>
+            <input class="contact-field" type="email" name="email" ng-model="FORM.email" placeholder="E-mail" ng-class="{'validation-field': !FORM.valid}" />
+            <a href="#" class="button button-next" ng-click="$event.preventDefault(); FORM.getPIN(auth)">Отправить PIN</a>
+            <input class="contact-field" type="text" name="pin" ng-model="FORM.pin" placeholder="PIN" ng-class="{'validation-field': !FORM.valid}" />
+            <a href="#" class="button button-next" ng-click="$event.preventDefault(); FORM.login(auth)">Войти</a>
+            <div class="text-center">
+                <a href="#" ng-click="REGISTER()">Зарегистрироваться</a>
+            </div>
         </div>
     </form>
     <div class="modal-footer">
-        <div class="validation-text" ng-if="!FORM.rulesAccepted && FORM.submitted">
+        <!--<div class="validation-text" ng-if="!FORM.rulesAccepted && FORM.submitted">
             Подтвердите, что вы принимаете условия продажи.
         </div>
-        <label><input type="checkbox" name="accept" ng-model="FORM.rulesAccepted" /> Принять <a target="blank" href="#">условия продажи</a></label>
+        <label><input type="checkbox" name="accept" ng-model="FORM.rulesAccepted" /> Принять <a target="blank" href="#">условия продажи</a></label>-->
     </div>
 </div>
