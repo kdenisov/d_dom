@@ -203,12 +203,35 @@ appConfigurator.service('levelsService', function(Configurator, $stateParams) {
         $this.collectors = $this.level.collectors;
     };
 
-
+    $this.hoveringTimer = null;
+    $this.isHovering = false;
     $this.hoverRoomId = 0;
     $this.setHoverRoomId = function(id) {
         id = isNaN(id) || id == undefined ? 0 : id;
+
+        if ($this.hoveringTimer !== null) {
+            clearTimeout($this.hoveringTimer);
+            $this.hoveringTimer = null;
+        }
+
+        if (id === 0) {
+            $this.hoveringTimer = setTimeout($this.__resetHover__, 300);
+            return;
+        }
+
         $this.hoverRoomId = id;
+        $this.isHovering = true;
     };
+
+    $this.__resetHover__ = function() {
+        var scope = angular.element($('.room-equipment-panel')).scope();
+        scope.$apply(function() {
+            $this.isHovering = false;
+            $this.hoverRoomId = 0;
+        });
+    };
+
+    return $this;
 });
 
 appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsService, $stateParams, $modal, $location) {

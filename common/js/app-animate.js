@@ -1,53 +1,74 @@
 ﻿'use strict';
 //animation effects
+angular.module('appConfigurator')
 
-appConfigurator.animation('.animate-enter-leave', function () {
-    var cancelHanlder = function(item) {
-        return function(cancelled) {
-            if (!cancelled) {
-                return;
+    .animation('.animate-enter-leave', function() {
+        return {
+            enter: function(item, done) {
+                $(item).hide();
+                $(item).fadeIn(animationDuration, done);
+                return animationCancelHandler(item);
+            },
+
+            leave: function(item, done) {
+                $(item).fadeOut(animationDuration, done);
+                return animationCancelHandler(item);
             }
-
-            $(item).stop();
         };
-    };
+    })
 
-    return {
-        enter: function (item, done) {
-            $(item).hide();
-            $(item).fadeIn(300, done);
-            return cancelHanlder(item);
-        },
+    .animation('.room-equipment-panel', function() {
+        return {
+            beforeRemoveClass: function (element, className, done) {
+                if (className === 'ng-hide') {
+                    element.css('left', '-300px');
+                    done();
+                }
 
-        leave: function(item, done) {
-            $(item).fadeOut(300, done);
-            return cancelHanlder(item);
-        }
-    };
-});
+                return animationCancelHandler(element);
+            },
+            removeClass: function(element, className, done) {
+                if (className === 'ng-hide') {
+                    element.animate({ left: '56px' }, animationDuration, done);
+                }
 
-appConfigurator.animation('.room-equipment', function () {
-    var cancelHanlder = function (item) {
-        return function (cancelled) {
-            if (!cancelled) {
-                return;
+                return animationCancelHandler(element);
+            },
+            beforeAddClass: function(element, className, done) {
+                if (className === 'ng-hide') {
+                    element.animate({ left: '-300px' }, animationDuration, done);
+                }
+
+                return animationCancelHandler(element);
             }
-
-            $(item).stop();
         };
-    };
+    })
 
-    return {
-        enter: function (item, done) {
-            $(item).css({ left: '-256px', opacity: 0 });
-            $(item).animate({ left: '56px', opacity: 1 }, 300);
-            return cancelHanlder(item);
-        },
+    .animation('.room-equipment', function() {
+        return {
+            enter: function(item, done) {
+                $(item).css({ opacity: 0 });
+                $(item).animate({ opacity: 1 }, animationDuration);
+                return animationCancelHandler(item);
+            },
 
-        leave: function (item, done) {
-            $(item).css({ left: '56px', opacity: 1 });
-            $(item).animate({ left: '-256px', opacity: 0 }, 300);
-            return cancelHanlder(item);
+            leave: function(item, done) {
+                $(item).css({ opacity: 1 });
+                $(item).animate({ opacity: 0 }, animationDuration);
+                return animationCancelHandler(item);
+            }
+        };
+    });
+
+
+function animationCancelHandler(item) {
+    return function (cancelled) {
+        if (!cancelled) {
+            return;
         }
+
+        $(item).stop();
     };
-});
+}
+
+var animationDuration = 300;

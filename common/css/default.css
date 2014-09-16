@@ -741,7 +741,7 @@ a.room-item {
 	background-image: url('../img/icon_floors.png');
 }
 
-.room-equipment {
+.room-equipment-panel {
     display: block;
     position: absolute;
     top: 0;
@@ -750,6 +750,11 @@ a.room-item {
     left: 56px;
     background-color: #f3f3f3;
     z-index: 8000;
+}
+
+.room-equipment {
+    position: absolute;
+    top: 0;
 }
 
 .room-equipment > h2 {

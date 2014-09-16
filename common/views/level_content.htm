@@ -17,28 +17,30 @@
     </div>
 </div>
 
-<div class="room-equipment" ng-repeat="room in EQUIPMENT.items" ng-if="MODEL.hoverRoomId == room.id && MODEL.level.id == room.levelId">
-    <h2>Оборудование в комнате</h2>
-    <div class="group">
-        <div class="room-controls" ng-repeat="thermostat in room.thermostats">
-            <img ng-src="{{thermostat.src}}" alt="thermostat.title" />
-            <div>{{thermostat.title}}</div>
-        </div>
-    </div>
-    <div class="group radiator-type" ng-repeat="radiator in room.radiators">
-        <h3><i>{{radiator.count}}</i> радиатор{{EQUIPMENT.radiatorEnding(radiator.count)}} Тип №{{radiator.type}}</h3>
-        <div class="radiator-equipment">
-            <div class="valve" ng-if="radiator.thermostat">
-                <img ng-src="{{radiator.thermostat.src}}" alt="{{radiator.thermostat.title}}" />
-                <div>{{radiator.thermostat.title}}</div>
-            </div>
-            <div class="interconnection" ng-if="radiator.interconnection">
-                <img ng-src="{{radiator.interconnection.src}}" alt="{{radiator.interconnection.title}}" />
+<div class="room-equipment-panel"  ng-show="MODEL.isHovering">
+    <div class="room-equipment" ng-repeat="room in EQUIPMENT.items" ng-if="MODEL.hoverRoomId == room.id && MODEL.level.id == room.levelId">
+        <h2>Оборудование в комнате</h2>
+        <div class="group">
+            <div class="room-controls" ng-repeat="thermostat in room.thermostats">
+                <img ng-src="{{thermostat.src}}" alt="thermostat.title" />
+                <div>{{thermostat.title}}</div>
             </div>
         </div>
-    </div>
-    <div class="group floor-loops" ng-if="room.floors > 0">
-        <h3><i>{{room.floors}}</i> пет{{EQUIPMENT.floorEnding(room.floors)}} теплого пола</h3>
+        <div class="group radiator-type" ng-repeat="radiator in room.radiators">
+            <h3><i>{{radiator.count}}</i> радиатор{{EQUIPMENT.radiatorEnding(radiator.count)}} Тип №{{radiator.type}}</h3>
+            <div class="radiator-equipment">
+                <div class="valve" ng-if="radiator.thermostat">
+                    <img ng-src="{{radiator.thermostat.src}}" alt="{{radiator.thermostat.title}}" />
+                    <div>{{radiator.thermostat.title}}</div>
+                </div>
+                <div class="interconnection" ng-if="radiator.interconnection">
+                    <img ng-src="{{radiator.interconnection.src}}" alt="{{radiator.interconnection.title}}" />
+                </div>
+            </div>
+        </div>
+        <div class="group floor-loops" ng-if="room.floors > 0">
+            <h3><i>{{room.floors}}</i> пет{{EQUIPMENT.floorEnding(room.floors)}} теплого пола</h3>
+        </div>
     </div>
 </div>
 

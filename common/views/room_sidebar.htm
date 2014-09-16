@@ -219,13 +219,6 @@
                         </div>
                         <div class="field">
                             <h3>Сторона</h3>
-                            <!--<select ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.connectSide"
-                                    ng-model="RADIATOR.connectSide"
-                                    ng-change="
-                                RADIATOR.valves = ((RADIATOR.preview_valves == 3 || RADIATOR.preview_valves == 4) && RADIATOR.connectSide == 2) ? RADIATOR.preview_valves + 2 : RADIATOR.preview_valves;
-                                RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;">
-                            </select>-->
-
                             <div class="choicebox">
                                 <label ng-repeat="ITEM in PARAMS.radiators.connectSide" ng-class="{'choicebox-true': ITEM.id == RADIATOR.connectSide }">
                                     {{ITEM.name}}
