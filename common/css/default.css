@@ -1139,7 +1139,7 @@ a.collector-item {
 }
 
 .collector-panel {
-    height: 452px;
+    height: 520px;
     position: relative;
     overflow: hidden;
 }
@@ -1183,7 +1183,7 @@ a.collector-item {
 }
 
 .collector-inner {
-    height: 402px;
+    height: 470px;
     min-width: 100px;
     margin: 30px -100px 0 -105px;
     overflow: hidden;
