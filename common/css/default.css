@@ -565,6 +565,7 @@ label.tab-item-add {
 /* Cottage */
 .cottage {
 	height: 100%;
+    overflow: auto;
 	position: relative;
 	background: #FFF url('../img/bg_grid.png');
 }
@@ -632,12 +633,17 @@ label.tab-item-add {
 
 /* Room items */
 #levels {
-    height: 100%;
+    /*height: 100%;
     width: 100%;
     min-width: 1000px;
     min-height: 700px;
     position: absolute;
-    top: 0;
+    top: 0;*/
+    margin-top: -220px;
+    position: relative;
+    height: 100%;
+    min-height: 500px;
+    overflow: auto;
 }
 .grid {
 	height: 100%;
@@ -664,7 +670,8 @@ label.tab-item-add {
 }
 .level-arrow {
     width: 59px;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 .room-items {
 	width: 575px;
