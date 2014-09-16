@@ -211,7 +211,10 @@
                                         <input type="radio"
                                                ng-model="RADIATOR.preview_valves"
                                                ng-value="{{ITEM.id}}"
-                                               ng-change="RADIATOR.valves = RADIATOR.preview_valves;RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;RADIATOR.connectSide = 1">
+                                               ng-change="
+                                               RADIATOR.valves = RADIATOR.preview_valves;
+                                               RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
+                                               ">
                                     </span>
                                     <span class="title"><img src="{{PREVIEW(ITEM.id)}}" title="{{ITEM.name}}" /></span>
                                 </label>

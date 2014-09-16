@@ -225,7 +225,7 @@ appConfigurator.service('levelsService', function(Configurator, $stateParams) {
 
     $this.__resetHover__ = function() {
         var scope = angular.element($('.room-equipment-panel')).scope();
-        scope.$apply(function() {
+        scope && scope.$apply(function() {
             $this.isHovering = false;
             $this.hoverRoomId = 0;
         });
