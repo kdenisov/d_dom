@@ -183,7 +183,7 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
             var deferred = $q.defer();
 
             if (typeof id == 'undefined') {
-                $http.jsonp(appConfig.appPath + "/JsonOperations/GetLastConfiguration?jsonp=JSON_CALLBACK")
+                $http.get(appConfig.appPath + "/JsonOperations/GetLastConfiguration?jsonp=JSON_CALLBACK")
                 .success(function (data) {
                     data = JSON.parse(data);
                     if (typeof data === 'string') {
@@ -213,13 +213,13 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
             return deferred.promise;
         },
         // Сохранить конфигурацию на сервер под определенным именем
-        SaveConfiguration: function (name, configuration) {
+        SaveConfiguration: function (name, configuration, price) {
             var deferred = $q.defer();
 
             $http({
                 url: appConfig.appPath + "/JsonOperations/SaveConfiguration?jsonp=JSON_CALLBACK",
                 method: "POST",
-                data: { configuration: configuration, name: name },
+                data: { configuration: configuration, name: name, price: price },
                 headers: { 'Content-Type': 'application/json' }
             })
 			.success(function (data) {
@@ -245,13 +245,11 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
             var defaultName = _userGUID().substring(0, 5) + "-01";
             if (this.isGuidExistsInDB()) {
                 this.LoadConfiguration().then(function (cfg) {
-                    console.log(cfg);
                     if (cfg && "name" in cfg) {
-                        console.log(cfg.name);
                         var prevName = cfg.name;
                         if (prevName.indexOf("-") > 0) {
-                            return prevName.split('-')[0] + '-' + (parseInt(prevName.split('-')[1]) + 1);
-                            deferred.resolve(prevName.split('-')[0] + '-' + (parseInt(prevName.split('-')[1]) + 1));
+                            var newName = prevName.split('-')[0] + '-' + (parseInt(prevName.split('-')[1]) + 1);
+                            deferred.resolve(newName);
                         } else {
                             deferred.resolve(defaultName);
                         }
@@ -259,8 +257,9 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
                         deferred.resolve(defaultName);
                     }
                 }, function () { deferred.resolve(defaultName); })
+            } else {
+                setTimeout(function () { deferred.resolve(defaultName); }, 100);
             }
-            setTimeout(function () { deferred.resolve(defaultName); }, 100);
 
             return deferred.promise;
         }
@@ -270,7 +269,7 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
 });
 
 // Configurator Factory
-appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, appConfig) {
+appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, Catalog, appConfig) {
 	var Cfg = {};
 
 	var initStructure = function(){
@@ -1318,12 +1317,27 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, a
 	    // если пользователь залогинен
 	    CurrentUser.isGuidExistsInDB().then(
             function () {
-	            // сохраняем на сервере
-	            CurrentUser.SaveConfiguration(Cfg.name, JSON.stringify(savedObj)).then(function (res) {
-	                successCallback(res);
-	            }, function (res) {
-	                failCallback(res);
-	            });
+                Catalog.fetch().then(function (data) {
+                    var
+                        price = 0,
+                        basket = Cfg.Basket(),
+                        catalog = data
+                    ;
+
+                    if (typeof catalog == 'undefined') return 0;
+                    for (var k in basket) {
+                        if (catalog[k])
+                            price += basket[k] * catalog[k].price;
+                    }
+                    price = Math.round(price);
+
+                    // сохраняем на сервере
+                    CurrentUser.SaveConfiguration(Cfg.name, JSON.stringify(savedObj), price).then(function (res) {
+                        successCallback(res);
+                    }, function (res) {
+                        failCallback(res);
+                    });
+                });	            
             },
             function ()
 	        {

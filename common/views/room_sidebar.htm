@@ -160,7 +160,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="field hidden-{{RADIATOR.connection == 1}}">
+                        <div class="field hidden-{{RADIATOR.connection == 1 ||(RADIATOR.connection == 1 && RADIATORS.controlType == 2) }}">
                             <h3>Тип клапана радиатора</h3>
                             <select ng-model="RADIATOR.builtinValve"
                                     ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.builtinValve | filter: {connection: RADIATOR.connection}"
