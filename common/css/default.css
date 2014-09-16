@@ -1941,6 +1941,9 @@ slider span.pointer + span.pointer {
 	padding: 10px 0 5px 17px;
 	margin: 0 0 -3px 22px;
 }
+.edit-mode-false label:hover span:after {
+	background: url('../img/icon_edit.png') no-repeat 100% -16px;
+}
 
 /*SUMMARY*/
 .summary-sidebar-layout {
