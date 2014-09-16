@@ -1887,6 +1887,6 @@ appConfigurator.controller('AlertCtrl', function($scope, alertService) {
 
 function setCustomScroll() {
     $(function() {
-        $('.autoscroll').perfectScrollbar({ wheelSpeed: 150, includePadding: true });
+        $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: true });
     });
 }
