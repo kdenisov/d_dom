@@ -1,4 +1,5 @@
 ﻿angular.module('appConfigurator')
+
     .directive('ngFocus', function() {
         var FOCUS_CLASS = "ng-focused";
         return {
@@ -16,6 +17,7 @@
             }
         };
     })
+
     .directive('ngRouteLoader', function($rootScope) {
         return {
             restrict: 'A',
