@@ -538,7 +538,12 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 
     //@private методы
 
-	var updateRoomsConfiguration = function () {
+	var updateRoomsConfiguration = function (alertCallback) {
+	    alertCallback = alertCallback ? alertCallback : function (title, message) {
+	        console.log(title);
+	        console.log(message);
+	    };
+
 	    var Configurator = Cfg;
 	    var
 			area = Cfg.cottage.area,
@@ -595,10 +600,10 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	        }
 	    }
 
-	    Configurator.RefreshCollectorsCount();
+	    Configurator.RefreshCollectorsCount(alertCallback);
 	}
 
-	var updateCottageConfiguration = function () {
+	var updateCottageConfiguration = function (alertCallback) {
 
 	    var Configurator = Cfg;
 
@@ -618,11 +623,16 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 
 	    Configurator.cottage.levelsCount = levels_count;
 
-	    updateRoomsConfiguration();
+	    updateRoomsConfiguration(alertCallback);
 	}
 
     // @private автоконфигурирование коллекторов радиаторов для каждого этажа
-	var refreshRadiatorCollectorsCount = function(){
+	var refreshRadiatorCollectorsCount = function (alertCallback) {
+	    alertCallback = alertCallback ? alertCallback : function (title, message) {
+	        console.log(title);
+	        console.log(message);
+	    };
+
 	    // по всем этажам
 	    for (var level in Cfg.levels) {
 	        // если этаж активный
@@ -640,7 +650,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	                var collectors_count = 0;
 
 	            if (collectors_count > 1) {
-	                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
+	                alertCallback("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
 	            }
 
 	            for (var i in Cfg.levels[level].collectors) {
@@ -669,7 +679,9 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 
 
     // @private автоконфигурирование коллекторов теплого пола для каждого этажа
-	var refreshCollectorsCount = function () {
+	var refreshCollectorsCount = function (alertCallback) {
+	    alertCallback = alertCallback ? alertCallback : alert;
+
 	    // по всем этажам
 	    for (var level in Cfg.levels) {
 	        // если этаж активный
@@ -691,7 +703,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	                var collectors_count = 0;
 
 	            if (collectors_count > 1) {
-	                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
+	                alertCallback("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
 	            }
 
 	            for (var i in Cfg.levels[level].collectors) {
@@ -737,8 +749,9 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	}	
 
     // @private пересчет кол-ва входов для конкретного этажа (не меняя конфигурацию коллекторов)
-	var setCollectorEntriesForLevel = function () {
-	    
+	var setCollectorEntriesForLevel = function (alertCallback) {
+	    alertCallback = alertCallback ? alertCallback : alert;
+
 	    // по всем этажам - очищаем коллекторные входы
 	    for (var level in Cfg.levels) {
 	        // если этаж активный
@@ -772,7 +785,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	            }
 
 	            if (level_loops_count > 24 || level_radiators_count > 24) {
-	                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
+	                alertCallback("Превышено ограничение в 24 захода на один коллектор.", "Для решения вопроса обратитесь в данфосс");
 	                return false;
 	            }
 
@@ -807,12 +820,12 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	    }
 
 	    if (rebuild_floor_collectors) {
-	        refreshCollectorsCount();
+	        refreshCollectorsCount(alertCallback);
 	        //return;
 	    }
 
 	    if (rebuild_radiator_collectors) {
-	        refreshRadiatorCollectorsCount();
+	        refreshRadiatorCollectorsCount(alertCallback);
 	        //return;
 	    }
 
@@ -830,7 +843,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	                            var _entries = Cfg.levels[level].collectors[i].type == 'floor' ? Cfg.levels[__l].floor_loops_count : Cfg.levels[__l].radiators_count;
 	                            
 	                            if (Cfg.levels[level].collectors[i].entries + _entries > 24) {
-	                                alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
+	                                alertCallback("Превышено ограничение в 24 захода на один коллектор.", "Для решения вопроса обратитесь в данфосс");
 	                                return false;
 	                            }
 	                            Cfg.levels[level].collectors[i].entries += _entries;
@@ -858,13 +871,13 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	}
 
     // @public автоконфигурирование коллекторов радиаторов и теплых полов
-	Cfg.RefreshCollectorsCount = function () {
+	Cfg.RefreshCollectorsCount = function (alertCallback) {
 
 	    Cfg.properties.autoCalcCollectorInputs = true;
 
-	    refreshCollectorsCount();
+	    refreshCollectorsCount(alertCallback);
 
-	    refreshRadiatorCollectorsCount();
+	    refreshRadiatorCollectorsCount(alertCallback);
 	}
 
     // @public кол-во этажей
@@ -888,18 +901,18 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	}
 
     // @public пересчет входов коллекторов без изменения конфигурации по этажам
-	Cfg.UpdateCollectorEntries = function () {
-	    setCollectorEntriesForLevel();
+	Cfg.UpdateCollectorEntries = function (alertCallback) {
+	    setCollectorEntriesForLevel(alertCallback);
 	}
 
 
     // @public пересчет кол-ва радиаторов и теплых полов в комнатах
-	Cfg.UpdateRoomsConfiguration = function () {
-	    updateRoomsConfiguration();
+	Cfg.UpdateRoomsConfiguration = function (alertCallback) {
+	    updateRoomsConfiguration(alertCallback);
 	}
 
-	Cfg.UpdateCottageConfiguration = function () {
-	    updateCottageConfiguration();
+	Cfg.UpdateCottageConfiguration = function (alertCallback) {
+	    updateCottageConfiguration(alertCallback);
 	}
 
 	Cfg.ValidateCollectors = function (currentLevel, levels, collector, alertCallback, popupCallback) {
@@ -1382,7 +1395,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	    merge(Cfg.boiler, restoredCfg.boiler);
 	}
 
-	Cfg.ReInitConfigurator = function () {
+	Cfg.ReInitConfigurator = function (alertCallback) {
 
 	    Cfg.cottage = {
 	        area: 160,
@@ -1398,10 +1411,10 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	    boiler = initBoiler();
 	    initLevels(boiler);
 	    Cfg.generateConfigurationName();
-	    updateCottageConfiguration();
+	    updateCottageConfiguration(alertCallback);
 	}
 
-    updateCottageConfiguration();
+	updateCottageConfiguration();
 
     Cfg.generateConfigurationName();
 

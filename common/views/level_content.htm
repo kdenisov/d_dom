@@ -1,52 +1,22 @@
+<div class="grid">
+    <h1>
+        Параметры<br>
+        <span ng-switch on="MODEL.level.isBasement">
+            <span ng-switch-when="true">подвала</span>
+            <span ng-switch-default ng-switch on="MODEL.level.id">
+                <span ng-switch-when="1">первого</span>
+                <span ng-switch-when="2">второго</span>
+                <span ng-switch-when="3">третьего</span>
+                этажа
+            </span>
+        </span>
+    </h1>
+    <div class="info">Уточните количество коллекторов и&nbsp;отапливаемых <br>комнат в&nbsp;вашем доме</div>
+    <div id="levels">
 
-
-<h1>Параметры<br>
-<span ng-switch on="MODEL.level.isBasement">
-	<span ng-switch-when="true">подвала</span>
-	<span ng-switch-default ng-switch on="MODEL.level.id">
-		<span ng-switch-when="1">первого</span>
-		<span ng-switch-when="2">второго</span>
-		<span ng-switch-when="3">третьего</span>
-		этажа
-	</span>
-</span>
-</h1>
-<div class="info">Уточните количество коллекторов и&nbsp;отапливаемых <br>комнат в&nbsp;вашем доме</div>
-<div id="levels">
-    
-</div>
-<!-- ng-href="{{ROOM.isRoom && ('#/' + (ROOM.isBoilerRoom && 'boiler' || 'room/' + CURRENT_LEVEL.id + '/' + ROOM.id)) || ''}}" -->
- <!--<div class="room-items">
-    
-    <a ng-repeat="ROOM in CURRENT_LEVEL.rooms | orderBy:'-isRoom'"
-       ng-class="{'is-room': ROOM.isRoom, 'is-room-boiler': ROOM.isBoilerRoom, 'is-floors': ROOM.floors.isFloors && ROOM.isRoom}"
-       ng-href="{{ROOM.isRoom && ('#/' + 'room/' + CURRENT_LEVEL.id + '/' + ROOM.id) || ''}}"
-       ng-mouseenter="mouseenter(ROOM.id);" ng-mouseleave="mouseleave(ROOM.id)"
-       class="room-item">
-        <div class="room-radiators"><b>{{ROOM.getRadiatorsCount()}}</b></div>
-        <div class="room-floors"><b>{{ROOM.floors.loops}}</b></div>
-        <h4 class="room-title">{{ROOM.name}}</h4>
-        <h4 class="boiler-title">{{BOILER.canonicalName()}}</h4>
-    </a>
+    </div>
 </div>
 
-<div class="level-items">
-	<a ng-repeat="LEVEL in LEVELS | filter:{isLevel: true} | orderBy:'-id' | orderBy:'isBasement'" ng-href="#/level/{{LEVEL.id}}" class="level-item clearfix selected-{{LEVEL.id == CURRENT_LEVEL.id}}">
-		<h3>{{LEVEL.canonicalName()}}</h3>
-		<div class="room-items">
-			<div
-				ng-repeat="ROOM in LEVEL.rooms | orderBy: '-isRoom'"
-				ng-class="{'is-room': ROOM.isRoom}"
-				class="room-item"
-			>
-			</div>
-		</div>
-	</a>
-</div>
-
-<a ng-if="PREV_LEVEL.isLevel" ng-href="#/level/{{PREV_LEVEL.id}}" class="arrow arrow-down"></a>
-<a ng-if="NEXT_LEVEL.isLevel" ng-href="#/level/{{NEXT_LEVEL.id}}" class="arrow arrow-up"></a>-->
-    
 <div class="room-equipment" ng-repeat="room in EQUIPMENT.items" ng-if="MODEL.hoverRoomId == room.id && MODEL.level.id == room.levelId">
     <h2>Оборудование в комнате</h2>
     <div class="group">

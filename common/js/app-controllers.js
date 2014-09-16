@@ -591,24 +591,6 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
         $scope.RADIATOR = obj;
     };
 
-    $scope.ALERT = function(alert, confirm, cancel) {
-        $scope.ALERT_MESSAGE = alert;
-        $scope.CONFIRM_ALERT = function() {
-            $scope.alertInstance && $scope.alertInstance.close();
-            confirm && confirm();
-        };
-        $scope.CLOSE_ALERT = cancel && function() {
-            $scope.alertInstance && $scope.alertInstance.dismiss('cancel');
-            cancel();
-        };
-
-        $scope.alertInstance = $modal.open({
-            templateUrl: 'alert.html',
-            size: 'sm',
-            scope: $scope
-        });
-    };
-
     $scope.DELETE_ROOM = function(evt) {
         evt && evt.preventDefault();
 
@@ -710,11 +692,18 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
     };
 
 	$scope.refreshRadiatorCollectorsCount = function () {
-	    Configurator.UpdateCollectorEntries();
+	    Configurator.UpdateCollectorEntries(defaultAlert);
 	}
 
     $scope.UpdateCollectorEntries = function() {
-        Configurator.UpdateCollectorEntries();
+        Configurator.UpdateCollectorEntries(defaultAlert);
+    };
+
+    var defaultAlert = function(title, message) {
+        alertService.open({
+            title: title,
+            message: message,
+        });
     };
     
 	setCustomScroll();
@@ -1818,24 +1807,6 @@ appConfigurator.controller('BaseCtrl', function($scope, $modal, CurrentUser, Con
     });
 });
 
-appConfigurator.directive('ngFocus', function () {
-    var FOCUS_CLASS = "ng-focused";
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        link: function(scope, element, attrs, ctrl) {
-            ctrl.$focused = false;
-            element.bind('focus', function(evt) {
-                element.addClass(FOCUS_CLASS);
-                scope.$apply(function() { ctrl.$focused = true; });
-            }).bind('blur', function(evt) {
-                element.removeClass(FOCUS_CLASS);
-                scope.$apply(function() { ctrl.$focused = false; });
-            });
-        }
-    };
-});
-
 appConfigurator.service('alertService', function($modal) {
     var $this = this;
 
@@ -1847,15 +1818,22 @@ appConfigurator.service('alertService', function($modal) {
 
     $this.cancel = function() {
         $this.modalInstance && $this.modalInstance.dismiss('close');
+        $this.modalInstance = null;
     };
 
     $this.confirm = function() {
         $this.modalInstance && $this.modalInstance.close();
+        $this.modalInstance = null;
     };
 
     $this.open = function (params) {
         if (!params) {
             return;
+        }
+
+        //close any non-closed pop-up.
+        if ($this.modalInstance != null) {
+            $this.cancel();
         }
 
         params = $.extend({
