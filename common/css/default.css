@@ -662,6 +662,10 @@ label.tab-item-add {
 	content: '';
 	background: no-repeat 28px 0;
 }
+.level-arrow {
+    width: 59px;
+    margin: 0 auto;
+}
 .room-items {
 	width: 575px;
 	margin: 0 0 0 70px;
