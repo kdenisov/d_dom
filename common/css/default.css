@@ -1223,6 +1223,7 @@ a.collector-item {
     position: absolute;
     left: -25px;
     top: 312px;
+    z-index: 2;
 }
 
 .collector-floor .collector-set.cold {
@@ -1329,7 +1330,7 @@ a.collector-item {
 
 .collector-nodes > .brace-long {
     position: absolute;
-    left: 31px;
+    left: 11px;
     top: -26px;
     z-index: 2;
 }
@@ -1356,14 +1357,14 @@ a.collector-item {
 
 .collector-nodes > .brace {
     position: absolute;
-    left: 35px;
+    left: 38px;
     top: 2px;
     z-index: 2;
 }
 
 .collector-nodes > .brace-second {
     position: absolute;
-    right: 35px;
+    right: 31px;
     top: 2px;
 }
 

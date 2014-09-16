@@ -215,7 +215,7 @@ appConfigurator.service('levelsService', function(Configurator, $stateParams) {
         }
 
         if (id === 0) {
-            $this.hoveringTimer = setTimeout($this.__resetHover__, 300);
+            $this.hoveringTimer = setTimeout($this.resetHover, 300);
             return;
         }
 
@@ -223,7 +223,7 @@ appConfigurator.service('levelsService', function(Configurator, $stateParams) {
         $this.isHovering = true;
     };
 
-    $this.__resetHover__ = function() {
+    $this.resetHover = function() {
         var scope = angular.element($('.room-equipment-panel')).scope();
         scope && scope.$apply(function() {
             $this.isHovering = false;
@@ -363,8 +363,8 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                 applyToSidebarScope(action);
             },
             roomClicked: function(levelId, roomId) {
-                $scope.$apply(function() {
-                    levelsService.setHoverRoomId(0);
+                levelsService.resetHover();
+                $scope.$apply(function () {
                     $location.path('/room/' + levelId + '/' + roomId);
                 });
             },
