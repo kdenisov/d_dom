@@ -76,7 +76,7 @@
         </div><!-- #viewport -->
 
 
-        <div id="basket" ng-controller="BasketCtrl" ng-init="TOGGLE_BASKET = true" ng-cloak ng-class="{'basket-opened': !TOGGLE_BASKET}">
+        <div id="basket" ng-controller="BasketCtrl" ng-init="TOGGLE_BASKET = true" ng-cloak ng-class="{'basket-opened': !TOGGLE_BASKET}" ng-click="$event.stopPropagation();">
             <div class="basket-sum" ng-click="TOGGLE_BASKET = !TOGGLE_BASKET">
                 <span class="sum" id="basket-sum">{{BASKET_TOTAL_PRICE()}}</span> руб.
             </div>
@@ -109,7 +109,7 @@
                 </div>
                 <div class="basket-nav">
                     <!--<a ui-sref-active="active" ng-href="#/summary" class="button button-next" title="Информация по заказу">Информация по заказу</a>-->
-                    <a ui-sref-active="active" ng-href="#/summary" class="button" title="Подробнее">Подробнее</a>
+                    <a ui-sref-active="active" ng-href="#/summary" class="button" title="Подробнее" >Подробнее</a>
                 </div>
             </div><!-- #basket-popup -->
         </div>
@@ -155,6 +155,19 @@
                 <div class="button" ng-click="CANCEL_SET_COLLECTOR()">Отмена</div>    
                 <div class="button button-next" ng-click="SET_COLLECTOR()">Применить</div>
             </div>
+        </script>
+        
+        <script>
+            //todo move it to some angular 'click-ouside' attr directive
+            $(function() {
+                var basketPanel = $('#basket-popup');
+                $(document).click(function() {
+                    var scope = angular.element(basketPanel).scope();
+                    scope && scope.$apply(function() {
+                        scope.TOGGLE_BASKET = true;
+                    });
+                });
+            });
         </script>
     </body>
 </html>
