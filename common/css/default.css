@@ -565,7 +565,6 @@ label.tab-item-add {
 /* Cottage */
 .cottage {
 	height: 100%;
-    overflow: auto;
 	position: relative;
 	background: #FFF url('../img/bg_grid.png');
 }
@@ -620,9 +619,17 @@ label.tab-item-add {
 }*/
 
 .cottage .house {
+    position: relative;
+    width: 800px;
+    height: 650px;
+    margin: 0 auto;
+}
+.cottage .house > img {
     position: absolute;
-    left: 29px;
-    top: 57px;
+    left: 0;
+    top: 0;
+    width: 800px;
+    height: 650px;
 }
 
 .cottage h1,
