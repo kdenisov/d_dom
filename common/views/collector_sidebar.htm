@@ -1,11 +1,11 @@
 <div class="autoscroll">
 	<div class="group">
-        <div ng-if="COLLECTOR.isCollector">
+        <div ng-if="COLLECTOR.isCollector()">
 		    <h3>К этому коллектору подключены</h3>
 		    <div class="level-items clearfix">
 			    <label ng-repeat="LEVEL in LEVELS | filter:{isLevel: true} | orderBy:'-isBasement'" class="label-checkbox checkbox-{{COLLECTOR.levels[LEVEL.id]}} level-item">
 				    <span class="pseudo-checkbox"></span>
-                    <input type="checkbox" disabled aria-disabled ng-model="COLLECTOR.levels[LEVEL.id]" ng-change="validateCollectors(LEVEL, LEVELS, COLLECTOR);">
+                    <input type="checkbox" ng-model="COLLECTOR.levels[LEVEL.id]" ng-change="validateCollectors(CURRENT_LEVEL, LEVEL.id, LEVELS, COLLECTOR);">
 				    <div class="room-items clearfix">
 					    <div
 						    ng-repeat="ROOM in LEVEL.rooms"
@@ -18,15 +18,15 @@
 			    </label>
 		    </div>
         </div>    
-        <div class="level-items clearfix">
-            <label class="label-switchbox small switchbox-{{COLLECTOR.isCollector}}">
-                <span ng-if="COLLECTOR.isCollector">Отключить</span><span ng-if="!COLLECTOR.isCollector">Включить</span> коллектор
+        <!--<div class="level-items clearfix">
+            <label class="label-switchbox small switchbox-{{COLLECTOR.isCollector()}}">
+                <span ng-if="COLLECTOR.isCollector()">Отключить</span><span ng-if="!COLLECTOR.isCollector()">Включить</span> коллектор
 			        <input type="checkbox"
-				        ng-model="COLLECTOR.isCollector"
+				        ng-model="COLLECTOR.isCollector()"
 				        ng-change="validateCollectors(CURRENT_LEVEL, LEVELS, COLLECTOR)"
 			        >
             </label>
-        </div>
+        </div>-->
 	</div>
 	<div class="group">
         <h3>Количество заходов</h3>        

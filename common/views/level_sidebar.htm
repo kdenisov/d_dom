@@ -1,14 +1,14 @@
 <div class="params-collectors autoscroll">
     <div ng-repeat="COLLECTOR in MODEL.collectors" class="group">
-        <label class="label-switchbox switchbox-{{COLLECTOR.isCollector}}">
+        <label class="label-switchbox switchbox-{{COLLECTOR.isCollector()}}">
             <!-- ng-class="{'label-switchbox-false': COLLECTOR.id == 1 + COTTAGE.levelsCount > 1}" -->
             <h3>{{COLLECTOR.name}} <nobr><span class="hidden-true">({{COLLECTOR.entries}} вх.)</span></nobr></h3>
-            <input type="checkbox"
-                   ng-model="COLLECTOR.isCollector"
-                   ng-change="validateCollectors(CURRENT_LEVEL, LEVELS, COLLECTOR)">
+            <!--<input type="checkbox"
+                   ng-model="COLLECTOR.isCollector()"
+                   ng-change="validateCollectors(CURRENT_LEVEL, LEVELS, COLLECTOR)">-->
             <!-- ng-if="!(COLLECTOR.id == 1 + COTTAGE.levelsCount > 1)" -->
         </label>
-        <div class="hidden-{{!COLLECTOR.isCollector}}">
+        <div class="hidden-{{!COLLECTOR.isCollector()}}">
             <a ng-href="#/collector/{{MODEL.level.id}}/{{COLLECTOR.id}}"><img src="common/img/collector_small_{{COLLECTOR.type}}.jpg" alt=""></a>
             К этому коллектору подключены
             <!-- <div class="choicebox hidden-{{!BOILER.isBoiler}}">
@@ -19,7 +19,7 @@
             <div class="level-items clearfix">
                 <label ng-repeat="LEVEL in MODEL.levels | filter:{isLevel: true} | orderBy:'-isBasement'" class="label-checkbox checkbox-{{COLLECTOR.levels[LEVEL.id]}} level-item">
                     <span class="pseudo-checkbox"></span>
-                    <input type="checkbox" ng-model="COLLECTOR.levels[LEVEL.id]" disabled aria-disabled ng-change="validateCollectors(CURRENT_LEVEL.id, COLLECTOR.levels, COLLECTOR.id)">
+                    <input type="checkbox" ng-model="COLLECTOR.levels[LEVEL.id]" ng-change="validateCollectors(CURRENT_LEVEL, LEVEL.id, MODEL.levels, COLLECTOR)">
                     <div class="room-items clearfix">
                         <div ng-repeat="ROOM in LEVEL.rooms"
                              ng-class="{'is-room': ROOM.id <= LEVEL.roomsCount}"
