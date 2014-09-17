@@ -277,6 +277,7 @@
                              ng-model="FLOORS.loops"
                              ng-change="
 							FLOORS.fittings = FLOORS.loops == 1 && 0;
+                            FLOORS.control = FLOORS.control == 1 && FLOORS.loops > 1 ? 2 : FLOORS.control;
                             UpdateCollectorEntries();
 						"></div>
                         <span class="slider-value"><b>{{FLOORS.loops}}</b></span>
