@@ -371,16 +371,7 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
             },
             roomRemoved: function(levelId, roomId) {
                 levelsService.level.rooms[roomId - 1].isRoom = false;
-            },
-            addRoom: function(levelId, roomId) {
-                console.log('attempt to ENABLE room ' + roomId + ' on level ' + levelId);
-            },
-            removeRoom: function(levelId, roomId) {
-                console.log('attempt to DISABLE room ' + roomId + ' on level ' + levelId);
-            },
-            renameRoom: function(levelId, roomId, newName) {
-                console.log('attempt to change the name of the room ' + roomId + ' on level ' + levelId + ' to "' + newName + '"');
-            },
+            }
         });
     });
 
@@ -452,6 +443,8 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
     if (!room.isRoom) {
         $location.path('/level/' + $stateParams.levelId);
     }
+
+    room.visited = true;
 
 	Configurator.params.room.fittings = Configurator.params.fittings;
 	Configurator.params.room.fittingsMaterial = Configurator.params.fittingsMaterial;
