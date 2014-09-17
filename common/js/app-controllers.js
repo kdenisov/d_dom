@@ -970,10 +970,8 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
     };
 
     $scope.AUTO_CALC_INPUTS = function () {
-        if (PROPERTIES.autoCalcCollectorInputs) {
-            Configurator.RefreshCollectorsCount();
-            $scope.UPDATE_NODES();
-        }
+        Configurator.RefreshCollectorsCount();
+        $scope.UPDATE_NODES();
     };
 
     $scope.UPDATE_NODES = function() {

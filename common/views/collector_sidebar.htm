@@ -37,9 +37,11 @@
 		<div class="slider-wrap">
 			Количество:
             <div ui-slider="{range: 'min'}" min="2" max="24"
-				ng-model="COLLECTOR.entries"
-				ng-change="COLLECTOR.sets = (PARAMS.sets | filter: {isFlowmeter: COLLECTOR.isFlowmeter, entries: COLLECTOR.entries})[0].id; AUTO_CALC_INPUT = false; UPDATE_NODES(); SLIDE_LEFT();"
-			></div>
+                 ng-model="COLLECTOR.entries"
+                 ng-change="COLLECTOR.sets = (PARAMS.sets | filter: {isFlowmeter: COLLECTOR.isFlowmeter, entries: COLLECTOR.entries})[0].id; 
+                 PROPERTIES.autoCalcCollectorInputs = false; 
+                 UPDATE_NODES(); 
+                 SLIDE_LEFT();"></div>
 			<span class="slider-value"><b>{{COLLECTOR.entries}}</b></span>
 		</div>
             
