@@ -1358,7 +1358,7 @@ a.collector-item {
 
 .collector-nodes > .node > .brace-long {
     position: absolute;
-    left: -8px;
+    left: -28px;
     top: -48px;
     z-index: 2;
 }
@@ -1366,7 +1366,7 @@ a.collector-item {
 .collector-nodes > .node > .brace-long-second {
     position: absolute;
     top: -48px;
-    left: 82px;
+    left: 62px;
     z-index: 2;
 }
 
@@ -1385,14 +1385,14 @@ a.collector-item {
 
 .collector-nodes > .node > .brace {
     position: absolute;
-    left: -5px;
+    left: 0px;
     top: -18px;
     z-index: 2;
 }
 
 .collector-nodes > .node > .brace-second {
     position: absolute;
-    right: -55px;
+    right: -60px;
     top: -18px;
     z-index: 2;
 }
