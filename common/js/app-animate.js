@@ -2,11 +2,12 @@
 //animation effects
 angular.module('appConfigurator')
 
-    .animation('.animate-enter-leave', function() {
+    .animation('.house-enter-leave', function() {
         return {
-            enter: function(item, done) {
-                $(item).hide();
-                $(item).fadeIn(animationDuration, done);
+            enter: function (item, done) {
+                item = $(item);
+                item.hide();
+                item.fadeIn(animationDuration, done);
                 return animationCancelHandler(item);
             },
 

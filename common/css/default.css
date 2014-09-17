@@ -619,17 +619,18 @@ label.tab-item-add {
 }*/
 
 .cottage .house {
-    position: relative;
-    width: 800px;
-    height: 650px;
-    margin: -150px auto 0;
+    position: absolute;
+    width: 1000px;
+    height: 100%;
+    min-height: 300px;
+    max-height: 800px;
+    top: 0;
 }
 .cottage .house > img {
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 800px;
-    height: 650px;
+    height: 100%;
+    right: 0;
+    bottom: 10px;
 }
 
 .cottage h1,
