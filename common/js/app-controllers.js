@@ -201,12 +201,35 @@ appConfigurator.service('levelsService', function(Configurator, $stateParams) {
         $this.collectors = $this.level.collectors;
     };
 
-
+    $this.hoveringTimer = null;
+    $this.isHovering = false;
     $this.hoverRoomId = 0;
     $this.setHoverRoomId = function(id) {
         id = isNaN(id) || id == undefined ? 0 : id;
+
+        if ($this.hoveringTimer !== null) {
+            clearTimeout($this.hoveringTimer);
+            $this.hoveringTimer = null;
+        }
+
+        if (id === 0) {
+            $this.hoveringTimer = setTimeout($this.resetHover, 300);
+            return;
+        }
+
         $this.hoverRoomId = id;
+        $this.isHovering = true;
     };
+
+    $this.resetHover = function() {
+        var scope = angular.element($('.room-equipment-panel')).scope();
+        scope && scope.$apply(function() {
+            $this.isHovering = false;
+            $this.hoverRoomId = 0;
+        });
+    };
+
+    return $this;
 });
 
 appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsService, $stateParams, $modal, $location) {
@@ -338,8 +361,8 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                 applyToSidebarScope(action);
             },
             roomClicked: function(levelId, roomId) {
-                $scope.$apply(function() {
-                    levelsService.setHoverRoomId(0);
+                levelsService.resetHover();
+                $scope.$apply(function () {
                     $location.path('/room/' + levelId + '/' + roomId);
                 });
             },
@@ -714,11 +737,18 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
     };
 
 	$scope.refreshRadiatorCollectorsCount = function () {
-	    Configurator.UpdateCollectorEntries();
+	    Configurator.UpdateCollectorEntries(defaultAlert);
 	}
 
     $scope.UpdateCollectorEntries = function() {
-        Configurator.UpdateCollectorEntries();
+        Configurator.UpdateCollectorEntries(defaultAlert);
+    };
+
+    var defaultAlert = function(title, message) {
+        alertService.open({
+            title: title,
+            message: message,
+        });
     };
     
 	setCustomScroll();
@@ -1829,23 +1859,6 @@ appConfigurator.controller('BaseCtrl', function($scope, $modal, CurrentUser, Con
     });
 });
 
-appConfigurator.directive('ngFocus', function () {
-    var FOCUS_CLASS = "ng-focused";
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        link: function(scope, element, attrs, ctrl) {
-            ctrl.$focused = false;
-            element.bind('focus', function(evt) {
-                element.addClass(FOCUS_CLASS);
-                scope.$apply(function() { ctrl.$focused = true; });
-            }).bind('blur', function(evt) {
-                element.removeClass(FOCUS_CLASS);
-                scope.$apply(function() { ctrl.$focused = false; });
-            });
-        }
-    };
-});
 
 appConfigurator.service('alertService', function($modal) {
     var $this = this;
@@ -1858,15 +1871,22 @@ appConfigurator.service('alertService', function($modal) {
 
     $this.cancel = function() {
         $this.modalInstance && $this.modalInstance.dismiss('close');
+        $this.modalInstance = null;
     };
 
     $this.confirm = function() {
         $this.modalInstance && $this.modalInstance.close();
+        $this.modalInstance = null;
     };
 
     $this.open = function (params) {
         if (!params) {
             return;
+        }
+
+        //close any non-closed pop-up.
+        if ($this.modalInstance != null) {
+            $this.cancel();
         }
 
         params = $.extend({
@@ -1897,6 +1917,6 @@ appConfigurator.controller('AlertCtrl', function($scope, alertService) {
 
 function setCustomScroll() {
     $(function() {
-        $('.autoscroll').perfectScrollbar({ wheelSpeed: 150, includePadding: true });
+        $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: true });
     });
 }
