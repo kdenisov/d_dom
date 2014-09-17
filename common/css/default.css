@@ -89,8 +89,12 @@ h1 a.delete {
     width: 15px;
     margin-bottom: 2px;
     margin-left: 12px;
-    background: url("../img/icon_delete.png") no-repeat scroll center bottom rgba(0, 0, 0, 0);
+    background: url("../img/icon_delete.png") no-repeat scroll center top rgba(0, 0, 0, 0);
     border: none;
+}
+
+h1 a.delete:hover {
+    background: url("../img/icon_delete.png") no-repeat scroll center -15px rgba(0, 0, 0, 0);
 }
 
 h1 input {
@@ -1932,6 +1936,11 @@ slider span.pointer + span.pointer {
 .edit-mode-true label span {
 	display: none;
 }
+
+.edit-mode-false label {
+    cursor: pointer;
+}
+
 .edit-mode-false label span:after {
 	width: 15px;
 	height: 14px;
