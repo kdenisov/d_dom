@@ -432,6 +432,8 @@ appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams,
     $scope.refreshRadiatorCollectorsCount = function () {
         Configurator.RefreshCollectorsCount();
     };
+
+    setCustomScroll();
 });
 
 appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, alertService, $modal, $location) {
