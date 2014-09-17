@@ -292,7 +292,7 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                     });
                 }
 
-                if (roomInstance.floors.isFloors && roomInstance.floors.control > 1) {
+                if (roomInstance.floors.isFloors) {
                     control = Configurator.params.room.floors.control[roomInstance.floors.control - 1];
                     roomEquipment.thermostats.push({
                         title: 'Термостат теплых полов',
