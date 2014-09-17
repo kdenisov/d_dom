@@ -168,7 +168,7 @@
                     id: collector_id, // id, он же тип колектора: радиаторов || теплых полов
                     name: collector_id <= 1 ? 'Коллектор радиаторов' : 'Коллектор теплых полов',
                     type: collector_id <= 1 ? 'radiator' : 'floor',
-                    isCollector: false, // Коллектор: есть
+                    isCollector: function () { return this.levels[1] || this.levels[2] || this.levels[3] }, // Коллектор: есть
                     levels: {
 // Этажи коллекторов
                         1: level_id == 1,
@@ -295,7 +295,7 @@
                     // если этаж активный
                     if (Cfg.levels[__level].isLevel) {
                         for (var j in Cfg.levels[__level].collectors) {
-                            if (Cfg.levels[__level].collectors[j].isCollector) {
+                            if (Cfg.levels[__level].collectors[j].isCollector()) {
                                 if (Cfg.levels[__level].collectors[j].levels[parseInt(level) + 1]) {
                                     if (Cfg.levels[__level].collectors[j].type == 'floor')
                                         is_exists_floor_collector = true;
@@ -328,7 +328,7 @@
             // если этаж активный
             if (Cfg.levels[level].isLevel) {
                 for (var i in Cfg.levels[level].collectors) {
-                    if (Cfg.levels[level].collectors[i].isCollector) {
+                    if (Cfg.levels[level].collectors[i].isCollector()) {
                         // смотрим к каким этажам подключен коллектор
                         for (var __l = 0; __l < 3; __l++) {
                             // __l-ый этаж
@@ -460,9 +460,7 @@
                 for (var i in Cfg.levels[level].collectors) {
                     if (Cfg.levels[level].collectors[i].type == 'radiator') {
                         // если кол0во коллекторов больше нуля, то активируем текущий
-                        Cfg.levels[level].collectors[i].isCollector = collectors_count > 0;
-
-                        if (Cfg.levels[level].collectors[i].isCollector) {
+                        if (collectors_count > 0) {
                             // считаем кол-во заходов
                             Cfg.levels[level].collectors[i].entries = level_radiators_count > 24 ? level_radiators_count % 1 : level_radiators_count;
                             Cfg.levels[level].collectors[i].levels = {
@@ -512,9 +510,7 @@
                 for (var i in Cfg.levels[level].collectors) {
                     if (Cfg.levels[level].collectors[i].type == 'floor') {
                         // если кол0во коллекторов больше нуля, то активируем текущий
-                        Cfg.levels[level].collectors[i].isCollector = collectors_count > 0;
-
-                        if (Cfg.levels[level].collectors[i].isCollector) {
+                        if (collectors_count > 0) {
                             // считаем кол-во заходов
                             Cfg.levels[level].collectors[i].entries = level_loops_count > 24 ? level_loops_count % 24 : level_loops_count;
                             Cfg.levels[level].collectors[i].levels = {

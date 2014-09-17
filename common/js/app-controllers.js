@@ -115,7 +115,7 @@ appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderBy
     //$scope.$watch('CONFIGURATOR.roomsTotal', setParamsCottage);
 });
 
-appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configurator, $timeout, $modalInstance, EDITED_COLLECTOR) {
+appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configurator, $timeout, $modalInstance, EDITED_COLLECTOR, UNCHECKED_LEVEL) {
 
     var
 		levels = Configurator.levels
@@ -131,6 +131,7 @@ appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configura
     $modalInstance.TO_COLLECTOR_LEVEL_ID = 0;
 
     $scope.EDITED_COLLECTOR = EDITED_COLLECTOR;
+    $scope.UNCHECKED_LEVEL = UNCHECKED_LEVEL;
 
     $scope.GET_FREE_COLLECTORS = function () {
          if ($scope.EDITED_COLLECTOR == null) return [];
@@ -138,9 +139,9 @@ appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configura
         var res = [];
         angular.forEach($scope.LEVELS, function (_level) {
             angular.forEach(_level.collectors, function (_collector, key2) {
-                if (_collector != null
+                if (_level.isLevel == true && _collector != null
                     && _collector.type == $scope.EDITED_COLLECTOR.type
-                    && _collector.isCollector
+                    && _collector.isCollector()
                     && _collector != $scope.EDITED_COLLECTOR) {
                     _collector.setup_level = _level;
                     _collector.disabled = 24 - _collector.entries < $scope.EDITED_COLLECTOR.entries;
@@ -170,9 +171,7 @@ appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configura
                         alert("Превышено ограничение в 24 захода на один коллектор. Для решения вопроса обратитесь в данфосс");
                         return;
                     }
-                    _collector.levels[1] = _collector.levels[1] || $scope.EDITED_COLLECTOR.levels[1];
-                    _collector.levels[2] = _collector.levels[2] || $scope.EDITED_COLLECTOR.levels[2];
-                    _collector.levels[3] = _collector.levels[3] || $scope.EDITED_COLLECTOR.levels[3];
+                    _collector.levels[UNCHECKED_LEVEL] = true;
                     _collector.entries += $scope.EDITED_COLLECTOR.entries;
                 }
             });
@@ -183,7 +182,6 @@ appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configura
     }
 
     $scope.CANCEL_SET_COLLECTOR = function () {
-        $scope.EDITED_COLLECTOR.isCollector = true;
         $scope.EDITED_COLLECTOR = null;
         $modalInstance.close(false);
     }
@@ -203,35 +201,12 @@ appConfigurator.service('levelsService', function(Configurator, $stateParams) {
         $this.collectors = $this.level.collectors;
     };
 
-    $this.hoveringTimer = null;
-    $this.isHovering = false;
+
     $this.hoverRoomId = 0;
     $this.setHoverRoomId = function(id) {
         id = isNaN(id) || id == undefined ? 0 : id;
-
-        if ($this.hoveringTimer !== null) {
-            clearTimeout($this.hoveringTimer);
-            $this.hoveringTimer = null;
-        }
-
-        if (id === 0) {
-            $this.hoveringTimer = setTimeout($this.resetHover, 300);
-            return;
-        }
-
         $this.hoverRoomId = id;
-        $this.isHovering = true;
     };
-
-    $this.resetHover = function() {
-        var scope = angular.element($('.room-equipment-panel')).scope();
-        scope && scope.$apply(function() {
-            $this.isHovering = false;
-            $this.hoverRoomId = 0;
-        });
-    };
-
-    return $this;
 });
 
 appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsService, $stateParams, $modal, $location) {
@@ -363,8 +338,8 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                 applyToSidebarScope(action);
             },
             roomClicked: function(levelId, roomId) {
-                levelsService.resetHover();
-                $scope.$apply(function () {
+                $scope.$apply(function() {
+                    levelsService.setHoverRoomId(0);
                     $location.path('/room/' + levelId + '/' + roomId);
                 });
             },
@@ -408,9 +383,13 @@ appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams,
         $scope.alertInstance.close();
     };
 
-    $scope.validateCollectors = function (current_level, collector_levels, collector) {
-        Configurator.ValidateCollectors(current_level, collector_levels, collector, $scope.ALERT, function (currentCollector) {
-            $scope.EDITED_COLLECTOR = currentCollector;
+    // currentLevel - этаж на котором установлен коллектор
+    // collectorForLevel номер этажа которвц подключается\отключается от коллектора
+    // levels - ссылка на этажи
+    // currentCollector - ссылка на коллектор
+    $scope.validateCollectors = function (currentLevel, collectorForLevel, levels, currentCollector) {
+        Configurator.ValidateCollectors(currentLevel, collectorForLevel, levels, currentCollector, $scope.ALERT, function (currentCollector) {
+            $scope.COLLECTOR = currentCollector;
 
             $scope.modalInstance = $modal.open({
                 templateUrl: 'set-dest-collector.html',
@@ -418,19 +397,21 @@ appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams,
                 controller: 'SetCollectorDialogCtrl',
                 resolve: {
                     EDITED_COLLECTOR: function () {
-                        return $scope.EDITED_COLLECTOR;
+                        return $scope.COLLECTOR;
+                    },
+                    UNCHECKED_LEVEL: function () {
+                        return collectorForLevel;
                     }
                 }
             });
 
             $scope.modalInstance.result.then(function (res) {
                 if (res == false) {
-                    currentCollector.isCollector = true;
+                    currentCollector.levels[collectorForLevel] = true;
                 } else {
                     currentCollector.entries = 0;
                 }
-                $scope.EDITED_COLLECTOR = null;
-            }, function () { currentCollector.isCollector = true; });
+            }, function () { currentCollector.levels[collectorForLevel] = true; });
         });
     };
 
@@ -614,6 +595,24 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
         $scope.RADIATOR = obj;
     };
 
+    $scope.ALERT = function(alert, confirm, cancel) {
+        $scope.ALERT_MESSAGE = alert;
+        $scope.CONFIRM_ALERT = function() {
+            $scope.alertInstance && $scope.alertInstance.close();
+            confirm && confirm();
+        };
+        $scope.CLOSE_ALERT = cancel && function() {
+            $scope.alertInstance && $scope.alertInstance.dismiss('cancel');
+            cancel();
+        };
+
+        $scope.alertInstance = $modal.open({
+            templateUrl: 'alert.html',
+            size: 'sm',
+            scope: $scope
+        });
+    };
+
     $scope.DELETE_ROOM = function(evt) {
         evt && evt.preventDefault();
 
@@ -715,18 +714,11 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
     };
 
 	$scope.refreshRadiatorCollectorsCount = function () {
-	    Configurator.UpdateCollectorEntries(defaultAlert);
+	    Configurator.UpdateCollectorEntries();
 	}
 
     $scope.UpdateCollectorEntries = function() {
-        Configurator.UpdateCollectorEntries(defaultAlert);
-    };
-
-    var defaultAlert = function(title, message) {
-        alertService.open({
-            title: title,
-            message: message,
-        });
+        Configurator.UpdateCollectorEntries();
     };
     
 	setCustomScroll();
@@ -811,7 +803,7 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
 	Configurator.params.collector.fittings = Configurator.params.fittings;
 
     //$scope.ROOM = room;
-
+	$scope.CURRENT_LEVEL = level;
 	$scope.TITLE = collector.name;
 	$scope.COLLECTOR = collector;
 	$scope.LEVELS = Configurator.levels;
@@ -1027,8 +1019,12 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
         $scope.COLLECTOR._thermometerOut &= $scope.COLLECTOR.isBallValves;
     };
 
-    $scope.validateCollectors = function (currentLevel, levels, currentCollector) {
-        Configurator.ValidateCollectors(currentLevel, levels, currentCollector, $scope.ALERT, function (currentCollector) {
+    // currentLevel - этаж на котором установлен коллектор
+    // collectorForLevel номер этажа которвц подключается\отключается от коллектора
+    // levels - ссылка на этажи
+    // currentCollector - ссылка на коллектор
+    $scope.validateCollectors = function (currentLevel, collectorForLevel, levels, currentCollector) {
+        Configurator.ValidateCollectors(currentLevel, collectorForLevel, levels, currentCollector, $scope.ALERT, function (currentCollector) {
             $scope.COLLECTOR = currentCollector;
 
             $scope.modalInstance = $modal.open({
@@ -1038,17 +1034,20 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
                 resolve: {
                     EDITED_COLLECTOR: function () {
                         return $scope.COLLECTOR;
+                    },
+                    UNCHECKED_LEVEL: function () {
+                        return collectorForLevel;
                     }
                 }
             });
 
             $scope.modalInstance.result.then(function (res) {
                 if (res == false) {
-                    currentCollector.isCollector = true;
+                    currentCollector.levels[collectorForLevel] = true;
                 } else {
                     currentCollector.entries = 0;
                 }
-            }, function () { currentCollector.isCollector = true; });
+            }, function () { currentCollector.levels[collectorForLevel] = true; });
         });
     };
 
@@ -1555,7 +1554,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
             _scheme.levels.push(_l);
 
             angular.forEach(_level.collectors, function (_collector) {
-                if (_collector.isCollector) {
+                if (_collector.isCollector()) {
                     var collector_1 = _collector.entries;
                     angular.forEach(Configurator.params.collector.sets, function (_set) {
                         if (_collector.type == 'radiator' && _set.isFlowmeter == _collector.isFlowmeter && _set.entries == collector_1) {
@@ -1830,6 +1829,24 @@ appConfigurator.controller('BaseCtrl', function($scope, $modal, CurrentUser, Con
     });
 });
 
+appConfigurator.directive('ngFocus', function () {
+    var FOCUS_CLASS = "ng-focused";
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function(scope, element, attrs, ctrl) {
+            ctrl.$focused = false;
+            element.bind('focus', function(evt) {
+                element.addClass(FOCUS_CLASS);
+                scope.$apply(function() { ctrl.$focused = true; });
+            }).bind('blur', function(evt) {
+                element.removeClass(FOCUS_CLASS);
+                scope.$apply(function() { ctrl.$focused = false; });
+            });
+        }
+    };
+});
+
 appConfigurator.service('alertService', function($modal) {
     var $this = this;
 
@@ -1841,22 +1858,15 @@ appConfigurator.service('alertService', function($modal) {
 
     $this.cancel = function() {
         $this.modalInstance && $this.modalInstance.dismiss('close');
-        $this.modalInstance = null;
     };
 
     $this.confirm = function() {
         $this.modalInstance && $this.modalInstance.close();
-        $this.modalInstance = null;
     };
 
     $this.open = function (params) {
         if (!params) {
             return;
-        }
-
-        //close any non-closed pop-up.
-        if ($this.modalInstance != null) {
-            $this.cancel();
         }
 
         params = $.extend({
@@ -1887,6 +1897,6 @@ appConfigurator.controller('AlertCtrl', function($scope, alertService) {
 
 function setCustomScroll() {
     $(function() {
-        $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: true });
+        $('.autoscroll').perfectScrollbar({ wheelSpeed: 150, includePadding: true });
     });
 }
