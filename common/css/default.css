@@ -622,7 +622,7 @@ label.tab-item-add {
     position: relative;
     width: 800px;
     height: 650px;
-    margin: 0 auto;
+    margin: -150px auto 0;
 }
 .cottage .house > img {
     position: absolute;

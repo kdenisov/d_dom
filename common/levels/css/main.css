@@ -78,6 +78,12 @@ body, html {
   left: 2px;
   top: 3px; }
 
+.circle_title_ie8 {
+  z-index: 2;
+  position: relative;
+  top: 3px;
+  font-family: "GothamProMedium"; }
+
 .circle_title_ie {
   top: 0; }
 
@@ -103,6 +109,9 @@ body, html {
 .circle_wall {
   top: 2%;
   left: 67%; }
+
+.circle_wall_boiler {
+  left: 23%; }
 
 .circle_active {
   background-color: #00b06c; }
@@ -180,6 +189,102 @@ body, html {
   background: url("../assets/boiler_room_hover.png");
   background-size: cover; }
 
+.boiler_emb1_floor_rad_active_bg {
+  background: url("../assets/boiler/boiler_emb1_floor_rad_active.png");
+  background-size: cover; }
+
+.boiler_emb1_floor_rad_inactive_bg {
+  background: url("../assets/boiler/boiler_emb1_floor_rad_inactive.png");
+  background-size: cover; }
+
+.boiler_emb1_floor_rad_hover {
+  background: url("../assets/boiler/boiler_emb1_floor_rad_hover.png");
+  background-size: cover; }
+
+.boiler_emb1_floor_active_bg {
+  background: url("../assets/boiler/boiler_emb1_floor_active.png");
+  background-size: cover; }
+
+.boiler_emb1_floor_inactive_bg {
+  background: url("../assets/boiler/boiler_emb1_floor_inactive.png");
+  background-size: cover; }
+
+.boiler_emb1_floor_hover {
+  background: url("../assets/boiler/boiler_emb1_floor_hover.png");
+  background-size: cover; }
+
+.boiler_emb1_rad_active_bg {
+  background: url("../assets/boiler/boiler_emb1_rad_active.png");
+  background-size: cover; }
+
+.boiler_emb1_rad_inactive_bg {
+  background: url("../assets/boiler/boiler_emb1_rad_inactive.png");
+  background-size: cover; }
+
+.boiler_emb1_rad_hover {
+  background: url("../assets/boiler/boiler_emb1_rad_hover.png");
+  background-size: cover; }
+
+.boiler_emb1_active_bg {
+  background: url("../assets/boiler/boiler_emb1_active.png");
+  background-size: cover; }
+
+.boiler_emb1_inactive_bg {
+  background: url("../assets/boiler/boiler_emb1_inactive.png");
+  background-size: cover; }
+
+.boiler_emb1_hover {
+  background: url("../assets/boiler/boiler_emb1_hover.png");
+  background-size: cover; }
+
+.boiler_emb2_floor_rad_active_bg {
+  background: url("../assets/boiler/boiler_emb2_floor_rad_active.png");
+  background-size: cover; }
+
+.boiler_emb2_floor_rad_inactive_bg {
+  background: url("../assets/boiler/boiler_emb2_floor_rad_inactive.png");
+  background-size: cover; }
+
+.boiler_emb2_floor_rad_hover {
+  background: url("../assets/boiler/boiler_emb2_floor_rad_hover.png");
+  background-size: cover; }
+
+.boiler_emb2_floor_active_bg {
+  background: url("../assets/boiler/boiler_emb2_floor_active.png");
+  background-size: cover; }
+
+.boiler_emb2_floor_inactive_bg {
+  background: url("../assets/boiler/boiler_emb2_floor_inactive.png");
+  background-size: cover; }
+
+.boiler_emb2_floor_hover {
+  background: url("../assets/boiler/boiler_emb2_floor_hover.png");
+  background-size: cover; }
+
+.boiler_emb2_rad_active_bg {
+  background: url("../assets/boiler/boiler_emb2_rad_active.png");
+  background-size: cover; }
+
+.boiler_emb2_rad_inactive_bg {
+  background: url("../assets/boiler/boiler_emb2_rad_inactive.png");
+  background-size: cover; }
+
+.boiler_emb2_rad_hover {
+  background: url("../assets/boiler/boiler_emb2_rad_hover.png");
+  background-size: cover; }
+
+.boiler_emb2_active_bg {
+  background: url("../assets/boiler/boiler_emb2_active.png");
+  background-size: cover; }
+
+.boiler_emb2_inactive_bg {
+  background: url("../assets/boiler/boiler_emb2_inactive.png");
+  background-size: cover; }
+
+.boiler_emb2_hover {
+  background: url("../assets/boiler/boiler_emb2_hover.png");
+  background-size: cover; }
+
 .door_switch {
   background: url(../assets/door_switcher.png);
   width: 23px;
@@ -199,13 +304,13 @@ body, html {
   background-position: 0px 57px; }
 
 .wall_switch {
-  background: url(../assets/wall_switcher.png);
+  background: url(../assets/door_switcher.png);
   width: 23px;
   height: 27px;
   position: absolute;
   background-size: cover;
-  left: 85%;
-  top: 52%; }
+  left: 6%;
+  top: 59%; }
 
 .wall_switch_one {
   background-position: 0px 0px; }
