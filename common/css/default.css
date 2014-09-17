@@ -2012,6 +2012,7 @@ slider span.pointer + span.pointer {
     height: 100%;
     width: 100%;
     position: relative;
+    overflow: auto;
 }
 
 .summary-page > h2 {
