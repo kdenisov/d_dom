@@ -1352,6 +1352,37 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	    return obj1;
 	}
 
+	Cfg._serializeConfiguration = function (successCallback) {
+	    var savedObj = {
+	        cottage: Cfg.cottage,
+	        levels: Cfg.levels,
+	        collectors: Cfg.collectors,
+	        boiler: Cfg.boiler,
+	        name: Cfg.name
+	    }
+
+	    if (typeof successCallback === 'undefined') {
+	        successCallback = function () { };
+	    }
+
+	    Catalog.fetch().then(function (data) {
+	        var
+                price = 0,
+                basket = Cfg.Basket(),
+                catalog = data
+	        ;
+
+	        if (typeof catalog == 'undefined') return 0;
+	        for (var k in basket) {
+	            if (catalog[k])
+	                price += basket[k] * catalog[k].price;
+	        }
+	        price = Math.round(price);
+
+	        successCallback({ name: Cfg.name, savedObj: JSON.stringify(savedObj), price: price });
+	    });
+	}
+
     // Метод сохраняющий конфигурацию авторизованного пользователя
 	Cfg.saveConfiguration = function (successCallback, failCallback) {
 	    var savedObj = {
@@ -1374,27 +1405,14 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	    // если пользователь залогинен
 	    CurrentUser.isGuidExistsInDB().then(
             function () {
-                Catalog.fetch().then(function (data) {
-                    var
-                        price = 0,
-                        basket = Cfg.Basket(),
-                        catalog = data
-                    ;
-
-                    if (typeof catalog == 'undefined') return 0;
-                    for (var k in basket) {
-                        if (catalog[k])
-                            price += basket[k] * catalog[k].price;
-                    }
-                    price = Math.round(price);
-
+                Cfg._serializeConfiguration(function (conf) {
                     // сохраняем на сервере
-                    CurrentUser.SaveConfiguration(Cfg.name, JSON.stringify(savedObj), price).then(function (res) {
+                    CurrentUser.SaveConfiguration(conf.name, conf.savedObj, conf.price).then(function (res) {
                         successCallback(res);
                     }, function (res) {
                         failCallback(res);
                     });
-                });	            
+                })
             },
             function ()
 	        {
@@ -1490,18 +1508,18 @@ appConfigurator.factory('Catalog', function ($q, $timeout, $http, appConfig) {
 					return;
 				});
 
-			}, 30);
+			}, 0);
 			return deferred.promise;
 	    },
         // Отправить заказ на сервер и отредиректить пользователя
-		makeOrder: function (basket) {
+		makeOrder: function (orderName, basket, configurationObj, price) {
 		    var deferred = $q.defer();
 		    $timeout(function () {
-		        var data = {codes : ""};
+		        var data = { orderName: orderName, codes: "", configurationObj: configurationObj, price: price };
 		        for (var b in basket){
 		            data.codes += b + " " + basket[b] + "; ";
 		        }
-		        $http.post(appConfig.appPath + "/checkout/express/", data)
+		        $http.post(appConfig.appPath + "/checkout/MakeExternalOrder/", data)
 				.success(function (data) {
 				    document.location.href = appConfig.appPath + "/Checkout/Cart";
 				})

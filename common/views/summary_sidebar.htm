@@ -10,7 +10,7 @@
         </div>
         <div class="summary-controls">
             <a class="print" href="#" ng-click="PRINT()">Распечатать</a>
-            <a class="order" href="#" ng-click="ORDER()">Оформить заказ</a>
+            <a class="order" href="#" ng-click="$event.preventDefault();ORDER()">{{isOrderSending ? "Оформление заказа..." : "Оформить заказ"}}</a>
         </div>
     </div>
 </div>

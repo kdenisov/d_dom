@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html data-ng-app="appConfigurator">
     <head>
         <meta charset="utf-8">
@@ -59,8 +59,8 @@
                 <div id="nav">
                     <a ui-sref-active="active" ui-sref="cottage" title="Редактирование"></a>
                     <a ui-sref-active="active" ui-sref="summary" title="Информация по заказу" class="summary"></a>
-                    <a ui-sref-active="active" ng-href="#/order" ng-click="$event.preventDefault(); SAVE();" title="Оформление заказа" class="order"></a>
-                    <a ui-sref-active="active" ui-sref="cottage" title="Сбросить параметры" class="reset"></a>
+                    <a ui-sref-active="active" ng-href="#/order" ng-click="$event.preventDefault(); SAVE();" title="Сохранить расчет" class="order"></a>
+                    <a ui-sref-active="active" ng-href="#" title="Сбросить параметры" ng-click="$event.preventDefault(); RESET();" class="reset"></a>
                 </div>
             </div>
             <div id="sidebar-content">

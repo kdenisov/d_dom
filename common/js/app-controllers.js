@@ -1142,7 +1142,10 @@ appConfigurator.controller('BasketCtrl', function($scope, $filter, Configurator,
 	}
 
 	$scope.ORDER = function () {
-	    Catalog.makeOrder(Configurator.Basket());
+	    Configurator._serializeConfiguration(function (conf) {
+	        Catalog.makeOrder(Configurator.name, Configurator.Basket(), conf.savedObj, conf.price);
+	    });
+	    
 	}
 
 	$scope.BASKET_TOTAL_COUNT = function(){
@@ -1212,6 +1215,8 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
         return _this;
     };
 
+    $scope.isOrderSending = false;
+
     $scope.BASKET = function () {
         return Configurator.Basket();
     }
@@ -1262,7 +1267,12 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
             });
     }
     $scope.ORDER = function () {
-        Catalog.makeOrder(Configurator.Basket());
+        if ($scope.isOrderSending) return false;
+
+        $scope.isOrderSending = true;
+        Configurator._serializeConfiguration(function (conf) {
+            Catalog.makeOrder(Configurator.name, Configurator.Basket(), conf.savedObj, conf.price);
+        });
     }
 
     $scope.BASKET_TOTAL_PRICE = function () {
@@ -1782,7 +1792,7 @@ appConfigurator.controller('SaveModalCtrl', function ($scope, $modalInstance, Cu
                 //todo save data here with form.createId or replace with form.replaceId
                 Configurator.saveConfiguration(function (message) {
                     form.saved = true;
-                    Configurator.ReInitConfigurator();
+                    /*Configurator.ReInitConfigurator();*/
                 }, function (message) {
                     form.errorMessage = message;
                     form.saved = false;
@@ -1797,7 +1807,7 @@ appConfigurator.controller('SaveModalCtrl', function ($scope, $modalInstance, Cu
     $scope.FORM = form;
 });
 
-appConfigurator.controller('BaseCtrl', function($scope, $modal, CurrentUser, Configurator) {
+appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, Configurator) {
     $scope.BASE_PAGE = { title: 'Конфигуратор' };
 
     var save = function() {
@@ -1834,6 +1844,20 @@ appConfigurator.controller('BaseCtrl', function($scope, $modal, CurrentUser, Con
             });
     };
 
+    $scope.RESET = function () {
+        alertService.open({
+            title: 'Сброс конфигурации',
+            message: 'Вы уверены, что хотите сбросить конфигурацию? Все изменения будут потеряны',
+            hasCancel: true,
+            confirm: function () {
+                Configurator.ReInitConfigurator();
+                $timeout(function () {
+                    $scope.$apply(function () { $location.path("/"); });
+                }, 0);
+            },
+        });
+    }
+
     $scope.SAVE = function () {
         CurrentUser.isGuidExistsInDB().then(
             function () { save(); }
@@ -1868,6 +1892,7 @@ appConfigurator.service('alertService', function($modal) {
     };
 
     $this.confirm = function() {
+
         $this.modalInstance && $this.modalInstance.close();
         $this.modalInstance = null;
     };
