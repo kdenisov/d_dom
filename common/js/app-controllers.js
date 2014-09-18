@@ -378,23 +378,13 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
     //setCustomScroll();
 });
 
-appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams, Configurator, levelsService) {
+appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams, Configurator, levelsService, alertService, $modal) {
     $scope.MODEL = levelsService;
 
     $scope.EDITED_COLLECTOR = null;
 
     $scope.ALERT = function (alert) {
-        $scope.ALERT_MESSAGE = alert;
-
-        $scope.alertInstance = $modal.open({
-            templateUrl: 'alert.html',
-            size: 'sm',
-            scope: $scope
-        });
-    };
-
-    $scope.CLOSE_ALERT = function () {
-        $scope.alertInstance.close();
+        alertService.open({ title: alert });
     };
 
     // currentLevel - этаж на котором установлен коллектор

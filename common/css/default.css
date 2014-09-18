@@ -2583,6 +2583,7 @@ table.summary-merchandise .rub {
     border-bottom: 1px solid #e2e3e3;
     cursor: pointer;
     margin-bottom: -1px;
+    font-weight: bold;
 }
 .summary-card-tab-item:first-child {
     margin-left: 38px;
@@ -2597,21 +2598,23 @@ table.summary-merchandise .rub {
 }
 .summary-card-tab-content {
     display: none;
-    padding: 38px 28px 0;
-    float: left;
 }
 .summary-card-tab-content.ng-show {
     display: block;
 }
 
-.summary-card-tab-content > div {
-    float: left;
+.summary-card-tab-content > * {
+    margin: 15px 38px 0;
 }
 
-.summary-card-tab-content > div:first-child {
+.summary-card-tab-content > .description {
+    float: left;
     width: 575px;
-    margin-right: 30px;
-    margin-bottom: 30px;
+}
+
+.summary-card-tab-content > .links {
+    float: left;
+    margin-left: 0;
 }
 
 .summary-card-tab-content > .links > h4 {
@@ -2636,6 +2639,29 @@ table.summary-merchandise .rub {
     position: absolute;
     left: 0px;
     top: 6px;
+}
+
+.summary-card-tab-content .tech {
+    clear: both;
+}
+
+.summary-card-tab-content .tech table {
+    width: 100%;
+}
+
+.summary-card-tab-content .tech table tr {
+    border-top: 1px solid #e2e3e3;
+}
+.summary-card-tab-content .tech table tr:first-child {
+    border: none;
+}
+
+.summary-card-tab-content .tech table td {
+    padding: 20px 0 10px;
+}
+
+.summary-card-tab-content .tech table td:first-child {
+    width: 375px;
 }
 
 
