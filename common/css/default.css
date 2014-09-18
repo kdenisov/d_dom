@@ -1140,6 +1140,13 @@ a.collector-item {
     background: url('../img/thermo-e.png') no-repeat center;
 }
 
+.wi-fi {
+    display: block;
+    position: absolute;
+    left: -12px;
+    top: 15px;
+}
+
 /* Boiler */
 .boiler {
 	height: 100%;

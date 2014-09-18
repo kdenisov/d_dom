@@ -19,22 +19,15 @@
         </div>
     </div>
     <div class="is-floors-{{FLOORS.isFloors}}"></div>
-    <div class="radiators-control-type-{{RADIATORS.controlType}} thermo-{{RADIATORS.commonControl}}"></div>
-    <div class="floor-control-{{FLOORS.isFloors}} floor-control-{{FLOORS.control}}"></div>
+    <div class="radiators-control-type-{{RADIATORS.controlType}} thermo-{{RADIATORS.commonControl}}">
+        <img ng-if="RADIATORS.commonControl && RADIATORS.commonControl >= 7 && RADIATORS.commonControl <= 8" class="wi-fi" alt="" src="common/img/wi-fi-indicator.png"/>
+    </div>
+    <div class="floor-control-{{FLOORS.isFloors}} floor-control-{{FLOORS.control}}">
+        <img ng-if="FLOORS.control && FLOORS.control == 3" class="wi-fi" alt="" src="common/img/wi-fi-indicator.png" />
+    </div>
     
     <div ng-if="ARROWS()">
         <div class="arrow arrow-left" ng-if="ARROW_LEFT()" ng-click="FOCUS_LEFT();"></div>
         <div class="arrow arrow-right" ng-if="ARROW_RIGHT()" ng-click="FOCUS_RIGHT();"></div>
     </div>
 </div>
-
-
-<script type="text/ng-template" id="alert.html">
-    <div class="modal-header">
-        <h3 class="modal-title">{{ALERT_MESSAGE}}</h3>
-    </div>
-    <div class="modal-footer">
-        <div class="button button-cancel" ng-if="CLOSE_ALERT" ng-click="CLOSE_ALERT()">Отмена</div>
-        <div class="button button-next" ng-if="CONFIRM_ALERT" ng-click="CONFIRM_ALERT()">Ok</div>
-    </div>
-</script>
