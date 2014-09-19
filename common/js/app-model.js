@@ -243,23 +243,28 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
         SetOrderName: function () {
             var deferred = $q.defer();
             var defaultName = _userGUID().substring(0, 5) + "-01";
-            if (this.isGuidExistsInDB()) {
-                this.LoadConfiguration().then(function (cfg) {
-                    if (cfg && "name" in cfg) {
-                        var prevName = cfg.name;
-                        if (prevName.indexOf("-") > 0) {
-                            var newName = prevName.split('-')[0] + '-' + (parseInt(prevName.split('-')[1]) + 1);
-                            deferred.resolve(newName);
-                        } else {
-                            deferred.resolve(defaultName);
+            this.isGuidExistsInDB().then(
+                function() {
+                    this.LoadConfiguration().then(
+                        function (cfg) {
+                            if (cfg && "name" in cfg) {
+                                var prevName = cfg.name;
+                                if (prevName.indexOf("-") > 0) {
+                                    var newName = prevName.split('-')[0] + '-' + (parseInt(prevName.split('-')[1]) + 1);
+                                    deferred.resolve(newName);
+                                } else {
+                                    deferred.resolve(defaultName);
+                                }
+                            } else {
+                                deferred.resolve(defaultName);
+                            }
                         }
-                    } else {
-                        deferred.resolve(defaultName);
-                    }
-                }, function () { deferred.resolve(defaultName); })
-            } else {
-                setTimeout(function () { deferred.resolve(defaultName); }, 100);
-            }
+                        , function () { deferred.resolve(defaultName); })
+                }
+                , function() {
+                    setTimeout(function () { deferred.resolve(defaultName); }, 100);
+                }
+            );
 
             return deferred.promise;
         }
@@ -668,6 +673,11 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	                        level_radiators_count -= Cfg.levels[level].collectors[i].entries;
 	                    } else {
 	                        Cfg.levels[level].collectors[i].entries = 0;
+	                        Cfg.levels[level].collectors[i].levels = {															// Этажи коллекторов
+	                            1: false,
+	                            2: false,
+	                            3: false
+	                        };
 	                    }
 	                }
 	            }
@@ -722,6 +732,11 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	                        level_loops_count -= Cfg.levels[level].collectors[i].entries;
 	                    } else {
 	                        Cfg.levels[level].collectors[i].entries = 0;
+	                        Cfg.levels[level].collectors[i].levels = {															// Этажи коллекторов
+	                            1: false,
+	                            2: false,
+	                            3: false
+	                        };
 	                    }
 	                }
 	            }
@@ -933,7 +948,6 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
     // levels - ссылка на этажи
     // currentCollector - ссылка на коллектор
 	Cfg.ValidateCollectors = function (currentLevel, collectorForLevel, levels, collector, alertCallback, popupCallback) {
-
         if (!alertCallback) {
             alertCallback = function (str) { };
         }
