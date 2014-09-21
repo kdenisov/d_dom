@@ -378,9 +378,116 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
     //setCustomScroll();
 });
 
-appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams, Configurator, levelsService, alertService, $modal) {
+appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams, Configurator, levelsService, alertService, $modal, $timeout) {
     $scope.MODEL = levelsService;
 
+    var mapModels = function(array, filteringPredicate, mappingPredicate) {
+        var res = [];
+        for (var i = 0; i < array.length; i++) {
+            var element = array[i];
+            if (filteringPredicate(element)) {
+                res.push(mappingPredicate(element));
+            }
+        }
+
+        return res;
+    };
+
+    var NodeModel = function(level, itemId, itemName, marked) {
+        var $this = this;
+        $this.id = itemId;
+        $this.name = itemName;
+        $this.levelId = level.id;
+        $this.marked = marked;
+        $this.editing = false;
+        $this.endEdit = function () {
+            $this.editing = false;
+            levelsService.levels[$this.levelId - 1].rooms[$this.id - 1].name = $this.name;
+            window.levelsModule.renameRoom($this.levelId, $this.id, $this.name);
+        };
+
+        $this.beginEdit = function(btn) {
+            if (!btn) {
+                return;
+            }
+
+            $this.editing = true;
+            $timeout(function () {  $(btn).siblings('input[type=text]').select(); }, 100);
+        };
+
+        $this.pressEnter = function(evt) {
+            if ($this.editing && evt.keyCode === 13) {
+                $this.endEdit();
+            }
+        };
+
+        return $this;
+    };
+
+    var LevelModel = function(level) {
+        var $this = this;
+        
+        $this.id = level.id;
+        $this.name = level.isBasement ? 'Подвал' : (level.id == 1 ? 'Первый этаж' : (level.id == 2 ? 'Второй этаж' : 'Третий этаж'));
+        $this.isBasement = level.isBasement;
+
+        $this.rooms = mapModels(level.rooms, function (room) { return room.isRoom; }, function (room) { return new NodeModel(level, room.id, room.name, room.visited); });
+        $this.hasMoreRooms = $this.rooms.length < level.rooms.length;
+        
+        $this.addRoom = function() {
+            var lvl = levelsService.levels[$this.id - 1];
+            for (var i = 0; i < lvl.rooms.length; i++) {
+                var room = lvl.rooms[i];
+                if (!room.isRoom) {
+                    $this.rooms.push(new NodeModel(lvl, room.id, room.name));
+                    window.levelsModule.addRoom(lvl.id, room.id);
+                    room.isRoom = true;
+                    $this.hasMoreRooms = $this.rooms.length < lvl.rooms.length;
+                    return;
+                }
+            }
+        };
+
+        $this.removeRoom = function(roomId) {
+            var lvl = levelsService.levels[$this.id - 1];
+            for (var i = 0; i < $this.rooms.length; i++) {
+                if ($this.rooms[i].id == roomId) {
+                    $this.rooms.splice(i, 1);
+                    window.levelsModule.removeRoom($this.id, roomId);
+                    lvl.rooms[roomId - 1].isRoom = false;
+                    $this.hasMoreRooms = $this.rooms.length < lvl.rooms.length;
+                    return;
+                }
+            }
+        };
+
+        return $this;
+    };
+
+    var TreeModel = function (levels) {
+        var $this = this;
+
+        $this.levels = mapModels(levels, function (l) { return l.isLevel; }, function (l) { return new LevelModel(l); });
+
+        $this.open = false;
+
+        $(function() {
+            $(document).click(function(e) {
+                var scope = angular.element('.tree-view').scope();
+                scope && scope.$apply(function() {
+                    scope.TREE.open = false;
+                });
+            });
+
+            $('.tree-view, .tree-button').click(function(e) {
+                e.stopPropagation();
+            });
+        });
+
+        return $this;
+    };
+
+    $scope.TREE = new TreeModel(levelsService.levels);
     $scope.EDITED_COLLECTOR = null;
 
     $scope.ALERT = function (alert) {

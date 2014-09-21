@@ -4,17 +4,17 @@
             <!-- ng-class="{'label-switchbox-false': COLLECTOR.id == 1 + COTTAGE.levelsCount > 1}" -->
             <h3>{{COLLECTOR.name}} <nobr><span class="hidden-true">({{COLLECTOR.entries}} вх.)</span></nobr></h3>
             <!--<input type="checkbox"
-                   ng-model="COLLECTOR.isCollector()"
-                   ng-change="validateCollectors(CURRENT_LEVEL, LEVELS, COLLECTOR)">-->
+                       ng-model="COLLECTOR.isCollector()"
+                       ng-change="validateCollectors(CURRENT_LEVEL, LEVELS, COLLECTOR)">-->
             <!-- ng-if="!(COLLECTOR.id == 1 + COTTAGE.levelsCount > 1)" -->
         </label>
         <div class="hidden-{{!COLLECTOR.isCollector()}}">
             <a ng-href="#/collector/{{MODEL.level.id}}/{{COLLECTOR.id}}"><img src="common/img/collector_small_{{COLLECTOR.type}}.jpg" alt=""></a>
             К этому коллектору подключены
             <!-- <div class="choicebox hidden-{{!BOILER.isBoiler}}">
-                <label ng-repeat="LEVEL in LEVELS" class="choicebox-{{LEVEL.id == COLLECTOR.level}} hidden-{{!LEVEL.isLevel}}">{{LEVEL.name}} <input type="radio" name="boiler_level" value="{{LEVEL.id}}" ng-model="COLLECTOR.level" ng-change="validateCollectors(CURRENT_LEVEL.id, COLLECTOR.level, COLLECTOR.id)"></label>
-                <label class="choicebox-{{COLLECTOR.level == 0}}">Оба этажа <input type="radio" name="boiler_level" value="0" ng-model="COLLECTOR.level" ng-change="validateCollectors(CURRENT_LEVEL.id, COLLECTOR.level, COLLECTOR.id)"></label>
-            </div> -->
+                     <label ng-repeat="LEVEL in LEVELS" class="choicebox-{{LEVEL.id == COLLECTOR.level}} hidden-{{!LEVEL.isLevel}}">{{LEVEL.name}} <input type="radio" name="boiler_level" value="{{LEVEL.id}}" ng-model="COLLECTOR.level" ng-change="validateCollectors(CURRENT_LEVEL.id, COLLECTOR.level, COLLECTOR.id)"></label>
+                     <label class="choicebox-{{COLLECTOR.level == 0}}">Оба этажа <input type="radio" name="boiler_level" value="0" ng-model="COLLECTOR.level" ng-change="validateCollectors(CURRENT_LEVEL.id, COLLECTOR.level, COLLECTOR.id)"></label>
+                 </div> -->
             <!-- <label ng-repeat="(LEVEL, IS_ON_LEVEL) in COLLECTOR.levels" class="checkbox-{{LEVEL == COLLECTOR.level}} hidden-{{!LEVEL.isLevel}}">{{LEVEL.name}} <input type="checkbox" name="collector_level_{{LEVEL.id}}" value="{{LEVEL.id}}" ng-true-value="{{LEVEL.id}}" ng-false-value="0" ng-model="COLLECTOR.level"></label> -->
             <div class="level-items clearfix">
                 <label ng-repeat="LEVEL in MODEL.levels | filter:{isLevel: true} | orderBy:'-isBasement'" class="label-checkbox checkbox-{{COLLECTOR.levels[LEVEL.id]}} level-item">
@@ -33,7 +33,23 @@
     </div>
 
 </div>
-<script type="text/ng-template" id="alert.html">
-</script>
 
+<div class="tree-button" ng-click="TREE.open = !TREE.open;">
+    
+</div>
 
+<div class="tree-view" ng-if="TREE.open" ng-click="$event.stopPropagation();">
+    <div class="level" ng-repeat="level in TREE.levels | orderBy: '-isBasement' ">
+        <h3>{{level.name}}</h3>
+
+        <div class="node" ng-class="{'marked' : room.marked}" ng-repeat="room in level.rooms">
+            <a ng-href="#/room/{{level.id}}/{{room.id}}" ng-show="!room.editing">{{room.name}}</a>
+            <input type="text" ng-model="room.name" ng-show="room.editing" ng-keyup="room.pressEnter($event);" ng-blur="room.endEdit();" />
+            <input class="edit" type="button" value="" alt="Переименовать" ng-click="room.beginEdit($event.target);" />
+            <input class="delete" type="button" value="" alt="Удалить" ng-click="level.removeRoom(room.id)" />
+        </div>
+        <div class="add" ng-if="level.hasMoreRooms">
+            <input type="button" value="Новая комната" ng-click="level.addRoom()" />
+        </div>
+    </div>
+</div>

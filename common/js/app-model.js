@@ -315,7 +315,8 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 			    autoCalcCollectorInputs: true // авторасчет входов коллектора
 			},
 			RefreshCollectorsCount: function () { },
-			ValidateCollectors: function(currentLevel, levels, collector, alertCallback, popupCallback) {},
+			ValidateCollectors: function (currentLevel, levels, collector, alertCallback, popupCallback) { },
+            createCollector: function() { },
 		};
 	};
 	
@@ -934,6 +935,36 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	    });
 	    return __c;
 	}
+
+    Cfg.createCollector = function(id, type, levelId) {
+        return {
+            // Коллекторы по умолчанию
+            id: id, // id, он же тип колектора: радиаторов || теплых полов
+            name: type === 'radiator' ? 'Коллектор радиаторов' : 'Коллектор теплых полов',
+            type: type,
+            levels: {
+                // Этажи коллекторов
+                1: levelId == 1,
+                2: levelId == 2,
+                3: levelId == 3
+            },
+            isCollector: function() {
+                return (this.levels[1] || this.levels[2] || this.levels[3]) /* && this.entries > 0*/
+            }, // Коллектор: есть
+            entries: 0, // Количество заходов коллектора радиаторов на этаже
+            sets: id == 1 && 13 || 2, // Коллектор (зависит от типа и количества заходов)
+            isFlowmeter: type === 'floor', // Расходомер (для коллектора теплых полов: есть)
+            isBallValves: true, // Шаровые краны
+            isThermometers: true, // Термометры
+            thermometersCount: 1, // Количество термометров
+            _thermometerIn: true,
+            _thermometerOut: false,
+            fittings: 0, // Фитинги для трубы
+            mixing: type === 'floor', // Узел смешения
+            fit_088U0305: 0, // фиттинги для узла смешения
+            fit_088U0301: 0 // термостат безопасности
+        };
+    };
 
     // @public пересчет входов коллекторов без изменения конфигурации по этажам
 	Cfg.UpdateCollectorEntries = function (alertCallback) {

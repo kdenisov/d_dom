@@ -1,10 +1,9 @@
 ﻿'use strict';
 //animation effects
 angular.module('appConfigurator')
-
     .animation('.house-enter-leave', function() {
         return {
-            enter: function (item, done) {
+            enter: function(item, done) {
                 item = $(item);
                 item.hide();
                 item.fadeIn(animationDuration, done);
@@ -17,10 +16,9 @@ angular.module('appConfigurator')
             }
         };
     })
-
     .animation('.room-equipment-panel', function() {
         return {
-            beforeRemoveClass: function (element, className, done) {
+            beforeRemoveClass: function(element, className, done) {
                 if (className === 'ng-hide') {
                     element.css('left', '-300px');
                     done();
@@ -44,21 +42,37 @@ angular.module('appConfigurator')
             }
         };
     })
-
     .animation('.room-equipment', function() {
         return {
             enter: function(item, done) {
                 $(item).css({ opacity: 0 });
-                $(item).animate({ opacity: 1 }, animationDuration);
+                $(item).animate({ opacity: 1 }, animationDuration, done);
                 return animationCancelHandler(item);
             },
 
             leave: function(item, done) {
                 $(item).css({ opacity: 1 });
-                $(item).animate({ opacity: 0 }, animationDuration);
+                $(item).animate({ opacity: 0 }, animationDuration, done);
                 return animationCancelHandler(item);
             }
         };
+    })
+    .animation('.tree-view', function() {
+        return {
+            enter: function (item, done) {
+                item = $(item);
+                item.css({top: '-100%'});
+                item.animate({ top: 0 }, animationDuration, done);
+                return animationCancelHandler(item);
+            },
+
+            leave: function(item, done) {
+                item = $(item);
+                item.css({ top: 0 });
+                item.animate({ top: '-100%' }, animationDuration, done);
+                return animationCancelHandler(item);
+            }
+        }
     });
 
 

@@ -850,6 +850,125 @@ a.room-item {
     height: 116px
 }
 
+.tree-button {
+    display: block;
+    width: 15px;
+    height: 15px;
+    background: transparent url('../img/icon-tree.png') no-repeat center center;
+    cursor: pointer;
+
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 9000;
+}
+
+.tree-view {
+    display: block;
+    width: 100%;
+    background: #424242;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+}
+
+.tree-view > :first-child {
+    margin-top: 56px;
+}
+
+.tree-view > .level{
+    padding: 15px 20px;
+}
+
+.tree-view > .level > h3 {
+    color: white;
+    font-size: 11px;
+}
+
+.tree-view > .level > .node, .tree-view > .level > .add {
+    padding: 5px 0 0 50px;
+    height: 25px;
+    background: url('../img/tree-nodes.png') left top no-repeat;
+}
+
+.tree-view > .level > .node {
+}
+
+.tree-view > .level > .node.marked {
+    background-position: left -30px;
+}
+
+.tree-view > .level > .add {
+    background-position: left -60px;
+}
+
+.tree-view > .level > .node:last-child {
+    background-position: left -90px;
+}
+
+.tree-view > .level > .node.marked:last-child {
+    background-position: left -120px;
+}
+
+.tree-view > .level > .add:last-child {
+    background-position: left -150px;
+}
+
+.tree-view > .level > .node > a {
+    border: none;
+    color: #929292;
+}
+
+.tree-view > .level > .node > [type=button] {
+    border: none;
+    background: transparent url('../img/icon-tree-edit.png');
+    width: 15px;
+    height: 15px;
+    margin-left: 5px;
+    cursor: pointer;
+    display: none;
+}
+
+.tree-view > .level > .node:hover > [type=button] {
+    display: inline-block;
+}
+
+.tree-view > .level > .node > .edit {
+    background-position: left top;
+}
+
+.tree-view > .level > .node > .edit:hover {
+    background-position: left -15px;
+}
+
+.tree-view > .level > .node > .delete {
+    background-position: right top;
+}
+
+.tree-view > .level > .node > .delete:hover {
+    background-position: right -15px;
+}
+
+.tree-view > .level > .node > a, .tree-view > .level > .node > input {
+    border: none;
+    padding: 0;
+    display: inline-block;
+    width: 114px;
+}
+
+.tree-view > .level > .add > input[type=button] {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #505050;
+    cursor: pointer;
+}
+
+.tree-view > .level > .add > input[type=button]:hover {
+    color: #929292;
+}
+
 /* Level items */
 #viewport .level-items {
 	position: absolute;
