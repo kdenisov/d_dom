@@ -345,9 +345,12 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
             scope.$apply(action);
         };
 
+        var levelsCopy = $.extend(true, [], levelsService.levels);
+        var boilerCopy = $.extend(true, {}, levelsService.boiler);
+
         window.levelsModule && window.levelsModule.buildLevels('#levels', {
-            levels: levelsService.levels,
-            boilers: levelsService.boiler,
+            levels: levelsCopy,
+            boilers: boilerCopy,
             currentLevelId: currentLevelId,
             roomMouseEnter: function(levelId, roomId) {
                 $scope.$apply(levelsService.setHoverRoomId(roomId));

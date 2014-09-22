@@ -310,7 +310,7 @@ body, html {
   position: absolute;
   background-size: cover;
   left: 6%;
-  top: 59%; }
+  top: 39%; }
 
 .wall_switch_one {
   background-position: 0px 0px; }
@@ -327,6 +327,13 @@ body, html {
   -ms-transition: all 1s ease-out;
   -o-transition: all 1s ease-out;
   transition: all 1s ease-out; }
+
+.animate_circle {
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -ms-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out; }
 
 .animate_floor_map {
   -webkit-transition: all 0.4s ease-out;
