@@ -40,10 +40,23 @@
     </div>
 
     <div class="summary-schemes">
+        <div class="summary-schemes-collectors">
+            <div ng-repeat="collector in PAGE_SCHEME.radiatorCollectors">
+                <div class="schemes-connection" ng-repeat="connection in collector.connectedLevelIndex" ng-class="CSS_SCHEME_CONNECTION(collector.installedLevelIndex, connection)"></div>
+                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><span class="count">{{collector.entries}}</span><div></div></div>
+            </div>
+        </div>
+        <div class="summary-schemes-collectors floors">
+            <div ng-repeat="collector in PAGE_SCHEME.floorCollectors">
+                <div class="schemes-connection" ng-repeat="connection in collector.connectedLevelIndex" ng-class="CSS_SCHEME_CONNECTION(collector.installedLevelIndex, connection)"></div>
+                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><span class="count">{{collector.entries}}</span><div></div></div>
+            </div>
+        </div>
+
         <div class="summary-schemes-level" ng-repeat="level in PAGE_SCHEME.levels">
             <h3>{{level.title}}</h3>
             <div>
-                <div class="summary-schemes-room" ng-repeat="room in level.rooms">
+                <div class="summary-schemes-room" ng-repeat="room in level.rooms" ng-class="{ 'room-hidden' : !room.show }">
                     <div ng-if="room.show">
                         <div class="contents" ng-class="{ 'radiator' :  room.radiators > 0, 'floor' :  room.floors > 0, 'boiler' : room.boiler }">
                             <span class="count radiator">{{room.radiators}}</span>
@@ -52,19 +65,6 @@
                         <div class="title">{{room.title}}</div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="summary-schemes-collectors">
-            <div ng-repeat="collector in PAGE_SCHEME.radiatorCollectors">
-                <div class="schemes-connection" ng-repeat="connection in collector.connectedLevelIndex" ng-class="CSS_SCHEME_CONNECTION(collector.installedLevelIndex, connection)"></div>
-                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><span class="count" >{{collector.entries}}</span><div></div></div>
-            </div>
-        </div>
-        <div class="summary-schemes-collectors floors">
-            <div ng-repeat="collector in PAGE_SCHEME.floorCollectors">
-                <div class="schemes-connection" ng-repeat="connection in collector.connectedLevelIndex" ng-class="CSS_SCHEME_CONNECTION(collector.installedLevelIndex, connection)"></div>
-                <div class="scheme-collector-placeholder" ng-class="CSS_SCHEME_COLLECTOR(collector.installedLevelIndex)"><span class="count" >{{collector.entries}}</span><div></div></div>
             </div>
         </div>
     </div>

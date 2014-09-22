@@ -2257,7 +2257,7 @@ slider span.pointer + span.pointer {
 .summary-schemes-level > div {
     float: left;
     width: 552px;
-    margin-left: -6px;
+    margin-left: 100px;
     padding: 30px 0;
 }
 
@@ -2267,6 +2267,9 @@ slider span.pointer + span.pointer {
     width: 82px;
     height: 82px;
     border: 2px solid #e2e3e3;
+}
+.summary-schemes-room.room-hidden {
+    border: 2px solid white;
 }
 
 .summary-schemes-room > div {
@@ -2282,6 +2285,7 @@ slider span.pointer + span.pointer {
     width: 82px;
     left: 0;
     top: 0;
+    opacity: 1;
     background-repeat: no-repeat;
     background-color: transparent;
     position: absolute;
@@ -2378,21 +2382,23 @@ slider span.pointer + span.pointer {
 
 .summary-schemes-collectors {
     position: absolute;
-    top: 85px;
-    left: 680px;
+    top: 65px;
+    left: 60px;
 }
 
 .summary-schemes-collectors.floors {
-    top: 65px;
+    top: 85px;
 }
 
 .schemes-connection {
-    width: 60px;
-    border-right: 1px solid #e2e3e3;
+    width: 120px;
+    border-left: 1px solid #e2e3e3;
     position: absolute;
+    left: 60px;
 }
 .summary-schemes-collectors.floors .schemes-connection {
-    width: 134px
+    left: 134px;
+    width: 47px
 }
 
 .summary-schemes-collectors .schemes-connection.on-top {
@@ -2420,13 +2426,13 @@ slider span.pointer + span.pointer {
 }
 
 .summary-schemes-collectors .schemes-connection.height-0 {
-    height: 20px;
+    height: 40px;
 }
 .summary-schemes-collectors .schemes-connection.height-1 {
-    height: 244px;
+    height: 284px;
 }
 .summary-schemes-collectors .schemes-connection.height-2 {
-    height: 488px;
+    height: 528px;
 }
 
 .summary-schemes-collectors .schemes-connection.height-1.on-top {
@@ -2436,31 +2442,31 @@ slider span.pointer + span.pointer {
     height: 388px;
 }
 
-.summary-schemes-collectors.floors  .schemes-connection.height-0 {
-    height: 40px;
+/*.summary-schemes-collectors.floors .schemes-connection.height-0 {
+    height: 20px;
 }
-.summary-schemes-collectors.floors > .schemes-connection.height-1 {
-    height: 284px;
+.summary-schemes-collectors.floors .schemes-connection.height-1 {
+    height: 244px;
 }
-.summary-schemes-collectors.floors > .schemes-connection.height-2 {
-    height: 528px;
-}
+.summary-schemes-collectors.floors .schemes-connection.height-2 {
+    height: 488px;
+}*/
 
 .scheme-collector-placeholder {
     position: absolute;
     left: 30px;
-    top: 20px;
+    top: 40px;
     width: 60px;
     height: 99px;
     background: url('../img/summary/scheme-radiator-collector.jpg') center top no-repeat;
 }
 
 .scheme-collector-placeholder.offset-1{
-    top: 264px;
+    top: 284px;
 }
 
 .scheme-collector-placeholder.offset-2{
-    top: 508px;
+    top: 528px;
 }
 
 .summary-schemes-collectors.floors .scheme-collector-placeholder {
@@ -2469,15 +2475,15 @@ slider span.pointer + span.pointer {
 }
 
 .summary-schemes-collectors.floors .scheme-collector-placeholder.offset-0{
-    top: 40px;
+    top: 20px;
 }
 
 .summary-schemes-collectors.floors .scheme-collector-placeholder.offset-1{
-    top: 284px;
+    top: 264px;
 }
 
 .summary-schemes-collectors.floors .scheme-collector-placeholder.offset-2{
-    top: 528px;
+    top: 508px;
 }
 
 .scheme-collector-placeholder > div {
