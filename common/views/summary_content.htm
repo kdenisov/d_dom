@@ -3,7 +3,9 @@
 
     <div id="summary-icons">
         <a href="/#/summary/print" class="print"></a>
-        <a class="download" ng-click="SAVE_CONFIGURATION()"></a>
+        <span ng-controller="SendConfigurationBaseCtrl">
+            <a class="download" ng-click="SEND()"></a>
+        </span>
     </div>
 
     <div class="summary-general" ng-repeat="clause in PAGE_GENERAL.clauses">

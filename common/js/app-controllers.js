@@ -1232,29 +1232,49 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
         }, 200);
     });
 
-    $scope.SAVE_CONFIGURATION = function () {
-        CurrentUser.isGuidExistsInDB().then(
-            function (user) { // success
-                Configurator.saveConfiguration();
+    $scope.DOWNLOAD = function () {
+
+        var pdf = (new jsPDF('p', 'pt', 'letter'))
+            // source can be HTML-formatted string, or a reference
+            // to an actual DOM element from which the text will be scraped.
+            , source = $('.summary-page')[0]
+
+            // we support special element handlers. Register them with jQuery-style
+            // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
+            // There is no support for any other type of selectors
+            // (class, of compound) at this time.
+            , specialElementHandlers = {
+                // element with id of "bypass" - jQuery style selector
+                '#bypassme': function (element, renderer) {
+                    // true = "handled elsewhere, bypass text extraction"
+                    return true
+                }
+            }
+            , margins = {
+                top: 80,
+                bottom: 60,
+                left: 40,
+                width: 522
+            };
+        pdf.setFont('Times', 'Roman');
+        // all coords and widths are in jsPDF instance's declared units
+        // 'inches' in this case
+        pdf.fromHTML(
+            source // HTML string or DOM elem ref.
+            , margins.left // x coord
+            , margins.top // y coord
+            , {
+                'width': margins.width // max width of content on PDF
+                , 'elementHandlers': specialElementHandlers
             },
-            function (msg) { // failure
-                alert(msg);
-                CurrentUser.Register("Денисов К", "+79631216973", "Односторонки гривки 10").then(
-                    function(user){ // success
-                        CurrentUser.SaveConfiguration(Configurator.name, Configurator.saveConfiguration()).then(
-                            function (m) { // success
-                                alert(m);
-                            },
-                            function (m) { //fail
-                                alert(m)
-                            }
-                        );
-                    }, 
-                    function(msg){ // fail
-                        alert(msg);
-                    }
-                )
-            });
+            function (dispose) {
+                // dispose: object with X, Y of the last line add to the PDF
+                //          this allow the insertion of new lines after html
+                pdf.save('Test.pdf');
+            },
+            margins
+            )
+
     }
     $scope.ORDER = function () {
         if ($scope.isOrderSending) return false;
@@ -1796,6 +1816,90 @@ appConfigurator.controller('SaveModalCtrl', function ($scope, $modalInstance, Cu
 
     $scope.FORM = form;
 });
+
+
+appConfigurator.controller('SendConfigurationModalCtrl', function ($scope, $modalInstance, CurrentUser, Configurator) {
+
+    $scope.CONFIGURATION_NAME = Configurator.name;
+
+    var form = {
+        email:"",
+        submitted: false,
+        valid: true,
+        errorMessage: "",
+        duplicateId: false,
+        saved: false,
+        validate: function (formCtrl) {
+            /*form.duplicateId = form.submitted && form.useCreateId && $.inArray(form.createId, form.orders) > -1;*/ // - эта проверка будет на сервере
+            form.valid =  (Configurator.name != '' && form.email != '' && !form.email.$error);
+            return form.valid;
+        },
+        submit: function (formCtrl) {
+            form.submitted = true;
+            if (form.validate(formCtrl)) {
+                //todo save data here with form.createId or replace with form.replaceId
+                Configurator.sendConfiguration(form.email, function (message) {
+                    form.saved = true;
+                    /*Configurator.ReInitConfigurator();*/
+                }, function (message) {
+                    form.errorMessage = message;
+                    form.saved = false;
+                });
+            }
+        },
+        dismiss: function () {
+            $modalInstance.dismiss('cancel');
+        }
+    };
+
+    $scope.FORM = form;
+});
+
+
+appConfigurator.controller('SendConfigurationBaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, Configurator) {
+
+    var save = function () {
+        var saveModal = $modal.open({
+            templateUrl: 'common/views/modal-send.htm',
+            controller: 'SendConfigurationModalCtrl',
+            size: 'sm',
+        });
+
+        saveModal.result.then(
+            function () {
+                //close it
+            },
+            function () {
+                //just close it
+            });
+    };
+
+    var authenticateAndSave = function () {
+        var authModal = $modal.open({
+            templateUrl: 'common/views/modal-save-authenticate.htm',
+            controller: 'AuthenticateModalCtrl',
+            size: 'sm',
+        });
+
+        authModal.result.then(
+            function (authenticationComplete) {
+                if (authenticationComplete) {
+                    save();
+                }
+            },
+            function () {
+                //just close it
+            });
+    };
+
+    $scope.SEND = function () {
+        CurrentUser.isGuidExistsInDB().then(
+            function () { save(); }
+          , function () { authenticateAndSave(); }
+        );
+    };
+});
+
 
 appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, Configurator) {
     $scope.BASE_PAGE = { title: 'Конфигуратор' };

@@ -1672,6 +1672,110 @@ var jsPDF = (function(global) {
 		activeFontKey = 'F1';
 		_addPage();
 
+
+		var padz =
+[
+   "",
+   "0",
+   "00",
+   "000",
+   "0000"
+];
+		var pdfEscape16 = function (text, flags) {
+		    var ar = ["FEFF"];
+		    for (var i = 0, l = text.length, t; i < l; ++i) {
+		        t = text.charCodeAt(i).toString(16).toUpperCase();
+		        ar.push(padz[4 - t.length], t);
+		    }
+		    return ar.join("");
+		};
+
+		API.text16 = function (text, x, y, flags) {
+		    /**
+            * Inserts something like this into PDF
+            BT
+            /F1 16 Tf % Font name + size
+            16 TL % How many units down for next line in multiline text
+            0 g % color
+            28.35 813.54 Td % position
+            (line one) Tj
+            T* (line two) Tj
+            T* (line three) Tj
+            ET
+            */
+
+		    var undef, _first, _second, _third, newtext, str, i;
+		    // Pre-August-2012 the order of arguments was function(x, y, text, flags)
+		    // in effort to make all calls have similar signature like
+		    // function(data, coordinates... , miscellaneous)
+		    // this method had its args flipped.
+		    // code below allows backward compatibility with old arg order.
+		    if (typeof text === 'number') {
+		        _first = y;
+		        _second = text;
+		        _third = x;
+
+		        text = _first;
+		        x = _second;
+		        y = _third;
+		    }
+
+		    // If there are any newlines in text, we assume
+		    // the user wanted to print multiple lines, so break the
+		    // text up into an array. If the text is already an array,
+		    // we assume the user knows what they are doing.
+		    if (typeof text === 'string' && text.match(/[\n\r]/)) {
+		        text = text.split(/\r\n|\r|\n/g);
+		    }
+
+		    if (typeof flags === 'undefined') {
+		        flags = { 'noBOM': true, 'autoencode': true };
+		    } else {
+
+		        if (flags.noBOM === undef) {
+		            flags.noBOM = true;
+		        }
+
+		        if (flags.autoencode === undef) {
+		            flags.autoencode = true;
+		        }
+
+		    }
+
+		    if (typeof text === 'string') {
+		        str = pdfEscape16(text, flags);
+		    } else if (text instanceof Array) { /* Array */
+		        // we don't want to destroy original text array, so cloning it
+		        newtext = text.concat();
+		        // we do array.join('text that must not be PDFescaped")
+		        // thus, pdfEscape each component separately
+		        for (i = newtext.length - 1; i !== -1; i--) {
+		            newtext[i] = pdfEscape16(newtext[i], flags);
+		        }
+		        str = newtext.join("> Tj\nT* <");
+		    } else {
+		        throw new Error('Type of text must be string or Array. "' + text + '" is not recognized.');
+		    }
+		    // Using "'" ("go next line and render text" mark) would save space but would complicate our rendering code, templates
+
+		    // BT .. ET does NOT have default settings for Tf. You must state that explicitely every time for BT .. ET
+		    // if you want text transformation matrix (+ multiline) to work reliably (which reads sizes of things from font declarations)
+		    // Thus, there is NO useful, *reliable* concept of "default" font for a page.
+		    // The fact that "default" (reuse font used before) font worked before in basic cases is an accident
+		    // - readers dealing smartly with brokenness of jsPDF's markup.
+		    out(
+                'BT\n/' +
+                    activeFontKey + ' ' + activeFontSize + ' Tf\n' + // font face, style, size
+                    (activeFontSize * lineHeightProportion) + ' TL\n' + // line spacing
+                    textColor +
+                    '\n' + f2(x * k) + ' ' + f2((pageHeight - y) * k) + ' Td\n<' +
+                    str +
+                    '> Tj\nET'
+            );
+
+		    return this;
+		};
+
 		events.publish('initialized');
 		return API;
 	}

@@ -185,9 +185,8 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
             if (typeof id == 'undefined') {
                 $http.get(appConfig.appPath + "/JsonOperations/GetLastConfiguration?jsonp=JSON_CALLBACK")
                 .success(function (data) {
-                    data = JSON.parse(data);
                     if (typeof data === 'string') {
-                        deferred.resolve(JSON.parse(data));
+                        deferred.resolve(JSON.parse(JSON.parse(data)));
                     } else {
                         deferred.reject(_getMessage(data));
                     }
@@ -209,6 +208,29 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
                     deferred.reject("Ошибка при загрузке конфигурации");
                 });
             }
+
+            return deferred.promise;
+        },
+        // Сохранить конфигурацию на сервер под определенным именем
+        SendConfiguration: function (email, name, configuration, price) {
+            var deferred = $q.defer();
+
+            $http({
+                url: appConfig.appPath + "/JsonOperations/SendConfiguration?jsonp=JSON_CALLBACK",
+                method: "POST",
+                data: { email:email, configuration: configuration, name: name, price: price },
+                headers: { 'Content-Type': 'application/json' }
+            })
+			.success(function (data) {
+			    if (_isSuccessResult(data)) {
+			        deferred.resolve("Конфигурация сохранена успешно");
+			    } else {
+			        deferred.reject(_getMessage(data));
+			    }
+			})
+			.error(function (data) {
+			    deferred.reject("Ошибка при сохранении конфигурации.");
+			});
 
             return deferred.promise;
         },
@@ -241,11 +263,12 @@ appConfigurator.service('CurrentUser', function ($q, $timeout, $http, StorageMan
         },
         // префикс по умолчанию для номеров заказов  пользователя
         SetOrderName: function () {
+            var _self = this;
             var deferred = $q.defer();
             var defaultName = _userGUID().substring(0, 5) + "-01";
             this.isGuidExistsInDB().then(
                 function() {
-                    this.LoadConfiguration().then(
+                    _self.LoadConfiguration().then(
                         function (cfg) {
                             if (cfg && "name" in cfg) {
                                 var prevName = cfg.name;
@@ -390,7 +413,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	                list: destRoom.radiators.list
 	            };
 	            // клонирование радиаторов
-	            for (var r in radiators.list) {
+	            for (var r in this.radiators.list) {
 	                destRoom.radiators.list[r].type = this.radiators.list[r].type;					// Вид радиатора
 	                destRoom.radiators.list[r].connection = this.radiators.list[r].connection;		// Подключение
 	                destRoom.radiators.list[r].builtinValve = this.radiators.list[r].builtinValve;	// Встроенный клапан
@@ -1111,7 +1134,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 							    } else {
 							        pushToBasket(_basket, _control[0], _radiator.count * eval(_control[1]), 'radiator-control');
 							    }
-							}))
+							}))                            
 							+
 							(angular.forEach(Configurator.params.room.radiators.valves[_radiator.valves - 1].basket, function (_valves) {
 							    pushToBasket(_basket, _valves[0], _radiator.count * _valves[1], 'radiator-valve');
@@ -1418,7 +1441,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	    StorageManager.saveLocalStorage({ key: "Danfoss.LastConfiguration", val: savedObj });
 	    // если пользователь залогинен
 	    CurrentUser.isGuidExistsInDB().then(
-            function () {
+            function (m) {
                 Cfg._serializeConfiguration(function (conf) {
                     // сохраняем на сервере
                     CurrentUser.SaveConfiguration(conf.name, conf.savedObj, conf.price).then(function (res) {
@@ -1434,6 +1457,42 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	        });
 	}
 
+    // Метод отправляющий конфигурацию на email
+	Cfg.sendConfiguration = function (email, successCallback, failCallback) {
+	    var savedObj = {
+	        cottage: Cfg.cottage,
+	        levels: Cfg.levels,
+	        collectors: Cfg.collectors,
+	        boiler: Cfg.boiler,
+	        name: Cfg.name
+	    }
+
+	    if (typeof successCallback === 'undefined') {
+	        successCallback = function () { };
+	    }
+
+	    if (typeof failCallback === 'undefined') {
+	        failCallback = function () { };
+	    }
+	    // В любом случае сохраняем в localStorage
+	    StorageManager.saveLocalStorage({ key: "Danfoss.LastConfiguration", val: savedObj });
+	    // если пользователь залогинен
+	    CurrentUser.isGuidExistsInDB().then(
+            function (m) {
+                Cfg._serializeConfiguration(function (conf) {
+                    // сохраняем на сервере
+                    CurrentUser.SendConfiguration(email, conf.name, conf.savedObj, conf.price).then(function (res) {
+                        successCallback(res);
+                    }, function (res) {
+                        failCallback(res);
+                    });
+                })
+            },
+            function () {
+                successCallback();
+            });
+	}
+
     // Восстанавливает конфигурацию по Id
 	Cfg.restoreConfiguration = function (id, callback) {
 	    var restoredCfg = null;
@@ -1447,7 +1506,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
         // если не получилось или задан какой-то конкретный идентификатор, то достаем его
         if (restoredCfg === null) {
             CurrentUser.isGuidExistsInDB().then(
-                function() {
+                function () {
                     CurrentUser.LoadConfiguration(id).then(function (r) {
                         Cfg.restoreJsonConfiguration(r);
                         callback();
