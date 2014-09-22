@@ -273,23 +273,26 @@ body {
     background: transparent url('../img/icons-sidebar-controls.png') no-repeat left top;
     border: none;
 }
-#nav a.active {
+#nav a.active, #nav a:hover {
     background-position: right top;
 }
 #nav a.summary {
     background-position: left -57px;
 }
-#nav a.summary.active {
+#nav a.summary.active, #nav a.summary:hover {
     background-position: right -57px;
 }
 #nav a.order {
     background-position: left -114px;
 }
-#nav a.order.active {
+#nav a.order.active, #nav a.order:hover {
     background-position: right -114px;
 }
 #nav a.reset {
     background-position: left -171px;
+}
+#nav a.reset.active, #nav a.reset:hover {
+    background-position: right -171px;
 }
 #nav .button-icon {
 	border: 0;

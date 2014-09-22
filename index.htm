@@ -57,10 +57,10 @@
                      </div> -->
                 <!-- <div class="button-icon button-clear" title="Удалить"></div> -->
                 <div id="nav">
-                    <a ui-sref-active="active" ui-sref="cottage" title="Редактирование"></a>
-                    <a ui-sref-active="active" ui-sref="summary" title="Информация по заказу" class="summary"></a>
-                    <a ui-sref-active="active" ng-href="#/order" ng-click="$event.preventDefault(); SAVE();" title="Сохранить расчет" class="order"></a>
-                    <a ui-sref-active="active" ng-href="#" title="Сбросить параметры" ng-click="$event.preventDefault(); RESET();" class="reset"></a>
+                    <a ng-href="#/level" ng-class="NAV_CSS('configurator');" ng-click="TRY_CLICK($event, 'configurator');" title="Редактирование"></a>
+                    <a ng-href="#/summary" class="summary" ng-class="NAV_CSS('summary');" ng-click="TRY_CLICK($event, 'summary');" title="Информация по заказу"></a>
+                    <a ng-href="#/order" class="order" ng-click="$event.preventDefault(); SAVE();" title="Сохранить расчет"></a>
+                    <a ng-href="#/reset" class="reset" ng-click="$event.preventDefault(); RESET();" title="Сбросить параметры"></a>
                 </div>
             </div>
             <div id="sidebar-content">
@@ -156,19 +156,6 @@
                 <div class="button" ng-click="CANCEL_SET_COLLECTOR()">Отмена</div>    
                 <div class="button button-next" ng-click="SET_COLLECTOR()">Применить</div>
             </div>
-        </script>
-        
-        <script>
-            //todo move it to some angular 'click-ouside' attr directive
-            $(function() {
-                var basketPanel = $('#basket-popup');
-                $(document).click(function() {
-                    var scope = angular.element(basketPanel).scope();
-                    scope && scope.$apply(function() {
-                        scope.TOGGLE_BASKET = true;
-                    });
-                });
-            });
         </script>
     </body>
 </html>

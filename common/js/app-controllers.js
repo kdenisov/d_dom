@@ -2069,6 +2069,33 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
         );
     };
 
+    var menuItemActive = function(section) {
+        if (!section) {
+            return true;
+        }
+
+        var url = $location.url();
+        if (url.indexOf('summary') != -1) {
+            return section === 'summary';
+        }
+
+        if (url.indexOf('summary') == -1) {
+            return section === 'configurator';
+        }
+
+        return false;
+    };
+
+    $scope.NAV_CSS = function(section) {
+        return (menuItemActive(section)) ? 'active' : '';
+    };
+
+    $scope.TRY_CLICK = function(e, section) {
+        if (menuItemActive(section)) {
+            e.preventDefault();
+        }
+    };
+
     $scope.$on('$locationChangeSuccess', function (event, toUrl, fromUrl) {
         if (toUrl.indexOf('#/summary') >= 0) {
             $scope.BASE_PAGE.title = 'Информация по заказу';
