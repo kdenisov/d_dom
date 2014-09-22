@@ -1,0 +1,257 @@
+﻿aside .bc {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    background-color: #f1f1f1;
+}
+aside {
+    position: fixed;
+    height: 100%;
+    width: 203px;
+    min-height: 615px;
+    z-index: 2;
+    left: 0;
+    background-color: #f1f1f1;
+    -moz-transition: left 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    -webkit-transition: left 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: left 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    /*transition-delay: 0.1s;*/
+    /*-webkit-transition-delay: 0.1s;*/
+    /*-moz-transition-delay: 0.1s*/
+}
+
+aside p {
+    margin-bottom: 0;
+}
+
+aside .logo {
+    display: block;
+    padding: 45px 32px 24px 32px;
+    cursor: pointer;
+}
+
+.textAndPhone {
+    padding: 0 30px 44px 32px;
+    text-align: center;
+}
+
+.textAndPhone .text {
+    color: #a9aaaa;
+    margin-bottom: 6px;
+    font-size: 12px;
+}
+.textAndPhone .phone {
+    font-size: 13px;
+}
+
+.upMenu .menuItem {
+    padding: 20px 0 0 32px;
+    display: block;
+    border-top: solid 1px #ebebeb;
+    border-bottom: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    height: 29px;
+
+    font-size: 12px;
+    color: black;
+
+    -moz-transition: all 0.15s linear;
+    -webkit-transition: all 0.15s linear;
+    transition: all 0.15s linear;
+}
+
+.upMenu .menuItem:last-child {
+    border-bottom: solid 1px #ebebeb;
+    background: url("../img/side-menu-popup/where.png") no-repeat 156px center;
+}
+
+.upMenu .menuItem:nth-child(1) {
+    background: url("../img/side-menu-popup/konf.png") no-repeat 156px center;
+}
+.upMenu .menuItem:nth-child(2) {
+    background: url("../img/side-menu-popup/catalog.png") no-repeat 156px center;
+}
+.upMenu .menuItem:nth-child(3) {
+    background: url("../img/side-menu-popup/article.png") no-repeat 156px center;
+}
+
+.upMenu .menuItem:hover {
+    background-color: #e4e5e5;
+}
+.upMenu .menuItem:nth-child(1):hover {
+    background-image: url("../img/side-menu-popup/konfHover.png");
+}
+.upMenu .menuItem:nth-child(2):hover {
+    background-image: url("../img/side-menu-popup/catalogHover.png");
+}
+.upMenu .menuItem:nth-child(3):hover {
+    background-image: url("../img/side-menu-popup/articleHover.png");
+}
+.upMenu .menuItem:nth-child(4):hover {
+    background-image: url("../img/side-menu-popup/whereHover.png");
+}
+
+.asideFooter {
+    position: absolute;
+    width: 100%;
+    bottom: 14px;
+}
+
+.courseEuro {
+    color: #a9aaaa;
+    text-transform: uppercase;
+    border-top: solid 1px #ebebeb;
+    padding: 14px 0 0 32px;
+    margin-top: 11px;
+    font-size: 11px;
+}
+.downMenu .menuItem {
+    -moz-transition: all 0.15s linear;
+    -webkit-transition: all 0.15s linear;
+    transition: all 0.15s linear;
+    border-bottom: none;
+
+    font-size: 12px;
+    line-height: 12px;
+
+    display: block;
+    padding: 9px 0 8px 32px;
+}
+.downMenu .menuItem:hover {
+    color: #ed1d24;
+}
+
+.downMenu .menuItem:last-child {
+    background: url("../img/side-menu-popup/key.png") no-repeat 13px center;
+}
+
+.downMenu .menuItem:last-child:hover {
+    background-image: url("../img/side-menu-popup/keyHover.png");
+}
+
+.subMenu {
+    z-index: -2;
+    position: fixed;
+    top: 0;
+    height: 100%;
+    min-height: 590px;
+    width: 110px;
+    left: 53px;
+    -moz-transition: left 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    -webkit-transition: left 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: left 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+aside .hasSubMenu {
+    cursor: pointer;
+}
+
+.subMenu .catalogIcon {
+    height: 100%;
+    width: 100%;
+}
+
+.subMenu .catalogIcon li {
+    height: 16.666%;
+    position: relative;
+    width: inherit;
+
+    -webkit-transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1),  background-position 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    -moz-transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1),  background-position 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    -o-transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1),  background-position 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1),  background-position 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.subMenu li:nth-child(1) {
+    background: #ffffff url("../img/side-menu-popup/catalog-1.png") no-repeat 67px 38px;
+    background-size: 65px;
+}
+.subMenu li:nth-child(2) {
+    background: #ffffff url("../img/side-menu-popup/catalog-2.png") no-repeat 62px 20px;
+    background-size: 73px;
+}
+.subMenu li:nth-child(3) {
+    background: #ffffff url("../img/side-menu-popup/catalog-3.png") no-repeat 66px 18px;
+    background-size: 80px;
+}
+.subMenu li:nth-child(4) {
+    background: #ffffff url("../img/side-menu-popup/catalog-4.png") no-repeat 65px 47px;
+    background-size: 68px;
+}
+.subMenu li:nth-child(5) {
+    background: #ffffff url("../img/side-menu-popup/catalog-5_2.png") no-repeat 64px 37px;
+    background-size: 80px;
+}
+.subMenu li:nth-child(6) {
+    background: #ffffff url("../img/side-menu-popup/catalog-6.png") no-repeat 61px 9px;
+    background-size: 81px;
+}
+
+.subMenu li:nth-child(1):hover {
+    background-position: 162px 22px;
+    background-size: 70px;
+}
+.subMenu li:nth-child(2):hover {
+    background-position: 139px 20px;
+    background-size: 90px;
+}
+.subMenu li:nth-child(3):hover {
+    background-position: 136px 29px;
+    background-size: 95px;
+}
+.subMenu li:nth-child(4):hover {
+    background-position: 151px 37px;
+    background-size: 95px;
+}
+.subMenu li:nth-child(5):hover {
+    background-position: 146px 19px;
+    background-size: 89px;
+}
+.subMenu li:nth-child(6):hover {
+    background-position: 145px 22px;
+    background-size: 90px;
+}
+
+.subMenu li:hover {
+    width: 210px;
+    border-top: 1px solid #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+}
+.subMenu .text {
+    font-weight: normal;
+    font-size: 12px;
+    text-transform: none;
+    position: absolute;
+    left: 9%;
+    top: 50%;
+}
+.subMenu .number {
+    color: #e5e5e5;
+    font-weight: 300;
+    font-size: 30px;
+    text-transform: none;
+    position: absolute;
+    left: 9%;
+    top: 17%;
+}
+.subMenu .catalogIcon a {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+
+    -webkit-transition: opacity 0.2s linear;
+    -moz-transition: opacity 0.2s linear;
+    -o-transition: opacity 0.2s linear;
+    transition: opacity 0.2s linear;
+
+    /*transition-delay: 0.15s;*/
+    /*-webkit-transition-delay: 0.15s;*/
+    /*-moz-transition-delay: 0.15s;*/
+    /*-o-transition-delay: 0.15s;*/
+}
+
+.subMenu li:hover a {
+    opacity: 1;
+}

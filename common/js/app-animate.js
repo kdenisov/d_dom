@@ -57,22 +57,75 @@ angular.module('appConfigurator')
             }
         };
     })
-    .animation('.tree-view', function() {
+    .animation('.tree-view', function () {
         return {
             enter: function (item, done) {
                 item = $(item);
-                item.css({top: '-100%'});
+                item.css({ top: '-100%' });
                 item.animate({ top: 0 }, animationDuration, done);
                 return animationCancelHandler(item);
             },
 
-            leave: function(item, done) {
+            leave: function (item, done) {
                 item = $(item);
                 item.css({ top: 0 });
                 item.animate({ top: '-100%' }, animationDuration, done);
                 return animationCancelHandler(item);
             }
-        }
+        };
+    })
+    .animation('.aside-enter-leave', function () {
+        return {
+            enter: function (item, done) {
+                item = $(item);
+                item.css({ left: '-100%' });
+                item.animate({ left: 0 }, animationDuration, done);
+                return animationCancelHandler(item);
+            },
+
+            leave: function (item, done) {
+                item = $(item);
+                item.css({ left: 0 });
+                item.animate({ left: '-100%' }, animationDuration, done);
+                return animationCancelHandler(item);
+            }
+        };
+    })
+    .animation('.menu-aside-popup', function () {
+        var animationDuration = window.animationDuration / 2;
+        return {
+            removeClass: function (item, className, done) {
+                if (className !== 'ng-hide') {
+                    return animationCancelHandler(item);
+                }
+
+                item = $(item);
+                var menu = item.children('aside');
+                item.css({ opacity: 0 });
+                menu.css({ left: '-100%' });
+                item.animate({ opacity: 1 }, animationDuration, function () {
+                    menu.animate({ left: 0 }, animationDuration, done);
+                });
+
+                return animationCancelHandler(item);
+            },
+
+            beforeAddClass: function (item, className, done) {
+                if (className !== 'ng-hide') {
+                    return animationCancelHandler(item);
+                }
+
+                item = $(item);
+                var menu = item.children('aside');
+                item.css({ opacity: 1 });
+                menu.css({ left: 0 });
+                menu.animate({ left: '-100%' }, animationDuration, function() {
+                    item.animate({ opacity: 0 }, animationDuration, done);
+                });
+                
+                return animationCancelHandler(item);
+            }
+        };
     });
 
 
@@ -86,4 +139,4 @@ function animationCancelHandler(item) {
     };
 }
 
-var animationDuration = 300;
+window.animationDuration = 300;

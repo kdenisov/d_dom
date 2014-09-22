@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>Danfoss Конфигуратор</title>
+        <link rel="stylesheet" type="text/css" href="common/css/side-menu-popup.css" media="all">
         <link rel="stylesheet" type="text/css" href="common/levels/css/main.css" media="all" />
         <link rel="stylesheet" type="text/css" href="common/css/default.css" media="all">
         <link rel="stylesheet" type="text/css" href="common/css/jquery-ui.css" media="all">
@@ -48,8 +49,8 @@
 
         <div id="sidebar">
             <div id="sidebar-panel">
-                <div id="sidebar-panel-top" ng-init="SIDEBAR.HIDE = true" ng-mouseenter="SIDEBAR.HIDE = false" ng-mouseleave="SIDEBAR.HIDE = true">
-                    <a class="button-icon button-menu" ui-sref-active="active" ng-href="#"></a>
+                <div id="sidebar-panel-top" ng-init="showPopupMenu = false;">
+                    <a class="button-icon button-menu" ui-sref-active="active" ng-href="#" ng-click="$event.preventDefault(); showPopupMenu = true;"></a>
                 </div>
                 <!-- <div id="nav" class="hidden-{{SIDEBAR.HIDE}}">
                          <div class="button-icon button-save" title="Сохранить"></div>
@@ -112,6 +113,51 @@
                     <a ui-sref-active="active" ng-href="#/summary" class="button" title="Подробнее" >Подробнее</a>
                 </div>
             </div><!-- #basket-popup -->
+        </div>
+        
+        <div class="menu-aside-popup" ng-show="showPopupMenu == true" ng-click="showPopupMenu = false;">
+            <aside ng-click="$event.stopPropagation();">
+                <div class="bc"></div>
+                <!--<a class="logo" href="#main">-->
+                <img class="logo" src="common/img/side-menu-popup/logo.png" alt="Danfoss">
+                <!--</a>-->
+                <div class="textAndPhone">
+                    <p class="text">Отопление&nbsp;коттеджей</p>
+                    <nobr><p class="phone">+7 (495) 258-07-08</p></nobr>
+                </div>
+                <nav class="upMenu">
+                    <a class="menuItem" href="#">конфигуратор</a>
+                    <div class="menuItem hasSubMenu">
+                        каталог
+                        <!--<div class="subMenu">
+                            <ul class="catalogIcon">
+                                <li><span class="number">01</span><a href="#"><span class="text">Радиаторные<br /> терморегуляторы<br /> и&nbsp;запорные&nbsp;клапаны</span></a></li>
+                                <li><span class="number">02</span><a href="#"><span class="text">Терморегуляторы<br /> для&nbsp;напольного<br /> отопления</span></a></li>
+                                <li><span class="number">03</span><a href="#"><span class="text">Коллекторы<br /> и&nbsp;узлы&nbsp;смешения</span></a></li>
+                                <li><span class="number">04</span><a href="#"><span class="text">Комнатные&nbsp;термостаты<br /> и&nbsp;термостаты&nbsp;гвс</span></a></li>
+                                <li><span class="number">05</span><a href="#"><span class="text">Трубопроводная<br /> арматура</span></a></li>
+                                <li><span class="number">06</span><a href="#"><span class="text">Насосные&nbsp;узлы<br /> обвязки&nbsp;котла</span></a></li>
+                            </ul>
+                        </div>-->
+                    </div>
+                    <a class="menuItem" href="allNews.html">статьи</a>
+                    <a class="menuItem" href="whereToBuy.html">где&nbsp;купить</a>
+                </nav>
+                <footer class="asideFooter">
+                    <nav class="downMenu">
+                        <a class="menuItem" href="about.html">О&nbsp;компании</a>
+                        <a class="menuItem" href="allNews.html">Новости</a>
+                        <a class="menuItem" href="contacts.html">Контакты</a>
+                        <a class="menuItem" href="payment.html">Оплата</a>
+                        <a class="menuItem" href="shipping.html">Доставка</a>
+                        <a class="menuItem" href="#">Личный&nbsp;кабинет</a>
+                    </nav>
+
+                    <div class="courseEuro">
+                        <p>eur&nbsp;цб&nbsp;рф&nbsp;48,2398</p>
+                    </div>
+                </footer>
+            </aside>
         </div>
 
         <script src="common/js/jquery.js"></script>
