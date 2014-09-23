@@ -232,7 +232,7 @@ appConfigurator.service('levelsService', function(Configurator, $stateParams) {
     return $this;
 });
 
-appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsService, $stateParams, $modal, $location) {
+appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsService, CottageTree, $stateParams, $modal, $location) {
 
     $scope.COTTAGE = Configurator.cottage;
     $scope.MODEL = levelsService;
@@ -331,6 +331,7 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
 
     $scope.EQUIPMENT = getEquipment(Configurator);
 
+    
 
     $(function () {
         $('#levels').width($('#viewport-inner').width());
@@ -376,6 +377,17 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                 levelsService.level.rooms[roomId - 1].isRoom = false;
             }
         });
+
+        CottageTree
+            .setCustomRoomAdded(function(levelId, roomId) {
+                window.levelsModule.addRoom(levelId, roomId);
+            })
+            .setCustomRoomRemoved(function (levelId, roomId) {
+                window.levelsModule.removeRoom(levelId, roomId);
+            })
+            .setCustomRoomRenamed(function (levelId, roomId, name) {
+                window.levelsModule.renameRoom(levelId, roomId, name);
+            });
     });
 
     //setCustomScroll();
@@ -384,113 +396,6 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
 appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams, Configurator, levelsService, alertService, $modal, $timeout) {
     $scope.MODEL = levelsService;
 
-    var mapModels = function(array, filteringPredicate, mappingPredicate) {
-        var res = [];
-        for (var i = 0; i < array.length; i++) {
-            var element = array[i];
-            if (filteringPredicate(element)) {
-                res.push(mappingPredicate(element));
-            }
-        }
-
-        return res;
-    };
-
-    var NodeModel = function(level, itemId, itemName, marked) {
-        var $this = this;
-        $this.id = itemId;
-        $this.name = itemName;
-        $this.levelId = level.id;
-        $this.marked = marked;
-        $this.editing = false;
-        $this.endEdit = function () {
-            $this.editing = false;
-            levelsService.levels[$this.levelId - 1].rooms[$this.id - 1].name = $this.name;
-            window.levelsModule.renameRoom($this.levelId, $this.id, $this.name);
-        };
-
-        $this.beginEdit = function(btn) {
-            if (!btn) {
-                return;
-            }
-
-            $this.editing = true;
-            $timeout(function () {  $(btn).siblings('input[type=text]').select(); }, 100);
-        };
-
-        $this.pressEnter = function(evt) {
-            if ($this.editing && evt.keyCode === 13) {
-                $this.endEdit();
-            }
-        };
-
-        return $this;
-    };
-
-    var LevelModel = function(level) {
-        var $this = this;
-        
-        $this.id = level.id;
-        $this.name = level.isBasement ? 'Подвал' : (level.id == 1 ? 'Первый этаж' : (level.id == 2 ? 'Второй этаж' : 'Третий этаж'));
-        $this.isBasement = level.isBasement;
-
-        $this.rooms = mapModels(level.rooms, function (room) { return room.isRoom; }, function (room) { return new NodeModel(level, room.id, room.name, room.visited); });
-        $this.hasMoreRooms = $this.rooms.length < level.rooms.length;
-        
-        $this.addRoom = function() {
-            var lvl = levelsService.levels[$this.id - 1];
-            for (var i = 0; i < lvl.rooms.length; i++) {
-                var room = lvl.rooms[i];
-                if (!room.isRoom) {
-                    $this.rooms.push(new NodeModel(lvl, room.id, room.name));
-                    window.levelsModule.addRoom(lvl.id, room.id);
-                    room.isRoom = true;
-                    $this.hasMoreRooms = $this.rooms.length < lvl.rooms.length;
-                    return;
-                }
-            }
-        };
-
-        $this.removeRoom = function(roomId) {
-            var lvl = levelsService.levels[$this.id - 1];
-            for (var i = 0; i < $this.rooms.length; i++) {
-                if ($this.rooms[i].id == roomId) {
-                    $this.rooms.splice(i, 1);
-                    window.levelsModule.removeRoom($this.id, roomId);
-                    lvl.rooms[roomId - 1].isRoom = false;
-                    $this.hasMoreRooms = $this.rooms.length < lvl.rooms.length;
-                    return;
-                }
-            }
-        };
-
-        return $this;
-    };
-
-    var TreeModel = function (levels) {
-        var $this = this;
-
-        $this.levels = mapModels(levels, function (l) { return l.isLevel; }, function (l) { return new LevelModel(l); });
-
-        $this.open = false;
-
-        $(function() {
-            $(document).click(function(e) {
-                var scope = angular.element('.tree-view').scope();
-                scope && scope.$apply(function() {
-                    scope.TREE.open = false;
-                });
-            });
-
-            $('.tree-view, .tree-button').click(function(e) {
-                e.stopPropagation();
-            });
-        });
-
-        return $this;
-    };
-
-    $scope.TREE = new TreeModel(levelsService.levels);
     $scope.EDITED_COLLECTOR = null;
 
     $scope.ALERT = function (alert, callback, dismissCallback) {
@@ -2028,8 +1933,135 @@ appConfigurator.controller('SendConfigurationBaseCtrl', function ($scope, $modal
     };
 });
 
+appConfigurator.service('CottageTree', function(Configurator, $timeout) {
+    //var mapModels = function(array, filteringPredicate, mappingPredicate) {
+    //    var res = [];
+    //    for (var i = 0; i < array.length; i++) {
+    //        var element = array[i];
+    //        if (filteringPredicate(element)) {
+    //            res.push(mappingPredicate(element));
+    //        }
+    //    }
 
-appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, Configurator) {
+    //    return res;
+    //};
+
+    //var NodeModel = function(level, itemId, itemName, marked) {
+    //    var $this = this;
+    //    $this.id = itemId;
+    //    $this.name = itemName;
+    //    $this.levelId = level.id;
+    //    $this.marked = marked;
+    //    $this.editing = false;
+
+    //    return $this;
+    //};
+
+    //var LevelModel = function(level) {
+    //    var $this = this;
+
+    //    $this.id = level.id;
+    //    $this.name = level.isBasement ? 'Подвал' : (level.id == 1 ? 'Первый этаж' : (level.id == 2 ? 'Второй этаж' : 'Третий этаж'));
+    //    $this.isBasement = level.isBasement;
+    //    $this.rooms = mapModels(level.rooms, function(room) { return room.isRoom; }, function(room) { return new NodeModel(level, room.id, room.name, room.visited); });
+    //    $this.hasMoreRooms = $this.rooms.length < level.rooms.length;
+
+    //    return $this;
+    //};
+
+    var model = this;
+    //model.levels = mapModels(Configurator.levels, function (l) { return l.isLevel; }, function (l) { return new LevelModel(l); });
+    model.levels = Configurator.levels;
+
+    model.levelName = function(level) {
+        if (!level) {
+            return "Этаж";
+        }
+
+        return level.isBasement ? 'Подвал' : (level.id == 1 ? 'Первый этаж' : (level.id == 2 ? 'Второй этаж' : 'Третий этаж'));
+    };
+
+    model.customRoomAdded = function (levelId, roomId) { };
+    model.customRoomRemoved = function (levelId, roomId) { };
+    model.customRoomRenamed = function (levelId, roomId, newName) { };
+
+    model.hasMoreRooms = function(levelId) {
+        var lvl = model.levels[levelId - 1];
+        return lvl.roomsCount < lvl.rooms.length;
+    };
+
+    model.addRoom = function (levelId) {
+        var lvl = model.levels[levelId - 1];
+        for (var i = 0; i < lvl.rooms.length; i++) {
+            var room = lvl.rooms[i];
+            if (!room.isRoom) {
+                room.isRoom = true;
+                lvl.roomsCount++;
+                model.customRoomAdded && model.customRoomAdded(levelId, room.id);
+                return;
+            }
+        }
+    };
+
+    model.removeRoom = function(levelId, roomId) {
+        var lvl = Configurator.levels[levelId - 1];
+        var room = Configurator.levels[levelId - 1].rooms[roomId - 1];
+        room.isRoom = false;
+        lvl.roomsCount--;
+        model.customRoomRemoved && model.customRoomRemoved(levelId, roomId);
+        return;
+    };
+
+    model.editing = null;
+    model.endEdit = function (levelId, roomId) {
+        var room = Configurator.levels[levelId - 1].rooms[roomId - 1];
+        model.editing = null;
+        model.customRoomRenamed && model.customRoomRenamed(levelId, roomId, room.name);
+    };
+
+    model.beginEdit = function (btn, levelId, roomId) {
+        if (!btn) {
+            return;
+        }
+
+        var room = Configurator.levels[levelId - 1].rooms[roomId - 1];
+        model.editing = room;
+        $timeout(function () { $(btn).siblings('input[type=text]').select(); }, 100);
+    };
+
+    model.editPressEnter = function (evt, levelId, roomId) {
+        if (model.editing != null && evt.keyCode === 13) {
+            model.endEdit(levelId, roomId);
+        }
+    };
+
+    var bind = function(targetHandlerName, customHandler) {
+        if (targetHandlerName && customHandler && typeof customHandler === "function") {
+            model[targetHandlerName] = customHandler;
+        }
+    };
+
+    model.setCustomRoomAdded = function (customHandler) {
+        bind('customRoomAdded', customHandler);
+        return model;
+    };
+
+    model.setCustomRoomRemoved = function (customHandler) {
+        bind('customRoomRemoved', customHandler);
+        return model;
+    };
+
+    model.setCustomRoomRenamed = function (customHandler) {
+        bind('customRoomRenamed', customHandler);
+        return model;
+    };
+
+    model.open = false;
+    return model;
+});
+
+
+appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, Configurator, CottageTree) {
     $scope.BASE_PAGE = { title: 'Конфигуратор' };
 
     var save = function() {
@@ -2066,6 +2098,8 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
             });
     };
 
+    $scope.TREE = CottageTree;
+
     $scope.RESET = function () {
         alertService.open({
             title: 'Сброс конфигурации',
@@ -2087,7 +2121,7 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
         );
     };
 
-    var menuItemActive = function(section) {
+    var activeSection = function(section) {
         if (!section) {
             return true;
         }
@@ -2105,11 +2139,11 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
     };
 
     $scope.NAV_CSS = function(section) {
-        return (menuItemActive(section)) ? 'active' : '';
+        return (activeSection(section)) ? 'active' : '';
     };
 
     $scope.TRY_CLICK = function(e, section) {
-        if (menuItemActive(section)) {
+        if (activeSection(section)) {
             e.preventDefault();
         }
     };
@@ -2117,11 +2151,32 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
     $scope.$on('$locationChangeSuccess', function (event, toUrl, fromUrl) {
         if (toUrl.indexOf('#/summary') >= 0) {
             $scope.BASE_PAGE.title = 'Информация по заказу';
-            $('#basket').hide();
+            $scope.TREE.hidden = true;
+            $scope.TREE.open = false;
+            $scope.BASKET_HIDDEN = true;
         } else {
             $scope.BASE_PAGE.title = 'Конфигуратор';
-            $('#basket').show();
+            $scope.TREE.hidden = false;
+            $scope.BASKET_HIDDEN = false;
         }
+    });
+
+    $(function () {
+        $(document).click(function (e) {
+            var scope = angular.element('.tree-view').scope();
+            scope && scope.$apply(function () {
+                scope.TREE.open = false;
+            });
+
+            scope = angular.element('#basket-popup').scope();
+            scope && scope.$apply(function() {
+                scope.TOGGLE_BASKET = true;
+            });
+        });
+
+        $('.tree-view, .tree-button, #basket-popup').click(function (e) {
+            e.stopPropagation();
+        });
     });
 });
 

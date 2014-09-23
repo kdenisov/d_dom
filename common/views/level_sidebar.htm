@@ -32,23 +32,3 @@
     </div>
 
 </div>
-
-<div class="tree-button" ng-click="TREE.open = !TREE.open;">
-    
-</div>
-
-<div class="tree-view" ng-if="TREE.open" ng-click="$event.stopPropagation();">
-    <div class="level" ng-repeat="level in TREE.levels | orderBy: '-isBasement' ">
-        <h3>{{level.name}}</h3>
-
-        <div class="node" ng-class="{'marked' : room.marked}" ng-repeat="room in level.rooms">
-            <a ng-href="#/room/{{level.id}}/{{room.id}}" ng-show="!room.editing">{{room.name}}</a>
-            <input type="text" ng-model="room.name" ng-show="room.editing" ng-keyup="room.pressEnter($event);" ng-blur="room.endEdit();" />
-            <input class="edit" type="button" value="" alt="Переименовать" ng-click="room.beginEdit($event.target);" />
-            <input class="delete" type="button" value="" alt="Удалить" ng-click="level.removeRoom(room.id)" />
-        </div>
-        <div class="add" ng-if="level.hasMoreRooms">
-            <input type="button" value="Новая комната" ng-click="level.addRoom()" />
-        </div>
-    </div>
-</div>
