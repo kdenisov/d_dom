@@ -900,8 +900,8 @@ a.room-item {
 }
 
 .tree-view > .level > .node, .tree-view > .level > .add {
-    padding: 5px 0 0 50px;
-    height: 25px;
+    padding: 0 0 0 50px;
+    height: 30px;
     background: url('../img/tree-nodes.png') left top no-repeat;
 }
 
@@ -910,6 +910,14 @@ a.room-item {
 
 .tree-view > .level > .node.marked {
     background-position: left -30px;
+}
+
+.tree-view > .level > .node.marked.current {
+    background-position: left -180px;
+}
+
+.tree-view > .level > .node.marked.current:last-child {
+    background-position: left -210px;
 }
 
 .tree-view > .level > .add {
@@ -931,6 +939,14 @@ a.room-item {
 .tree-view > .level > .node > a {
     border: none;
     color: #929292;
+    float: left;
+}
+.tree-view > .level > .node > a:hover {
+    color: white;
+}
+.tree-view >  .level > .node.current > a {
+    color: black;
+    background: white url('../img/tree-close-cap.png') top right no-repeat;
 }
 
 .tree-view > .level > .node > [type=button] {
@@ -938,9 +954,10 @@ a.room-item {
     background: transparent url('../img/icon-tree-edit.png');
     width: 15px;
     height: 15px;
-    margin-left: 5px;
+    margin: 5px 0 0 5px;
     cursor: pointer;
     display: none;
+    float: left;
 }
 
 .tree-view > .level > .node:hover > [type=button] {
@@ -965,12 +982,16 @@ a.room-item {
 
 .tree-view > .level > .node > a, .tree-view > .level > .node > input {
     border: none;
-    padding: 0;
     display: inline-block;
-    width: 114px;
+    width: 124px;
+    line-height: 26px;
+    padding: 0 0 0 6px;
+    margin: 1px 0 0 -6px;
+    float: left;
 }
 
 .tree-view > .level > .add > input[type=button] {
+    margin-top: 5px;
     padding: 0;
     border: 0;
     background: transparent;
@@ -979,7 +1000,7 @@ a.room-item {
 }
 
 .tree-view > .level > .add > input[type=button]:hover {
-    color: #929292;
+    color: white;
 }
 
 /* Level items */

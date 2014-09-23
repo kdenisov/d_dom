@@ -75,11 +75,11 @@
                     <div class="level" ng-repeat="level in TREE.levels | filter: {isLevel: true} | orderBy: '-isBasement' ">
                         <h3>{{TREE.levelName(level)}}</h3>
 
-                        <div class="node" ng-class="{'marked' : room.visited}" ng-repeat="room in level.rooms | filter : {isRoom:true}">
+                        <div class="node" ng-class="{'marked' : room.visited, 'current' : TREE.current === room }" ng-repeat="room in level.rooms | filter : {isRoom:true}">
                             <a ng-href="#/room/{{level.id}}/{{room.id}}" ng-show="TREE.editing !== room">{{room.name}}</a>
                             <input type="text" ng-model="room.name" ng-show="TREE.editing === room" ng-keyup="TREE.editPressEnter($event, level.id, room.id);" ng-blur="TREE.endEdit(level.id, room.id);" />
-                            <input class="edit" type="button" value="" alt="Переименовать" ng-click="TREE.beginEdit($event.target, level.id, room.id);" />
-                            <input class="delete" type="button" value="" alt="Удалить" ng-click="TREE.removeRoom(level.id, room.id)" />
+                            <input ng-show="TREE.editable(room)" class="edit" type="button" value="" alt="Переименовать" ng-click="TREE.beginEdit($event.target, level.id, room.id);" />
+                            <input ng-show="TREE.editable(room)" class="delete" type="button" value="" alt="Удалить" ng-click="TREE.removeRoom(level.id, room.id)" />
                         </div>
                         <div class="add" ng-if="TREE.hasMoreRooms(level.id)">
                             <input type="button" value="Новая комната" ng-click="TREE.addRoom(level.id)" />
