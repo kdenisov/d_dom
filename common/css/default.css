@@ -941,7 +941,7 @@ a.room-item {
     color: #929292;
     float: left;
 }
-.tree-view > .level > .node > a:hover {
+.tree-view > .level > .node > a:hover, .tree-view > .level > .node.marked > a {
     color: white;
 }
 .tree-view >  .level > .node.current > a {
