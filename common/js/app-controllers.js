@@ -372,9 +372,11 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
             },
             roomAdded: function(levelId, roomId) {
                 levelsService.level.rooms[roomId - 1].isRoom = true;
+                levelsService.level.roomsCount++;
             },
             roomRemoved: function(levelId, roomId) {
                 levelsService.level.rooms[roomId - 1].isRoom = false;
+                levelsService.level.roomsCount--;
             }
         });
 

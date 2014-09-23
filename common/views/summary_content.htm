@@ -2,10 +2,8 @@
     <h2>Информация по заказу<!-- № {{PAGE_GENERAL.orderNum}}--> </h2>
 
     <div id="summary-icons">
-        <a href="/#/summary/print" class="print"></a>
-        <span ng-controller="SendConfigurationBaseCtrl">
-            <a class="download" ng-click="SEND()"></a>
-        </span>
+        <!--<a href="/#/summary/print" class="print"></a>-->
+        <a href="/#/summary/download" class="download"></a>
     </div>
 
     <div class="summary-general" ng-repeat="clause in PAGE_GENERAL.clauses">
@@ -35,7 +33,7 @@
     <h2>Схема дома</h2>
 
     <div id="summary-icons">
-        <a href="/#/summary/print" class="print"></a>
+        <!--<a href="/#/summary/print" class="print"></a>-->
         <a href="/#/summary/download" class="download"></a>
     </div>
 
@@ -78,7 +76,7 @@
     <h2 class="no-border">Набор товаров</h2>
 
     <div id="summary-icons">
-        <a href="/#/summary/print" class="print"></a>
+        <!--<a href="/#/summary/print" class="print"></a>-->
         <a href="/#/summary/download" class="download"></a>
     </div>
 
@@ -125,7 +123,7 @@
     <h2 class="no-border">Куда устанавливать</h2>
 
     <div id="summary-icons">
-        <a href="/#/summary/print" class="print"></a>
+        <!--<a href="/#/summary/print" class="print"></a>-->
         <a href="/#/summary/download" class="download"></a>
     </div>
 
@@ -170,9 +168,9 @@
 
 <div class="summary-page" ng-show="MODEL.visible(5)">
     <h2 class="no-border">Карточки товаров</h2>
-    
+
     <div id="summary-icons">
-        <a href="/#/summary/print" class="print"></a>
+        <!--<a href="/#/summary/print" class="print"></a>-->
         <a href="/#/summary/download" class="download"></a>
     </div>
 
@@ -188,7 +186,7 @@
         <div>
             <h3>{{MODEL.productCard.name}}</h3>
             <div class="summary-card-pricing">
-               <div>
+                <div>
                     <div>цена</div>
                     <span class="value">{{MODEL.productCard.price | number:0 | formatNumber}}</span> руб.
                 </div>
@@ -232,7 +230,7 @@
         </div>
     </div>
 
-    <div class="summary-footer">
-        <a href="/#/summary/print" ng-click="PRINT();">Распечатать всю информацию <i class="icon-print-all"></i></a>
-    </div>
+    <!--<div class="summary-footer">
+            <a href="/#/summary/print" ng-click="PRINT();">Распечатать всю информацию <i class="icon-print-all"></i></a>
+        </div>-->
 </div>

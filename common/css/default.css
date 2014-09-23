@@ -2875,8 +2875,8 @@ table.summary-merchandise .rub {
 #summary-icons a{
     float: left;
     display: block;
-    width: 36.5px;
-    height: 35px;
+    width: 34px;/*36.5px*/
+    height: 36px;
     border-bottom: none;
     background: transparent url('../img/summary/icons-print-download.png') no-repeat;
 }
@@ -2887,6 +2887,7 @@ table.summary-merchandise .rub {
 
 #summary-icons .download {
     background-position: right top;
+    background-position: -46px top;
 }
 
 .summary-footer {
