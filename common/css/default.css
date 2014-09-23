@@ -302,6 +302,28 @@ body {
 #nav .button-icon:after {
 	display: none;
 }
+#login {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
+
+#login > a {
+    display: block;
+    width: 100%;
+    height: 55px;
+    border: none;
+}
+
+#login > a.help {
+    background: url('../img/icons-sidebar-controls.png') left bottom no-repeat;
+}
+
+#login > a.account {
+    width: 33px;
+    padding: 11px;
+}
 
 
 #viewport {
