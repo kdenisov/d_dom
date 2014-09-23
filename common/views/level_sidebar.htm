@@ -3,9 +3,8 @@
         <label class="label-switchbox switchbox-{{COLLECTOR.isCollector()}}">
             <!-- ng-class="{'label-switchbox-false': COLLECTOR.id == 1 + COTTAGE.levelsCount > 1}" -->
             <h3>{{COLLECTOR.name}} <nobr><span class="hidden-true">({{COLLECTOR.entries}} вх.)</span></nobr></h3>
-            <!--<input type="checkbox"
-                       ng-model="COLLECTOR.isCollector()"
-                       ng-change="validateCollectors(CURRENT_LEVEL, LEVELS, COLLECTOR)">-->
+            <input type="checkbox"
+                   ng-click="turnOffCollector(MODEL.level, MODEL.levels, COLLECTOR)" />
             <!-- ng-if="!(COLLECTOR.id == 1 + COTTAGE.levelsCount > 1)" -->
         </label>
         <div class="hidden-{{!COLLECTOR.isCollector()}}">

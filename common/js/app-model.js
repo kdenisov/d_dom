@@ -1043,11 +1043,10 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	    }
 
 	    var collector_id = collector.id;
-
 	    if (collector.isCollector() == false) {
 	        // Коллектор радиаторов должен быть минимум один, должно быть нельзя выключить все
 	        var noRadiatorCollectors = true;
-	        angular.forEach(levels, function (_level) {
+	        iterateActiveLevels(function (_level) {
 	            angular.forEach(_level.collectors, function (_collector, key2) {
 	                if (_collector.type == 'radiator' && _collector.isCollector())
 	                    noRadiatorCollectors = false;
@@ -1056,7 +1055,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 
 	        if (noRadiatorCollectors) {
 	            alertCallback("Коллектор радиаторов должен быть как минимум один.");
-	            currentCollector.levels[collectorForLevel] = true;
+	            collector.levels[collectorForLevel] = true;
 	            return;
 	        }
 
@@ -1064,18 +1063,19 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	            // Если есть теплый пол - значит должен быть коллектор, минимум один
 	            var isFloorExists = false;
 	            var isFloorCollectorExists = false;
-	            angular.forEach(levels, function (_level) {
+	            iterateActiveLevels(function (_level) {
 	                angular.forEach(_level.rooms, function (_room) {
 	                    isFloorExists = isFloorExists || (_room.isRoom && _room.floors.isFloors);
 	                    angular.forEach(_level.collectors, function (_collector, key2) {
-	                        isFloorCollectorExists = isFloorCollectorExists || (_collector.type == 'floor' && _collector.isCollector());
+	                        if (_collector.type == 'floor') {
+	                            isFloorCollectorExists = isFloorCollectorExists || (_collector.type == 'floor' && _collector.isCollector());
+	                        }
 	                    });
 	                });
 	            });
-
 	            if (isFloorExists && !isFloorCollectorExists) {
 	                alertCallback("Коллектор теплых полов должен быть как минимум один");
-	                currentCollector.levels[collectorForLevel] = true;
+	                collector.levels[collectorForLevel] = true;
 	                return;
 	            }
 	        }

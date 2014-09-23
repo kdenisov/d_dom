@@ -493,8 +493,26 @@ appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams,
     $scope.TREE = new TreeModel(levelsService.levels);
     $scope.EDITED_COLLECTOR = null;
 
-    $scope.ALERT = function (alert) {
-        alertService.open({ title: alert });
+    $scope.ALERT = function (alert, callback, dismissCallback) {
+        var m = { title: alert };
+        if (typeof callback != 'undefined')
+            m.confirm = callback;
+        if (typeof dismissCallback != 'undefined')
+            m.cancel = dismissCallback;
+        alertService.open(m);
+    };
+
+    $scope.turnOffCollector = function (currentLevel, levels, currentCollector) {
+        if (currentCollector.isCollector()) {
+            angular.forEach(currentCollector.levels, function (enabled, level) {
+                if (enabled) {
+                    currentCollector.levels[level] = false;
+                }
+            });
+        } else {
+            currentCollector.levels[currentLevel.id] = true;
+        }
+        $scope.validateCollectors(currentLevel, currentLevel.id, levels, currentCollector);
     };
 
     // currentLevel - этаж на котором установлен коллектор
@@ -503,30 +521,30 @@ appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams,
     // currentCollector - ссылка на коллектор
     $scope.validateCollectors = function (currentLevel, collectorForLevel, levels, currentCollector) {
         Configurator.ValidateCollectors(currentLevel, collectorForLevel, levels, currentCollector, $scope.ALERT, function (currentCollector) {
-            $scope.COLLECTOR = currentCollector;
+                $scope.COLLECTOR = currentCollector;
 
-            $scope.modalInstance = $modal.open({
-                templateUrl: 'set-dest-collector.html',
-                size: 'sm',
-                controller: 'SetCollectorDialogCtrl',
-                resolve: {
-                    EDITED_COLLECTOR: function () {
-                        return $scope.COLLECTOR;
-                    },
-                    UNCHECKED_LEVEL: function () {
-                        return collectorForLevel;
+                $scope.modalInstance = $modal.open({
+                    templateUrl: 'set-dest-collector.html',
+                    size: 'sm',
+                    controller: 'SetCollectorDialogCtrl',
+                    resolve: {
+                        EDITED_COLLECTOR: function () {
+                            return $scope.COLLECTOR;
+                        },
+                        UNCHECKED_LEVEL: function () {
+                            return collectorForLevel;
+                        }
                     }
-                }
-            });
+                });
 
-            $scope.modalInstance.result.then(function (res) {
-                if (res == false) {
-                    currentCollector.levels[collectorForLevel] = true;
-                } else {
-                    currentCollector.entries = 0;
-                }
-            }, function () { currentCollector.levels[collectorForLevel] = true; });
-        });
+                $scope.modalInstance.result.then(function (res) {
+                    if (res == false) {
+                        currentCollector.levels[collectorForLevel] = true;
+                    } else {
+                        currentCollector.entries = 0;
+                    }
+                }, function () { currentCollector.levels[collectorForLevel] = true; });
+            });
     };
 
     $scope.refreshRadiatorCollectorsCount = function () {
@@ -2056,7 +2074,7 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
             confirm: function () {
                 Configurator.ReInitConfigurator();
                 $timeout(function () {
-                    $scope.$apply(function () { $location.path("/"); });
+                    $scope.$apply(function () { $location.path("#/#"); });
                 }, 0);
             },
         });
