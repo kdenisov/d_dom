@@ -324,6 +324,7 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                     control = radiatorType.control > 4 ? null : Configurator.params.room.radiators.control[radiatorType.control - 1];
                     var valves = Configurator.params.room.radiators.valves[radiatorType.valves - 1];
                     if (radiatorType.count > 0) {
+                        console.log(radiatorType);
                         roomEquipment.radiators.push({
                             type: radIndex + 1,
                             thermostat: control ? {
