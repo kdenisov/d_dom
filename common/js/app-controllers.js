@@ -2078,6 +2078,17 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
     model.resetCurrentRoom = function() { model.current = null; };
 
     model.open = false;
+    model.expand = function() {
+        if (model.open) {
+            return;
+        }
+
+        model.open = true;
+        $timeout(function() {
+            setCustomScroll('.tree-view');
+        }, 100);
+    };
+
     return model;
 });
 
@@ -2199,6 +2210,8 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
         $('.tree-view, .tree-button, #basket-popup').click(function (e) {
             e.stopPropagation();
         });
+
+        setCustomScroll('.tree-view');
     });
 });
 
@@ -2261,8 +2274,12 @@ appConfigurator.controller('AlertCtrl', function($scope, alertService) {
     $scope.MODEL = alertService;
 });
 
-function setCustomScroll() {
-    $(function() {
-        $('.autoscroll').perfectScrollbar({ wheelSpeed: 300, includePadding: true });
+function setCustomScroll(select) {
+    $(function () {
+        if (!select) {
+            select = '.autoscroll';
+        }
+
+        $(select).perfectScrollbar({ wheelSpeed: 300, includePadding: true });
     });
 }
