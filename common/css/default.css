@@ -2760,7 +2760,7 @@ table.summary-merchandise .rub {
 
 .summary-card-title > img {
     float: left;
-    width: 190px;
+    width: 228px;
     height: 190px;
     margin-left: 38px;
     margin-bottom: 38px;
@@ -2842,21 +2842,20 @@ table.summary-merchandise .rub {
     margin-bottom: 15px;
 }
 
-.summary-card-tab-content > .links > a {
+.summary-card-tab-content > .links a {
     display: block;
     border: none;
     padding: 15px 0 15px 30px;
     position: relative;
 }
 
-.summary-card-tab-content > .links .icon-download {
+.summary-card-tab-content > .links img {
     display: block;
     width: 24px;
     height: 30px;
-    background: url('../img/summary/icon-download.png') center center no-repeat;
     position: absolute;
-    left: 0px;
-    top: 6px;
+    margin-top: -8px;
+    margin-left: -30px;
 }
 
 .summary-card-tab-content .tech {

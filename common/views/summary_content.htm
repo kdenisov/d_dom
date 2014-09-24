@@ -199,7 +199,7 @@
                 </div>
             </div>
         </div>
-        <img ng-src="{{MODEL.productCard.image}}?w=400&h=400&mode=pad" alt="{{MODEL.productCard.name}}" />
+        <img ng-src="{{MODEL.productCard.image}}?w=228&h=201&mode=pad" alt="{{MODEL.productCard.name}}" />
     </div>
 
     <div class="summary-card-tab" ng-tabs>
@@ -214,9 +214,8 @@
                 <h4>Документация</h4>
                 <div class="thumbnail" ng-repeat="link in MODEL.productCard.docs">
                     <a href="{{link.ActionUrl}}" target="_blank">
-                        <img src="common/img/summary/icon-download.png" alt="Скачать" />
+                        <img src="common/img/summary/icon-download.png" alt="Скачать" /> {{link.Name}}
                     </a>
-                    {{link.Name}}
                 </div>
             </div>
         </div>
