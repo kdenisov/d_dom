@@ -284,7 +284,7 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                     floors: 0
                 };
 
-                if (roomInstance.controlType == 2 && roomInstance.radiators.commonControl) {
+                if (roomInstance.radiators.controlType == 2 && roomInstance.radiators.commonControl) {
                     var control = Configurator.params.room.radiators.control[roomInstance.radiators.commonControl - 1];
                     roomEquipment.thermostats.push({
                         title: 'Комнатный термостат',

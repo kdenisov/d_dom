@@ -48,8 +48,8 @@ var APP_PARAMS = {
                 { id: 4, builtinValve: 3, previewPrefix: 'RAW-K', controlType: 1, preview: 'config-prod-ra.png', name: 'RAW-K', basket: [['013G5030', 1]] },
                 { id: 5, builtinValve: [1, 2, 3], controlType: 2, preview: 'config-prod-termo-3.png', name: 'Простой', basket: [['087N1110', '1/_radiator.count'], ['088H3112', '1', 'radiator-collector'], ['088H0016', 1 / 8, 'radiator-collector']] },
                 { id: 6, builtinValve: [1, 2, 3], controlType: 2, preview: 'config-prod-termo-1.png', name: 'Программируемый', basket: [['087N791801', '1/_radiator.count'], ['088H3112', '1', 'radiator-collector'], ['088H0016', 1/8, 'radiator-collector']] },
-                { id: 7, builtinValve: [1, 2, 3], controlType: 2, preview: 'config-prod-termo-2.png', name: 'Простой беспроводной', basket: [['087N7270', '1/_radiator.count'], ['087N7478', '1/3', 'radiator-collector'], ['088H3112', '1', 'radiator-collector']] },
-                { id: 8, builtinValve: [1, 2, 3], controlType: 2, preview: 'config-prod-termo-1.png', name: 'Программируемый беспроводной', basket: [['087N791301', '1/_radiator.count'], ['087N7478', '1/3', 'radiator-collector'], ['088H3112', '1', 'radiator-collector']] }
+                { id: 7, builtinValve: [1, 2, 3], controlType: 2, preview: 'config-prod-termo-2-wi.png', name: 'Простой беспроводной', basket: [['087N7270', '1/_radiator.count'], ['087N7478', '1/3', 'radiator-collector'], ['088H3112', '1', 'radiator-collector']] },
+                { id: 8, builtinValve: [1, 2, 3], controlType: 2, preview: 'config-prod-termo-1-wi.png', name: 'Программируемый беспроводной', basket: [['087N791301', '1/_radiator.count'], ['087N7478', '1/3', 'radiator-collector'], ['088H3112', '1', 'radiator-collector']] }
             ],
             externalView: [ // Исполнение
                 { id: 1, name: 'Никелированный' },
@@ -150,7 +150,7 @@ var APP_PARAMS = {
                 {id: 1, type: 1, name: 'Механическое', preview: 'config-prod-termo-4.png', basket: [['003L1000', 1],['003L1040', 1]]},
                 // 
                 { id: 2, type: 2, name: 'Проводное с датчиком', preview: 'config-prod-termo-1.png', basket: [['087N791801', 1], ['087N6784', 1], ['088H3112', '_room.floors.loops', 'floor-collector'], ['088H0016', 1/8, 'floor-collector']] },
-                { id: 3, type: 2, name: 'Беспроводное с датчиком', preview: 'config-prod-termo-1.png', basket: [['087N791301', 1], ['087N6784', 1], ['087N7478', '1/3', 'floor-collector'], ['088H3112', '_room.floors.loops', 'floor-collector']] }
+                { id: 3, type: 2, name: 'Беспроводное с датчиком', preview: 'config-prod-termo-1-wi.png', basket: [['087N791301', 1], ['087N6784', 1], ['087N7478', '1/3', 'floor-collector'], ['088H3112', '_room.floors.loops', 'floor-collector']] }
             ]
         }
     },
