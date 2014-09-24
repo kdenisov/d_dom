@@ -193,7 +193,8 @@ appConfigurator.service('levelsService', function(Configurator, $stateParams) {
     var $this = this;
     $this.levels = Configurator.levels;
     $this.boiler = Configurator.boiler;
-    $this.level = this.levels[$stateParams.levelId - 1];
+    var levelId = parseInt($stateParams.levelId);
+    $this.level = !isNaN(levelId) && levelId > 0 ?  $this.levels[$stateParams.levelId - 1] : $this.levels[0];
     $this.collectors = $this.level.collectors;
 
     $this.setLevel = function(id) {
@@ -236,8 +237,6 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
 
     $scope.COTTAGE = Configurator.cottage;
     $scope.MODEL = levelsService;
-    var currentLevelId = parseInt($stateParams.levelId);
-    currentLevelId = isNaN(currentLevelId) ? 1 : currentLevelId;
 
     //rooms equipment
     var getEquipment = function(Configurator) {
@@ -352,7 +351,7 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
         window.levelsModule && window.levelsModule.buildLevels('#levels', {
             levels: levelsCopy,
             boilers: boilerCopy,
-            currentLevelId: currentLevelId,
+            currentLevelId: levelsService.level.id,
             roomMouseEnter: function(levelId, roomId) {
                 $scope.$apply(levelsService.setHoverRoomId(roomId));
             },
