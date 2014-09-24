@@ -6,15 +6,16 @@
 			<span class="slider-value"><b>{{COTTAGE.area}} м<sup>2</sup></b></span>
 		</div>
 	</div>
-	<div ng-repeat="LEVEL in LEVELS" class="group">
+	<div ng-repeat="LEVEL in LEVELS" class="group" ng-hide="LEVEL.id == 3 && LEVEL.isLevel && LEVEL.isBasement">
 		<label class="label-switchbox{{LEVEL.id == 1 && '-false' || ''}} switchbox-{{LEVEL.id != 3 && LEVEL.isLevel || (LEVEL.isLevel && !LEVEL.isBasement)}}">
 			<h3>{{LEVEL.name}}</h3>
 			<input type="checkbox"
 				ng-if="LEVEL.id != 1"
 				ng-model="LEVEL.isLevel"
-				ng-change="
+			       ng-change="
 					LEVEL.id == 3 && LEVEL.isBasement && (LEVEL.isLevel = true);
 					LEVEL.id == 3 && (LEVEL.isBasement = false);
+                    CHANGE_LEVEL(LEVEL);
 					UPDATE_LEVELS_COUNT()
 				">
 		</label>
@@ -24,17 +25,17 @@
 			<span class="slider-value"><b>{{LEVEL.roomsCount}}</b></span>
 		</div>
 	</div>
-	<div ng-repeat="LEVEL in LEVELS | filter:{id: 3}" class="group">
-		<label class="label-switchbox switchbox-{{LEVEL.isBasement && LEVEL.isLevel}}">
-			<h3>Подвал</h3>
-			<input type="checkbox" ng-model="LEVEL.isBasement" ng-change="LEVEL.isLevel = LEVEL.isBasement; UPDATE_LEVELS_COUNT();">
-		</label>
-		<div class="slider-wrap hidden-{{!LEVEL.isBasement}}">
-			Количество комнат
-			<div ui-slider="{range: 'min'}" min="1" max="12" ng-model="LEVEL.roomsCount" ng-change="UPDATE_ROOMS_COUNT()"></div>
-			<span class="slider-value"><b>{{LEVEL.roomsCount}}</b></span>
-		</div>
-	</div>
+    <div ng-repeat="LEVEL in LEVELS | filter:{id: 3}" class="group" ng-hide="LEVEL.isLevel && !LEVEL.isBasement">
+        <label class="label-switchbox switchbox-{{LEVEL.isBasement && LEVEL.isLevel}}">
+            <h3>Подвал</h3>
+            <input type="checkbox" ng-model="LEVEL.isBasement" ng-change="LEVEL.isLevel = LEVEL.isBasement; UPDATE_LEVELS_COUNT();">
+        </label>
+        <div class="slider-wrap hidden-{{!LEVEL.isBasement}}">
+            Количество комнат
+            <div ui-slider="{range: 'min'}" min="1" max="12" ng-model="LEVEL.roomsCount" ng-change="UPDATE_ROOMS_COUNT()"></div>
+            <span class="slider-value"><b>{{LEVEL.roomsCount}}</b></span>
+        </div>
+    </div>
 	<div class="group clearfix">
 		<h3>Расположение котельной</h3>
 		<div class="radio left hidden-{{!LEVELS[2].isBasement}}">

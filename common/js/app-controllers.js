@@ -89,11 +89,7 @@ appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderBy
 
     $scope.SHOW_HOUSE_IMAGE = function(level, rooms, basement) {
         var count = Configurator.cottage.levelsCount;
-        var lastLevel = Configurator.levels[count - 1];
-        if (lastLevel.isBasement) {
-            count--;
-        }
-
+        var lastLevel = Configurator.levels[Configurator.levels.length-1];
         var size = 's';
         for (var i = 0; i < count; i++) {
             if (Configurator.levels[i].roomsCount > 8) {
@@ -102,7 +98,29 @@ appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderBy
             }
         }
 
+        if (lastLevel.isBasement) {
+            count--;
+        }
+
         return lastLevel.isBasement == basement && count == level && rooms == size;
+    };
+
+    $scope.CHANGE_LEVEL = function(level) {
+        if (!level) {
+            return;
+        }
+
+        //если отключается 2 этаж и 3 этаж включен и не определен как подвал, отключить третий этаж
+        if (!level.isLevel && level.id == 2 && Configurator.levels[2].isLevel && !Configurator.levels[2].isBasement) {
+            Configurator.levels[2].isLevel = false;
+            return;
+        }
+
+        //если включается третий этаж, и он не определен как подвал, включить второй этаж
+        if (level.isLevel && level.id == 3 && !level.isBasement) {
+            Configurator.levels[1].isLevel = true;
+            return;
+        }
     };
 
     setCustomScroll();
