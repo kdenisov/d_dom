@@ -100,11 +100,11 @@ angular.module('appConfigurator')
                 }
 
                 item = $(item);
-                var menu = item.children('aside');
-                item.css({ opacity: 0 });
-                menu.css({ left: '-100%' });
-                item.animate({ opacity: 1 }, animationDuration, function () {
-                    menu.animate({ left: 0 }, animationDuration, done);
+                var shade = $('.menu-aside-popup-shade');
+                item.css({ width: 0 });
+                shade.css({ opacity: 0 });
+                shade.animate({ opacity: 1 }, animationDuration, function () {
+                    item.animate({ width: 203 }, animationDuration, done);
                 });
 
                 return animationCancelHandler(item);
@@ -116,13 +116,13 @@ angular.module('appConfigurator')
                 }
 
                 item = $(item);
-                var menu = item.children('aside');
-                item.css({ opacity: 1 });
-                menu.css({ left: 0 });
-                menu.animate({ left: '-100%' }, animationDuration, function() {
-                    item.animate({ opacity: 0 }, animationDuration, done);
+                var shade = $('.menu-aside-popup-shade');
+                item.css({ width: 203 });
+                shade.css({ opacity: 1 });
+                item.animate({ width: 0 }, animationDuration, function () {
+                    shade.animate({ opacity: 0 }, animationDuration, done);
                 });
-                
+
                 return animationCancelHandler(item);
             }
         };

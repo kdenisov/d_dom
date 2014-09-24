@@ -160,6 +160,15 @@ body {
 	margin: 0 -100% 0 0;
 }
 
+.sidebar-sliding-layout {
+    position: absolute;
+    height: 100%;
+    overflow: visible;
+    left: 0;
+    top: 0;
+    z-index: 10000;
+}
+
 #sidebar-panel {
 	width: 56px;
 	height: 100%;
@@ -185,9 +194,11 @@ body {
 
 
 #sidebar-content {
+    position: absolute;
+    left: 56px;
+    top: 0;
 	width: 254px;
 	height: 100%;
-	float: left;
 	overflow: hidden;
 	background: #F3F3F3;
     position: relative;
@@ -478,12 +489,28 @@ body {
 
 /*Side menu popup*/
 .menu-aside-popup {
+    position: relative;
+    height: 100%;
+    width: 203px;
+    float: left;
+    overflow: hidden;
+}
+
+.menu-aside-popup > * {
     position: absolute;
     width: 100%;
     height: 100%;
-    z-index: 9000;
+    right: 0;
+}
+
+.menu-aside-popup-shade {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: black;
     background-color: rgba(0, 0, 0, 0.6);
+    z-index: 9900;
 }
 
 
