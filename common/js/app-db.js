@@ -1,4 +1,4 @@
-﻿var APP_PARAMS = {
+var APP_PARAMS = {
     cottage: {
         minArea: 50,
         maxArea: 300,
@@ -211,10 +211,10 @@
         ],
         // С узлом не должен по умолчанию добавлять код 088U0305, код 088U0305 и '088U0301' должны быть опциями на экране “Коллектор теплых полов”
         fit_088U0305: [
-            { id: 1, name: '088U0305', preview:'config-prod-fittings-uglovoy.png', mixing:[1,2,3,4,5], basket: [['088U0305', 1]] }
+            { id: 1, name: '088U0305', preview:'config-prod-fittings-uglovoy.png', mixing:[1,2], basket: [['088U0305', 1]] }
         ],
         fit_088U0301: [
-            { id: 1, name: '088U0301', preview: 'config-prod-term-bez.png', mixing: [2, 4, 5], basket: [['088U0301', 1]] }
+            { id: 1, name: '088U0301', preview: 'config-prod-term-bez.png', mixing: [1, 2], basket: [['088U0301', 1]] }
         ],
         mixing: [
             /*{ id: 1, name: 'FHM-C5', preview: 'config-prod-FHM-C5.png', basket: [['088U0095', 1]] },*/
