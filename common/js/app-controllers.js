@@ -411,15 +411,16 @@ appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams,
 
     $scope.turnOffCollector = function (currentLevel, levels, currentCollector) {
         if (currentCollector.isCollector()) {
-            angular.forEach(currentCollector.levels, function (enabled, level) {
-                if (enabled) {
-                    currentCollector.levels[level] = false;
-                }
-            });
+                angular.forEach(currentCollector.levels, function (enabled, level) {
+                    if (enabled) {
+                        currentCollector.levels[level] = false;
+                    }
+                });
+
+                $scope.validateCollectors(currentLevel, currentLevel.id, levels, currentCollector);
         } else {
-            currentCollector.levels[currentLevel.id] = true;
+                currentCollector.levels[currentLevel.id] = true;
         }
-        $scope.validateCollectors(currentLevel, currentLevel.id, levels, currentCollector);
     };
 
     // currentLevel - этаж на котором установлен коллектор
@@ -427,31 +428,68 @@ appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams,
     // levels - ссылка на этажи
     // currentCollector - ссылка на коллектор
     $scope.validateCollectors = function (currentLevel, collectorForLevel, levels, currentCollector) {
-        Configurator.ValidateCollectors(currentLevel, collectorForLevel, levels, currentCollector, $scope.ALERT, function (currentCollector) {
-                $scope.COLLECTOR = currentCollector;
 
-                $scope.modalInstance = $modal.open({
-                    templateUrl: 'set-dest-collector.html',
-                    size: 'sm',
-                    controller: 'SetCollectorDialogCtrl',
-                    resolve: {
-                        EDITED_COLLECTOR: function () {
-                            return $scope.COLLECTOR;
-                        },
-                        UNCHECKED_LEVEL: function () {
-                            return collectorForLevel;
+        if (!currentCollector.levels[collectorForLevel]) {
+            $scope.ALERT("От коллектора отключен " + levels[collectorForLevel - 1].canonicalName() + ".", function () {
+                Configurator.ValidateCollectors(currentLevel, collectorForLevel, levels, currentCollector, $scope.ALERT, function (currentCollector) {
+                    $scope.COLLECTOR = currentCollector;
+
+                    $scope.modalInstance = $modal.open({
+                        templateUrl: 'set-dest-collector.html',
+                        size: 'sm',
+                        controller: 'SetCollectorDialogCtrl',
+                        resolve: {
+                            EDITED_COLLECTOR: function () {
+                                return $scope.COLLECTOR;
+                            },
+                            UNCHECKED_LEVEL: function () {
+                                return collectorForLevel;
+                            }
                         }
-                    }
-                });
+                    });
 
-                $scope.modalInstance.result.then(function (res) {
-                    if (res == false) {
-                        currentCollector.levels[collectorForLevel] = true;
-                    } else {
-                        currentCollector.entries = 0;
-                    }
-                }, function () { currentCollector.levels[collectorForLevel] = true; });
+                    $scope.modalInstance.result.then(function (res) {
+                        if (res == false) {
+                            currentCollector.levels[collectorForLevel] = true;
+                        } else {
+                            currentCollector.entries = 0;
+                        }
+                    }, function () { currentCollector.levels[collectorForLevel] = true; });
+                });
+            }, function () {
+                currentCollector.levels[collectorForLevel] = true;
             });
+        } else {
+            $scope.ALERT("К коллектору подключен " + levels[collectorForLevel -1].canonicalName() + ".", function () {
+                Configurator.ValidateCollectors(currentLevel, collectorForLevel, levels, currentCollector, $scope.ALERT, function (currentCollector) {
+                    $scope.COLLECTOR = currentCollector;
+
+                    $scope.modalInstance = $modal.open({
+                        templateUrl: 'set-dest-collector.html',
+                        size: 'sm',
+                        controller: 'SetCollectorDialogCtrl',
+                        resolve: {
+                            EDITED_COLLECTOR: function () {
+                                return $scope.COLLECTOR;
+                            },
+                            UNCHECKED_LEVEL: function () {
+                                return collectorForLevel;
+                            }
+                        }
+                    });
+
+                    $scope.modalInstance.result.then(function (res) {
+                        if (res == false) {
+                            currentCollector.levels[collectorForLevel] = true;
+                        } else {
+                            currentCollector.entries = 0;
+                        }
+                    }, function () { currentCollector.levels[collectorForLevel] = true; });
+                });
+            }, function () {
+                currentCollector.levels[collectorForLevel] = false;
+            });
+        }
     };
 
     $scope.refreshRadiatorCollectorsCount = function () {
@@ -1546,10 +1584,36 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
             homeClause,
             boilerClause,
             radiatorsClause,
-            collectorClause,
-            radiatorControlClause
+            radiatorControlClause,
+            collectorClause
         ]
     };
+    // если есть теплый пол
+    if ("floor-control" in _groupedBasket) {
+        var floorControls = {
+            title: 'Управление теплым полом',
+            src: 'common/img/summary/general-floor-control.jpg',
+            html: '',
+            thumbs: []
+        }
+        for (var k in _groupedBasket["floor-control"].equip)
+            floorControls.thumbs.push({ src: k, count: _groupedBasket["floor-control"].equip[k].value });
+
+
+        if (Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['087N791801']) && Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['087N791301'])) {
+            floorControls.html += '<br/>Для регулирования теплых полов применены проводные программируемые  комнатные термостаты TP5001МA и беспроводныйые программируемыйые  комнатныйые  термостаты TP5001A-RF. Использование беспроводных моделей позволяет легко менять размещение комнатного термостата, например, при перестановке мебели. Комнатный термостат устанавливается в каждой комнате с напольным отоплением. Управляющий сигнал комнатного термостата подается к приемнику беспроводного сигнала RX3 и коммутационному устройству FH-WC, которые передают сигнал к термоэлектрическим приводам TWA-A, установленным на распределительный коллектор теплых полов.';
+        } else if (Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['087N791801'])) {
+            floorControls.html += '<br/>Для регулирования теплых полов применены проводные программируемые  комнатные  термостаты TP5001МA. Комнатный термостат устанавливается в каждой комнате с напольным отоплением. Управляющий сигнал комнатного термостата подается к приемнику беспроводного сигнала RX3, который передает сигнал к термоэлектрическим приводам TWA-A, установленным на распределительный коллектор теплых полов.';
+        } else if (Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['087N791301'])) {
+            floorControls.html += '<br/>Для регулирования теплых полов применены беспроводные программируемые  комнатные  термостаты TP5001A-RF. Использование беспроводных моделей позволяет легко менять размещение комнатного термостата, например, при перестановке мебели. Комнатный термостат устанавливается в каждой комнате с напольным отоплением. Управляющий сигнал комнатного термостата подается к коммутационному устройству FH-WC, установленному совместно с коллектором теплых полов.';
+        }
+
+        if (Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['003L1000'])) {
+            floorControls.html += '<br/>Для регулирования теплых полов в помещениях с повышенной влажностью использованы терморегуляторы FHV для напольного отопления. Модель FHV-R с термостатическим элементом FJVR регулирует температуру возвращаемого теплоносителя, таким образом поддерживая постоянную температуру поверхности пола.';
+        }
+
+        $scope.PAGE_GENERAL.clauses.push(floorControls);
+    }
 
     // если есть теплый пол
     if ("floor-collector" in _groupedBasket) {
@@ -1594,31 +1658,6 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
         }
 
         $scope.PAGE_GENERAL.clauses.push(floorsCollectors);
-    }
-    if ("floor-control" in _groupedBasket) {
-        var floorControls = {
-            title: 'Управление теплым полом',
-            src: 'common/img/summary/general-floor-control.jpg',
-            html: '',
-            thumbs: []
-        }
-        for (var k in _groupedBasket["floor-control"].equip)
-            floorControls.thumbs.push({ src: k, count: _groupedBasket["floor-control"].equip[k].value });
-
-
-        if (Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['087N791801']) && Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['087N791301'])) {
-            floorControls.html += '<br/>Для регулирования теплых полов применены проводные программируемые  комнатные термостаты TP5001МA и беспроводныйые программируемыйые  комнатныйые  термостаты TP5001A-RF. Использование беспроводных моделей позволяет легко менять размещение комнатного термостата, например, при перестановке мебели. Комнатный термостат устанавливается в каждой комнате с напольным отоплением. Управляющий сигнал комнатного термостата подается к приемнику беспроводного сигнала RX3 и коммутационному устройству FH-WC, которые передают сигнал к термоэлектрическим приводам TWA-A, установленным на распределительный коллектор теплых полов.';
-        }else if (Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['087N791801'])) {
-            floorControls.html += '<br/>Для регулирования теплых полов применены проводные программируемые  комнатные  термостаты TP5001МA. Комнатный термостат устанавливается в каждой комнате с напольным отоплением. Управляющий сигнал комнатного термостата подается к приемнику беспроводного сигнала RX3, который передает сигнал к термоэлектрическим приводам TWA-A, установленным на распределительный коллектор теплых полов.';
-        } else if (Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['087N791301'])) {
-            floorControls.html += '<br/>Для регулирования теплых полов применены беспроводные программируемые  комнатные  термостаты TP5001A-RF. Использование беспроводных моделей позволяет легко менять размещение комнатного термостата, например, при перестановке мебели. Комнатный термостат устанавливается в каждой комнате с напольным отоплением. Управляющий сигнал комнатного термостата подается к коммутационному устройству FH-WC, установленному совместно с коллектором теплых полов.';
-        }
-
-        if (Configurator.ifBasketContainCodes(_groupedBasket["floor-control"].equip, ['003L1000'])) {
-            floorControls.html += '<br/>Для регулирования теплых полов в помещениях с повышенной влажностью использованы терморегуляторы FHV для напольного отопления. Модель FHV-R с термостатическим элементом FJVR регулирует температуру возвращаемого теплоносителя, таким образом поддерживая постоянную температуру поверхности пола.';
-        }
-
-        $scope.PAGE_GENERAL.clauses.push(floorControls);
     }
 
     var _scheme = {
@@ -2174,8 +2213,10 @@ appConfigurator.service('alertService', function($modal) {
         return typeof $this.cancel !== 'undefined';
     };
 
-    $this.cancel = function() {
-        $this.modalInstance && $this.modalInstance.dismiss('close');
+    $this.cancel = function () {
+        try{
+            $this.modalInstance && $this.modalInstance.dismiss('close');
+        }catch(e){}
         $this.modalInstance = null;
     };
 

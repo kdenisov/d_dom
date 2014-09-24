@@ -217,11 +217,11 @@
             { id: 1, name: '088U0301', preview: 'config-prod-term-bez.png', mixing: [2, 4, 5], basket: [['088U0301', 1]] }
         ],
         mixing: [
-            { id: 1, name: 'FHM-C5', preview: 'config-prod-FHM-C5.png', basket: [['088U0095', 1]] },
-            { id: 2, name: 'FHM-C6', preview: 'config-prod-FHM-C6.png', basket: [['088U0096', 1]] },
-            { id: 3, name: 'FHM-C7', preview: 'config-prod-FHM-C7.png', basket: [['088U0097', 1]] },
-            { id: 4, name: 'FHM-C8', preview: 'config-prod-FHM-C8-9.png', basket: [['088U0098', 1]] },
-            { id: 5, name: 'FHM-C9', preview: 'config-prod-FHM-C8-9.png', basket: [['088U0099', 1]] }
+            /*{ id: 1, name: 'FHM-C5', preview: 'config-prod-FHM-C5.png', basket: [['088U0095', 1]] },*/
+            { id: 1, name: 'FHM-C6', preview: 'config-prod-FHM-C6.png', basket: [['088U0096', 1]] },
+            /*{ id: 3, name: 'FHM-C7', preview: 'config-prod-FHM-C7.png', basket: [['088U0097', 1]] },*/
+            { id: 2 , name: 'FHM-C8', preview: 'config-prod-FHM-C8-9.png', basket: [['088U0098', 1]] }
+            /*{ id: 5, name: 'FHM-C9', preview: 'config-prod-FHM-C8-9.png', basket: [['088U0099', 1]] }*/
         ]
     },
     boiler: {

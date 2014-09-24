@@ -46,25 +46,23 @@
 		</div>
             
 	</div>
-	<div class="group">
-		<h3>Комплектация</h3>
-		<div class="selectbox clearfix">
-			<label class="label-checkbox checkbox-{{COLLECTOR.isFlowmeter}}">
-				<span class="pseudo-checkbox"></span>
-				<input type="checkbox"
-					ng-model="COLLECTOR.isFlowmeter"
-					ng-change="COLLECTOR.sets = (PARAMS.sets | filter: {isFlowmeter: COLLECTOR.isFlowmeter, entries: COLLECTOR.entries})[0].id"
-				>
-				<span class="title"><img src="common/img/products/config-prod-rashodomer.png" title="Расходомер" />Расходомер</span>
-			</label>
-		    <label class="label-checkbox checkbox-{{COLLECTOR.isBallValves}}">
-		        <span class="pseudo-checkbox"></span>
-		        <input type="checkbox"
-		               ng-model="COLLECTOR.isBallValves"
-		               ng-change="TOGGLE_BALL_VALVES()"
-		            >
-		        <span class="title"><img src="common/img/products/config-prod-kran.png" title="Шаровые краны" />Шаровые краны</span>
-		    </label>
+    <div class="group">
+        <h3>Комплектация</h3>
+        <div class="selectbox clearfix">
+            <label class="label-checkbox checkbox-{{COLLECTOR.isFlowmeter}}">
+                <span class="pseudo-checkbox"></span>
+                <input type="checkbox"
+                       ng-model="COLLECTOR.isFlowmeter"
+                       ng-change="COLLECTOR.sets = (PARAMS.sets | filter: {isFlowmeter: COLLECTOR.isFlowmeter, entries: COLLECTOR.entries})[0].id">
+                <span class="title"><img src="common/img/products/config-prod-rashodomer.png" title="Расходомер" />Расходомер</span>
+            </label>
+            <label class="label-checkbox checkbox-{{COLLECTOR.isBallValves}}">
+                <span class="pseudo-checkbox"></span>
+                <input type="checkbox"
+                       ng-model="COLLECTOR.isBallValves"
+                       ng-change="TOGGLE_BALL_VALVES()">
+                <span class="title"><img src="common/img/products/config-prod-kran.png" title="Шаровые краны" />Шаровые краны</span>
+            </label>
         </div>
         <div class="selectbox merged clearfix">
             <label class="label-checkbox" ng-class="{'checkbox-true': COLLECTOR._thermometerIn || COLLECTOR._thermometerOut }" ng-click="TOGGLE_THERMOMETERS();">
@@ -99,63 +97,47 @@
                 <select ng-options="ITEM.id as ITEM.name for ITEM in FITTINGS | filter: {type: 2, fittingsMaterial: COLLECTOR.fittingsMaterial}" ng-model="COLLECTOR.fittings"></select>
             </label>
         </div><!-- .selectbox -->
-	</div>
-
-	<div class="group" ng-if="COLLECTOR.id == 2">
-		<h3>Узел смешения</h3>
-		<div class="selectbox clearfix">
-			<label class="option-{{COLLECTOR.mixing == 0}}">
-				<span class="pseudo-radio"><input type="radio"
-					ng-model="COLLECTOR.mixing"
-					ng-value="0"
-				>
-				</span>
-				<span class="title">Не нужен</span>
-			</label>
-			<label class="option-{{COLLECTOR.mixing == ITEM.id}}"
-				ng-repeat="ITEM in PARAMS.mixing"
-			>
-				<span class="pseudo-radio"><input type="radio"
-					ng-model="COLLECTOR.mixing"
-					ng-value="{{ITEM.id}}"
-                    ng-change="COLLECTOR.fit_088U0301 = (COLLECTOR.mixing == 2 || COLLECTOR.mixing == 4 || COLLECTOR.mixing == 5)"
-				>
-				</span>
-				<span class="title">
-                    <img src="common/img/products/{{ITEM.preview}}" title="{{ITEM.name}}" /><br />{{ITEM.name}}
-				</span>
-			</label>
-		</div><!-- .selectbox -->
-	</div>
-    <div class="group" ng-if="COLLECTOR.id == 2">
-		<div class="selectbox clearfix">
-			<label class="option-{{COLLECTOR.fit_088U0301 == ITEM.id}}"  ng-if="COLLECTOR.id == 2 && (COLLECTOR.mixing == 2 || COLLECTOR.mixing == 4 || COLLECTOR.mixing == 5)"
-				ng-repeat="ITEM in PARAMS.fit_088U0301"
-			>
-				<span class="pseudo-radio"><input type="checkbox"
-					ng-model="COLLECTOR.fit_088U0301"
-					ng-value="{{ITEM.id}}"
-				>
-				</span>
-				<span class="title">
+        <div class="selectbox clearfix" ng-if="COLLECTOR.id == 2">
+            <label class="option-{{COLLECTOR.fit_088U0301 == ITEM.id}}" ng-if="COLLECTOR.id == 2 && (COLLECTOR.mixing == 2 || COLLECTOR.mixing == 4 || COLLECTOR.mixing == 5)"
+                   ng-repeat="ITEM in PARAMS.fit_088U0301">
+                <span class="pseudo-radio">
+                    <input type="checkbox"
+                           ng-model="COLLECTOR.fit_088U0301"
+                           ng-value="{{ITEM.id}}">
+                </span>
+                <span class="title">
                     <img src="common/img/products/{{ITEM.preview}}" title="{{ITEM.name}}" />Термостат безопасности
-				</span>
-			</label>
+                </span>
+            </label>
             <label class="option-{{COLLECTOR.fit_088U0305 == 1}}"
-				ng-repeat="ITEM in PARAMS.fit_088U0305"
-			>
-				<span class="pseudo-radio"><input type="checkbox"
-					ng-model="COLLECTOR.fit_088U0305"
-					ng-value="{{ITEM.id}}"
-				>
-				</span>
-				<span class="title">
+                   ng-repeat="ITEM in PARAMS.fit_088U0305">
+                <span class="pseudo-radio">
+                    <input type="checkbox"
+                           ng-model="COLLECTOR.fit_088U0305"
+                           ng-value="{{ITEM.id}}">
+                </span>
+                <span class="title">
                     <img src="common/img/products/{{ITEM.preview}}" title="{{ITEM.name}}" />Угловые фиттинги
-				</span>
-			</label>
-		</div><!-- .selectbox -->
-	</div>
+                </span>
+            </label>
+        </div><!-- .selectbox -->
 
+
+        <div ng-if="COLLECTOR.id == 2" style="padding-top:10px">
+            <h3>Узел смешения</h3>
+            <div class="selectbox clearfix">
+                <label class="option-{{COLLECTOR.mixing == ITEM.id}}"
+                       ng-repeat="ITEM in PARAMS.mixing" ng-click="COLLECTOR.mixing = COLLECTOR.mixing == ITEM.id ? 0 : ITEM.id; COLLECTOR.fit_088U0301 = (COLLECTOR.mixing == 2 || COLLECTOR.mixing == 4 || COLLECTOR.mixing == 5)">
+                    <span class="pseudo-radio">
+
+                    </span>
+                    <span class="title">
+                        <img src="common/img/products/{{ITEM.preview}}" title="{{ITEM.name}}" /><br />{{ITEM.name}}
+                    </span>
+                </label>
+            </div><!-- .selectbox -->
+        </div>
+    </div>
 </div>
 <script type="text/ng-template" id="alert.html">
     <div class="modal-header">

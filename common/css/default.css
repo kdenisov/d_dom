@@ -2375,6 +2375,7 @@ slider span.pointer + span.pointer {
 }
 .summary-schemes-room .contents.radiator.floor .count.floor {
     right: 6px;
+    opacity:1;
 }
 .summary-schemes-room .contents.radiator.floor .count.radiator {
     right: 37px;
@@ -2387,6 +2388,7 @@ slider span.pointer + span.pointer {
 }
 .summary-schemes-room .contents.boiler.floor .count.floor {
     right: 6px;
+    opacity:1;
 }
 
 .summary-schemes-room .contents.boiler.radiator {
