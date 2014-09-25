@@ -834,7 +834,7 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
     };
 
     $scope.INFO = infoService;
-    
+
 	setCustomScroll();
 });
 
@@ -2101,22 +2101,22 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
     model.resetCurrentRoom = function() { model.current = null; };
 
     model.open = false;
-    model.expand = function() {
-        if (model.open) {
-            return;
+    model.scroll = false;
+    model.toggle = function() {
+        model.open = !model.open;
+        if (!model.scroll) {
+            $timeout(function() {
+                model.scroll = true;
+                setCustomScroll('.tree-view');
+            }, 100);
         }
-
-        model.open = true;
-        $timeout(function() {
-            setCustomScroll('.tree-view');
-        }, 100);
     };
 
     return model;
 });
 
 
-appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, Configurator, CottageTree) {
+appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, infoService, Configurator, CottageTree) {
     $scope.BASE_PAGE = { title: 'Конфигуратор' };
 
     var save = function() {
@@ -2205,6 +2205,7 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
 
     $scope.$on('$locationChangeSuccess', function (event, toUrl, fromUrl) {
         CottageTree.resetCurrentRoom();
+        infoService.hide();
         if (toUrl.indexOf('#/summary') >= 0) {
             $scope.BASE_PAGE.title = 'Информация по заказу';
             $scope.TREE.hidden = true;
@@ -2228,9 +2229,11 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
             scope && scope.$apply(function() {
                 scope.TOGGLE_BASKET = true;
             });
+
+            infoService.hide();
         });
 
-        $('.tree-view, .tree-button, #basket-popup').click(function (e) {
+        $('body').on('click', '.tree-view, .tree-button, #basket-popup, .info-panel', function (e) {
             e.stopPropagation();
         });
 
