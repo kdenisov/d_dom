@@ -31,3 +31,400 @@
         <div class="arrow arrow-right" ng-if="ARROW_RIGHT()" ng-click="FOCUS_RIGHT();"></div>
     </div>
 </div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('allrooms')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Для всех комнат
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                Настроив управление температурой и конфигурацию подключения радиаторов и теплых полов, примените текущие параметры для всех помещений дома.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('thermocontrol')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Регулирование температуры
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                Как правило применяют радиаторные термостаты, но если в комнате установлено большое количество радиаторов, удобнее регулировать температуру в помещении одним прибором – комнатным термостатом.
+            </p>
+            <p>
+                Также комнатный термостат применяют, если радиаторы закрыты декоративной решеткой.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('radiatortype')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Тип
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                При необходимости в одном помещении можно произвести расчет для нескольких различных типов радиаторов и типов подключения, а также различных вариантов подводки трубопровода.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('design')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Вид радиатора
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                Danfoss выпускает оборудование для всех типов отопительных приборов - стандартных и дизайн.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Стандартная версия радиатора
+            </h3>
+            <p>
+                Панельный
+                <img class="block" src="common/img/info/radiator-panel.png" alt="Панельный" />
+            </p>
+            <p>
+                Секционный
+                <img class="block" src="common/img/info/radiator-section.png" alt="Секционный" />
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Дизайн версия радиатора
+            </h3>
+            <p>
+                Дизайн-радиатор
+                <img class="block" src="common/img/info/radiator-design.png" alt="Дизайн-радиатор" />
+            </p>
+            <p>
+                Полотенцесушитель
+                <img class="block" src="common/img/info/radiator-towelrail.png" alt="Полотенцесушитель" />
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('connection')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Подключение к радиатору
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                Для определения типа клапана и термостатического элемента необходимо определить какой тип подключения радиаторов используется в системе отопления.
+            </p>
+            <p>
+                Традиционно используются две схемы подключения радиаторов отопления: боковое подключение и нижнее подключение.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Боковое <img src="common/img/info/connection-side.png" alt="Боковое подключение" />
+            </h3>
+            <p>
+                Трубы подключаются через патрубки радиатора, расположенные сбоку.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Нижнее <img src="common/img/info/connection-bottom.png" alt="Нижнее подключение" />
+            </h3>
+            <p>
+                Трубы подключаются через патрубки радиатора, расположенные  снизу. Нижнее подключение позволяет уменьшить количество труб в квартире до минимума: такое подключение практически незаметно и выглядит намного эстетичнее классического бокового.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('valve')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Тип клапана радиатора
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                Некоторые радиаторы оснощены встроенным клапаном терморегулятора. Клапаны могут быть с клипсовым соединеним RA и резьбовым соединением M 30 x 1,5
+            </p>
+            <p>
+                Если радиатор не оснащен встроенным клапаном, то клапан устанавливается отдельно.
+            </p>
+        </div>
+        <div class="info-clause">
+            <p>
+                Клипсовым соединеним RA <img src="common/img/products/config-prod-living-eco.png" alt="Клипсовым соединеним RA" />
+            </p>
+            <p>
+                Резьбовое соединение M 30 x 1,5 <img src="common/img/products/config-prod-living-eco.png" alt="Резьбовое соединение M 30 x 1,5" />
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('interconnection')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Тип клапана радиатора
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <h3>
+                В полу
+            </h3>
+            <p>
+                трубопроводы от радиатора идут вниз и далее проложены в стяжке или по плинтусу.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                В коробе
+            </h3>
+            <p>
+                трубопроводы идут вдоль радиатора и уходят в выступ в стене.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                В стене
+            </h3>
+            <p>
+                трубопроводы от радиатора идут в стену.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('thermostat')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Радиаторный термостат
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <h3>
+                Термостат Living eco электронный 
+            </h3>
+            <img src="common/img/products/config-prod-living-eco.png" alt="Термостат Living eco электронный" />
+            <p>
+                Программируемый микропроцессорный регулятор для поддержания заданной температуры воздуха. В Living eco® установлены программы P0, P1 и P2, которые позволяют регулировать температуру в помещении в различные периоды суток. Обеспечивает экономию до 46%.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Термостат RA2994 с газовым наполнением 
+            </h3>
+            <img src="common/img/products/config-prod-ra.png" alt="Термостат RA2994 с газовым наполнением" />
+            <p>
+                Терморегулятор серии RA оснащен сильфоном с газовым наполнением, что обеспечивает время реакции 8 минут и экономию до 36%.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Термостат RAW-K с жидкостным наполнением 
+            </h3>
+            <img src="common/img/products/config-prod-ra.png" alt="Термостат RAW-K с жидкостным наполнением" />
+            <p>
+                Термостатический элемент серии RAW-K оснащен сильфоном с жикостным наполнением, что обеспечивает время реакции 25 минут и экономию до 31%.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('distinctvalves')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Обвязка радитора
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                В зависимости от выбранного типа управления температурой и конфигурацию и подключения радиаторов, предлагается выбрать подходящий тип обвязки радиатора.
+            </p>
+            <p>
+                Обвязка включает в себя клапан запорный и регулирующий и термостатический элемент.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('connectionside')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Сторона
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                Подключение радиаторов возможно как слева, так и справа
+            </p>
+            <p>
+                Справа <img src="common/img/info/connection-side.png" alt="Подключение справа" />
+            </p>
+            <p>
+                Слева <img src="common/img/info/connection-side-left.png" alt="Подключение слева" />
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('valves')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Исполнение
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                Выберите диаметр патрубков радиатора.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                G ½ или G ¾
+            </h3>
+            <p>
+                Универсальный клапан, подходящий к соединению G ½ и G ¾.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                G ¾
+            </h3>
+            <p>
+                Подходит только к радиатору с патрубками G ¾.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('designvalves')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Исполнение клапанов
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                Никелерованный //фото
+            </p>
+            <p>
+                Хромированный //фото
+            </p>
+            <p>
+                Прессовое соединение //фото
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('use')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Применение радиатора
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                Дизайн-радиатор
+                <img class="block" src="common/img/info/radiator-design.png" alt="Дизайн-радиатор" />
+            </p>
+            <p>
+                Полотенцесушитель
+                <img class="block" src="common/img/info/radiator-towelrail.png" alt="Полотенцесушитель" />
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('loops')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Количество петель
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                В зависимости от площади в одном помещении может быть одна или несколько петель трубы теплого пола. Как правило одна петля обеспечивает отопление 10-15 м2 поверхности пола.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('floorcontrol')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Регулирование температуры
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <h3>Механический регулятор температуры FHV</h3>
+            <p>
+                Используется, если в помещении не более 1 петли трубы теплого пола. Не требует подключения к электричеству, что особенно важно при эксплуатации во влажных помещениях.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>Программируемый</h3>
+            <p>
+                
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>Проводной</h3>
+            <p>
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>Беспроводной</h3>
+            <p>
+            </p>
+        </div>
+        <div class="info-clause">
+            Для корректного изменрения температуры пола … датчик температуры теплого пола.
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('boiler')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Тип котла
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                Одноконтурный
+            </p>
+            <p>
+                Двухконтурный
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.show('pump')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Насосный узел
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                Рекомендации по выбору и применению
+            </p>
+        </div>
+    </div>
+</div>

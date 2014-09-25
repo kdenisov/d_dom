@@ -3372,7 +3372,9 @@ input.validation-field {
     width: 23px;
     height: 23px;
     margin-bottom: -6px;
-    background: url('../img/icon-info.png') center top no-repeat;
+    background-image: url('../img/icon-info.png') !important;
+    background-position: center top;
+    background-repeat:  no-repeat;
     cursor: pointer;
 }
 
@@ -3382,7 +3384,7 @@ input.validation-field {
     border: transparent 6px solid;
     border-left: none;
     border-right-color: white;
-    margin-top: 8px;
+    margin-top: 6px;
     display: none;
 }
 
@@ -3416,7 +3418,7 @@ input.validation-field {
     z-index: 2;
 }
 
-.info-panel > h2 > .btn-close {
+.info-panel > .btn-close {
     display: block;
     position: absolute;
     width: 30px;
@@ -3425,6 +3427,7 @@ input.validation-field {
     top: 35px;
     background: url('../img/btn-close.png') center center no-repeat;
     cursor: pointer;
+    z-index: 3;
 }
 
 .info-scroller {
@@ -3447,4 +3450,8 @@ input.validation-field {
 
 .info-clause > h3 > img {
     float: right;
+}
+
+.info-clause > p > img {
+    display: block;
 }

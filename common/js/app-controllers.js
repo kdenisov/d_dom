@@ -517,7 +517,7 @@ appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams,
     setCustomScroll();
 });
 
-appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, CottageTree, alertService, $modal, $location) {
+appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, CottageTree, alertService, infoService, $modal, $location) {
 	var
 		level = Configurator.levels[$stateParams.levelId - 1],
 		room = level.rooms[$stateParams.roomId - 1]
@@ -832,6 +832,8 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
             message: message,
         });
     };
+
+    $scope.INFO = infoService;
     
 	setCustomScroll();
 });
