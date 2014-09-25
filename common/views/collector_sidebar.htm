@@ -29,7 +29,7 @@
         </div>-->
 	</div>
 	<div class="group">
-        <h3>Количество заходов <i class="icon-info" ng-click="INFO.open($event.target, 1)" ng-class="{'active' : INFO.index === 1}"></i></h3>        
+        <h3>Количество заходов <i class="icon-info" ng-click="INFO.open(1)" ng-class="{'active' : INFO.show(1)}"><i class="pointer"></i></i></h3>        
         <label class="label-switchbox small switchbox-{{PROPERTIES.autoCalcCollectorInputs}}">
 		    Авторасчет	    
 			<input type="checkbox" ng-click="AUTO_CALC_INPUTS();" ng-model="PROPERTIES.autoCalcCollectorInputs" class="ng-scope ng-pristine ng-valid">
@@ -47,7 +47,7 @@
             
 	</div>
     <div class="group">
-        <h3>Комплектация <i class="icon-info" ng-click="INFO.open($event.target, 2)" ng-class="{'active' : INFO.index === 2}"></i></h3>
+        <h3>Комплектация <i class="icon-info" ng-click="INFO.open(2)" ng-class="{'active' : INFO.show(2)}"><i class="pointer"></i></i></h3>
         <div class="selectbox clearfix">
             <label class="label-checkbox checkbox-{{COLLECTOR.isFlowmeter}}">
                 <span class="pseudo-checkbox"></span>

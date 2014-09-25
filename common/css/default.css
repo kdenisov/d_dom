@@ -3376,8 +3376,22 @@ input.validation-field {
     cursor: pointer;
 }
 
+.icon-info .pointer {
+    position: absolute;
+    right: 0;
+    border: transparent 6px solid;
+    border-left: none;
+    border-right-color: white;
+    margin-top: 8px;
+    display: none;
+}
+
 .icon-info.active, .icon-info:hover {
     background-position: center bottom;
+}
+
+.icon-info.active .pointer {
+    display: block;
 }
 
 .info-panel {

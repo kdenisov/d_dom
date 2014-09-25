@@ -2298,13 +2298,16 @@ appConfigurator.controller('AlertCtrl', function($scope, alertService) {
 appConfigurator.service('infoService', function() {
     var service = this;
     service.index = null;
-    service.open = function(ctrl, index) {
-        angular.element('#info-panel-pointer').css({ top: $(ctrl).position().top });
+    service.open = function (index) {
         service.index = index;
     };
 
     service.hide = function() {
         service.index = null;
+    };
+
+    service.show = function(index) {
+        return service.index === index;
     };
 
     return service;
