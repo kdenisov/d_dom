@@ -14,13 +14,21 @@
         </div>
         <div class="item type{{ITEM.connection}} item-{{$index + 1}}" ng-class="CSS_RADIATOR(ITEM)" ng-repeat="ITEM in RADIATORS_LIST | limitTo:RADIATORS.radiatorsTypes">
             <div class="item-valve">
-                <img alt="" ng-src="{{VIEW(ITEM)}}" />
+                <div class="layover-msg" ng-show="INFO.show('thermocontrol') && RADIATORS.controlType == 1">
+                    На радиаторе
+                    <i></i>
+                </div>
+                <img ng-class="{'layover' : INFO.show('thermocontrol') && RADIATORS.controlType == 1}" alt="" ng-src="{{VIEW(ITEM)}}" />
             </div>
         </div>
     </div>
     <div class="is-floors-{{FLOORS.isFloors}}"></div>
-    <div class="radiators-control-type-{{RADIATORS.controlType}} thermo-{{RADIATORS.commonControl}}">
-        <img ng-if="RADIATORS.commonControl && RADIATORS.commonControl >= 7 && RADIATORS.commonControl <= 8" class="wi-fi" alt="" src="common/img/wi-fi-indicator.png"/>
+    <div class="radiators-control-type-{{RADIATORS.controlType}} thermo-{{RADIATORS.commonControl}}" ng-class="{'layover' : INFO.show('thermocontrol') && RADIATORS.controlType == 2}">
+        <img ng-if="RADIATORS.commonControl && RADIATORS.commonControl >= 7 && RADIATORS.commonControl <= 8" class="wi-fi" alt="" src="common/img/wi-fi-indicator.png" />
+        <div class="layover-msg" style="margin-left: -70px; top:0; margin-top: -50px; width: 115px;" ng-show="INFO.show('thermocontrol') && RADIATORS.controlType == 2">
+            Общее в комнате
+            <i></i>
+        </div>
     </div>
     <div class="floor-control-{{FLOORS.isFloors}} floor-control-{{FLOORS.control}}">
         <img ng-if="FLOORS.control && FLOORS.control == 3" class="wi-fi" alt="" src="common/img/wi-fi-indicator.png" />
@@ -427,4 +435,10 @@
             </p>
         </div>
     </div>
+</div>
+
+<div class="whiteshade" ng-show="
+     INFO.show('thermocontrol')
+     ">
+    
 </div>
