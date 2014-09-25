@@ -3,7 +3,7 @@
 var appConfigurator = angular.module('appConfigurator', ['ngSanitize', 'ui.router', 'tabs', 'ui.slider', 'ui.bootstrap', 'ngAnimate']);
 
 appConfigurator.constant('appConfig', {
-      appPath: "../" // = "http://dom.danfoss.ru"
+      appPath:  "http://dom.danfoss.ru"//"../"
     , DanfossAuthorisationID: "DanfossCottageAuthorisationID"
     , DanfossAuthorisationCookieName: ".d-auth"
 });

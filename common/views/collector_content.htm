@@ -1,5 +1,5 @@
 <div class="collector">
-	<h1><b><a ng-href="{{LINK_RETURN}}">&lt;</a></b>{{TITLE}}</h1>
+    <h1><b><a ng-href="{{LINK_RETURN}}">&lt;</a></b>{{TITLE}}</h1>
     <div class="info">Уточните количество коллекторов и&nbsp;отапливаемых комнат в&nbsp;вашем доме</div>
     <div class="collector-panel">
         <div class="collector-slider">
@@ -58,5 +58,127 @@
 
         <a href="#" class="arrow-left" ng-click="SLIDE_LEFT($event)"></a>
         <a href="#" class="arrow-right" ng-click="SLIDE_RIGHT($event)"></a>
+    </div>
+</div>
+
+<div class="info-panel autoscroll" ng-show="INFO.index === 1">
+    <h2>
+        Коллекторы
+        <div class="btn-close" ng-click="INFO.hide()"></div>
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause" ng-if="COLLECTOR.type === 'radiator'">
+            <h3>
+                К этому коллектору подключены радиаторы
+            </h3>
+            <p>
+                Рекомендуется устанавливать коллектор на каждом этаже, что позволит сократить количество труб, а также улучшит отвод воздуха.
+            </p>
+        </div>
+        <div class="info-clause" ng-if="COLLECTOR.type === 'floor'">
+            <h3>
+                К этому коллектору подключены теплые полы
+            </h3>
+            <p>
+                Рекомендуется устанавливать коллектор на каждом этаже, где есть теплый пол, что позволит сократить количество труб, а также улучшит отвод воздуха.
+            </p>
+        </div>
+        <div class="info-clause" ng-if="COLLECTOR.type === 'radiator'">
+            <h3>
+                Количество заходов
+            </h3>
+            <p>
+                Количество заходов определяется автоматически по количеству радиаторов в комнатах, подключенных к данному коллектору.
+            </p>
+            <p>
+                Также количество заходов может быть задано вручную.
+            </p>
+        </div>
+        <div class="info-clause" ng-if="COLLECTOR.type === 'floor'">
+            <h3>
+                Количество заходов
+            </h3>
+            <p>
+                Количество заходов определяется автоматически по количеству петель теплого пола в комнатах, подключенных к данному коллектору.
+            </p>
+            <p>
+                Также количество заходов может быть задано вручную.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="info-panel " ng-show="INFO.index === 2">
+    <h2>
+        Комплектация
+        <div class="btn-close" ng-click="INFO.hide()"></div>
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <h3>
+                Расходомер <img src="common/img/products/config-prod-rashodomer.png" alt="Расходомер"/>
+            </h3>
+            <p>
+                Позволяют измерить расход теплоносителя в каждом контуре, что значительно упрощает настройку системы отопления.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Шаровые краны <img src="common/img/products/config-prod-kran.png" alt="Шаровые краны" />
+            </h3>
+            <p>
+                Устанавливаются для удобства эксплуатации и обслуживания, позволяют отсечь весь коллектор.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Термометры <img src="common/img/products/config-prod-termometr.png" alt="Термометры" />
+            </h3>
+            <p>
+                Предназначены для установки в гнезда шаровых кранов и служат для индикации температуры теплоносителя в диапазоне от 0 до 60 градусов С0.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Фитинги <img src="common/img/products/config-prod-fittings.png" alt="Фитинги" />
+            </h3>
+            <p>
+                Уплотнительные фитинги предназначены для соединения клапанов и коллекторов с трубопроводами систем отопления.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Термостат безопасности <img src="common/img/products/config-prod-term-bez.png" alt="Термостат безопасности" />
+            </h3>
+            <p>
+                Термостат безопасности FH-ST55 предназначен для защиты напольного покрытия и системы напольного отопления от воздействия теплоносителя со слишком высокой температурой.
+            </p>
+        </div>
+        <div ng-if="COLLECTOR.type=='floor'">
+            <div class="info-clause">
+                <h3>
+                    Узел смешения <img src="common/img/products/config-prod-FHM-C5.png" alt="Узел смешения" />
+                </h3>
+                <p>
+                    Узел смешения обеспечивает оптимальную температуру +35...+45 С<sup>o</sup> для теплого пола и создает циркуляцию теплоносителя в контурах теплого пола.
+                </p>
+            </div>
+            <div class="info-clause">
+                <h3>
+                    Узел FHM-C6 <img src="common/img/products/config-prod-FHM-C6.png" alt="Узел FHM-C6" />
+                </h3>
+                <p>
+                    на базе трехскоростного насоса UPS 15-60
+                </p>
+            </div>
+            <div class="info-clause">
+                <h3>
+                    Узел FHM-C8 <img src="common/img/products/config-prod-FHM-C8-9.png" alt="Узел FHM-C8" />
+                </h3>
+                <p>
+                    на базе энергоэффективного насоса Alpha2 15-60 с частотным приводом
+                </p>
+            </div>
+        </div>
     </div>
 </div>

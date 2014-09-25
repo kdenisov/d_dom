@@ -904,7 +904,7 @@ appConfigurator.controller('BoilerCtrl', function($scope, Configurator, $statePa
 	setCustomScroll();
 });
 
-appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stateParams, $modal){
+appConfigurator.controller('CollectorCtrl', function($scope, Configurator, infoService, $stateParams, $modal){
 	var
 		level = Configurator.levels[$stateParams.levelId - 1],
 		collector = level.collectors[$stateParams.collectorId - 1]
@@ -1174,6 +1174,8 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, $stat
     $scope.CLOSE_ALERT = function () {
         $scope.alertInstance.close();
     };
+
+    $scope.INFO = infoService;
 
     setCustomScroll();
 
@@ -2293,12 +2295,29 @@ appConfigurator.controller('AlertCtrl', function($scope, alertService) {
     $scope.MODEL = alertService;
 });
 
+appConfigurator.service('infoService', function() {
+    var service = this;
+    service.index = null;
+    service.open = function(ctrl, index) {
+        angular.element('#info-panel-pointer').css({ top: $(ctrl).position().top });
+        service.index = index;
+    };
+
+    service.hide = function() {
+        service.index = null;
+    };
+
+    return service;
+});
+
 function setCustomScroll(select) {
     $(function () {
         if (!select) {
             select = '.autoscroll';
         }
 
-        $(select).perfectScrollbar({ wheelSpeed: 300, includePadding: true });
+        var item = $(select);
+        item.perfectScrollbar({ wheelSpeed: 300, includePadding: true });
+        return item;
     });
 }

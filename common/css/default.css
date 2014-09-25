@@ -3366,3 +3366,71 @@ input.validation-field {
     border: 1px solid red;
     background-color: #fcf7f7;
 }
+
+.icon-info {
+    display: inline-block;
+    width: 23px;
+    height: 23px;
+    margin-bottom: -6px;
+    background: url('../img/icon-info.png') center top no-repeat;
+    cursor: pointer;
+}
+
+.icon-info.active, .icon-info:hover {
+    background-position: center bottom;
+}
+
+.info-panel {
+    width: 336px;
+    height: 100%;
+    top: 0;
+    background-color: white;
+    color: black;
+    position: absolute;
+    z-index: 1000;
+}
+
+.info-panel > h2 {
+    padding: 35px 30px 25px;
+    width: 270px;
+    line-height: 30px;
+    font-size: 18px;
+    font-weight: normal;
+    vertical-align: middle;
+    position: relative;
+    background: white;
+    z-index: 2;
+}
+
+.info-panel > h2 > .btn-close {
+    display: block;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    right: 20px;
+    top: 35px;
+    background: url('../img/btn-close.png') center center no-repeat;
+    cursor: pointer;
+}
+
+.info-scroller {
+    top: 0;
+    box-sizing: border-box;
+    padding: 90px 30px 35px;
+    width: 336px;
+}
+
+.info-clause {
+    border-top: solid 1px #e2e3e3;
+    padding: 25px 0;
+}
+
+.info-clause > h3 {
+    font-size: 14px;
+    margin-bottom: 20px;
+    vertical-align: bottom;
+}
+
+.info-clause > h3 > img {
+    float: right;
+}
