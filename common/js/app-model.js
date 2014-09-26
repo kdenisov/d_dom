@@ -3,7 +3,7 @@
 var appConfigurator = angular.module('appConfigurator', ['ngSanitize', 'ui.router', 'tabs', 'ui.slider', 'ui.bootstrap', 'ngAnimate']);
 
 appConfigurator.constant('appConfig', {
-      appPath:  "http://dom.danfoss.ru"//"../"
+        appPath: "../"//"http://dom.danfoss.ru"
     , DanfossAuthorisationID: "DanfossCottageAuthorisationID"
     , DanfossAuthorisationCookieName: ".d-auth"
 });
@@ -515,7 +515,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 			        fittings: 0,											// Фитинги для трубы
 			        mixing: collector_id > 1 && 1 || 0,	// Узел смешения
 			        fit_088U0305: 0, // фиттинги для узла смешения
-			        fit_088U0301: 0 // термостат безопасности
+			        fit_088U0301: collector_id > 1 ? 1 : 0 // термостат безопасности
 			    });
 			}
 
@@ -962,7 +962,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
             fittings: 0, // Фитинги для трубы
             mixing: type === 'floor', // Узел смешения
             fit_088U0305: 0, // фиттинги для узла смешения
-            fit_088U0301: 0 // термостат безопасности
+            fit_088U0301: type === 'floor' ? 1 : 0 // термостат безопасности
         };
     };
 

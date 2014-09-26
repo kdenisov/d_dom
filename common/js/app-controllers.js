@@ -1445,8 +1445,10 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
         };
     }
 
-   for (var k in _groupedBasket["boiler"].equip)
-        boilerClause.thumbs.push({ src: k, count: _groupedBasket["boiler"].equip[k].value });
+    if (_groupedBasket["boiler"]) {
+        for (var k in _groupedBasket["boiler"].equip)
+            boilerClause.thumbs.push({ src: k, count: _groupedBasket["boiler"].equip[k].value });
+    }
 
     var collectorClause = {
         title: 'Коллекторы радиаторов',
@@ -1592,11 +1594,11 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
 
     if (Configurator.ifBasketContainCodes(_basket, ['013G4003', '013G4004', '013G4007', '013G4008', '013G4009', '013G4010', '013G4132', ' 013G4133', '013G4136', '013G4137', '013G4138', '013G4139'])) {
         if (Configurator.ifBasketContainCodes(_basket, ['013G4003', '013G4004', '013G4007', '013G4008', '013G4009', '013G4010']) && Configurator.ifBasketContainCodes(_basket, ['013G4132', ' 013G4133', '013G4136', '013G4137', '013G4138', '013G4139'])) {
-            radiatorControlClause.html += '<br/>Для подключения полотенцесушителей и дизайн-радиаторов к контуру отопления применены  комплекты из дизайн-серии X-tra Collection. Данный комплект подключается через невидимые снаружи переходники, таким образом обеспечивается безупречный внешний вид';
+            radiatorsClause.html += '<br/>Для подключения полотенцесушителей и дизайн-радиаторов к контуру отопления применены  комплекты из дизайн-серии X-tra Collection. Данный комплект подключается через невидимые снаружи переходники, таким образом обеспечивается безупречный внешний вид';
         } else if (Configurator.ifBasketContainCodes(_basket, ['013G4132', ' 013G4133', '013G4136', '013G4137', '013G4138', '013G4139'])) {
-            radiatorControlClause.html += '<br/>Для подключения полотенцесушителей к контуру отопления применены  комплекты из дизайн-серии X-tra Collection. Данный комплект подключается через невидимые снаружи переходники, таким образом обеспечивается безупречный внешний вид';
+            radiatorsClause.html += '<br/>Для подключения полотенцесушителей к контуру отопления применены  комплекты из дизайн-серии X-tra Collection. Данный комплект подключается через невидимые снаружи переходники, таким образом обеспечивается безупречный внешний вид';
         }else {
-            radiatorControlClause.html += '<br/>Для подключения дизайн-радиатора к контуру отопления применен  комплект из дизайн-серии X-tra Collection. Данный комплект подключается через невидимые снаружи переходники, таким образом обеспечивается безупречный внешний вид';
+            radiatorsClause.html += '<br/>Для подключения дизайн-радиатора к контуру отопления применен  комплект из дизайн-серии X-tra Collection. Данный комплект подключается через невидимые снаружи переходники, таким образом обеспечивается безупречный внешний вид';
         }
     }
 
@@ -1777,7 +1779,7 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
                     };
 
                     for (var _el in _groupedByRooms[_groupName].equip) {
-                        _group.items.push({ title: _el, count: _groupedByRooms[_groupName].equip[_el].value });
+                        _group.items.push({ title: _el, count: Math.ceil(parseFloat(_groupedByRooms[_groupName].equip[_el].value)) });
                     }
                     _l.groups.push(_group);
                 }
