@@ -19,11 +19,12 @@
                     <i></i>
                 </div>
                 <img ng-class="{'layover' : INFO.show('thermocontrol') && RADIATORS.controlType == 1}" alt="" ng-src="{{VIEW(ITEM)}}" />
+                <div class="info-trigger radiator" ng-mouseenter="RADIATORS.controlType == 1 && INFO.open('thermocontrol')" ng-mouseleave="RADIATORS.controlType == 1 && INFO.hide()"></div>
             </div>
         </div>
     </div>
     <div class="is-floors-{{FLOORS.isFloors}}"></div>
-    <div class="radiators-control-type-{{RADIATORS.controlType}} thermo-{{RADIATORS.commonControl}}" ng-class="{'layover' : INFO.show('thermocontrol') && RADIATORS.controlType == 2}">
+    <div class="radiators-control-type-{{RADIATORS.controlType}} thermo-{{RADIATORS.commonControl}}" ng-class="{'layover' : INFO.show('thermocontrol') && RADIATORS.controlType == 2}" ng-mouseenter="RADIATORS.controlType == 2 && INFO.open('thermocontrol')" ng-mouseleave="RADIATORS.controlType == 2 && INFO.hide()">
         <img ng-if="RADIATORS.commonControl && RADIATORS.commonControl >= 7 && RADIATORS.commonControl <= 8" class="wi-fi" alt="" src="common/img/wi-fi-indicator.png" />
         <div class="layover-msg" style="margin-left: -70px; top:0; margin-top: -50px; width: 115px;" ng-show="INFO.show('thermocontrol') && RADIATORS.controlType == 2">
             Общее в комнате
@@ -37,6 +38,12 @@
     <div ng-if="ARROWS()">
         <div class="arrow arrow-left" ng-if="ARROW_LEFT()" ng-click="FOCUS_LEFT();"></div>
         <div class="arrow arrow-right" ng-if="ARROW_RIGHT()" ng-click="FOCUS_RIGHT();"></div>
+    </div>
+
+    <div class="whiteshade" ng-show="
+     INFO.show('thermocontrol')
+     ">
+
     </div>
 </div>
 
@@ -435,10 +442,4 @@
             </p>
         </div>
     </div>
-</div>
-
-<div class="whiteshade" ng-show="
-     INFO.show('thermocontrol')
-     ">
-    
 </div>
