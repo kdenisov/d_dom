@@ -47,6 +47,20 @@
             
 	</div>
     <div class="group">
+        <div ng-if="COLLECTOR.id == 2" style="padding-bottom:10px">
+            <h3>Узел смешения</h3>
+            <div class="selectbox clearfix">
+                <label class="option-{{COLLECTOR.mixing == ITEM.id}}"
+                       ng-repeat="ITEM in PARAMS.mixing" ng-click="COLLECTOR.mixing = COLLECTOR.mixing == ITEM.id ? 0 : ITEM.id; COLLECTOR.fit_088U0301 = (COLLECTOR.mixing == 2 || COLLECTOR.mixing == 4 || COLLECTOR.mixing == 5)">
+                    <span class="pseudo-radio">
+
+                    </span>
+                    <span class="title">
+                        <img src="common/img/products/{{ITEM.preview}}" title="{{ITEM.name}}" /><br />{{ITEM.name}}
+                    </span>
+                </label>
+            </div><!-- .selectbox -->
+        </div>
         <h3>Комплектация <i class="icon-info" ng-click="INFO.open(2)" ng-class="{'active' : INFO.show(2)}"><i class="pointer"></i></i></h3>
         <div class="selectbox clearfix">
             <label class="label-checkbox checkbox-{{COLLECTOR.isFlowmeter}}">
@@ -121,22 +135,6 @@
                 </span>
             </label>
         </div><!-- .selectbox -->
-
-
-        <div ng-if="COLLECTOR.id == 2" style="padding-top:10px">
-            <h3>Узел смешения</h3>
-            <div class="selectbox clearfix">
-                <label class="option-{{COLLECTOR.mixing == ITEM.id}}"
-                       ng-repeat="ITEM in PARAMS.mixing" ng-click="COLLECTOR.mixing = COLLECTOR.mixing == ITEM.id ? 0 : ITEM.id; COLLECTOR.fit_088U0301 = (COLLECTOR.mixing == 2 || COLLECTOR.mixing == 4 || COLLECTOR.mixing == 5)">
-                    <span class="pseudo-radio">
-
-                    </span>
-                    <span class="title">
-                        <img src="common/img/products/{{ITEM.preview}}" title="{{ITEM.name}}" /><br />{{ITEM.name}}
-                    </span>
-                </label>
-            </div><!-- .selectbox -->
-        </div>
     </div>
 </div>
 <script type="text/ng-template" id="alert.html">
