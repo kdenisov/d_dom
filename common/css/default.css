@@ -1614,12 +1614,14 @@ a.collector-item {
     left: 11px;
     top: -26px;
     z-index: 2;
+    pointer-events: none;
 }
 
 .collector-nodes > .brace-long-second {
     position: absolute;
     right: 31px;
     top: -26px;
+    pointer-events: none;
 }
 
 .collector-nodes > .node > .brace-long {
@@ -1627,6 +1629,7 @@ a.collector-item {
     left: -28px;
     top: -48px;
     z-index: 2;
+    pointer-events: none;
 }
 
 .collector-nodes > .node > .brace-long-second {
@@ -1634,6 +1637,7 @@ a.collector-item {
     top: -48px;
     left: 62px;
     z-index: 2;
+    pointer-events: none;
 }
 
 .collector-nodes > .brace {
@@ -1641,12 +1645,14 @@ a.collector-item {
     left: 38px;
     top: 2px;
     z-index: 2;
+    pointer-events: none;
 }
 
 .collector-nodes > .brace-second {
     position: absolute;
     right: 31px;
     top: 2px;
+    pointer-events: none;
 }
 
 .collector-nodes > .node > .brace {
@@ -1654,6 +1660,7 @@ a.collector-item {
     left: 0px;
     top: -18px;
     z-index: 2;
+    pointer-events: none;
 }
 
 .collector-nodes > .node > .brace-second {
@@ -1661,6 +1668,7 @@ a.collector-item {
     right: -60px;
     top: -18px;
     z-index: 2;
+    pointer-events: none;
 }
 
 .collector-set .mixer {
@@ -1674,6 +1682,7 @@ a.collector-item {
     float: left;
     width: 190px;
     height: 20px;
+    pointer-events: none;
 }
 
 .receivers {

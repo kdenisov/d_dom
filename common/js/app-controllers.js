@@ -983,7 +983,7 @@ appConfigurator.controller('BoilerCtrl', function($scope, Configurator, $statePa
 	setCustomScroll();
 });
 
-appConfigurator.controller('CollectorCtrl', function($scope, Configurator, infoService, $stateParams, $modal){
+appConfigurator.controller('CollectorCtrl', function($scope, Configurator, infoService, $stateParams, $modal, $timeout){
 	var
 		level = Configurator.levels[$stateParams.levelId - 1],
 		collector = level.collectors[$stateParams.collectorId - 1]
@@ -1256,6 +1256,39 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, infoS
 
     $scope.INFO = infoService;
 
+    var Controls = function() {
+        var controls = this;
+
+        var scroll = function() {
+            $timeout(function() {
+                var ctrl = $('.icon-info.active:first');
+                var panel = ctrl.closest('.autoscroll');
+                var top = ctrl.position().top;
+                top = top < panel.height() ? 0 : top;
+                panel.scrollTop(top);
+                panel.perfectScrollbar('update');
+            }, 100);
+        };
+
+        controls.toNodes = function() {
+            infoService.open(2);
+            scroll();
+        };
+
+        controls.toMixer = function () {
+            infoService.open(3);
+            scroll();
+        };
+
+        controls.toComplectation = function () {
+            infoService.open(4);
+            scroll();
+        };
+
+        return controls;
+    };
+
+    $scope.CTRL = new Controls();
     setCustomScroll();
 
     $(function() {
