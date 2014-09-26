@@ -1,4 +1,47 @@
 /* ======== */
+/*FONTS*/
+@font-face {
+    font-family: GothamPro;
+    src: url('../fonts/gothampro-webfont.eot');
+    src: url('../fonts/gothampro-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/gothampro-webfont.woff') format('woff'),
+    url('../fonts/gothampro-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: GothamPro;
+    src: url('../fonts/gothampro-bold-webfont.eot');
+    src: url('../fonts/gothampro-bold-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/gothampro-bold-webfont.woff') format('woff'),
+    url('../fonts/gothampro-bold-webfont.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: GothamPro;
+    src: url('../fonts/gothampro-medium-webfont.eot');
+    src: url('../fonts/gothampro-medium-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/gothampro-medium-webfont.woff') format('woff'),
+    url('../fonts/gothampro-medium-webfont.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: GothamPro;
+    src: url('../fonts/gothampro-light-webfont.eot');
+    src: url('../fonts/gothampro-light-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/gothampro-light-webfont.woff') format('woff'),
+    url('../fonts/gothampro-light-webfont.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
 /* Default */
 
 html, body, form, table {
@@ -8,7 +51,7 @@ html, body, form, table {
 body {
 	color: #000;
 	font-size: 13px;
-	font-family: 'Open Sans', Tahoma, Arial, sans-serif;
+	font-family: GothamPro, 'Open Sans', Tahoma, Arial, sans-serif;
 	font-weight: normal;
 	line-height: 1.27em;
 }
@@ -44,12 +87,12 @@ a:visited {
 
 input, select, textarea {
 	font-size: 100%;
-	font-family: 'Open Sans', Tahoma, Arial, sans-serif;
+	font-family: GothamPro, 'Open Sans', Tahoma, Arial, sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
 	font-size: 100%;
-	font-family: 'Open Sans', Tahoma, Arial, sans-serif;
+	font-family: GothamPro, 'Open Sans', Tahoma, Arial, sans-serif;
 	line-height: 1.27em;
 	margin: 0;
 }
