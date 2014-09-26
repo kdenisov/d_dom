@@ -517,7 +517,7 @@ appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams,
     setCustomScroll();
 });
 
-appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, CottageTree, alertService, infoService, $modal, $location) {
+appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, CottageTree, alertService, infoService, $modal, $location, $timeout) {
 	var
 		level = Configurator.levels[$stateParams.levelId - 1],
 		room = level.rooms[$stateParams.roomId - 1]
@@ -616,7 +616,11 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
         return "common/img/radiator-preview/" + Configurator.params.room.radiators.valves[valves - 1].preview + ".png";
     };
 
-    $scope.VIEW = function(radiator) {
+    $scope.VIEW = function (radiator) {
+        if (room.radiators.controlType == 2 && infoService.show('thermocontrol')) {
+            return 'common/img/radiators/n/16_17_RA2994_r1.png';
+        };
+
         var side = radiator.connectSide == 2 ? "_right" : "";
         if (radiator.type == 2) { //design radiator
             var use = radiator.use == 1 ? 'radiator_valve' : 'towelrail_valve';
@@ -834,6 +838,79 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
     };
 
     $scope.INFO = infoService;
+
+    var RoomControls = function () {
+        var controls = this;
+        var setTab = function (index) {
+            var scope = angular.element('#room-tabs').scope();
+            scope && (scope.tabs.index = index);
+        };
+
+        var scroll = function () {
+            $timeout(function() {
+                var ctrl = $('.icon-info.active:first');
+                var panel = ctrl.closest('.autoscroll');
+                var top = ctrl.position().top - 70; 
+                if (top < panel.height()) {
+                    top = 0;
+                }
+
+                panel.scrollTop(top);
+                panel.perfectScrollbar('update');
+            }, 100);
+        };
+
+        controls.toFloor = function () {
+            setTab(2);
+        };
+
+        controls.toRadiator = function () {
+            setTab(1);
+        };
+
+        controls.toBoiler = function () {
+            setTab(3);
+        };
+
+        controls.toValves = function () {
+            setTab(1);
+            infoService.open('distinctvalves');
+            scroll();
+        };
+
+        controls.toCommonThermostat = function () {
+            setTab(1);
+            infoService.open('commonthermostat');
+            scroll();
+        };
+
+        controls.toRadiatorThermostat = function () {
+            setTab(1);
+            infoService.open('thermostat');
+            scroll();
+        };
+
+        controls.toFloorThermostat = function () {
+            setTab(2);
+            infoService.open('floorcontrol');
+            scroll();
+        };
+
+        controls.cssRadiatorsCommon = function(radiators) {
+            if (infoService.show('thermocontrol') && radiators.controlType != 2) {
+                return 'layover radiators-control-type-2 thermo-5';
+            }
+
+            var cssClass = infoService.show('commonthermostat') ? 'layover' : '';
+            cssClass += ' radiators-control-type-' + radiators.controlType;
+            cssClass += ' thermo-' + radiators.commonControl;
+            return cssClass;
+        };
+        
+        return controls;
+    };
+
+    $scope.ROOM_CONTROLS = new RoomControls();
 
 	setCustomScroll();
 });
@@ -2235,7 +2312,11 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
             infoService.hide();
         });
 
-        $('body').on('click', '.tree-view, .tree-button, #basket-popup, .info-panel', function (e) {
+        $(document).on('click', '.whiteshade', function() {
+            infoService.hide();
+        });
+
+        $('body').on('click', '.tree-view, .tree-button, #basket-popup, .info-panel, .info-trigger, .floor-info-trigger, .radiator-info-trigger', function (e) {
             e.stopPropagation();
         });
 

@@ -10,28 +10,34 @@
     <div class="info">Уточните количество радиаторов в&nbsp;комнате и&nbsp;какого они типа</div>
     <div class="radiators current-item-{{RADIATORS.current}}" ng-class="{'boiler-focus' : BOILER_FOCUS}">
         <div class="item type-boiler" ng-if="BOILER_VISIBLE()" ng-class="{'alt': BOILER.embodiment==2}">
-             
+            <div class="info-trigger boiler" ng-click="ROOM_CONTROLS.toBoiler()"></div>
         </div>
         <div class="item type{{ITEM.connection}} item-{{$index + 1}}" ng-class="CSS_RADIATOR(ITEM)" ng-repeat="ITEM in RADIATORS_LIST | limitTo:RADIATORS.radiatorsTypes">
             <div class="item-valve">
-                <div class="layover-msg" ng-show="INFO.show('thermocontrol') && RADIATORS.controlType == 1">
+                <div class="layover-msg" ng-show="INFO.show('thermostat') || INFO.show('thermocontrol')">
                     На радиаторе
                     <i></i>
                 </div>
-                <img ng-class="{'layover' : INFO.show('thermocontrol') && RADIATORS.controlType == 1}" alt="" ng-src="{{VIEW(ITEM)}}" />
-                <div class="info-trigger radiator" ng-mouseenter="RADIATORS.controlType == 1 && INFO.open('thermocontrol')" ng-mouseleave="RADIATORS.controlType == 1 && INFO.hide()"></div>
+                <img ng-class="{'layover' : INFO.show('thermostat') || INFO.show('thermocontrol')}" alt="" ng-src="{{VIEW(ITEM)}}" />
+                <div class="info-trigger valves" ng-click="ROOM_CONTROLS.toValves()"></div>
+                <div class="info-trigger radiator" ng-click="ROOM_CONTROLS.toRadiator()"></div>
+                <div class="info-trigger thermocontrol" ng-click="ROOM_CONTROLS.toRadiatorThermostat()" ng-show="RADIATORS.controlType == 1"></div>
             </div>
         </div>
     </div>
-    <div class="is-floors-{{FLOORS.isFloors}}"></div>
-    <div class="radiators-control-type-{{RADIATORS.controlType}} thermo-{{RADIATORS.commonControl}}" ng-class="{'layover' : INFO.show('thermocontrol') && RADIATORS.controlType == 2}" ng-mouseenter="RADIATORS.controlType == 2 && INFO.open('thermocontrol')" ng-mouseleave="RADIATORS.controlType == 2 && INFO.hide()">
+    <div class="is-floors-{{FLOORS.isFloors}}" ng-click="ROOM_CONTROLS.toFloor()"></div>
+    <div class="radiator-info-trigger" ng-class="ROOM_CONTROLS.cssRadiatorsCommon(RADIATORS)" ng-click="ROOM_CONTROLS.toCommonThermostat();">
         <img ng-if="RADIATORS.commonControl && RADIATORS.commonControl >= 7 && RADIATORS.commonControl <= 8" class="wi-fi" alt="" src="common/img/wi-fi-indicator.png" />
-        <div class="layover-msg" style="margin-left: -70px; top:0; margin-top: -50px; width: 115px;" ng-show="INFO.show('thermocontrol') && RADIATORS.controlType == 2">
+        <div class="layover-msg" style="margin-left: -70px; top:0; margin-top: -50px; width: 115px;" ng-show="INFO.show('commonthermostat') || INFO.show('thermocontrol')">
             Общее в комнате
             <i></i>
         </div>
     </div>
-    <div class="floor-control-{{FLOORS.isFloors}} floor-control-{{FLOORS.control}}">
+    <div class="floor-control-{{FLOORS.isFloors}} floor-control-{{FLOORS.control}} floor-info-trigger" ng-class="{ 'layover' : INFO.show('floorcontrol') }" ng-click="ROOM_CONTROLS.toFloorThermostat();">
+        <div class="layover-msg" style="margin-left: -70px; top:0; margin-top: -50px; width: 115px;" ng-show="INFO.show('floorcontrol')">
+            Для теплых полов
+            <i></i>
+        </div>
         <img ng-if="FLOORS.control && FLOORS.control == 3" class="wi-fi" alt="" src="common/img/wi-fi-indicator.png" />
     </div>
     
@@ -41,7 +47,10 @@
     </div>
 
     <div class="whiteshade" ng-show="
-     INFO.show('thermocontrol')
+     INFO.show('thermocontrol') ||
+     INFO.show('thermostat') ||
+     INFO.show('commonthermostat') ||
+     INFO.show('floorcontrol')
      ">
 
     </div>
@@ -74,6 +83,43 @@
             <p>
                 Также комнатный термостат применяют, если радиаторы закрыты декоративной решеткой.
             </p>
+        </div>
+    </div>
+</div>
+
+
+<div class="info-panel autoscroll" ng-show="INFO.show('commonthermostat')">
+    <div class="btn-close" ng-click="INFO.hide()"></div>
+    <h2>
+        Комнатный термостат
+    </h2>
+    <div class="info-scroller autoscroll">
+        <div class="info-clause">
+            <p>
+                Как правило применяют радиаторные термостаты, но если в комнате установлено большое количество радиаторов, удобнее регулировать температуру в помещении одним прибором – комнатным термостатом.
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Проводной
+            </h3>
+            <p>
+            </p>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Программируемый проводной
+            </h3>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Простой беспроводной
+            </h3>
+        </div>
+        <div class="info-clause">
+            <h3>
+                Программируемый беспроводной
+            </h3>
         </div>
     </div>
 </div>

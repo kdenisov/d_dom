@@ -1208,6 +1208,7 @@ a.collector-item {
 .radiators .item.type-boiler {
     margin-top: 0;
     background: url('../img/boiler-1-contour.png') no-repeat 50% top;
+    position: relative;
 }
 
 .radiators .item.type-boiler.alt {
@@ -1352,14 +1353,53 @@ a.collector-item {
     top: 15px;
 }
 
-.info-trigger.radiator {
+.info-trigger {
     position: absolute;
+    z-index: 2000;
     left: 50%;
+}
+
+.info-trigger.thermocontrol {
     top: 150px;
     margin-left: -220px;
     width: 70px;
     height: 50px;
-    z-index: 9000;
+}
+
+.info-trigger.radiator {
+    top: 165px;
+    height: 210px;
+    width: 325px;
+    left: 50%;
+    margin-left: -162.5px;
+}
+
+.info-trigger.boiler {
+    top: 0;
+    height: 610px;
+    width: 500px;
+    left: 50%;
+    margin-left: -250px;
+    background: none;
+}
+
+.info-trigger.valves {
+    top: 165px;
+    height: 260px;
+    width: 385px;
+    left: 50%;
+    margin-left: -195px;
+}
+
+.design .info-trigger.radiator {
+    height: 420px;
+    margin-left: -120px;
+    top: 0;
+    width: 240px;
+}
+
+.design .info-trigger.valves {
+    display: none;
 }
 
 /* Boiler */
@@ -2079,6 +2119,7 @@ a.button-close {
 .arrow-right {
 	top: 50%;
 	background-color: rgba(255,255,255,.75);
+    z-index: 2000;
 }
 .arrow-left {
 	left: 0;
@@ -3378,6 +3419,7 @@ input.validation-field {
 }
 
 .icon-info {
+    position: relative;
     display: inline-block;
     width: 23px;
     height: 23px;
@@ -3388,13 +3430,25 @@ input.validation-field {
     cursor: pointer;
 }
 
-.icon-info .pointer {
+.icon-info.all-rooms {
+    display: block; 
+    margin-left: 120px; 
+    margin-top: -23px;
+}
+
+.icon-info.radiator-type {
+    float:right; 
+    margin-top: 10px; 
+    margin-right: 10px;
+}
+
+.info-pointer {
     position: absolute;
     right: 0;
     border: transparent 6px solid;
     border-left: none;
     border-right-color: white;
-    margin-top: 6px;
+    margin-top: -14px;
     display: none;
 }
 
@@ -3402,8 +3456,16 @@ input.validation-field {
     background-position: center bottom;
 }
 
-.icon-info.active .pointer {
+.icon-info.active + .info-pointer {
     display: block;
+}
+
+.icon-info.all-rooms + .info-pointer {
+    margin-top: -10px;
+}
+
+.icon-info.radiator-type + .info-pointer {
+    margin-top: -22px;
 }
 
 .info-panel {
@@ -3413,7 +3475,7 @@ input.validation-field {
     background-color: white;
     color: black;
     position: absolute;
-    z-index: 1000;
+    z-index: 3000;
 }
 
 .info-panel > h2 {
