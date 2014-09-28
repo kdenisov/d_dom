@@ -836,7 +836,7 @@ appConfigurator.factory('Configurator', function (StorageManager, CurrentUser, C
 	            for (var __level in Cfg.levels) {
 	                // если этаж активный
 	                if (Cfg.levels[__level].isLevel) {
-	                    for (var j in Cfg.levels[__level].collectors) {
+	                    for (var j = 0; j < Cfg.levels[__level].collectors.length; j++) {
 	                        if (Cfg.levels[__level].collectors[j].isCollector()) {
 	                            if (Cfg.levels[__level].collectors[j].levels[parseInt(level) + 1]) {
 	                                if (Cfg.levels[__level].collectors[j].type == 'floor')
