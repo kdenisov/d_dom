@@ -2370,14 +2370,10 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
             infoService.hide();
         });
 
-        $(document).on('click', '.whiteshade', function() {
-            infoService.hide();
-        });
-
-        $('body').on('click', '.tree-view, .tree-button, #basket-popup, .info-panel, .info-trigger, .floor-info-trigger, .radiator-info-trigger', function (e) {
+        $('body').on('click', '.tree-view, .tree-button, #basket-popup, .info-panel, .icon-info, .info-trigger, .floor-info-trigger, .radiator-info-trigger', function (e) {
             e.stopPropagation();
+            return false;
         });
-
         setCustomScroll('.tree-view');
     });
 });
@@ -2444,11 +2440,14 @@ appConfigurator.controller('AlertCtrl', function($scope, alertService) {
 appConfigurator.service('infoService', function() {
     var service = this;
     service.index = null;
-    service.open = function (index) {
-        service.index = index;
+    service.toggle = function (index) {
+        console.log('current "' + service.index + '", new "' + index + '"');
+        service.index = service.index == index ? null : index;
+        console.log('current "' + service.index + '", new "' + index + '"');
     };
 
     service.hide = function() {
+        console.log('current "' + service.index + '", closing');
         service.index = null;
     };
 

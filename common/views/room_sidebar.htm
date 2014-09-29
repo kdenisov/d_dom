@@ -25,10 +25,10 @@
                     <h3 class="ng-binding">Для всех комнат</h3>
                     <input type="checkbox" ng-change="SET_PARAMS_FOR_ALL();" ng-model="SET_PARAMS_FOR_ALL_ROOMS" class="ng-scope ng-pristine ng-valid">
                 </label>
-                <i class="icon-info all-rooms" ng-click="INFO.open('allrooms')" ng-class="{'active' : INFO.show('allrooms')}"></i><i class="info-pointer"></i>
+                <i class="icon-info all-rooms" ng-click="INFO.toggle('allrooms')" ng-class="{'active' : INFO.show('allrooms')}"></i><i class="info-pointer"></i>
             </div>
             <div class="group" ng-if="RADIATOR.type == 1">
-                <h3>Регулирование <br> температуры <i class="icon-info" ng-click="INFO.open('thermocontrol')" ng-class="{'active' : INFO.show('thermocontrol')}"></i><i class="info-pointer"></i></h3>
+                <h3>Регулирование <br> температуры <i class="icon-info" ng-click="INFO.toggle('thermocontrol')" ng-class="{'active' : INFO.show('thermocontrol')}"></i><i class="info-pointer"></i></h3>
                 <div class="choicebox">
                     <label ng-repeat="ITEM in PARAMS.radiators.controlType" class="choicebox-{{ITEM.id == RADIATORS.controlType}}">
                         {{ITEM.name}}
@@ -44,7 +44,7 @@
                     </label>
                 </div>
                 <div class="field" ng-if="RADIATORS.controlType == 2 && RADIATOR.type == 1">
-                    <h3>Термостат <i class="icon-info" ng-class="{'active' : INFO.show('commonthermostat')}" ng-click="INFO.open('commonthermostat')"></i><i class="info-pointer"></i></h3>
+                    <h3>Термостат <i class="icon-info" ng-class="{'active' : INFO.show('commonthermostat')}" ng-click="INFO.toggle('commonthermostat')"></i><i class="info-pointer"></i></h3>
                     <div class="selectbox clearfix">
                         <label class="option-{{RADIATORS.commonControl == ITEM.id}}"
                                ng-repeat="ITEM in PARAMS.radiators.control | filter: {controlType: RADIATORS.controlType}">
@@ -81,7 +81,7 @@
                     <input ng-model="RADIATORS.radiatorsTypes"
                            ng-click="RADIATORS.radiatorsTypes = RADIATORS.radiatorsTypes + 1;RADIATORS_LIST[RADIATORS.radiatorsTypes-1].count = 1;">
                 </label>
-                <i class="icon-info radiator-type"  ng-click="INFO.open('radiatortype')" ng-class="{'active' : INFO.show('radiatortype')}"></i><i class="info-pointer"></i>
+                <i class="icon-info radiator-type"  ng-click="INFO.toggle('radiatortype')" ng-class="{'active' : INFO.show('radiatortype')}"></i><i class="info-pointer"></i>
             </div>
             <div class="bg-white">
                 <div class="group">
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                     <div class="field">
-                        <h3>Вид радиатора <i class="icon-info" ng-click="INFO.open('design')" ng-class="{'active' : INFO.show('design')}"></i><i class="info-pointer"></i></h3>
+                        <h3>Вид радиатора <i class="icon-info" ng-click="INFO.toggle('design')" ng-class="{'active' : INFO.show('design')}"></i><i class="info-pointer"></i></h3>
                         <div class="choicebox">
                             <label ng-repeat="ITEM in PARAMS.radiators.type" class="choicebox-{{ITEM.id == RADIATOR.type}}">
                                 {{ITEM.name}}
@@ -112,7 +112,7 @@
                     </div>
                     <div ng-if="RADIATOR.type == 2">
                         <div class="field">
-                            <h3>Применение <i class="icon-info" ng-click="INFO.open('use')" ng-class="{'active': INFO.show('use') }"></i><i class="info-pointer"></i></h3>
+                            <h3>Применение <i class="icon-info" ng-click="INFO.toggle('use')" ng-class="{'active': INFO.show('use') }"></i><i class="info-pointer"></i></h3>
                             <div class="choicebox">
                                 <label ng-repeat="ITEM in PARAMS.radiators.use" ng-class="{'choicebox-true': ITEM.id == RADIATOR.use}">
                                     {{ITEM.name}}
@@ -127,7 +127,7 @@
                             </div>
                         </div>
                         <div class="field">
-                            <h3>Сторона <i class="icon-info" ng-click="INFO.open('connectionside')" ng-class="{'active' : INFO.show('connectionside')}"></i><i class="info-pointer"></i></h3>
+                            <h3>Сторона <i class="icon-info" ng-click="INFO.toggle('connectionside')" ng-class="{'active' : INFO.show('connectionside')}"></i><i class="info-pointer"></i></h3>
                             <div class="choicebox">
                                 <label ng-repeat="ITEM in PARAMS.radiators.connectSide" ng-class="{'choicebox-true': ITEM.id == RADIATOR.connectSide }">
                                     {{ITEM.name}}
@@ -141,13 +141,13 @@
                             </div>
                         </div>
                         <div class="field">
-                            <h3>Исполнение <i class="icon-info" ng-click="INFO.open('designvalves')" ng-class="{'active' : INFO.show('designvalves')}"></i><i class="info-pointer"></i></h3>
+                            <h3>Исполнение <i class="icon-info" ng-click="INFO.toggle('designvalves')" ng-class="{'active' : INFO.show('designvalves')}"></i><i class="info-pointer"></i></h3>
                             <select ng-options="ITEM.id as ITEM.name for ITEM in GET_EXTERNAL_VIEW_ITEMS()" ng-model="RADIATOR.valves"></select>
                         </div>
                     </div>
                     <div ng-if="RADIATOR.type == 1">
                         <div class="field">
-                            <h3>Подключение <br>к радиатору <i class="icon-info" ng-click="INFO.open('connection')" ng-class="{'active' : INFO.show('connection')}"></i><i class="info-pointer"></i></h3>
+                            <h3>Подключение <br>к радиатору <i class="icon-info" ng-click="INFO.toggle('connection')" ng-class="{'active' : INFO.show('connection')}"></i><i class="info-pointer"></i></h3>
                             <div class="choicebox">
                                 <label ng-repeat="ITEM in PARAMS.radiators.connection" class="choicebox-{{ITEM.id == RADIATOR.connection}}">
                                     {{ITEM.name}}
@@ -165,7 +165,7 @@
                             </div>
                         </div>
                         <div class="field hidden-{{ RADIATOR.connection == 1 || RADIATORS.controlType == 2 }}">
-                            <h3>Тип клапана радиатора <i class="icon-info" ng-click="INFO.open('valve')" ng-class="{'active' : INFO.show('valve')}"></i><i class="info-pointer"></i></h3>
+                            <h3>Тип клапана радиатора <i class="icon-info" ng-click="INFO.toggle('valve')" ng-class="{'active' : INFO.show('valve')}"></i><i class="info-pointer"></i></h3>
                             <select ng-model="RADIATOR.builtinValve"
                                     ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.builtinValve | filter: {connection: RADIATOR.connection}"
                                     ng-change="
@@ -176,7 +176,7 @@
 							"></select>
                         </div>
                         <div class="field">
-                            <h3>Разводка трубопроводов <i class="icon-info" ng-click="INFO.open('interconnection')" ng-class="{'active' : INFO.show('interconnection')}"></i><i class="info-pointer"></i></h3>
+                            <h3>Разводка трубопроводов <i class="icon-info" ng-click="INFO.toggle('interconnection')" ng-class="{'active' : INFO.show('interconnection')}"></i><i class="info-pointer"></i></h3>
                             <select ng-model="RADIATOR.pipework"
                                     ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.pipework | filter: {connection: RADIATOR.connection}"
                                     ng-change="
@@ -186,7 +186,7 @@
 							"></select>
                         </div>
                         <div class="field hidden-{{RADIATORS.controlType == 2}}">
-                            <h3>Радиаторный термостат <i class="icon-info" ng-click="INFO.open('thermostat')" ng-class="{'active' : INFO.show('thermostat')}"></i><i class="info-pointer"></i></h3>
+                            <h3>Радиаторный термостат <i class="icon-info" ng-click="INFO.toggle('thermostat')" ng-class="{'active' : INFO.show('thermostat')}"></i><i class="info-pointer"></i></h3>
                             <div class="selectbox clearfix">
                                 <label class="option-{{RADIATOR.control == ITEM.id}}"
                                        ng-repeat="ITEM in PARAMS.radiators.control | filter: {builtinValve: RADIATOR.builtinValve, controlType: RADIATORS.controlType}">
@@ -202,7 +202,7 @@
                             </div><!-- .selectbox -->
                         </div>
                         <div class="field">
-                            <h3>Обвязка радиаторов <i class="icon-info" ng-click="INFO.open('distinctvalves')" ng-class="{'active' : INFO.show('distinctvalves')}"></i><i class="info-pointer"></i></h3>
+                            <h3>Обвязка радиаторов <i class="icon-info" ng-click="INFO.toggle('distinctvalves')" ng-class="{'active' : INFO.show('distinctvalves')}"></i><i class="info-pointer"></i></h3>
                             <div class="selectbox clearfix">
                                 <label class="option-{{RADIATOR.preview_valves == ITEM.id}}"
                                        ng-repeat="ITEM in PARAMS.distinctValves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use})">
@@ -220,7 +220,7 @@
                             </div><!-- .selectbox -->
                         </div>
                         <div class="field">
-                            <h3>Сторона <i class="icon-info" ng-click="INFO.open('connectionside')" ng-class="{'active' : INFO.show('connectionside')}"></i><i class="info-pointer"></i></h3>
+                            <h3>Сторона <i class="icon-info" ng-click="INFO.toggle('connectionside')" ng-class="{'active' : INFO.show('connectionside')}"></i><i class="info-pointer"></i></h3>
                             <div class="choicebox">
                                 <label ng-repeat="ITEM in PARAMS.radiators.connectSide" ng-class="{'choicebox-true': ITEM.id == RADIATOR.connectSide }">
                                     {{ITEM.name}}
@@ -234,13 +234,13 @@
                             </div>
                         </div>
                         <div class="field hidden-{{GET_EXTERNAL_VIEW_ITEMS().length == 0}}">
-                            <h3>Исполнение <i class="icon-info" ng-click="INFO.open('valves')" ng-class="{'active' : INFO.show('valves')}"></i><i class="info-pointer"></i></h3>
+                            <h3>Исполнение <i class="icon-info" ng-click="INFO.toggle('valves')" ng-class="{'active' : INFO.show('valves')}"></i><i class="info-pointer"></i></h3>
                             <select ng-options="ITEM.id as ITEM.name for ITEM in GET_EXTERNAL_VIEW_ITEMS()" ng-model="RADIATOR.valves"></select>
                         </div>
                     </div>
                 </div>
                 <div class="field hidden-{{RADIATOR.fittingsType == 0}}">
-                    <h3>Комплектация <i class="icon-info" ng-click="INFO.open('complect')" ng-class="{'active' : INFO.show('complect')}"></i><i class="info-pointer"></i></h3>
+                    <h3>Комплектация <i class="icon-info" ng-click="INFO.toggle('complect')" ng-class="{'active' : INFO.show('complect')}"></i><i class="info-pointer"></i></h3>
                     <div class="selectbox merged clearfix">
                         <label class="label-checkbox checkbox-{{RADIATOR.fittings != 0}}">
                             <span class="pseudo-checkbox"></span>
@@ -274,7 +274,7 @@
             <div class="group hidden-{{!FLOORS.isFloors}}">
                 <div class="field">
                     <div class="slider-wrap">
-                        Количество петель <i class="icon-info" ng-click="INFO.open('loops')" ng-class="{'active': INFO.show('loops')}"></i><i class="info-pointer"></i>
+                        Количество петель <i class="icon-info" ng-click="INFO.toggle('loops')" ng-class="{'active': INFO.show('loops')}"></i><i class="info-pointer"></i>
                         <div ui-slider="{range: 'min'}" min="1" max="8"
                              ng-model="FLOORS.loops"
                              ng-change="
@@ -286,7 +286,7 @@
                     </div>
                 </div>
                 <div class="field">
-                    <h3>Регулирование <br>температуры <i class="icon-info" style="float: right; margin-right: -4px; margin-top: -4px;" ng-click="INFO.open('floorcontrol')" ng-class="{'active': INFO.show('floorcontrol')}"></i><i class="info-pointer"></i></h3>
+                    <h3>Регулирование <br>температуры <i class="icon-info" style="float: right; margin-right: -4px; margin-top: -4px;" ng-click="INFO.toggle('floorcontrol')" ng-class="{'active': INFO.show('floorcontrol')}"></i><i class="info-pointer"></i></h3>
                     <div class="selectbox clearfix">
                         <label class="option-{{FLOORS.control == ITEM.id}}"
                                ng-repeat="ITEM in PARAMS.floors.control | filter: filterFunction">
@@ -321,7 +321,7 @@
 
         <div class="tab-content" ng-tab-body>
             <div class="group">
-                <h3>Тип котла <i class="icon-info" ng-click="INFO.open('boiler')" ng-class="{'active': INFO.show('boiler')}"></i><i class="info-pointer"></i></h3>
+                <h3>Тип котла <i class="icon-info" ng-click="INFO.toggle('boiler')" ng-class="{'active': INFO.show('boiler')}"></i><i class="info-pointer"></i></h3>
                 <div class="choicebox">
                     <label ng-repeat="item in BOILER_PARAMS.embodiment" ng-class="{ 'choicebox-true': item.id == BOILER.embodiment }">
                         {{item.name}}
@@ -330,7 +330,7 @@
                 </div>
             </div>
             <div class="group" ng-if="BOILER.embodiment == 1">
-                <h3>Насосный узел обвязки <br> котла <i class="icon-info" ng-click="INFO.open('pump')" ng-class="{'active': INFO.show('pump')}"></i><i class="info-pointer"></i></h3>
+                <h3>Насосный узел обвязки <br> котла <i class="icon-info" ng-click="INFO.toggle('pump')" ng-class="{'active': INFO.show('pump')}"></i><i class="info-pointer"></i></h3>
                 <label class="label-checkbox inline" ng-repeat="pump in BOILER_PARAMS.pump" ng-class="{ 'checkbox-true': pump.id == BOILER.pump }">
                     <span class="pseudo-checkbox">
                         <input type="radio" ng-model="BOILER.pump" ng-value="{{pump.id}}" />
