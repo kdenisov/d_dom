@@ -209,14 +209,19 @@ appConfigurator.controller('SetCollectorDialogCtrl', function ($scope, Configura
 
 appConfigurator.service('levelsService', function(Configurator, $stateParams) {
     var $this = this;
-    $this.levels = Configurator.levels;
-    $this.boiler = Configurator.boiler;
+
+    $this.reset = function (cfg, levelId) {
+        $this.levels = cfg.levels;
+        $this.level = !isNaN(levelId) && levelId > 0 ? $this.levels[levelId - 1] : $this.levels[0];
+        $this.boiler = cfg.boiler;
+        $this.collectors = $this.level.collectors;
+    };
+
     var levelId = parseInt($stateParams.levelId);
-    $this.level = !isNaN(levelId) && levelId > 0 ?  $this.levels[$stateParams.levelId - 1] : $this.levels[0];
-    $this.collectors = $this.level.collectors;
+    $this.reset(Configurator, levelId);
 
     $this.setLevel = function(id) {
-        $this.level = $this.levels[id - 1];
+        $this.level = Configurator.levels[id - 1];
         $this.collectors = $this.level.collectors;
     };
 
@@ -363,13 +368,13 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
             scope.$apply(action);
         };
 
-        var levelsCopy = $.extend(true, [], levelsService.levels);
-        var boilerCopy = $.extend(true, {}, levelsService.boiler);
+        var levelsCopy = $.extend(true, [], Configurator.levels);
+        var boilerCopy = $.extend(true, {}, Configurator.boiler);
 
         window.levelsModule && window.levelsModule.buildLevels('#levels', {
             levels: levelsCopy,
             boilers: boilerCopy,
-            currentLevelId: levelsService.level.id,
+            currentLevelId: $stateParams.levelId,
             roomMouseEnter: function(levelId, roomId) {
                 $scope.$apply(levelsService.setHoverRoomId(roomId));
             },
@@ -2123,19 +2128,6 @@ appConfigurator.controller('SendConfigurationBaseCtrl', function ($scope, $modal
 
 appConfigurator.service('CottageTree', function(Configurator, $timeout) {
     var model = this;
-    model.levels = Configurator.levels;
-
-    model.levelName = function(level) {
-        if (!level) {
-            return "Этаж";
-        }
-
-        return level.isBasement ? 'Подвал' : (level.id == 1 ? 'Первый этаж' : (level.id == 2 ? 'Второй этаж' : 'Третий этаж'));
-    };
-
-    model.customRoomAdded = null;
-    model.customRoomRemoved = null;
-    model.customRoomRenamed = null;
 
     model.unbindAllCustom = function () {
         model.customRoomAdded = function (levelId, roomId) { };
@@ -2143,7 +2135,24 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
         model.customRoomRenamed = function (levelId, roomId, newName) { };
     };
 
-    model.unbindAllCustom();
+    model.reset = function(cfg) {
+        model.levels = cfg.levels;
+        model.levelName = function (level) {
+            if (!level) {
+                return "Этаж";
+            }
+
+            return level.isBasement ? 'Подвал' : (level.id == 1 ? 'Первый этаж' : (level.id == 2 ? 'Второй этаж' : 'Третий этаж'));
+        };
+
+        model.customRoomAdded = null;
+        model.customRoomRemoved = null;
+        model.customRoomRenamed = null;
+
+        model.unbindAllCustom();
+    };
+
+    model.reset(Configurator);
 
     model.hasMoreRooms = function(levelId) {
         var lvl = model.levels[levelId - 1];
@@ -2168,8 +2177,8 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
     };
 
     model.removeRoom = function(levelId, roomId) {
-        var lvl = Configurator.levels[levelId - 1];
-        var room = Configurator.levels[levelId - 1].rooms[roomId - 1];
+        var lvl = levels[levelId - 1];
+        var room = levels[levelId - 1].rooms[roomId - 1];
         room.isRoom = false;
         lvl.roomsCount--;
         model.customRoomRemoved && model.customRoomRemoved(levelId, roomId);
@@ -2178,7 +2187,7 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
 
     model.editing = null;
     model.endEdit = function (levelId, roomId) {
-        var room = Configurator.levels[levelId - 1].rooms[roomId - 1];
+        var room = levels[levelId - 1].rooms[roomId - 1];
         model.editing = null;
         model.customRoomRenamed && model.customRoomRenamed(levelId, roomId, room.name);
     };
@@ -2188,7 +2197,7 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
             return;
         }
 
-        var room = Configurator.levels[levelId - 1].rooms[roomId - 1];
+        var room = levels[levelId - 1].rooms[roomId - 1];
         model.editing = room;
         $timeout(function () { $(btn).siblings('input[type=text]').select(); }, 100);
     };
@@ -2241,7 +2250,7 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
 });
 
 
-appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, infoService, Configurator, CottageTree) {
+appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, infoService, Configurator, CottageTree, levelsService) {
     $scope.BASE_PAGE = { title: 'Конфигуратор' };
 
     var save = function() {
@@ -2287,6 +2296,8 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
             hasCancel: true,
             confirm: function () {
                 Configurator.ReInitConfigurator();
+                CottageTree.reset(Configurator);
+                levelsService.reset(Configurator);
                 $timeout(function () {
                     $scope.$apply(function () { $location.path("#/#"); });
                 }, 0);
