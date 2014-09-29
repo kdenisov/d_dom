@@ -59,14 +59,22 @@ angular.module('appConfigurator')
     })
     .animation('.tree-view', function () {
         return {
-            enter: function (item, done) {
+            removeClass: function (item, className, done) {
+                if (className !== 'ng-hide') {
+                    return animationCancelHandler(item);
+                }
+
                 item = $(item);
                 item.css({ top: '-100%' });
                 item.animate({ top: 0 }, animationDuration, done);
                 return animationCancelHandler(item);
             },
 
-            leave: function (item, done) {
+            beforeAddClass: function (item, className, done) {
+                if (className !== 'ng-hide') {
+                    return animationCancelHandler(item);
+                }
+
                 item = $(item);
                 item.css({ top: 0 });
                 item.animate({ top: '-100%' }, animationDuration, done);

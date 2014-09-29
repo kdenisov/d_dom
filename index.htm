@@ -123,7 +123,7 @@
 
                 </div>
 
-                <div class="tree-view" ng-if="TREE.open" ng-click="$event.stopPropagation();">
+                <div class="tree-view" ng-show="TREE.open" ng-click="$event.stopPropagation();">
                     <div class="level" ng-repeat="level in TREE.levels | filter: {isLevel: true} | orderBy: '-isBasement' ">
                         <h3>{{TREE.levelName(level)}}</h3>
 

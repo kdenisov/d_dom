@@ -324,7 +324,6 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                     control = radiatorType.control > 4 ? null : Configurator.params.room.radiators.control[radiatorType.control - 1];
                     var valves = Configurator.params.room.radiators.valves[radiatorType.valves - 1];
                     if (radiatorType.count > 0) {
-                        console.log(radiatorType);
                         roomEquipment.radiators.push({
                             type: radIndex + 1,
                             thermostat: control ? {
@@ -388,13 +387,21 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                     $location.path('/room/' + levelId + '/' + roomId);
                 });
             },
-            roomAdded: function(levelId, roomId) {
-                levelsService.level.rooms[roomId - 1].isRoom = true;
-                levelsService.level.roomsCount++;
+            roomAdded: function (levelId, roomId) {
+                var level = Configurator.levels[levelId - 1];
+                var room = level.rooms[roomId - 1];
+                if (room.isRoom == false) {
+                    room.isRoom = true;
+                    level.roomsCount++;
+                }
             },
             roomRemoved: function(levelId, roomId) {
-                levelsService.level.rooms[roomId - 1].isRoom = false;
-                levelsService.level.roomsCount--;
+                var level = Configurator.levels[levelId - 1];
+                var room = level.rooms[roomId - 1];
+                if (room.isRoom == true) {
+                    room.isRoom = false;
+                    level.roomsCount--;
+                }
             }
         });
 
@@ -2126,9 +2133,17 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
         return level.isBasement ? 'Подвал' : (level.id == 1 ? 'Первый этаж' : (level.id == 2 ? 'Второй этаж' : 'Третий этаж'));
     };
 
-    model.customRoomAdded = function (levelId, roomId) { };
-    model.customRoomRemoved = function (levelId, roomId) { };
-    model.customRoomRenamed = function (levelId, roomId, newName) { };
+    model.customRoomAdded = null;
+    model.customRoomRemoved = null;
+    model.customRoomRenamed = null;
+
+    model.unbindAllCustom = function () {
+        model.customRoomAdded = function (levelId, roomId) { };
+        model.customRoomRemoved = function (levelId, roomId) { };
+        model.customRoomRenamed = function (levelId, roomId, newName) { };
+    };
+
+    model.unbindAllCustom();
 
     model.hasMoreRooms = function(levelId) {
         var lvl = model.levels[levelId - 1];
@@ -2217,10 +2232,8 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
     model.toggle = function() {
         model.open = !model.open;
         if (!model.scroll) {
-            $timeout(function() {
-                model.scroll = true;
-                setCustomScroll('.tree-view');
-            }, 100);
+            model.scroll = true;
+            setCustomScroll('.tree-view');
         }
     };
 
@@ -2316,6 +2329,7 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
     };
 
     $scope.$on('$locationChangeSuccess', function (event, toUrl, fromUrl) {
+        CottageTree.unbindAllCustom();
         CottageTree.resetCurrentRoom();
         infoService.hide();
         if (toUrl.indexOf('#/summary') >= 0) {
