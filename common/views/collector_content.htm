@@ -8,14 +8,14 @@
                 <div class="collector-inner">
                     <div class="collector-set" ng-click="$event.stopPropagation();">
                         <div class="pipe-in" ng-hide="SHOW_MIXER()"></div>
-                        <div class="mixer" ng-show="SHOW_MIXER()" ng-click="CTRL.toMixer()"></div>
-                        <img class="valve" src="common/img/collector/valve.png" alt="" ng-show="COLLECTOR.isBallValves" ng-click="CTRL.toComplectation();" />
-                        <img class="clock-face" src="common/img/collector/valve-clock-face.png" ng-show="COLLECTOR._thermometerIn" alt="" ng-click="CTRL.toComplectation();" />
+                        <div class="mixer pointer" title="Узел смешения" ng-show="SHOW_MIXER()" ng-click="CTRL.toMixer()"></div>
+                        <img class="valve pointer" title="Комплектация" src="common/img/collector/valve.png" alt="" ng-show="COLLECTOR.isBallValves" ng-click="CTRL.toComplectation();" />
+                        <img class="clock-face pointer" title="Комплектация" src="common/img/collector/valve-clock-face.png" ng-show="COLLECTOR._thermometerIn" alt="" ng-click="CTRL.toComplectation();" />
                         <div class="collector-nodes">
                             <img class="brace-long" src="common/img/collector/double-brace.png" alt="" data-no-width />
-                            <div class="node" ng-repeat="node in NODES" ng-class="GET_NODE_CSS_CLASS($index)" ng-click="CTRL.toNodes();">
+                            <div class="node pointer" title="Количество заходов" ng-repeat="node in NODES" ng-class="GET_NODE_CSS_CLASS($index)" ng-click="CTRL.toNodes();">
                                 <img class="cap" src="common/img/collector/cap.png" ng-hide="COLLECTOR.isFlowmeter" />
-                                <img class="meter" src="common/img/collector/meter.png" ng-show="COLLECTOR.isFlowmeter" ng-click="$event.stopPropagation(); CTRL.toComplectation();" />
+                                <img class="meter pointer" title="Комплектация" src="common/img/collector/meter.png" ng-show="COLLECTOR.isFlowmeter" ng-click="$event.stopPropagation(); CTRL.toComplectation();" />
                                 <img class="fitting" src="common/img/collector/fitting.png" />
                                 <img class="pipe-out" src="common/img/collector/pipe-out-long.png" />
                                 <img class="section-fitting" src="common/img/collector/section-fitting.png" ng-show="SHOW_SECTION_FITTING($index)" />
@@ -24,17 +24,17 @@
                             </div>
                             <img class="brace-long-second" src="common/img/collector/double-brace.png" alt="" data-no-width />
                         </div>
-                        <img class="air-vent" src="common/img/collector/air-vent.png" alt="" ng-click="CTRL.toComplectation();" />
+                        <img class="air-vent pointer" title="Количество заходов" src="common/img/collector/air-vent.png" alt="" ng-click="CTRL.toNodes();" />
                     </div>
 
                     <div class="collector-set cold" ng-click="$event.stopPropagation();">
                         <div class="pipe-in" ng-hide="SHOW_MIXER()"></div>
-                        <div class="mixer-filler" ng-show="SHOW_MIXER()" ng-click="CTRL.toMixer()"></div>
-                        <img class="valve" src="common/img/collector/valve-cold.png" alt="" ng-show="COLLECTOR.isBallValves" ng-click="CTRL.toComplectation();" />
-                        <img class="clock-face" src="common/img/collector/valve-clock-face.png" ng-show="COLLECTOR._thermometerOut" ng-click="CTRL.toComplectation();" alt="" />
+                        <div class="mixer-filler pointer" title="Узел смешения" ng-show="SHOW_MIXER()" ng-click="CTRL.toMixer()"></div>
+                        <img class="valve pointer" title="Комплектация" src="common/img/collector/valve-cold.png" alt="" ng-show="COLLECTOR.isBallValves" ng-click="CTRL.toComplectation();" />
+                        <img class="clock-face pointer" title="Комплектация" src="common/img/collector/valve-clock-face.png" ng-show="COLLECTOR._thermometerOut" ng-click="CTRL.toComplectation();" alt="" />
                         <div class="collector-nodes">
                             <img class="brace" src="common/img/collector/brace.png" alt="" />
-                            <div class="node" ng-repeat="node in NODES" ng-class="GET_NODE_CSS_CLASS($index)" ng-click="CTRL.toNodes();">
+                            <div class="node pointer" ng-repeat="node in NODES" ng-class="GET_NODE_CSS_CLASS($index)" ng-click="CTRL.toNodes();">
                                 <img class="valve-electro" src="common/img/collector/electro-valve.png" ng-show="HAS_ELECTRO_VALVE($index)" />
                                 <img class="valve-cooling" src="common/img/collector/cooling-valve.png" ng-hide="HAS_ELECTRO_VALVE($index)" />
                                 <img class="fitting" src="common/img/collector/fitting.png" />
@@ -45,7 +45,7 @@
                             </div>
                             <img class="brace-second" src="common/img/collector/brace.png" alt="" />
                         </div>
-                        <img class="air-vent" src="common/img/collector/air-vent.png" alt="" />
+                        <img class="air-vent pointer" title="Количество заходов" src="common/img/collector/air-vent.png" alt="" ng-click="CTRL.toNodes();" />
                     </div>
 
                     <div class="receivers" ng-show="THERMOCONTROLS.receivers.length > 0">
@@ -61,126 +61,128 @@
     </div>
 </div>
 
-<div class="info-panel autoscroll" ng-show="INFO.show(1)">
-    <div class="btn-close" ng-click="INFO.hide()"></div>
-    <h2>
-        К этому коллектору подключены
-    </h2>
-    <div class="info-scroller autoscroll">
-        <div class="info-clause" ng-if="COLLECTOR.type === 'radiator'">
-            <p>
-                Рекомендуется устанавливать коллектор на каждом этаже, что позволит сократить количество труб, а также улучшит отвод воздуха.
-            </p>
-        </div>
-        <div class="info-clause" ng-if="COLLECTOR.type === 'floor'">
-            <p>
-                Рекомендуется устанавливать коллектор на каждом этаже, где есть теплый пол, что позволит сократить количество труб, а также улучшит отвод воздуха.
-            </p>
-        </div>
-    </div>
-</div>
-
-
-<div class="info-panel autoscroll" ng-show="INFO.show(2)">
-    <div class="btn-close" ng-click="INFO.hide()"></div>
-    <h2>
-        Количество заходов
-    </h2>
-    <div class="info-scroller autoscroll">
-        <div class="info-clause" ng-if="COLLECTOR.type === 'radiator'">
-            <p>
-                Количество заходов определяется автоматически по количеству радиаторов в комнатах, подключенных к данному коллектору.
-            </p>
-            <p>
-                Также количество заходов может быть задано вручную.
-            </p>
-        </div>
-        <div class="info-clause" ng-if="COLLECTOR.type === 'floor'">
-            <p>
-                Количество заходов определяется автоматически по количеству петель теплого пола в комнатах, подключенных к данному коллектору.
-            </p>
-            <p>
-                Также количество заходов может быть задано вручную.
-            </p>
+<div class="info-panel-container" ng-show="INFO.any()">
+    <div class="info-panel autoscroll" ng-show="INFO.visible(1)">
+        <div class="btn-close" ng-click="INFO.hide()"></div>
+        <h2>
+            К этому коллектору подключены
+        </h2>
+        <div class="info-scroller autoscroll">
+            <div class="info-clause" ng-if="COLLECTOR.type === 'radiator'">
+                <p>
+                    Рекомендуется устанавливать коллектор на каждом этаже, что позволит сократить количество труб, а также улучшит отвод воздуха.
+                </p>
+            </div>
+            <div class="info-clause" ng-if="COLLECTOR.type === 'floor'">
+                <p>
+                    Рекомендуется устанавливать коллектор на каждом этаже, где есть теплый пол, что позволит сократить количество труб, а также улучшит отвод воздуха.
+                </p>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="info-panel " ng-show="INFO.show(3)">
-    <div class="btn-close" ng-click="INFO.hide()"></div>
-    <h2>
-        Узел смешения
-    </h2>
-    <div class="info-scroller autoscroll">
-        <div class="info-clause">
-            <p>
-                Узел смешения обеспечивает оптимальную температуру +35...+45 С<sup>o</sup> для теплого пола и создает циркуляцию теплоносителя в контурах теплого пола.
-            </p>
-        </div>
-        <div class="info-clause">
-            <h3>
-                <span>Узел FHM-C6</span> <img src="common/img/products/config-prod-FHM-C6.png" alt="Узел FHM-C6" />
-            </h3>
-            <p>
-                на базе трехскоростного насоса UPS 15-60
-            </p>
-        </div>
-        <div class="info-clause">
-            <h3>
-                <span>Узел FHM-C8</span> <img src="common/img/products/config-prod-FHM-C8-9.png" alt="Узел FHM-C8" />
-            </h3>
-            <p>
-                на базе энергоэффективного насоса Alpha2 15-60 с частотным приводом
-            </p>
+
+    <div class="info-panel autoscroll" ng-show="INFO.visible(2)">
+        <div class="btn-close" ng-click="INFO.hide()"></div>
+        <h2>
+            Количество заходов
+        </h2>
+        <div class="info-scroller autoscroll">
+            <div class="info-clause" ng-if="COLLECTOR.type === 'radiator'">
+                <p>
+                    Количество заходов определяется автоматически по количеству радиаторов в комнатах, подключенных к данному коллектору.
+                </p>
+                <p>
+                    Также количество заходов может быть задано вручную.
+                </p>
+            </div>
+            <div class="info-clause" ng-if="COLLECTOR.type === 'floor'">
+                <p>
+                    Количество заходов определяется автоматически по количеству петель теплого пола в комнатах, подключенных к данному коллектору.
+                </p>
+                <p>
+                    Также количество заходов может быть задано вручную.
+                </p>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="info-panel " ng-show="INFO.show(4)">
-    <div class="btn-close" ng-click="INFO.hide()"></div>
-    <h2>
-        Комплектация
-    </h2>
-    <div class="info-scroller autoscroll">
-        <div class="info-clause">
-            <h3 class="table-like">
-                <span>Расходомер</span> <img src="common/img/products/config-prod-rashodomer.png" alt="Расходомер" />
-            </h3>
-            <p>
-                Позволяют измерить расход теплоносителя в каждом контуре, что значительно упрощает настройку системы отопления.
-            </p>
+    <div class="info-panel " ng-show="INFO.visible(3)">
+        <div class="btn-close" ng-click="INFO.hide()"></div>
+        <h2>
+            Узел смешения
+        </h2>
+        <div class="info-scroller autoscroll">
+            <div class="info-clause">
+                <p>
+                    Узел смешения обеспечивает оптимальную температуру +35...+45 С<sup>o</sup> для теплого пола и создает циркуляцию теплоносителя в контурах теплого пола.
+                </p>
+            </div>
+            <div class="info-clause">
+                <h3>
+                    <span>Узел FHM-C6</span> <img src="common/img/products/config-prod-FHM-C6.png" alt="Узел FHM-C6" />
+                </h3>
+                <p>
+                    на базе трехскоростного насоса UPS 15-60
+                </p>
+            </div>
+            <div class="info-clause">
+                <h3>
+                    <span>Узел FHM-C8</span> <img src="common/img/products/config-prod-FHM-C8-9.png" alt="Узел FHM-C8" />
+                </h3>
+                <p>
+                    на базе энергоэффективного насоса Alpha2 15-60 с частотным приводом
+                </p>
+            </div>
         </div>
-        <div class="info-clause">
-            <h3 class="table-like">
-                <span>Шаровые краны</span> <img src="common/img/products/config-prod-kran.png" alt="Шаровые краны" />
-            </h3>
-            <p>
-                Устанавливаются для удобства эксплуатации и обслуживания, позволяют отсечь весь коллектор.
-            </p>
-        </div>
-        <div class="info-clause">
-            <h3 class="table-like">
-                <span>Термометры</span> <img src="common/img/products/config-prod-termometr.png" alt="Термометры" />
-            </h3>
-            <p>
-                Предназначены для установки в гнезда шаровых кранов и служат для индикации температуры теплоносителя в диапазоне от 0 до 60 градусов С0.
-            </p>
-        </div>
-        <div class="info-clause">
-            <h3 class="table-like">
-                <span>Фитинги</span> <img src="common/img/products/config-prod-fittings.png" alt="Фитинги" />
-            </h3>
-            <p>
-                Уплотнительные фитинги предназначены для соединения клапанов и коллекторов с трубопроводами систем отопления.
-            </p>
-        </div>
-        <div class="info-clause">
-            <h3 class="table-like">
-                <span>Термостат безопасности</span> <img src="common/img/products/config-prod-term-bez.png" alt="Термостат безопасности" />
-            </h3>
-            <p>
-                Термостат безопасности FH-ST55 предназначен для защиты напольного покрытия и системы напольного отопления от воздействия теплоносителя со слишком высокой температурой.
-            </p>
+    </div>
+
+    <div class="info-panel " ng-show="INFO.visible(4)">
+        <div class="btn-close" ng-click="INFO.hide()"></div>
+        <h2>
+            Комплектация
+        </h2>
+        <div class="info-scroller autoscroll">
+            <div class="info-clause">
+                <h3 class="table-like">
+                    <span>Расходомер</span> <img src="common/img/products/config-prod-rashodomer.png" alt="Расходомер" />
+                </h3>
+                <p>
+                    Позволяют измерить расход теплоносителя в каждом контуре, что значительно упрощает настройку системы отопления.
+                </p>
+            </div>
+            <div class="info-clause">
+                <h3 class="table-like">
+                    <span>Шаровые краны</span> <img src="common/img/products/config-prod-kran.png" alt="Шаровые краны" />
+                </h3>
+                <p>
+                    Устанавливаются для удобства эксплуатации и обслуживания, позволяют отсечь весь коллектор.
+                </p>
+            </div>
+            <div class="info-clause">
+                <h3 class="table-like">
+                    <span>Термометры</span> <img src="common/img/products/config-prod-termometr.png" alt="Термометры" />
+                </h3>
+                <p>
+                    Предназначены для установки в гнезда шаровых кранов и служат для индикации температуры теплоносителя в диапазоне от 0 до 60 градусов С0.
+                </p>
+            </div>
+            <div class="info-clause">
+                <h3 class="table-like">
+                    <span>Фитинги</span> <img src="common/img/products/config-prod-fittings.png" alt="Фитинги" />
+                </h3>
+                <p>
+                    Уплотнительные фитинги предназначены для соединения клапанов и коллекторов с трубопроводами систем отопления.
+                </p>
+            </div>
+            <div class="info-clause">
+                <h3 class="table-like">
+                    <span>Термостат безопасности</span> <img src="common/img/products/config-prod-term-bez.png" alt="Термостат безопасности" />
+                </h3>
+                <p>
+                    Термостат безопасности FH-ST55 предназначен для защиты напольного покрытия и системы напольного отопления от воздействия теплоносителя со слишком высокой температурой.
+                </p>
+            </div>
         </div>
     </div>
 </div>

@@ -629,7 +629,7 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
     };
 
     $scope.VIEW = function (radiator) {
-        if (room.radiators.controlType == 2 && infoService.show('thermocontrol')) {
+        if (room.radiators.controlType == 2 && infoService.visible('thermocontrol')) {
             return 'common/img/radiators/n/16_17_RA2994_r1.png';
         };
 
@@ -862,58 +862,70 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
             $timeout(function() {
                 var ctrl = $('.icon-info.active:first');
                 var panel = ctrl.closest('.autoscroll');
-                var top = ctrl.position().top - 70; 
-                if (top < panel.height()) {
-                    top = 0;
+                if (ctrl.length == 0) {
+                    panel = $('#sidebar-content .autoscroll:first');
                 }
 
-                panel.scrollTop(top);
-                panel.perfectScrollbar('update');
+                var top = 0;
+                if (ctrl.position()) {
+                    top = ctrl.position().top - 70;
+                    if (top < panel.height()) {
+                        top = 0;
+                    }
+                } 
+
+                panel.animate({ scrollTop: top }, 300, function () {
+                    panel.perfectScrollbar('update');
+                });
+
             }, 100);
         };
 
         controls.toFloor = function () {
             setTab(2);
+            scroll();
         };
 
         controls.toRadiator = function () {
             setTab(1);
+            scroll();
         };
 
         controls.toBoiler = function () {
             setTab(3);
+            scroll();
         };
 
         controls.toValves = function () {
             setTab(1);
-            infoService.open('distinctvalves');
+            infoService.toggle('distinctvalves');
             scroll();
         };
 
         controls.toCommonThermostat = function () {
             setTab(1);
-            infoService.open('commonthermostat');
+            infoService.toggle('commonthermostat');
             scroll();
         };
 
         controls.toRadiatorThermostat = function () {
             setTab(1);
-            infoService.open('thermostat');
+            infoService.toggle('thermostat');
             scroll();
         };
 
         controls.toFloorThermostat = function () {
             setTab(2);
-            infoService.open('floorcontrol');
+            infoService.toggle('floorcontrol');
             scroll();
         };
 
         controls.cssRadiatorsCommon = function(radiators) {
-            if (infoService.show('thermocontrol') && radiators.controlType != 2) {
+            if (infoService.visible('thermocontrol') && radiators.controlType != 2) {
                 return 'layover radiators-control-type-2 thermo-5';
             }
 
-            var cssClass = infoService.show('commonthermostat') ? 'layover' : '';
+            var cssClass = infoService.visible('commonthermostat') ? 'layover' : '';
             cssClass += ' radiators-control-type-' + radiators.controlType;
             cssClass += ' thermo-' + radiators.commonControl;
             return cssClass;
@@ -1275,25 +1287,37 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, infoS
             $timeout(function() {
                 var ctrl = $('.icon-info.active:first');
                 var panel = ctrl.closest('.autoscroll');
-                var top = ctrl.position().top;
-                top = top < panel.height() ? 0 : top;
-                panel.scrollTop(top);
-                panel.perfectScrollbar('update');
+                if (ctrl.length == 0) {
+                    panel = $('#sidebar-content .autoscroll:first');
+                }
+
+                var top = 0;
+                if (ctrl.position()) {
+                    top = ctrl.position().top - 70;
+                    if (top < panel.height()) {
+                        top = 0;
+                    }
+                }
+
+                panel.animate({scrollTop: top}, 300, function() {
+                    panel.perfectScrollbar('update');
+                });
             }, 100);
         };
 
+
         controls.toNodes = function() {
-            infoService.open(2);
+            infoService.toggle(2);
             scroll();
         };
 
         controls.toMixer = function () {
-            infoService.open(3);
+            infoService.toggle(3);
             scroll();
         };
 
         controls.toComplectation = function () {
-            infoService.open(4);
+            infoService.toggle(4);
             scroll();
         };
 
@@ -2368,11 +2392,11 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
             });
 
             infoService.hide();
+            console.log(infoService);
         });
 
         $('body').on('click', '.tree-view, .tree-button, #basket-popup, .info-panel, .icon-info, .info-trigger, .floor-info-trigger, .radiator-info-trigger', function (e) {
             e.stopPropagation();
-            return false;
         });
         setCustomScroll('.tree-view');
     });
@@ -2440,19 +2464,23 @@ appConfigurator.controller('AlertCtrl', function($scope, alertService) {
 appConfigurator.service('infoService', function() {
     var service = this;
     service.index = null;
+    service.omitAnimation = false;
     service.toggle = function (index) {
-        console.log('current "' + service.index + '", new "' + index + '"');
-        service.index = service.index == index ? null : index;
-        console.log('current "' + service.index + '", new "' + index + '"');
+        service.omitAnimation = service.index !== null && service.index !== index;
+        service.index = service.index === index ? null : index;
     };
 
-    service.hide = function() {
-        console.log('current "' + service.index + '", closing');
+    service.hide = function () {
+        service.omitAnimation = false;
         service.index = null;
     };
 
-    service.show = function(index) {
+    service.visible = function(index) {
         return service.index === index;
+    };
+
+    service.any = function() {
+        return service.index !== null;
     };
 
     return service;

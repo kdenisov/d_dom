@@ -168,6 +168,10 @@ p {
     padding: 0 5px;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 /* ======= */
 /* Layout */
 
@@ -3524,14 +3528,23 @@ input.validation-field {
     margin-top: -22px;
 }
 
+.info-panel-container {
+    width: 336px;
+    height: 100%;
+    top: 0;
+    left: 310px;
+    overflow: hidden;
+    position: absolute;
+    z-index: 3000;
+}
+
 .info-panel {
     width: 336px;
     height: 100%;
     top: 0;
+    right: 0;
     background-color: white;
     color: black;
-    position: absolute;
-    z-index: 3000;
 }
 
 .info-panel > h2 {

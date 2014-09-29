@@ -57,9 +57,9 @@ angular.module('appConfigurator')
             }
         };
     })
-    .animation('.tree-view', function () {
+    .animation('.tree-view', function() {
         return {
-            removeClass: function (item, className, done) {
+            removeClass: function(item, className, done) {
                 if (className !== 'ng-hide') {
                     return animationCancelHandler(item);
                 }
@@ -70,7 +70,7 @@ angular.module('appConfigurator')
                 return animationCancelHandler(item);
             },
 
-            beforeAddClass: function (item, className, done) {
+            beforeAddClass: function(item, className, done) {
                 if (className !== 'ng-hide') {
                     return animationCancelHandler(item);
                 }
@@ -82,16 +82,16 @@ angular.module('appConfigurator')
             }
         };
     })
-    .animation('.aside-enter-leave', function () {
+    .animation('.aside-enter-leave', function() {
         return {
-            enter: function (item, done) {
+            enter: function(item, done) {
                 item = $(item);
                 item.css({ left: '-100%' });
                 item.animate({ left: 0 }, animationDuration, done);
                 return animationCancelHandler(item);
             },
 
-            leave: function (item, done) {
+            leave: function(item, done) {
                 item = $(item);
                 item.css({ left: 0 });
                 item.animate({ left: '-100%' }, animationDuration, done);
@@ -99,10 +99,10 @@ angular.module('appConfigurator')
             }
         };
     })
-    .animation('.menu-aside-popup', function () {
+    .animation('.menu-aside-popup', function() {
         var animationDuration = window.animationDuration / 2;
         return {
-            removeClass: function (item, className, done) {
+            removeClass: function(item, className, done) {
                 if (className !== 'ng-hide') {
                     return animationCancelHandler(item);
                 }
@@ -111,14 +111,14 @@ angular.module('appConfigurator')
                 var shade = $('.menu-aside-popup-shade');
                 item.css({ width: 0 });
                 shade.css({ opacity: 0 });
-                shade.animate({ opacity: 1 }, animationDuration, function () {
+                shade.animate({ opacity: 1 }, animationDuration, function() {
                     item.animate({ width: 203 }, animationDuration, done);
                 });
 
                 return animationCancelHandler(item);
             },
 
-            beforeAddClass: function (item, className, done) {
+            beforeAddClass: function(item, className, done) {
                 if (className !== 'ng-hide') {
                     return animationCancelHandler(item);
                 }
@@ -127,10 +127,74 @@ angular.module('appConfigurator')
                 var shade = $('.menu-aside-popup-shade');
                 item.css({ width: 203 });
                 shade.css({ opacity: 1 });
-                item.animate({ width: 0 }, animationDuration, function () {
+                item.animate({ width: 0 }, animationDuration, function() {
                     shade.animate({ opacity: 0 }, animationDuration, done);
                 });
 
+                return animationCancelHandler(item);
+            }
+        };
+    })
+    .animation('.info-panel-container', function() {
+        var cssShow = { width: 336 };
+        var cssHide = { width: 0 };
+
+        return {
+            removeClass: function(item, className, done) {
+                if (className !== 'ng-hide') {
+                    return animationCancelHandler(item);
+                }
+
+                item = $(item);
+                item.css(cssHide);
+                item.animate(cssShow, animationDuration, function() {
+                    done && done();
+                });
+                return animationCancelHandler(item);
+            },
+
+            beforeAddClass: function(item, className, done) {
+                if (className !== 'ng-hide') {
+                    return animationCancelHandler(item);
+                }
+
+                item = $(item);
+                item.css(cssShow);
+                item.animate(cssHide, animationDuration, function() {
+                    done && done();
+                });
+                return animationCancelHandler(item);
+            }
+        };
+    })
+    .animation('.info-panel', function() {
+        var cssShow = { opacity: 1 };
+        var cssHide = { opacity: 0 };
+
+        return {
+            removeClass: function(item, className, done) {
+                if (className !== 'ng-hide') {
+                    return animationCancelHandler(item);
+                }
+
+                item = $(item);
+                item.css(cssHide);
+                item.animate(cssShow, animationDuration, function() {
+                    done && done();
+                });
+                return animationCancelHandler(item);
+            },
+
+            beforeAddClass: function(item, className, done) {
+                if (className !== 'ng-hide') {
+                    return animationCancelHandler(item);
+                }
+
+                item = $(item);
+                item.css(cssShow);
+                item.animate(cssHide, animationDuration, function() {
+                    done && done();
+                });
                 return animationCancelHandler(item);
             }
         };
