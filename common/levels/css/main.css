@@ -81,8 +81,9 @@ body, html {
 .circle_title_ie8 {
   z-index: 2;
   position: relative;
-  top: 3px;
-  font-family: "GothamProMedium"; }
+  left: 2px;
+  font-family: "GothamProMedium";
+  margin-top: 3px; }
 
 .circle_title_ie {
   top: 0; }
