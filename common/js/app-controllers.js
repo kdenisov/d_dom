@@ -589,10 +589,13 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	        $scope.PARAMS.distinctValves.push(el);
 	}
 
-    $scope.GET_EXTERNAL_VIEW_ITEMS = function() {
+	$scope.UPDATE_EXTERNAL_VIEW_ITEMS = function () {
         var all = Configurator.params.room.radiators.externalView;
         var res = [];
         var preview = Configurator.params.room.radiators.valves[$scope.RADIATOR.valves - 1].preview;
+        var getItem = function(el) {
+            return { id: el.id, name: all[el.externalView - 1].name, hasExternalView: el.externalView < 4 || el.externalView > 5, externalView: el.externalView }
+        };
 
         if ($scope.RADIATOR.type == 1) {
             for (var i in Configurator.params.room.radiators.valves) {
@@ -605,7 +608,7 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
                         && el.controlType == $scope.RADIATORS.controlType
                 ) {
                     if (el.externalView > 0) {
-                        res.push({ id: el.id, name: all[el.externalView - 1].name });
+                        res.push(getItem(el));
                     }
                 }
             }
@@ -616,16 +619,59 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
                         && el.use == $scope.RADIATOR.use
                         && el.connectSide == $scope.RADIATOR.connectSide
                 ) {
-                    if (el.externalView > 0)
-                        res.push({ id: el.id, name: all[el.externalView - 1].name });
+                    if (el.externalView > 0) {
+                        res.push(getItem(el));
+                    }
                 }
             }
         }
-        return res;
-    };
+
+        $scope.EXTERNAL_VIEW_ITEMS = { items: res, any: res.length > 0, hasExternalView: res.length > 0 && res[0].hasExternalView };
+	    return $scope.EXTERNAL_VIEW_ITEMS;
+	};
+
+	$scope.UPDATE_EXTERNAL_VIEW_ITEMS();
 
     $scope.PREVIEW = function(valves) {
         return "common/img/radiator-preview/" + Configurator.params.room.radiators.valves[valves - 1].preview + ".png";
+    };
+
+    $scope.PREVIEW_VALVE = function(externalViewId, design) {
+        design = design && true;
+        var name = '';
+        switch (externalViewId) {
+        case 1:
+        {
+            name = 'valve-nickel';
+            break;
+        }
+        case 2:
+        {
+            name = 'valve-pressed';
+            break;
+        }
+        case 3:
+        {
+            name = design ? 'valve-design-chrome' : 'valve-chrome';
+            break;
+        }
+        case 6:
+        {
+            name = 'valve-design-white';
+            break;
+        }
+        case 7:
+        {
+            name = 'valve-design-stainless-steel';
+            break;
+        }
+        default:
+        {
+            name = 'valve-design-stainless-steel';
+        }
+        }
+
+        return 'common/img/info/' + name + '.png';
     };
 
     $scope.VIEW = function (radiator) {
