@@ -153,7 +153,7 @@
                                     <span class="pseudo-radio">
                                         <input type="radio" ng-model="RADIATOR.valves" ng-value="{{ITEM.id}}">
                                     </span>
-                                    <span class="title"><img src="{{PREVIEW_VALVE(ITEM.externalView)}}" title="{{ITEM.name}}" /><br>{{ITEM.name}}</span>
+                                    <span class="title"><img src="{{PREVIEW_VALVE(ITEM.externalView, true)}}" title="{{ITEM.name}}" /><br>{{ITEM.name}}</span>
                                 </label>
                             </div><!-- .selectbox -->
                         </div>
@@ -168,9 +168,10 @@
                                            ng-model="RADIATOR.connection"
                                            ng-value="{{ITEM.id}}"
                                            ng-change="
+                                        LOG(RADIATOR);
 										RADIATOR.builtinValve = (PARAMS.radiators.builtinValve | filter: {connection: RADIATOR.connection})[0].id;
 										RADIATOR.pipework = (PARAMS.radiators.pipework | filter: {connection: RADIATOR.connection})[0].id;
-										RADIATOR.valves = (PARAMS.radiators.valves | filter: ((RADIATOR.type == 1 && {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control}) || {use: RADIATOR.use}))[0].id;
+										RADIATOR.valves = (PARAMS.radiators.valves | filter: {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control})[0].id;
 										RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
                                         RADIATOR.preview_valves = RADIATOR.valves;
                                         UPDATE_EXTERNAL_VIEW_ITEMS();
@@ -180,7 +181,7 @@
                         </div>
                         <div class="field hidden-{{ RADIATOR.connection == 1 || RADIATORS.controlType == 2 }}">
                             <h3>Тип клапана радиатора <i class="icon-info" ng-click="INFO.toggle('valve')" ng-class="{'active' : INFO.visible('valve')}"></i><i class="info-pointer"></i></h3>
-                            <select ng-model="RADIATOR.builtinValve"
+                            <!--<select ng-model="RADIATOR.builtinValve"
                                     ng-options="ITEM.id as ITEM.name for ITEM in PARAMS.radiators.builtinValve | filter: {connection: RADIATOR.connection}"
                                     ng-change="
 								RADIATOR.control = (PARAMS.radiators.control | filter: {builtinValve: RADIATOR.builtinValve})[0].id;
@@ -188,7 +189,24 @@
                                 RADIATOR.preview_valves = RADIATOR.valves;
                                 RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
                                 UPDATE_EXTERNAL_VIEW_ITEMS();
-							"></select>
+							"></select>-->
+                            
+                            <div class="selectbox clearfix">
+                                <label class="option-{{RADIATOR.builtinValve == ITEM.id}}" 
+                                       ng-repeat="ITEM in PARAMS.radiators.builtinValve | filter: {connection: RADIATOR.connection}">
+                                    <span class="pseudo-radio">
+                                        <input type="radio" ng-model="RADIATOR.builtinValve" ng-value="{{ITEM.id}}"
+                                               ng-change="
+								                RADIATOR.control = (PARAMS.radiators.control | filter: {builtinValve: RADIATOR.builtinValve})[0].id;
+								                RADIATOR.valves = (PARAMS.radiators.valves | filter: {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control})[0].id;
+                                                RADIATOR.preview_valves = RADIATOR.valves;
+                                                RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
+                                                UPDATE_EXTERNAL_VIEW_ITEMS();
+                                               " />
+                                    </span>
+                                    <span class="title"><img ng-src="common/img/info/{{ITEM.id === 2 ? 'valve-ra' : 'valve-m30x1,5'}}.png" title="{{ITEM.name}}" /><br>{{ITEM.name}}</span>
+                                </label>
+                            </div><!-- .selectbox -->
                         </div>
                         <div class="field">
                             <h3>Разводка трубопроводов <i class="icon-info" ng-click="INFO.toggle('interconnection')" ng-class="{'active' : INFO.visible('interconnection')}"></i><i class="info-pointer"></i></h3>
@@ -227,8 +245,9 @@
                                                ng-model="RADIATOR.preview_valves"
                                                ng-value="{{ITEM.id}}"
                                                ng-change="
-                                               RADIATOR.valves = RADIATOR.preview_valves;
-                                               RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
+                                                RADIATOR.valves = RADIATOR.preview_valves;
+                                                RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
+                                                UPDATE_EXTERNAL_VIEW_ITEMS();
                                                ">
                                     </span>
                                     <span class="title"><img src="{{PREVIEW(ITEM.id)}}" title="{{ITEM.name}}" /></span>

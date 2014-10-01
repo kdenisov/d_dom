@@ -29,8 +29,8 @@ var APP_PARAMS = {
             ],
             builtinValve: [
                 {id: 1, connection: [1,2], name: 'Нет'},
-                {id: 2, connection: 2, name: 'RA'},
-                {id: 3, connection: 2, name: 'M30x1,5'}
+                {id: 2, connection: 2, name: 'Клипсовый RA'},
+                {id: 3, connection: 2, name: 'Резьбовой M30x1,5'}
             ],
             pipework: [
                 { id: 1, connection: [1, 2], name: 'В полу' },

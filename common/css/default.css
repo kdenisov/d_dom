@@ -413,7 +413,7 @@ body {
 	position: absolute;
 	top: 0;
 	right: 0;
-    z-index: 2;
+    z-index: 7000;
 }
 .basket-opened {
 	height: 100%;
@@ -766,6 +766,7 @@ label.tab-item-add {
     height: 100%;
     min-height: 500px;
     overflow: auto;
+    z-index: 1;
 }
 
 .grid {
@@ -1406,7 +1407,6 @@ a.collector-item {
 
 .info-trigger {
     position: absolute;
-    z-index: 2000;
     left: 50%;
 }
 
@@ -3535,7 +3535,7 @@ input.validation-field {
     left: 310px;
     overflow: hidden;
     position: absolute;
-    z-index: 3000;
+    z-index: 7200;
 }
 
 .info-panel {
@@ -3630,11 +3630,11 @@ input.validation-field {
     height: 100%;
     background-color: white;
     background-color: rgba(255, 255, 255, 0.7);
-    z-index: 900;
+    z-index: 7100;
 }
 
 .layover {
-    z-index: 1000;
+    z-index: 7200;
 }
 .layover-msg {
     width: auto;
@@ -3648,7 +3648,7 @@ input.validation-field {
     color: white;
     background-color: #01b06d;
     text-align: center;
-    z-index: 1100;
+    z-index: 7300;
 }
 .layover-msg > i {
     border: 8px solid transparent;

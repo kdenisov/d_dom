@@ -590,41 +590,42 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	}
 
 	$scope.UPDATE_EXTERNAL_VIEW_ITEMS = function () {
-        var all = Configurator.params.room.radiators.externalView;
-        var res = [];
-        var preview = Configurator.params.room.radiators.valves[$scope.RADIATOR.valves - 1].preview;
-        var getItem = function(el) {
-            return { id: el.id, name: all[el.externalView - 1].name, hasExternalView: el.externalView < 4 || el.externalView > 5, externalView: el.externalView }
-        };
 
-        if ($scope.RADIATOR.type == 1) {
-            for (var i in Configurator.params.room.radiators.valves) {
-                var el = Configurator.params.room.radiators.valves[i];
-                if (el.preview == preview
+	    var getItem = function (el) {
+	        return { id: el.id, name: all[el.externalView - 1].name, hasExternalView: el.externalView < 4 || el.externalView > 5, externalView: el.externalView }
+	    };
+
+	    var all = Configurator.params.room.radiators.externalView;
+	    var res = [];
+	    var preview = Configurator.params.room.radiators.valves[$scope.RADIATOR.valves - 1].preview;
+
+	    if ($scope.RADIATOR.type == 1) {
+	        for (var i in Configurator.params.room.radiators.valves) {
+	            var el = Configurator.params.room.radiators.valves[i];
+	            if (el.preview == preview
                         && el.type == $scope.RADIATOR.type
                         && el.connection == $scope.RADIATOR.connection
                         && el.builtinValve == $scope.RADIATOR.builtinValve
                         && el.pipework == $scope.RADIATOR.pipework
                         && el.controlType == $scope.RADIATORS.controlType
                 ) {
-                    if (el.externalView > 0) {
-                        res.push(getItem(el));
-                    }
-                }
-            }
-        } else {
-            for (var i in Configurator.params.room.radiators.valves) {
-                var el = Configurator.params.room.radiators.valves[i];
-                if (el.type == $scope.RADIATOR.type
+	                if (el.externalView > 0) {
+	                    res.push(getItem(el));
+	                }
+	            }
+	        }
+	    } else {
+	        for (var i in Configurator.params.room.radiators.valves) {
+	            var el = Configurator.params.room.radiators.valves[i];
+	            if (el.type == $scope.RADIATOR.type
                         && el.use == $scope.RADIATOR.use
                         && el.connectSide == $scope.RADIATOR.connectSide
                 ) {
-                    if (el.externalView > 0) {
-                        res.push(getItem(el));
-                    }
-                }
-            }
-        }
+	                if (el.externalView > 0)
+	                    res.push(getItem(el));
+	            }
+	        }
+	    }
 
         $scope.EXTERNAL_VIEW_ITEMS = { items: res, any: res.length > 0, hasExternalView: res.length > 0 && res[0].hasExternalView };
 	    return $scope.EXTERNAL_VIEW_ITEMS;
@@ -981,7 +982,9 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
     };
 
     $scope.ROOM_CONTROLS = new RoomControls();
-
+    $scope.LOG = function(o) {
+        console.log(o);
+    };
 	setCustomScroll();
 });
 
