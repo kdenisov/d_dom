@@ -617,6 +617,7 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
                         && el.builtinValve == $scope.RADIATOR.builtinValve
                         && el.pipework == $scope.RADIATOR.pipework
                         && el.controlType == $scope.RADIATORS.controlType
+                        && (el.connectSide === 0 || el.connectSide == $scope.RADIATOR.connectSide)
                 ) {
 	                if (el.externalView > 0) {
 	                    res.push(getItem(el));
