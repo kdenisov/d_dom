@@ -301,10 +301,18 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                 var roomEquipment = {
                     id: roomInstance.id,
                     levelId: levelInstance.id,
+                    boiler: { active: false },
                     thermostats: [],
                     radiators: [],
                     floors: 0
                 };
+
+                if (roomInstance.isBoilerRoom) {
+                    roomEquipment.boiler.active = Configurator.boiler.isBoiler;
+                    roomEquipment.boiler.title = Configurator.boiler.embodiment == 1 ? '1-контурный' : '2-контурный';
+                    roomEquipment.boiler.pump = Configurator.boiler.embodiment == 1 ? Configurator.params.boiler.pump[Configurator.boiler.pump - 1].name : null;
+                    roomEquipment.boiler.src = 'common/img/info/boiler-' + (Configurator.boiler.embodiment == 1 ? 1 : 2) + '-contour.png';
+                }
 
                 if (roomInstance.radiators.controlType == 2 && roomInstance.radiators.commonControl) {
                     var control = Configurator.params.room.radiators.control[roomInstance.radiators.commonControl - 1];

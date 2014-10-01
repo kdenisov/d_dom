@@ -22,8 +22,12 @@
         <h2>Оборудование в комнате</h2>
         <div class="group">
             <div class="room-controls" ng-repeat="thermostat in room.thermostats">
-                <img ng-src="{{thermostat.src}}" alt="thermostat.title" />
+                <img ng-src="{{thermostat.src}}" alt="{{thermostat.title}}" />
                 <div>{{thermostat.title}}</div>
+            </div>
+            <div class="room-controls" ng-if="room.boiler.active">
+                <img ng-src="{{room.boiler.src}}" alt="Котел {{room.boiler.title}}"/>
+                <div>Котел {{room.boiler.title}} <span ng-if="room.boiler.pump !== null">({{room.boiler.pump}})</span></div>
             </div>
         </div>
         <div class="group radiator-type" ng-repeat="radiator in room.radiators">
