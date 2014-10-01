@@ -192,17 +192,12 @@
 							"></select>-->
                             
                             <div class="selectbox clearfix">
-                                <label class="option-{{RADIATOR.builtinValve == ITEM.id}}" 
-                                       ng-repeat="ITEM in PARAMS.radiators.builtinValve | filter: {connection: RADIATOR.connection}">
+                                <label class="option-{{RADIATOR.builtinValve == ITEM.id}}"
+                                       ng-repeat="ITEM in PARAMS.radiators.builtinValve | filter: {connection: RADIATOR.connection}"
+                                       ng-show="ITEM.id > 1"
+                                       ng-click="$event.preventDefault(); SET_BUILTIN_VALVE(ITEM.id);">
                                     <span class="pseudo-radio">
-                                        <input type="radio" ng-model="RADIATOR.builtinValve" ng-value="{{ITEM.id}}"
-                                               ng-change="
-								                RADIATOR.control = (PARAMS.radiators.control | filter: {builtinValve: RADIATOR.builtinValve})[0].id;
-								                RADIATOR.valves = (PARAMS.radiators.valves | filter: {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control})[0].id;
-                                                RADIATOR.preview_valves = RADIATOR.valves;
-                                                RADIATOR.fittingsType = PARAMS.radiators.valves[RADIATOR.valves-1].fittingsType;
-                                                UPDATE_EXTERNAL_VIEW_ITEMS();
-                                               " />
+                                        <input type="radio" ng-model="RADIATOR.builtinValve" ng-value="{{ITEM.id}}" />
                                     </span>
                                     <span class="title"><img ng-src="common/img/info/{{ITEM.id === 2 ? 'valve-ra' : 'valve-m30x1,5'}}.png" title="{{ITEM.name}}" /><br>{{ITEM.name}}</span>
                                 </label>

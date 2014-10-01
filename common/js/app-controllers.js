@@ -434,7 +434,7 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
     //setCustomScroll();
 });
 
-appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams, Configurator, levelsService, alertService, $modal, $timeout) {
+appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams, Configurator, levelsService, alertService, $modal) {
     $scope.MODEL = levelsService;
 
     $scope.EDITED_COLLECTOR = null;
@@ -538,7 +538,7 @@ appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams,
     setCustomScroll();
 });
 
-appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, CottageTree, alertService, infoService, $modal, $location, $timeout) {
+appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, CottageTree, alertService, infoService, $modal, $location, $timeout, $filter) {
 	var
 		level = Configurator.levels[$stateParams.levelId - 1],
 		room = level.rooms[$stateParams.roomId - 1]
@@ -642,6 +642,16 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 	};
 
 	$scope.UPDATE_EXTERNAL_VIEW_ITEMS();
+
+    $scope.SET_BUILTIN_VALVE = function(builtInValveId) {
+        var radiator = $scope.RADIATOR;
+        radiator.builtinValve = radiator.builtinValve === builtInValveId ? 1 : builtInValveId;
+        radiator.control = $filter('filter')($scope.PARAMS.radiators.control, { builtinValve: radiator.builtinValve })[0].id;
+        radiator.valves = $filter('filter')($scope.PARAMS.radiators.valves, { type: 1, connection: radiator.connection, builtinValve: radiator.builtinValve, pipework: radiator.pipework, control: radiator.control })[0].id;
+        radiator.preview_valves = radiator.valves;
+        radiator.fittingsType = $scope.PARAMS.radiators.valves[radiator.valves - 1].fittingsType;
+        $scope.UPDATE_EXTERNAL_VIEW_ITEMS();
+    };
 
     $scope.PREVIEW = function(valves) {
         return "common/img/radiator-preview/" + Configurator.params.room.radiators.valves[valves - 1].preview + ".png";
