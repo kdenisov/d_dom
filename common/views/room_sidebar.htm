@@ -168,7 +168,6 @@
                                            ng-model="RADIATOR.connection"
                                            ng-value="{{ITEM.id}}"
                                            ng-change="
-                                        LOG(RADIATOR);
 										RADIATOR.builtinValve = (PARAMS.radiators.builtinValve | filter: {connection: RADIATOR.connection})[0].id;
 										RADIATOR.pipework = (PARAMS.radiators.pipework | filter: {connection: RADIATOR.connection})[0].id;
 										RADIATOR.valves = (PARAMS.radiators.valves | filter: {type: 1, connection: RADIATOR.connection, builtinValve: RADIATOR.builtinValve, pipework: RADIATOR.pipework, control: RADIATOR.control})[0].id;

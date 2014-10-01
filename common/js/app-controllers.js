@@ -326,7 +326,7 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
 
                 for (var radIndex = 0; radIndex < roomInstance.radiators.list.length; radIndex++) {
                     var radiatorType = roomInstance.radiators.list[radIndex];
-                    control = radiatorType.control > 4 ? null : Configurator.params.room.radiators.control[radiatorType.control - 1];
+                    control = radiatorType.type != 1 || radiatorType.control > 4 ? null : Configurator.params.room.radiators.control[radiatorType.control - 1];
                     var valves = Configurator.params.room.radiators.valves[radiatorType.valves - 1];
                     if (radiatorType.count > 0) {
                         roomEquipment.radiators.push({
