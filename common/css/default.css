@@ -2991,6 +2991,7 @@ table.summary-merchandise .rub {
 
 .summary-card-tab-content .tech table td:first-child {
     width: 375px;
+    font-weight: 500;
 }
 
 
