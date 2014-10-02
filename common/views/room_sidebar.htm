@@ -45,7 +45,7 @@
                     </label>
                 </div>
                 <div class="field" ng-if="RADIATORS.controlType == 2 && RADIATOR.type == 1">
-                    <h3>Термостат <i class="icon-info" ng-class="{'active' : INFO.visible('commonthermostat')}" ng-click="INFO.toggle('commonthermostat')"></i><i class="info-pointer"></i></h3>
+                    <h3>Комнатный термостат <i class="icon-info" ng-class="{'active' : INFO.visible('commonthermostat')}" ng-click="INFO.toggle('commonthermostat')"></i><i class="info-pointer"></i></h3>
                     <div class="selectbox clearfix">
                         <label class="option-{{RADIATORS.commonControl == ITEM.id}}"
                                ng-repeat="ITEM in PARAMS.radiators.control | filter: {controlType: RADIATORS.controlType}">
@@ -205,7 +205,15 @@
                         </div>
                         <div class="field hidden-{{!EXTERNAL_VIEW_ITEMS.any}}" ng-if="!EXTERNAL_VIEW_ITEMS.hasExternalView">
                             <h3>Диаметр патрубков <i class="icon-info" ng-click="INFO.toggle('valves')" ng-class="{'active' : INFO.visible('valves')}"></i><i class="info-pointer"></i></h3>
-                            <select ng-options="ITEM.id as ITEM.name for ITEM in EXTERNAL_VIEW_ITEMS.items" ng-model="RADIATOR.valves"></select>
+                            <!--<select ng-options="ITEM.id as ITEM.name for ITEM in EXTERNAL_VIEW_ITEMS.items" ng-model="RADIATOR.valves"></select>-->
+                            <div class="choicebox">
+                                <label ng-repeat="ITEM in EXTERNAL_VIEW_ITEMS.items" ng-class="{'choicebox-true': ITEM.id == RADIATOR.valves }">
+                                    {{ITEM.name}}
+                                    <input type="radio"
+                                           ng-model="RADIATOR.valves"
+                                           ng-value="{{ITEM.id}}">
+                                </label>
+                            </div>
                         </div>
                         <div class="field">
                             <h3>Разводка трубопроводов <i class="icon-info" ng-click="INFO.toggle('interconnection')" ng-class="{'active' : INFO.visible('interconnection')}"></i><i class="info-pointer"></i></h3>
@@ -284,7 +292,7 @@
                     </div>
                 </div>
                 <div class="field hidden-{{RADIATOR.fittingsType == 0}}">
-                    <h3>Комплектация <i class="icon-info" ng-click="INFO.toggle('complect')" ng-class="{'active' : INFO.visible('complect')}"></i><i class="info-pointer"></i></h3>
+                    <h3>Фиттинги <i class="icon-info" ng-click="INFO.toggle('complect')" ng-class="{'active' : INFO.visible('complect')}"></i><i class="info-pointer"></i></h3>
                     <div class="selectbox merged clearfix">
                         <label class="label-checkbox checkbox-{{RADIATOR.fittings != 0}}">
                             <span class="pseudo-checkbox"></span>

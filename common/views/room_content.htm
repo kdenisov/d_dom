@@ -7,7 +7,11 @@
 <div class="room">
     <h1 ng-if="!BOILER_VISIBLE()" class="edit-mode-{{EDITOR.editMode}}"><b><a ng-href="{{LINK_RETURN}}">&lt;</a></b><label ng-click="EDITOR.editMode = true"><span>{{ROOM.name}}</span><input type="text" ng-model="ROOM.name" ng-blur="EDITOR.editMode = false" ng-keyup="EDITOR.pressEnter($event)"></label><a class="delete" ng-href="{{LINK_RETURN}}" ng-click="DELETE_ROOM($event)"></a></h1>
     <h1 ng-if="BOILER_VISIBLE()"><b><a ng-href="{{LINK_RETURN}}">&lt;</a></b>{{BOILER.canonicalName()}}</h1>
-    <div class="info">Уточните количество радиаторов в&nbsp;комнате и&nbsp;какого они типа</div>
+
+    <div class="info" ng-if="ROOM_CONTROLS.sectionIs('radiators')">Настройте подключение радиаторов и способы регулирования температуры в помещении.</div>
+    <div class="info" ng-if="ROOM_CONTROLS.sectionIs('floors')">Настройте способ регулирования температуры теплого пола в помещении.</div>
+    <div class="info" ng-if="ROOM_CONTROLS.sectionIs('boiler')">Выберите тип котла и узла обвязки.</div>
+    
     <div class="radiators current-item-{{RADIATORS.current}}" ng-class="{'boiler-focus' : BOILER_FOCUS}">
         <div class="item type-boiler" ng-if="BOILER_VISIBLE()" ng-class="{'alt': BOILER.embodiment==2}">
             <div class="info-trigger boiler pointer" title="Котельная" ng-click="ROOM_CONTROLS.toBoiler()"></div>
@@ -28,13 +32,13 @@
     <div class="is-floors-{{FLOORS.isFloors}} pointer" title="Теплые полы" ng-click="ROOM_CONTROLS.toFloor()"></div>
     <div class="radiator-info-trigger pointer" title="Комнатный термостат" ng-class="ROOM_CONTROLS.cssRadiatorsCommon(RADIATORS)" ng-click="ROOM_CONTROLS.toCommonThermostat();">
         <img ng-if="RADIATORS.commonControl && RADIATORS.commonControl >= 7 && RADIATORS.commonControl <= 8" class="wi-fi" alt="" src="common/img/wi-fi-indicator.png" />
-        <div class="layover-msg" style="margin-left: -70px; top:0; margin-top: -50px; width: 115px;" ng-show="INFO.visible('commonthermostat') || INFO.visible('thermocontrol')">
+        <div class="layover-msg" style="margin-left: -70px; top:0; margin-top: -70px; width: 115px;" ng-show="INFO.visible('commonthermostat') || INFO.visible('thermocontrol')">
             Общее в комнате
             <i></i>
         </div>
     </div>
     <div class="floor-control-{{FLOORS.isFloors}} floor-control-{{FLOORS.control}} floor-info-trigger pointer" title="Термостат теплых полов" ng-class="{ 'layover' : INFO.visible('floorcontrol') }" ng-click="ROOM_CONTROLS.toFloorThermostat();">
-        <div class="layover-msg" style="margin-left: -70px; top:0; margin-top: -50px; width: 115px;" ng-show="INFO.visible('floorcontrol')">
+        <div class="layover-msg" style="margin-left: -70px; top:0; margin-top: -70px; width: 115px;" ng-show="INFO.visible('floorcontrol')">
             Для теплых полов
             <i></i>
         </div>

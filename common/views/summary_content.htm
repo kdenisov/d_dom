@@ -1,5 +1,5 @@
 ﻿<div class="summary-page" ng-show="MODEL.visible(1)">
-    <h2>Информация по заказу<!-- № {{PAGE_GENERAL.orderNum}}--> </h2>
+    <h2>Описание системы отопления<!-- № {{PAGE_GENERAL.orderNum}}--> </h2>
 
     <div id="summary-icons">
         <!--<a href="/#/summary/print" class="print"></a>-->
@@ -30,7 +30,7 @@
 </div>
 
 <div class="summary-page" ng-show="MODEL.visible(2)">
-    <h2>Схема дома</h2>
+    <h2>Схема системы отопления</h2>
 
     <div id="summary-icons">
         <!--<a href="/#/summary/print" class="print"></a>-->
@@ -72,8 +72,56 @@
     </div>
 </div>
 
+
 <div class="summary-page" ng-show="MODEL.visible(3)">
-    <h2 class="no-border">Набор товаров</h2>
+    <h2 class="no-border">Спецификация системы отопления с группировкой по помещениям</h2>
+
+    <div id="summary-icons">
+        <!--<a href="/#/summary/print" class="print"></a>-->
+        <!--<a href="/#/summary/download" class="download"></a>-->
+    </div>
+
+    <table class="summary-merchandise">
+        <tbody ng-repeat="level in PAGE_INSTALLATION.levels">
+            <tr class="summary-merchandise-level">
+                <td colspan="3">{{level.title}}</td>
+                <td class="qty">Кол-во</td>
+                <td>Сумма</td>
+            </tr>
+            <tr ng-repeat-start="group in level.groups" class="summary-merchandise-group">
+                <td colspan="5">{{group.title}}</td>
+            </tr>
+            <tr ng-repeat="item in group.items" ng-repeat-end>
+                <td>
+                    <img class="thumb" ng-src="{{CATALOG[item.title].image}}?w=55&h=55&mode=pad" alt="{{CATALOG[item.title].name}}" />
+                </td>
+                <td>{{item.title}}</td>
+                <td>
+                    {{CATALOG[item.title].name}}
+                </td>
+                <td class="qty">
+                    {{item.count | number:0 | ceilNumber}}
+                </td>
+                <td>
+                    {{CATALOG[item.title].price * item.count | number:0 | formatNumber}} <span class="rub">руб.</span>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">Итого</td>
+                <td>{{BASKET_TOTAL_PRICE()}} <span class="rub">руб.</span></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="summary-footer">
+        <a href="/#/summary/4" ng-click="MODEL.setPage(5, $event);">Карточки товаров <i class="icon-next"></i></a>
+    </div>
+</div>
+
+<div class="summary-page" ng-show="MODEL.visible(4)">
+    <h2 class="no-border">Спецификация системы отопления</h2>
 
     <div id="summary-icons">
         <!--<a href="/#/summary/print" class="print"></a>-->
@@ -116,62 +164,13 @@
     </table>
     
     <div class="summary-footer">
-        <a href="/#/summary/4" ng-click="MODEL.setPage(4, $event);">Куда устанавливать <i class="icon-next"></i></a>
-    </div>
-</div>
-
-
-
-<div class="summary-page" ng-show="MODEL.visible(4)">
-    <h2 class="no-border">Куда устанавливать</h2>
-
-    <div id="summary-icons">
-        <!--<a href="/#/summary/print" class="print"></a>-->
-        <!--<a href="/#/summary/download" class="download"></a>-->
-    </div>
-
-    <table class="summary-merchandise">
-        <tbody ng-repeat="level in PAGE_INSTALLATION.levels">
-            <tr class="summary-merchandise-level">
-                <td colspan="3">{{level.title}}</td>
-                <td class="qty">Кол-во</td>
-                <td>Сумма</td>
-            </tr>
-            <tr ng-repeat-start="group in level.groups" class="summary-merchandise-group">
-                <td colspan="5">{{group.title}}</td>
-            </tr>
-            <tr ng-repeat="item in group.items" ng-repeat-end>
-                <td>
-                    <img class="thumb" ng-src="{{CATALOG[item.title].image}}?w=55&h=55&mode=pad" alt="{{CATALOG[item.title].name}}" />
-                </td>
-                <td>{{item.title}}</td>
-                <td>
-                     {{CATALOG[item.title].name}}
-                </td>
-                <td class="qty">
-                    {{item.count | number:0 | ceilNumber}}
-                </td>
-                <td>
-                    {{CATALOG[item.title].price * item.count | number:0 | formatNumber}} <span class="rub">руб.</span>
-                </td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4">Итого</td>
-                <td>{{BASKET_TOTAL_PRICE()}} <span class="rub">руб.</span></td>
-            </tr>
-        </tfoot>
-    </table>
-
-    <div class="summary-footer">
-        <a href="/#/summary/5" ng-click="MODEL.setPage(5, $event);">Карточки товаров <i class="icon-next"></i></a>
+        <a href="/#/summary/5" ng-click="MODEL.setPage(4, $event);">Куда устанавливать <i class="icon-next"></i></a>
     </div>
 </div>
 
 
 <div class="summary-page" ng-show="MODEL.visible(5)">
-    <h2 class="no-border">Карточки товаров</h2>
+    <h2 class="no-border">Описание оборудования</h2>
 
     <div id="summary-icons">
         <!--<a href="/#/summary/print" class="print"></a>-->

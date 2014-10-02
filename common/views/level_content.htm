@@ -1,17 +1,8 @@
 <div class="grid">
     <h1>
-        Параметры<br>
-        <span ng-switch on="MODEL.level.isBasement">
-            <span ng-switch-when="true">подвала</span>
-            <span ng-switch-default ng-switch on="MODEL.level.id">
-                <span ng-switch-when="1">первого</span>
-                <span ng-switch-when="2">второго</span>
-                <span ng-switch-when="3">третьего</span>
-                этажа
-            </span>
-        </span>
+        {{MODEL.level.canonicalName()}}
     </h1>
-    <div class="info">Уточните количество коллекторов и&nbsp;отапливаемых <br>комнат в&nbsp;вашем доме</div>
+    <div class="info">Настройте систему отопления в помещениях<br> в соответствии с Вашими предпочтениями</div>
     <div id="levels">
 
     </div>

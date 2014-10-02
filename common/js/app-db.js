@@ -42,7 +42,7 @@ var APP_PARAMS = {
                 {id: 2, name: 'Полотенцесушитель'}
             ],
             control: [
-                { id: 1, builtinValve: [1, 2], previewPrefix: 'living_Eco', preview:'config-prod-living-eco.png', controlType: 1, name: 'Living eco RA', basket: [['014G0050', 1]] },
+                { id: 1, builtinValve: [1, 2], previewPrefix: 'living_Eco', preview:'config-prod-living-eco.png', controlType: 1, name: 'Living eco', basket: [['014G0050', 1]] },
                 { id: 2, builtinValve: [1, 2], previewPrefix: 'RA2994', controlType: 1, preview: 'config-prod-ra.png', name: 'RA2994', basket: [['013G2994', 1]] },
                 { id: 3, builtinValve: 3, previewPrefix: 'living_Eco', controlType: 1, preview: 'config-prod-living-eco.png', name: 'Living eco RA+K', basket: [['014G0052', 1]] },
                 { id: 4, builtinValve: 3, previewPrefix: 'RAW-K', controlType: 1, preview: 'config-prod-raw-k.png', name: 'RAW-K', basket: [['013G5030', 1]] },
@@ -55,8 +55,8 @@ var APP_PARAMS = {
                 { id: 1, name: 'Никелированный' },
                 { id: 2, name: 'Прессовое соединение' },
                 { id: 3, name: 'Хромированный' },
-                { id: 4, name: 'Радиатор G1/2"' },
-                { id: 5, name: 'Радиатор G3/4"' },
+                { id: 4, name: 'G½ или G¾' },
+                { id: 5, name: 'G¾' },
                 { id: 6, name: 'Холодно белый' },
                 { id: 7, name: 'Нержавеющая сталь' }
             ],
@@ -234,8 +234,8 @@ var APP_PARAMS = {
             {id: 2, name: 'Газовая колонка'}
         ],
         pump: [
-            {id: 1, name: 'UPS 25-60', basket: [['004F5877', 1]]},
-            {id: 2, name: 'Alpha2 25-60', basket: [['004F4592', 1]]}
+            { id: 1, name: 'DSM-BPU 2xUPS 25-60', basket: [['004F5877', 1]] },
+            { id: 2, name: 'DSM-BPU 2xAlpha2 L 25-60', basket: [['004F4592', 1]] }
         ]
     },
     fittingsMaterial:[

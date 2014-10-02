@@ -1,6 +1,7 @@
 <div class="collector">
     <h1><b><a ng-href="{{LINK_RETURN}}">&lt;</a></b>{{TITLE}}</h1>
-    <div class="info">Уточните количество коллекторов и&nbsp;отапливаемых комнат в&nbsp;вашем доме</div>
+    <div class="info" ng-if="COLLECTOR.type=='radiator'">Настройте комплектацию коллектора и подключение этажей</div>
+    <div class="info" ng-if="COLLECTOR.type=='floor'">Настройте комплектацию  коллектора, узла смешения и подключение этажей</div>
     <div class="collector-panel">
         <div class="collector-slider">
             <div class="collector-frame">
@@ -122,6 +123,9 @@
                 <h3>
                     <span>Узел FHM-C6</span> <img src="common/img/products/config-prod-FHM-C6.png" alt="Узел FHM-C6" />
                 </h3>
+                <p class="price">
+                    {{PRICE.get('088U0096')}}
+                </p>
                 <p>
                     на базе трехскоростного насоса UPS 15-60
                 </p>
@@ -130,6 +134,9 @@
                 <h3>
                     <span>Узел FHM-C8</span> <img src="common/img/products/config-prod-FHM-C8-9.png" alt="Узел FHM-C8" />
                 </h3>
+                <p class="price">
+                    {{PRICE.get('088U0098')}}
+                </p>
                 <p>
                     на базе энергоэффективного насоса Alpha2 15-60 с частотным приводом
                 </p>

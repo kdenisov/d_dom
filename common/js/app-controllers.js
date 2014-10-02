@@ -317,7 +317,7 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                 if (roomInstance.radiators.controlType == 2 && roomInstance.radiators.commonControl) {
                     var control = Configurator.params.room.radiators.control[roomInstance.radiators.commonControl - 1];
                     roomEquipment.thermostats.push({
-                        title: 'Комнатный термостат',
+                        title: control.name,
                         src: 'common/img/products/' + control.preview,
                     });
                 }
@@ -538,7 +538,7 @@ appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams,
     setCustomScroll();
 });
 
-appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, CottageTree, alertService, infoService, $modal, $location, $timeout, $filter) {
+appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configurator, Editor, CottageTree, alertService, infoService, priceCatalog, $modal, $location, $timeout, $filter) {
 	var
 		level = Configurator.levels[$stateParams.levelId - 1],
 		room = level.rooms[$stateParams.roomId - 1]
@@ -918,10 +918,18 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 
     $scope.INFO = infoService;
 
+    $scope.PRICE = priceCatalog;
+
     var RoomControls = function () {
         var controls = this;
-        var setTab = function (index) {
+
+        var getTabsScope = function() {
             var scope = angular.element('#room-tabs').scope();
+            return scope;
+        };
+
+        var setTab = function (index) {
+            var scope = getTabsScope();
             scope && (scope.tabs.index = index);
         };
 
@@ -997,14 +1005,30 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
             cssClass += ' thermo-' + radiators.commonControl;
             return cssClass;
         };
+
+        controls.sectionIs = function(sectionName) {
+            var scope = getTabsScope();
+            if (!scope) {
+                return false;
+            }
+
+            switch (scope.tabs.index) {
+            case 1:
+                return 'radiators' === sectionName;
+            case 2:
+                return 'floors' === sectionName;
+            case 3:
+                return 'boiler' === sectionName;
+            default:
+                return false;
+            }
+        };
         
         return controls;
     };
 
     $scope.ROOM_CONTROLS = new RoomControls();
-    $scope.LOG = function(o) {
-        console.log(o);
-    };
+
 	setCustomScroll();
 });
 
@@ -1076,7 +1100,7 @@ appConfigurator.controller('BoilerCtrl', function($scope, Configurator, $statePa
 	setCustomScroll();
 });
 
-appConfigurator.controller('CollectorCtrl', function($scope, Configurator, infoService, $stateParams, $modal, $timeout){
+appConfigurator.controller('CollectorCtrl', function($scope, Configurator, infoService, priceCatalog, $stateParams, $modal, $timeout){
 	var
 		level = Configurator.levels[$stateParams.levelId - 1],
 		collector = level.collectors[$stateParams.collectorId - 1]
@@ -1349,6 +1373,8 @@ appConfigurator.controller('CollectorCtrl', function($scope, Configurator, infoS
 
     $scope.INFO = infoService;
 
+    $scope.PRICE = priceCatalog;
+
     var Controls = function() {
         var controls = this;
 
@@ -1481,8 +1507,9 @@ appConfigurator.controller('SummaryCtrl', function ($scope, $filter, $stateParam
 
     var getMenuPointerTop = function (selectedIndex) {
         var dh = 58;
+        var dh2 = 16;
         var h0 = 25;
-        return selectedIndex * dh + h0;
+        return selectedIndex * dh + h0 + (selectedIndex >= 3 ? dh2 : 0);
     };
 
 
@@ -2366,7 +2393,7 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
 
 
 appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, infoService, Configurator, CottageTree, levelsService) {
-    $scope.BASE_PAGE = { title: 'Конфигуратор' };
+    $scope.BASE_PAGE = { title: 'Список помещений' };
 
     var save = function () {
         $.ajax({
@@ -2478,12 +2505,12 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
         CottageTree.resetCurrentRoom();
         infoService.hide();
         if (toUrl.indexOf('#/summary') >= 0) {
-            $scope.BASE_PAGE.title = 'Информация по заказу';
+            $scope.BASE_PAGE.title = 'Проект отопления';
             $scope.TREE.hidden = true;
             $scope.TREE.open = false;
             $scope.BASKET_HIDDEN = true;
         } else {
-            $scope.BASE_PAGE.title = 'Конфигуратор';
+            $scope.BASE_PAGE.title = 'Список помещений';
             $scope.TREE.hidden = false;
             $scope.BASKET_HIDDEN = false;
         }
@@ -2591,6 +2618,30 @@ appConfigurator.service('infoService', function() {
 
     service.any = function() {
         return service.index !== null;
+    };
+
+    return service;
+});
+
+appConfigurator.service('priceCatalog', function(Catalog, $filter) {
+    var service = this;
+    service.catalog = [];
+    Catalog.fetch()
+        .then(function(data) {
+            service.catalog = data;
+        });
+
+    service.get = function(code) {
+        var price = 0;
+        if (service.catalog && service.catalog[code]) {
+            price = service.catalog[code].price;
+        }
+
+        if (price) {
+            return $filter('formatNumber')(price) + ' руб.';
+        }
+
+        return '';
     };
 
     return service;

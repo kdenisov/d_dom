@@ -37,7 +37,7 @@
         </div>
     </div>
 	<div class="group clearfix">
-		<h3>Расположение котельной</h3>
+		<h3>Расположение котла</h3>
 		<div class="radio left hidden-{{!LEVELS[2].isBasement}}">
 			<label ng-repeat="LEVEL in LEVELS | filter: {id: '1,3'}:multipleValues" class="radio-{{LEVEL.id == BOILER.level}} hidden-{{!LEVEL.isLevel}}"><input type="radio" name="boiler_level" value="{{LEVEL.id}}" ng-model="BOILER.level"  ng-change="SET_BOILER()"> {{LEVEL.canonicalName()}}</label>
 		</div>
