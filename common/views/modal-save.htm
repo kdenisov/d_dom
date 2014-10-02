@@ -2,6 +2,7 @@
     <div class="modal-header">
         <div class="modal-title">
             Сохранить расчет
+            <div class="btn-close" ng-click="FORM.dismiss()"></div>
         </div>
     </div>
     <!--<div class="modal-body save-options" ng-if="!FORM.saved">
@@ -20,7 +21,7 @@
         <input class="new-item-name" type="text" ng-model="CONFIGURATION_NAME" name="CONFIGURATION_NAME" ng-class="{'validation-field': !FORM.valid}" />
     </div>-->
     <div class="modal-body save-options" ng-if="!FORM.saved">
-        <div>Вы можете воспользоваться нумерацией по умолчанию или указать свое название для проекта.</div>
+        <div class="legend">Вы можете воспользоваться нумерацией по умолчанию или указать свое название для проекта.</div>
         <div class="validation-text" ng-if="!FORM.valid">
             Необходимо указать имя проекта.
         </div>
@@ -39,6 +40,6 @@
         <a href="#" class="button button-next" ng-click="$event.preventDefault(); FORM.submit(save);">Сохранить</a>
     </div>
     <div class="modal-footer" ng-if="FORM.saved">
-        <a href="#" class="button button-next" ng-click="$event.preventDefault(); FORM.dismiss()">Ok</a>
+        <a href="#" class="button button-next" ng-click="$event.preventDefault(); FORM.dismiss()">Закрыть</a>
     </div>
 </form>

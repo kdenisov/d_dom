@@ -2022,62 +2022,82 @@ appConfigurator.controller('AuthenticateModalCtrl', function ($scope, $modalInst
         name:'',
         phone: '',
         email: '',
-        modalError: '',
+        modalError: [],
         pin: '',
         rulesAccepted: false,
         submitted: false,
         valid: true,
-        mode:'register',
+        mode: 'register',
+        resetErrorMesages: function () { while (form.modalError.length > 0) form.modalError.pop(); },
+
         validateReg: function (formCtrl) {
-            form.valid = form.phone != '' && (form.email == '' || (form.email != '' && !form.email.$error));
+            form.resetErrorMesages();
+            form.valid = form.rulesAccepted && form.phone != '' && (form.email == '' || (form.email != '' && !formCtrl.email.$error.email));
             if (!form.valid) {
                 if (form.phone == '') {
-                    form.modalError = 'Телефон - обязательное поле';
-                } else {
-                    form.modalError = 'Email адрес имеет неверный формат';
+                    form.modalError.push('Телефон - обязательное поле.');
+                }
+
+                if (form.email == '' || formCtrl.email.$error.email) {
+                    form.modalError.push('Email адрес имеет неверный формат.');
+                }
+
+                if (!form.rulesAccepted) {
+                    form.modalError.push('Не приняты условия продажи.');
                 }
             }
+
             return form.valid;
         },
+
         submit: function (formCtrl) {
             if (form.validateReg(formCtrl)) {
                 CurrentUser.Register(form.name, form.phone, form.email, '').then(
                     function (res) {
                         $modalInstance.close(true);
                     }, function (res) {
-                        form.modalError = res;
+                        form.resetErrorMesages();
+                        form.modalError.push(res);
                     }
                 );
             }
         },
+
         validateGetPIN: function (formCtrl) {
-            form.valid = form.phone != '' || (form.email != '' && !form.email.$error);
+            form.resetErrorMesages();
+            form.valid = form.rulesAccepted && (form.phone != '' || (form.email != '' && !formCtrl.email.$error.email));
             if (!form.valid) {
-                form.modalError = 'Телефон или Email - обязательное поле';
+                if (form.phone == '' && (form.email == '' || formCtrl.email.$error.email))
+                    form.modalError.push('Телефон или Email - обязательное поле.');
+                if (!form.rulesAccepted) {
+                    form.modalError.push('Не приняты условия продажи.');
+                }
             }
             return form.valid;
         },
+
         getPIN: function (formCtrl) {
             if (form.validateGetPIN(formCtrl)) {
                 CurrentUser.GetPIN(form.phone || form.email).then(
                     function (res) {
-                        form.modalError = res;
+                        form.mode = 'pin';
+                        form.resetErrorMesages();
                     }, function (res) {
-                        form.modalError = res;
+                        form.modalError.push(res);
                     }
                 );
             }
         },
         login: function (formCtrl) {
             if (form.pin == '') {
-                form.modalError = 'Введите PIN';
+                form.modalError.push('Введите PIN');
             }
             if (form.validateGetPIN(formCtrl) && form.pin != '') {
                 CurrentUser.Login(form.phone || form.email, form.pin).then(
                     function (res) {
                         $modalInstance.close(true);
                     }, function (res) {
-                        form.modalError = res;
+                        form.modalError.push(res);
                     }
                 );
             }
@@ -2091,10 +2111,12 @@ appConfigurator.controller('AuthenticateModalCtrl', function ($scope, $modalInst
 
     $scope.LOGIN = function () {
         form.mode = 'login';
+        form.resetErrorMesages();
     }
 
     $scope.REGISTER = function () {
         form.mode = 'register';
+        form.resetErrorMesages();
     }
     
 });
@@ -2346,38 +2368,55 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
 appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, infoService, Configurator, CottageTree, levelsService) {
     $scope.BASE_PAGE = { title: 'Конфигуратор' };
 
-    var save = function() {
-        var saveModal = $modal.open({
-            templateUrl: 'common/views/modal-save.htm',
-            controller: 'SaveModalCtrl',
-            size: 'sm',
-        });
+    var save = function () {
+        $.ajax({
+            url: 'common/views/modal-save.htm',
+            dataType: 'html',
+            cache: false
+        }).done(function (html) {
 
-        saveModal.result.then(
-            function() {
-                //close it
-            },
-            function() {
-                //just close it
+            var saveModal = $modal.open({
+                template: html,
+                controller: 'SaveModalCtrl',
+                size: 'sm',
             });
+
+            saveModal.result.then(
+                function () {
+                    //close it
+                },
+                function () {
+                    //just close it
+                });
+
+        });
+        
     };
 
     var authenticateAndSave = function() {
-        var authModal = $modal.open({
-            templateUrl: 'common/views/modal-save-authenticate.htm',
-            controller: 'AuthenticateModalCtrl',
-            size: 'sm',
-        });
+        $.ajax({
+            url: 'common/views/modal-save-authenticate.htm',
+            dataType: 'html',
+            cache: false
+        }).done(function (html) {
 
-        authModal.result.then(
-            function(authenticationComplete) {
-                if (authenticationComplete) {
-                    save();
-                }
-            },
-            function() {
-                //just close it
+            var authModal = $modal.open({
+                template: html,
+                controller: 'AuthenticateModalCtrl',
+                size: 'sm',
             });
+
+            authModal.result.then(
+                function (authenticationComplete) {
+                    if (authenticationComplete) {
+                        save();
+                    }
+                },
+                function () {
+                    //just close it
+                });
+
+        });
     };
 
     $scope.TREE = CottageTree;
@@ -2399,6 +2438,8 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
     }
 
     $scope.SAVE = function () {
+        //save();
+        //return;
         CurrentUser.isGuidExistsInDB().then(
             function () { save(); }
           , function () { authenticateAndSave(); }

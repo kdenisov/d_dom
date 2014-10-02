@@ -3355,9 +3355,23 @@ text-align: left;
 {
     font-weight: normal;
     font-size: 19px;
-    text-align: center;
-    padding-top: 7px;
+    text-align: center;    
+    line-height: 24px !important;
+    padding: 15px 0 5px;
+    position: relative;
 }
+
+.modal-title .btn-close {
+    display: block;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 15px;
+    height: 15px;
+    background: url('../img/btn-close2.png') no-repeat center center;
+    cursor: pointer;
+}
+
 .modal-content
 {
     width:500px;
@@ -3378,18 +3392,18 @@ text-align: left;
 {
     float:left;
 }
-    .radio .title
-    {
-        display:block;
-        padding-left:6px;
-        padding-top:1px;
-        margin-left:23px;
-    }
+.radio .title
+{
+    display:block;
+    padding-left:6px;
+    padding-top:1px;
+    margin-left:23px;
+}
 
-        .radio .title.disabled-true
-        {
-            color:#a0a0a0;
-        }
+.radio .title.disabled-true
+{
+    color:#a0a0a0;
+}
 
 .radio .validation
 {
@@ -3400,8 +3414,8 @@ text-align: left;
     margin-top:-6px;
 }
 
-.save-options, #authenticate-config .modal-body {
-    padding: 35px !important;
+#authenticate-config .modal-body, #save-config .save-options {
+    padding: 35px 75px;
 }
 
 .save-options .save-options-desc {
@@ -3436,14 +3450,31 @@ text-align: left;
 .save-options input.new-item-name,
 #authenticate-config input.contact-field {
     display: block;
-    width: 410px;
-    padding: 5px 10px;
-    margin: 5px 0;
-    font-size: 16px;
+    width:  330px;
+    padding: 12px 9px;
+    margin: 10px 0;
+    font-size: 12px;
+    line-height: 12px;
+    color: black;
+}
+
+.modal-body .legend {
+    width: 100%;
+    margin-bottom: 25px
+}
+
+.modal-body .login-link {
+    text-align: center;
+}
+
+.modal-footer a,
+.modal-body a {
+    color: black;
+    font-weight: 500;
 }
 
 .save-options .notice {
-    margin-top: 50px;
+    color: #bababa;
 }
 
 #save-config .modal-footer, #authenticate-config .modal-footer {
@@ -3452,8 +3483,10 @@ text-align: left;
 
 #save-config .button, #authenticate-config .button {
     border: 1px solid #d2d2d2;
-    line-height: 35px;
+    border-radius: 3px;
+    line-height: 40px;
     font-size: 12px;
+    font-weight: bold;
     color: black !important;
     background-color: transparent;
 }
@@ -3465,14 +3498,20 @@ text-align: left;
 }
 
 #authenticate-config .button.button-next {
-    margin: 10px 0;
+    margin: 20px 0 10px 0;
+    clear: both;
+}
+
+#authenticate-config small {
+    font-size: 12px;
+    color: #b8b8b8;
 }
 
 .validation-text {
     color: red !important;
 }
 
-input.validation-field {
+input.validation-field:not(.ng-valid) {
     color: red !important;
     border: 1px solid red;
     background-color: #fcf7f7;
