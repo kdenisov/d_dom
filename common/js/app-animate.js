@@ -16,11 +16,13 @@ angular.module('appConfigurator')
             }
         };
     })
-    .animation('.room-equipment-panel', function() {
+    .animation('.room-equipment-panel', function () {
+        var cssShow = { left: '56px' };
+        var cssHide = { left: '-300px' };
         return {
             beforeRemoveClass: function(element, className, done) {
                 if (className === 'ng-hide') {
-                    element.css('left', '-300px');
+                    element.css(cssHide);
                     done();
                 }
 
@@ -28,36 +30,40 @@ angular.module('appConfigurator')
             },
             removeClass: function(element, className, done) {
                 if (className === 'ng-hide') {
-                    element.animate({ left: '56px' }, animationDuration, done);
+                    element.animate(cssShow, animationDuration, done);
                 }
 
                 return animationCancelHandler(element);
             },
             beforeAddClass: function(element, className, done) {
                 if (className === 'ng-hide') {
-                    element.animate({ left: '-300px' }, animationDuration, done);
+                    element.animate(cssHide, animationDuration, done);
                 }
 
                 return animationCancelHandler(element);
             }
         };
     })
-    .animation('.room-equipment', function() {
+    .animation('.room-equipment', function () {
+        var cssShow = { opacity: 1 };
+        var cssHide = { opacity: 0 };
         return {
             enter: function(item, done) {
-                $(item).css({ opacity: 0 });
-                $(item).animate({ opacity: 1 }, animationDuration, done);
+                $(item).css(cssHide);
+                $(item).animate(cssShow, animationDuration, done);
                 return animationCancelHandler(item);
             },
 
             leave: function(item, done) {
-                $(item).css({ opacity: 1 });
-                $(item).animate({ opacity: 0 }, animationDuration, done);
+                $(item).css(cssShow);
+                $(item).animate(cssHide, animationDuration, done);
                 return animationCancelHandler(item);
             }
         };
     })
-    .animation('.tree-view', function() {
+    .animation('.tree-view', function () {
+        var cssHide = { top: '-100%' };
+        var cssShow = { top: 0 };
         return {
             removeClass: function(item, className, done) {
                 if (className !== 'ng-hide') {
@@ -65,8 +71,8 @@ angular.module('appConfigurator')
                 }
 
                 item = $(item);
-                item.css({ top: '-100%' });
-                item.animate({ top: 0 }, animationDuration, done);
+                item.css(cssHide);
+                item.animate(cssShow, animationDuration, done);
                 return animationCancelHandler(item);
             },
 
@@ -76,8 +82,8 @@ angular.module('appConfigurator')
                 }
 
                 item = $(item);
-                item.css({ top: 0 });
-                item.animate({ top: '-100%' }, animationDuration, done);
+                item.css(cssShow);
+                item.animate(cssHide, animationDuration, done);
                 return animationCancelHandler(item);
             }
         };

@@ -24,9 +24,9 @@
         <div class="group radiator-type" ng-repeat="radiator in room.radiators">
             <h3><i>{{radiator.count}}</i> радиатор{{EQUIPMENT.radiatorEnding(radiator.count)}} Тип №{{radiator.type}}</h3>
             <div class="radiator-equipment">
-                <div class="valve" ng-if="radiator.thermostat">
-                    <img ng-src="{{radiator.thermostat.src}}" alt="{{radiator.thermostat.title}}" />
-                    <div>{{radiator.thermostat.title}}</div>
+                <div class="valve" ng-if="radiator.valve">
+                    <img ng-src="{{radiator.valve.src}}" alt="{{radiator.valve.title}}" />
+                    <div>{{radiator.valve.title}}</div>
                 </div>
                 <div class="interconnection" ng-if="radiator.interconnection">
                     <img ng-src="{{radiator.interconnection.src}}" alt="{{radiator.interconnection.title}}" />

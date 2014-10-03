@@ -332,6 +332,57 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
 
                 roomEquipment.floors = roomInstance.floors.loops;
 
+                var getValveIcon = function(radType) {
+                    if (radType.type == 1) {
+                        if (radType.control > 4) {
+                            return null;
+                        }
+
+                        var control = Configurator.params.room.radiators.control[radiatorType.control - 1];
+                        if (!control) {
+                            return null;
+                        }
+
+                        console.log(control.preview);
+                        return {
+                            title: control.name,
+                            src: 'common/img/products/' + control.preview
+                        };
+                    }
+
+                    if (radType.type == 2) {
+                        var valves = Configurator.params.room.radiators.valves[radiatorType.valves - 1];
+                        var extView = Configurator.params.room.radiators.externalView[valves.externalView - 1];
+
+                        if (!extView) {
+                            return null;
+                        }
+
+                        var iconSrc = 'common/img/info/';
+                        switch (valves.externalView) {
+                        case 3:
+                            iconSrc += 'valve-design-chrome.png';
+                            break;
+                        case 6:
+                            iconSrc += 'valve-design-white.png';
+                            break;
+                        case 7:
+                            iconSrc += 'valve-design-stainless-steel.png';
+                            break;
+                        default:
+                            iconSrc = '';
+                            break;
+                        }
+
+                        return {
+                            title: extView.name,
+                            src: iconSrc
+                        };
+                    }
+
+                    return null;
+                };
+
                 for (var radIndex = 0; radIndex < roomInstance.radiators.list.length; radIndex++) {
                     var radiatorType = roomInstance.radiators.list[radIndex];
                     control = radiatorType.type != 1 || radiatorType.control > 4 ? null : Configurator.params.room.radiators.control[radiatorType.control - 1];
@@ -339,10 +390,7 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                     if (radiatorType.count > 0) {
                         roomEquipment.radiators.push({
                             type: radIndex + 1,
-                            thermostat: control ? {
-                                title: control.name,
-                                src: 'common/img/products/' + control.preview
-                            } : null,
+                            valve: getValveIcon(radiatorType),
                             interconnection: {
                                 title: 'Обвязка',
                                 src: 'common/img/radiator-preview/' + valves.preview + '.png'
