@@ -317,7 +317,7 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                 if (roomInstance.radiators.controlType == 2 && roomInstance.radiators.commonControl) {
                     var control = Configurator.params.room.radiators.control[roomInstance.radiators.commonControl - 1];
                     roomEquipment.thermostats.push({
-                        title: control.name,
+                        title: control.name + ' комнатный термостат',
                         src: 'common/img/products/' + control.preview,
                     });
                 }
@@ -325,7 +325,7 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
                 if (roomInstance.floors.isFloors) {
                     control = Configurator.params.room.floors.control[roomInstance.floors.control - 1];
                     roomEquipment.thermostats.push({
-                        title: 'Термостат теплых полов',
+                        title: control.name + ' управление теплыми полами',
                         src: 'common/img/products/' + control.preview
                     });
                 }
