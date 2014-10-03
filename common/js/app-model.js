@@ -1632,7 +1632,25 @@ appConfigurator.factory('Catalog', function ($q, $timeout, $http, appConfig) {
 				});
 
 		    }, 30);
-		}
+		},
+
+        fetchFake: function() {
+            var deferred = $q.defer();
+            $.ajax({
+                    url: 'common/js/test-catalog.js',
+                    dataType: 'json',
+                    cache: false
+                })
+                .success(function(data) {
+                    deferred.resolve(data.data);
+                })
+                .error(function() {
+                    console.log('Test data retrieving failed.');
+                    deferred.resolve({});
+                });
+
+            return deferred.promise;
+        }
 	}
 
 	return _Catalog;

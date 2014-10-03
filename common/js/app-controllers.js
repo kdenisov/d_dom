@@ -2632,12 +2632,12 @@ appConfigurator.service('priceCatalog', function(Catalog, $filter) {
         });
 
     service.get = function(code) {
-        var price = 0;
+        var price = null;
         if (service.catalog && service.catalog[code]) {
             price = service.catalog[code].price;
         }
 
-        if (price) {
+        if (!isNaN(price)) {
             return $filter('formatNumber')(price) + ' руб.';
         }
 
