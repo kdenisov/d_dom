@@ -306,12 +306,14 @@
                         </label>
                     </div>
                 </div>
-                <div class="button hidden-{{RADIATORS.radiatorsTypes == 1}}"
-                     ng-click="
+                <div class="button-field">
+                    <div class="button hidden-{{RADIATORS.radiatorsTypes == 1}}"
+                         ng-click="
 					RADIATORS.radiatorsTypes = RADIATORS.radiatorsTypes - 1;
 					(RADIATORS.current = RADIATORS.radiatorsTypes) && (RADIATORS.current > RADIATORS.radiatorsTypes);
 					scopeUpdateRADIATOR(RADIATORS_LIST[RADIATORS.current-1]);
-				">Удалить тип</div>
+				        ">Удалить тип</div>
+                </div>
             </div>
 
         </div><!-- .tab-content -->

@@ -291,6 +291,10 @@ body {
 	margin: 0 20px 15px;
 }
 
+#sidebar-content .button-field {
+    padding: 20px 15px;
+}
+
 #sidebar-view {
 	position: relative;
     height: 100%;
@@ -2087,17 +2091,17 @@ label.choicebox-true {
 .button-next {
 	color: #FFF !important;
 	border: 0;
-	background: #01B06D;
+	background: #01B06D !important;
 }
 .button-cancel {
 	color: #FFF !important;
 	border: 0;
-	background: #ADADAD;
+	background: #ADADAD !important;
 }
 .button-order {
 	color: #FFF !important;
 	border: 0;
-	background: #ADADAD;
+    background: #ADADAD !important;
 }
 a.button,
 div.button {
@@ -3483,17 +3487,14 @@ text-align: left;
 }
 
 .modal-content .button {
-    border: 1px solid #d2d2d2;
     border-radius: 3px;
     line-height: 40px;
     font-size: 12px;
-    font-weight: bold;
-    color: black !important;
+    font-weight: 500;
     background-color: transparent;
 }
 
 .modal-body .button.button-next {
-    border: 1px solid #00b06a;
     color: white !important;
     background-color: #00b06a;
     margin: 20px 0 10px 0;
