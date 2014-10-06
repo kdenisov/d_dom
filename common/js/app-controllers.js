@@ -2106,7 +2106,9 @@ appConfigurator.controller('AuthenticateModalCtrl', function ($scope, $modalInst
 
         setPhoneMask: function(ctrl) {
             var item = ctrl ? $(ctrl) : $('input[type=tel]');
-            item.mask('+7 (999) 999-99-99');
+            item.each(function() {
+                $(this).mask('+7 (999) 999-99-99', { placeholder: 'x' });
+            });
         },
 
         validateReg: function (formCtrl) {

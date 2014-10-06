@@ -7,13 +7,13 @@
     </div>
     <form class="modal-body" name="auth" novalidate ng-submit="FORM.submit(auth)">
         <div class="legend">Введите контакные данные для регистрации и сохранения текущей конфигурации.</div>
-        <div class="validation-text" ng-repeat="error in FORM.modalError" >
+        <div class="validation-text" ng-repeat="error in FORM.modalError">
             {{error}}
         </div>
         <div ng-if="FORM.mode == 'register'">
             <input class="contact-field" type="text" name="name" ng-model="FORM.name" placeholder="Ваше имя" />
-            <input ng-init="FORM.setPhoneMask(auth.phone);" class="contact-field" type="tel" name="phone" ng-model="FORM.phone" placeholder="Телефон" ng-class="{'validation-field': FORM.phone === ''}" />
-            <input class="contact-field" type="email" name="email" ng-model="FORM.email" placeholder="E-mail" ng-class="{'validation-field': FORM.email === '' || auth.email.$error.email}" />
+            <input class="contact-field" type="tel" name="phone" ng-model="FORM.phone" placeholder="Телефон" ng-class="{'validation-field': FORM.phone === ''}" />
+            <input ng-init="FORM.setPhoneMask()" class="contact-field" type="email" name="email" ng-model="FORM.email" placeholder="E-mail" ng-class="{'validation-field': FORM.email === '' || auth.email.$error.email}" />
             <a href="#" class="button button-next" ng-click="$event.preventDefault(); FORM.submit(auth)">Сохранить</a>
             <div class="login-link">
                 <a href="#" ng-click="$event.preventDefault(); LOGIN()">Вы уже зарегистрированы?</a>
@@ -21,7 +21,7 @@
         </div>
 
         <div ng-if="FORM.mode == 'login'">
-            <input ng-init="FORM.setPhoneMask(auth.phone)" class="contact-field" type="tel" name="phone" ng-model="FORM.phone" placeholder="Телефон" ng-class="{'validation-field': !FORM.valid}" />
+            <input ng-init="FORM.setPhoneMask()" class="contact-field" type="tel" name="phone" ng-model="FORM.phone" placeholder="Телефон" ng-class="{'validation-field': !FORM.valid}" />
             <div class="text-center">
                 <small>или</small>
             </div>

@@ -3378,6 +3378,10 @@ text-align: left;
     width:500px;
 }
 
+.modal-content .modal-body {
+    padding: 35px 75px;
+}
+
 .modal-body-content
 {
     padding-left: 40px;
@@ -3387,7 +3391,7 @@ text-align: left;
 .modal-body-content p
 {
     padding-bottom:20px;
-    line-height:23px;
+    line-height: 23px;
 }
 .radio input[type=radio]
 {
@@ -3413,10 +3417,6 @@ text-align: left;
     padding-top: 0px;
     color:#E93C36;
     margin-top:-6px;
-}
-
-#authenticate-config .modal-body, #save-config .save-options {
-    padding: 35px 75px;
 }
 
 .save-options .save-options-desc {
@@ -3482,7 +3482,7 @@ text-align: left;
     background-color: #f4f4f4;
 }
 
-#save-config .button, #authenticate-config .button {
+.modal-content .button {
     border: 1px solid #d2d2d2;
     border-radius: 3px;
     line-height: 40px;
@@ -3492,15 +3492,11 @@ text-align: left;
     background-color: transparent;
 }
 
-#save-config .button.button-next, #authenticate-config .button.button-next {
+.modal-body .button.button-next {
     border: 1px solid #00b06a;
     color: white !important;
     background-color: #00b06a;
-}
-
-#authenticate-config .button.button-next {
     margin: 20px 0 10px 0;
-    clear: both;
 }
 
 #authenticate-config small {
