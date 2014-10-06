@@ -213,7 +213,7 @@ body {
     overflow: visible;
     left: 0;
     top: 0;
-    z-index: 10000;
+    z-index: 1000;
 }
 
 #sidebar-panel {
@@ -256,7 +256,7 @@ body {
 	background: #424242;
     position: absolute;
     width: 100%;
-    z-index: 9000;
+    z-index: 700;
 }
 #sidebar-content h2 span{
     display: block;
@@ -413,7 +413,7 @@ body {
 	position: absolute;
 	top: 0;
 	right: 0;
-    z-index: 7000;
+    z-index: 890;
 }
 .basket-opened {
 	height: 100%;
@@ -558,7 +558,7 @@ body {
     height: 100%;
     background-color: black;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 9900;
+    z-index: 900;
 }
 
 
@@ -880,7 +880,7 @@ a.room-item {
     width: 255px;
     left: 56px;
     background-color: #f3f3f3;
-    z-index: 8000;
+    z-index: 690;
 }
 
 .room-equipment {
@@ -972,7 +972,7 @@ a.room-item {
     position: absolute;
     top: 20px;
     right: 20px;
-    z-index: 9000;
+    z-index: 710;
 }
 
 .tree-view {

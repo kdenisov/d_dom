@@ -991,10 +991,8 @@ appConfigurator.controller('RoomCtrl', function ($scope, $stateParams, Configura
 
                 var top = 0;
                 if (ctrl.position()) {
-                    top = ctrl.position().top - 70;
-                    if (top < panel.height()) {
-                        top = 0;
-                    }
+                    top = ctrl.position().top;
+                    top = (top < panel.height()) ? 0 : top - 70;
                 } 
 
                 panel.animate({ scrollTop: top }, 300, function () {
