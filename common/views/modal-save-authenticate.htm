@@ -12,7 +12,7 @@
         </div>
         <div ng-if="FORM.mode == 'register'">
             <input class="contact-field" type="text" name="name" ng-model="FORM.name" placeholder="Ваше имя" />
-            <input class="contact-field" type="tel" name="phone" ng-model="FORM.phone" placeholder="Телефон" ng-class="{'validation-field': FORM.phone === ''}" />
+            <input ng-init="FORM.setPhoneMask(auth.phone);" class="contact-field" type="tel" name="phone" ng-model="FORM.phone" placeholder="Телефон" ng-class="{'validation-field': FORM.phone === ''}" />
             <input class="contact-field" type="email" name="email" ng-model="FORM.email" placeholder="E-mail" ng-class="{'validation-field': FORM.email === '' || auth.email.$error.email}" />
             <a href="#" class="button button-next" ng-click="$event.preventDefault(); FORM.submit(auth)">Сохранить</a>
             <div class="login-link">
@@ -21,7 +21,7 @@
         </div>
 
         <div ng-if="FORM.mode == 'login'">
-            <input class="contact-field" type="tel" name="phone" ng-model="FORM.phone" placeholder="Телефон" ng-class="{'validation-field': !FORM.valid}" />
+            <input ng-init="FORM.setPhoneMask(auth.phone)" class="contact-field" type="tel" name="phone" ng-model="FORM.phone" placeholder="Телефон" ng-class="{'validation-field': !FORM.valid}" />
             <div class="text-center">
                 <small>или</small>
             </div>

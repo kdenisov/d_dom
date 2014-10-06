@@ -2099,16 +2099,22 @@ appConfigurator.controller('AuthenticateModalCtrl', function ($scope, $modalInst
         pin: '',
         rulesAccepted: false,
         submitted: false,
+        phoneRegex: /\+7\s?\(?[0-9]{3}\)?\s?[0-9]{3}[-\s]?[0-9]{2}[-\s]?[0-9]{2}/, //+7 (000) 000-00-00 with optional brackets, spaces and dashes
         valid: true,
         mode: 'register',
         resetErrorMesages: function () { while (form.modalError.length > 0) form.modalError.pop(); },
 
+        setPhoneMask: function(ctrl) {
+            var item = ctrl ? $(ctrl) : $('input[type=tel]');
+            item.mask('+7 (999) 999-99-99');
+        },
+
         validateReg: function (formCtrl) {
             form.resetErrorMesages();
-            form.valid = form.rulesAccepted && form.phone != '' && (form.email == '' || (form.email != '' && !formCtrl.email.$error.email));
+            form.valid = form.rulesAccepted && (form.phone != '' && !form.phoneRegex.test(form.phone)) && (form.email == '' || (form.email != '' && !formCtrl.email.$error.email));
             if (!form.valid) {
                 if (form.phone == '') {
-                    form.modalError.push('Телефон - обязательное поле.');
+                    form.modalError.push('Телефон должен соотвествовать формату +7 (000) 000-00-00.');
                 }
 
                 if (form.email == '' || formCtrl.email.$error.email) {
@@ -2138,7 +2144,7 @@ appConfigurator.controller('AuthenticateModalCtrl', function ($scope, $modalInst
 
         validateGetPIN: function (formCtrl) {
             form.resetErrorMesages();
-            form.valid = form.rulesAccepted && (form.phone != '' || (form.email != '' && !formCtrl.email.$error.email));
+            form.valid = form.rulesAccepted && ((form.phone != '' && !form.phoneRegex.test(form.phone)) || (form.email != '' && !formCtrl.email.$error.email));
             if (!form.valid) {
                 if (form.phone == '' && (form.email == '' || formCtrl.email.$error.email))
                     form.modalError.push('Телефон или Email - обязательное поле.');
@@ -2439,7 +2445,9 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
 
 
 appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, infoService, Configurator, CottageTree, levelsService) {
-    $scope.BASE_PAGE = { title: 'Список помещений' };
+    $scope.BASE_PAGE = {
+        title: 'Список помещений'
+    };
 
     var save = function () {
         $.ajax({
