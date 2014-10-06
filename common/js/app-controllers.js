@@ -2694,7 +2694,7 @@ appConfigurator.service('priceCatalog', function(Catalog, $filter) {
         }
 
         if (!isNaN(price)) {
-            return $filter('formatNumber')(price) + ' руб.';
+            return $filter('formatNumber')(price);
         }
 
         return '';

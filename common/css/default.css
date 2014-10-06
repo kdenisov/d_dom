@@ -3660,8 +3660,11 @@ input.validation-field:not(.ng-valid) {
 }
 
 .info-clause .price {
-    text-align: right;
-    font-style: italic;
+    text-align: left;
+}
+
+.info-clause .price strong {
+    font-weight: 500;
 }
 
 .whiteshade {
