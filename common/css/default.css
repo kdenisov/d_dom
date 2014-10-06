@@ -225,7 +225,7 @@ body {
     z-index: 9000;
 }
 #sidebar-panel-top {
-	height: 56px;
+	height: 57px;
 	background: #D13631;
 	overflow: hidden;
     position: relative;
@@ -332,29 +332,29 @@ body {
 	display: block;
     width: 56px;
 	height: 57px;
-    background: transparent url('../img/icons-sidebar-controls.png') no-repeat left top;
+    background: transparent url('../img/icons-sidebar-controls.png') no-repeat left -57px;
     border: none;
 }
 #nav a.active, #nav a:hover {
-    background-position: right top;
-}
-#nav a.summary {
-    background-position: left -57px;
-}
-#nav a.summary.active, #nav a.summary:hover {
     background-position: right -57px;
 }
-#nav a.order {
+#nav a.summary {
     background-position: left -114px;
 }
-#nav a.order.active, #nav a.order:hover {
+#nav a.summary.active, #nav a.summary:hover {
     background-position: right -114px;
 }
-#nav a.reset {
+#nav a.order {
     background-position: left -171px;
 }
-#nav a.reset.active, #nav a.reset:hover {
+#nav a.order.active, #nav a.order:hover {
     background-position: right -171px;
+}
+#nav a.reset {
+    background-position: left -228px;
+}
+#nav a.reset.active, #nav a.reset:hover {
+    background-position: right -228px;
 }
 #nav .button-icon {
 	border: 0;
@@ -1216,7 +1216,7 @@ a.collector-item {
 	background: #D9D9D9 url('../img/bg_room.jpg') repeat-x;
 }
 .room h1 {
-    z-index: 1000;
+    z-index: 880;
 }
 .radiators {
 	width: 100%;
@@ -2069,8 +2069,8 @@ label.choicebox-true {
 }
 
 .label-checkbox .pseudo-checkbox {
-    top: 11px;
-    left: 6px;
+    top: 0;
+    right: 0;
 }
 
 
@@ -2117,8 +2117,12 @@ div.button {
 	cursor: pointer;
 }
 .button-menu {
-	background-image: url('../img/sidebar-panel-top.png');
-	margin: 20px 0 0 15px;
+	background: url('../img/icons-sidebar-controls.png') left top no-repeat;
+    width: 56px;
+    height: 57px;
+}
+.button-menu:hover {
+    background-position: -56px top;
 }
 .button-help {
 	background-image: url('../img/sidebar-panel-bottom.png');
@@ -3472,6 +3476,10 @@ text-align: left;
     text-align: center;
 }
 
+.modal-footer {
+    background-color: #f4f4f4;
+}
+
 .modal-footer a,
 .modal-body a {
     color: black;
@@ -3480,10 +3488,6 @@ text-align: left;
 
 .save-options .notice {
     color: #bababa;
-}
-
-#save-config .modal-footer, #authenticate-config .modal-footer {
-    background-color: #f4f4f4;
 }
 
 .modal-content .button {
