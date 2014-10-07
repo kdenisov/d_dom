@@ -418,66 +418,65 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
         });
     });
 
-    $(function() {
-        var applyToSidebarScope = function (action) {
-            var scope = angular.element($('.params-collectors > .group:first')).scope();
-            scope.$apply(action);
-        };
+    var applyToSidebarScope = function (action) {
+        var scope = angular.element($('.params-collectors > .group:first')).scope();
+        scope.$apply(action);
+    };
 
-        var levelsCopy = $.extend(true, [], Configurator.levels);
-        var boilerCopy = $.extend(true, {}, Configurator.boiler);
-        var current = levelsService.level.id;
+    var levelsCopy = $.extend(true, [], Configurator.levels);
+    var boilerCopy = $.extend(true, {}, Configurator.boiler);
+    var current = parseInt($stateParams.levelId);
+    current = isNaN(current) ? 1 : current;
 
-        window.levelsModule && window.levelsModule.buildLevels('#levels', {
-            levels: levelsCopy,
-            boilers: boilerCopy,
-            currentLevelId: current,
-            roomMouseEnter: function(levelId, roomId) {
-                $scope.$apply(levelsService.setHoverRoomId(roomId));
-            },
-            roomMouseLeave: function(levelId, roomId) {
-                $scope.$apply(levelsService.setHoverRoomId(0));
-            },
-            levelSwitched: function(levelId) {
-                var action = function() { levelsService.setLevel(levelId); };
-                $scope.$apply(action);
-                applyToSidebarScope(action);
-            },
-            roomClicked: function(levelId, roomId) {
-                levelsService.resetHover();
-                $scope.$apply(function () {
-                    $location.path('/room/' + levelId + '/' + roomId);
-                });
-            },
-            roomAdded: function (levelId, roomId) {
-                var level = Configurator.levels[levelId - 1];
-                var room = level.rooms[roomId - 1];
-                if (room.isRoom == false) {
-                    room.isRoom = true;
-                    level.roomsCount++;
-                }
-            },
-            roomRemoved: function(levelId, roomId) {
-                var level = Configurator.levels[levelId - 1];
-                var room = level.rooms[roomId - 1];
-                if (room.isRoom == true) {
-                    room.isRoom = false;
-                    level.roomsCount--;
-                }
-            }
-        });
-
-        CottageTree
-            .setCustomRoomAdded(function(levelId, roomId) {
-                window.levelsModule.addRoom(levelId, roomId);
-            })
-            .setCustomRoomRemoved(function (levelId, roomId) {
-                window.levelsModule.removeRoom(levelId, roomId);
-            })
-            .setCustomRoomRenamed(function (levelId, roomId, name) {
-                window.levelsModule.renameRoom(levelId, roomId, name);
+    window.levelsModule && window.levelsModule.buildLevels('#levels', {
+        levels: levelsCopy,
+        boilers: boilerCopy,
+        currentLevelId: current,
+        roomMouseEnter: function(levelId, roomId) {
+            $scope.$apply(levelsService.setHoverRoomId(roomId));
+        },
+        roomMouseLeave: function(levelId, roomId) {
+            $scope.$apply(levelsService.setHoverRoomId(0));
+        },
+        levelSwitched: function(levelId) {
+            var action = function() { levelsService.setLevel(levelId); };
+            $scope.$apply(action);
+            applyToSidebarScope(action);
+        },
+        roomClicked: function(levelId, roomId) {
+            levelsService.resetHover();
+            $scope.$apply(function () {
+                $location.path('/room/' + levelId + '/' + roomId);
             });
+        },
+        roomAdded: function (levelId, roomId) {
+            var level = Configurator.levels[levelId - 1];
+            var room = level.rooms[roomId - 1];
+            if (room.isRoom == false) {
+                room.isRoom = true;
+                level.roomsCount++;
+            }
+        },
+        roomRemoved: function(levelId, roomId) {
+            var level = Configurator.levels[levelId - 1];
+            var room = level.rooms[roomId - 1];
+            if (room.isRoom == true) {
+                room.isRoom = false;
+                level.roomsCount--;
+            }
+        }
     });
+
+    CottageTree
+        .setCustomRoomAdded(function(levelId, roomId) {
+            window.levelsModule.addRoom(levelId, roomId);
+        })
+        .setCustomRoomRemoved(function (levelId, roomId) {
+            window.levelsModule.removeRoom(levelId, roomId);
+        })
+        .setCustomRoomRenamed(function (levelId, roomId, name) {
+            window.levelsModule.renameRoom(levelId, roomId, name);
+        });
 
     //setCustomScroll();
 });
@@ -2373,8 +2372,8 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
     };
 
     model.removeRoom = function(levelId, roomId) {
-        var lvl = levels[levelId - 1];
-        var room = levels[levelId - 1].rooms[roomId - 1];
+        var lvl = model.levels[levelId - 1];
+        var room = model.levels[levelId - 1].rooms[roomId - 1];
         room.isRoom = false;
         lvl.roomsCount--;
         model.customRoomRemoved && model.customRoomRemoved(levelId, roomId);
@@ -2383,7 +2382,7 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
 
     model.editing = null;
     model.endEdit = function (levelId, roomId) {
-        var room = levels[levelId - 1].rooms[roomId - 1];
+        var room = model.levels[levelId - 1].rooms[roomId - 1];
         model.editing = null;
         model.customRoomRenamed && model.customRoomRenamed(levelId, roomId, room.name);
     };
@@ -2393,7 +2392,7 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
             return;
         }
 
-        var room = levels[levelId - 1].rooms[roomId - 1];
+        var room = model.levels[levelId - 1].rooms[roomId - 1];
         model.editing = room;
         $timeout(function () { $(btn).siblings('input[type=text]').select(); }, 100);
     };
@@ -2446,7 +2445,7 @@ appConfigurator.service('CottageTree', function(Configurator, $timeout) {
 });
 
 
-appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, infoService, Configurator, CottageTree, levelsService) {
+appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $location, CurrentUser, alertService, infoService, Configurator, CottageTree, levelsService, pageInfo) {
     $scope.BASE_PAGE = {
         title: 'Список помещений'
     };
@@ -2529,21 +2528,10 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
         );
     };
 
+    $scope.BASE_PAGE.pageInfo = pageInfo;
+
     var activeSection = function(section) {
-        if (!section) {
-            return true;
-        }
-
-        var url = $location.url();
-        if (url.indexOf('summary') != -1) {
-            return section === 'summary';
-        }
-
-        if (url.indexOf('summary') == -1) {
-            return section === 'configurator';
-        }
-
-        return false;
+        return pageInfo.section === section;
     };
 
     $scope.NAV_CSS = function(section) {
@@ -2554,6 +2542,15 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
         if (activeSection(section)) {
             e.preventDefault();
         }
+    };
+
+    $scope.ACTIVE_PAGE_LEVEL = function() {
+        return pageInfo.section == pageInfo.allSections.configurator
+            && pageInfo.page == pageInfo.allPages.levels;
+    };
+
+    $scope.SWITCH_LEVEL = function(event) {
+        event.preventDefault();
     };
 
     $scope.$on('$locationChangeSuccess', function (event, toUrl, fromUrl) {
@@ -2585,7 +2582,6 @@ appConfigurator.controller('BaseCtrl', function ($scope, $modal, $timeout, $loca
             });
 
             infoService.hide();
-            console.log(infoService);
         });
 
         $('body').on('click', '.tree-view, .tree-button, #basket-popup, .info-panel, .icon-info, .info-trigger, .floor-info-trigger, .radiator-info-trigger', function (e) {
@@ -2657,14 +2653,11 @@ appConfigurator.controller('AlertCtrl', function($scope, alertService) {
 appConfigurator.service('infoService', function() {
     var service = this;
     service.index = null;
-    service.omitAnimation = false;
     service.toggle = function (index) {
-        service.omitAnimation = service.index !== null && service.index !== index;
         service.index = service.index === index ? null : index;
     };
 
     service.hide = function () {
-        service.omitAnimation = false;
         service.index = null;
     };
 

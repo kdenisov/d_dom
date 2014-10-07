@@ -125,7 +125,9 @@
 
                 <div class="tree-view" ng-show="TREE.open" ng-click="$event.stopPropagation();">
                     <div class="level" ng-repeat="level in TREE.levels | filter: {isLevel: true} | orderBy: '-isBasement' ">
-                        <h3>{{TREE.levelName(level)}}</h3>
+                        <h3>
+                            <a ng-href="#/level/{{level.id}}" ng-click="ACTIVE_PAGE_LEVEL() && SWITCH_LEVEL($event)">{{TREE.levelName(level)}}</a>
+                        </h3>
 
                         <div class="node" ng-class="{'marked' : room.visited, 'current' : TREE.current === room }" ng-repeat="room in level.rooms | filter : {isRoom:true}">
                             <a ng-href="#/room/{{level.id}}/{{room.id}}" ng-show="TREE.editing !== room">{{room.name}}</a>
@@ -139,20 +141,20 @@
                     </div>
                 </div>
 
-                <div id="sidebar-view" ui-view="sidebar">
+                <div id="sidebar-view" ng-cloack ui-view="sidebar">
 
                 </div>
             </div><!-- #sidebar-content -->
         </div><!-- #sidebar -->
 
         <div id="viewport">
-            <div id="viewport-inner" ui-view="content"></div>
+            <div id="viewport-inner" ng-cloack ui-view="content"></div>
         </div><!-- #viewport -->
         
         <div class="menu-aside-popup-shade" ng-click="showPopupMenu = false;" ng-show="showPopupMenu == true"></div>
 
 
-        <div id="basket" ng-controller="BasketCtrl" ng-init="TOGGLE_BASKET = true" ng-hide="BASKET_HIDDEN" ng-cloak ng-class="{'basket-opened': !TOGGLE_BASKET}" ng-click="$event.stopPropagation();">
+        <div id="basket" ng-controller="BasketCtrl" ng-cloack ng-init="TOGGLE_BASKET = true" ng-hide="BASKET_HIDDEN" ng-cloak ng-class="{'basket-opened': !TOGGLE_BASKET}" ng-click="$event.stopPropagation();">
             <div class="basket-sum" ng-click="TOGGLE_BASKET = !TOGGLE_BASKET">
                 <span class="sum" id="basket-sum">{{BASKET_TOTAL_PRICE()}}</span> руб.
             </div>
