@@ -2177,6 +2177,12 @@ a.button-close {
 	color: #000;
 }
 
+.button.route-loader img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: -15px;
+    margin-top: 5px;
+}
 
 .arrow {
 	width: 59px;

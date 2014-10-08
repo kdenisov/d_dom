@@ -87,7 +87,7 @@ appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderBy
 		return actual.indexOf(expected) > -1;
 	};
 
-    $scope.SHOW_HOUSE_IMAGE = function(level, rooms, basement) {
+	$scope.SHOW_HOUSE_IMAGE = function (level, rooms, basement) {
         var count = Configurator.cottage.levelsCount;
         var lastLevel = Configurator.levels[Configurator.levels.length-1];
         var size = 's';
@@ -121,6 +121,11 @@ appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderBy
             Configurator.levels[1].isLevel = true;
             return;
         }
+    };
+
+    $scope.HIDE_HOUSE = function() {
+        var item = angular.element('.house-enter-leave');
+        item.animate({ opacity: 0, width: 0, height: 0, marginLeft: 0, marginTop: 0 }, 300, function() {});
     };
 
     setCustomScroll();

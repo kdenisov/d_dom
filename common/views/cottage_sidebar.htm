@@ -47,6 +47,9 @@
 		</div>
 	</div>
 
-    <a ng-href="#/level" class="button button-next" ng-route-loader>Дальше</a>
+    <a ng-href="#/level" class="button button-next route-loader" ng-init="loading = false;" ng-click="loading = true; HIDE_HOUSE();">
+        <span ng-if="!loading">Дальше</span>
+        <img ng-if="loading" alt="Загрузка..." src="common/img/loader.gif"/>
+    </a>
     
 </div>
