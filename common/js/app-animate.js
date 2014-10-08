@@ -93,7 +93,7 @@
             return getEnterLeaveAnimation();
         })
         .animation('.room-equipment-panel', function() {
-            var cssShow = { left: '56px' };
+            var cssShow = { left: '0' };
             var cssHide = { left: '-300px' };
             return getAddRemoveClassAnimation(cssShow, cssHide, 'ng-hide');
         })

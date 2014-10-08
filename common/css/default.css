@@ -892,7 +892,7 @@ a.room-item {
     top: 0;
     height: 100%;
     width: 255px;
-    left: 56px;
+    left: 0;
     background-color: #f3f3f3;
     z-index: 690;
 }
@@ -900,6 +900,8 @@ a.room-item {
 .room-equipment {
     position: absolute;
     top: 0;
+    left: 0;
+    width: 100%;
 }
 
 .room-equipment > h2 {
@@ -907,6 +909,9 @@ a.room-item {
     text-transform: uppercase;
     padding: 20px;
     border-bottom: 1px solid #e6e6e6;
+    position: relative !important;
+    background-color: #f3f3f3 !important;
+    color: black !important;
 }
 
 .room-equipment > .group {
@@ -914,16 +919,19 @@ a.room-item {
     width: 255px;
 }
 
-.room-equipment > .group > .room-controls {
+.room-equipment > .group.room-controls {
+    padding: 0 !important; 
+}
+.room-equipment > .room-controls.group > * {
     float: left;
-    padding: 0 10px 0 10px;
+    padding: 10px;
     width: 107.5px;
     text-align: center;
 }
 
-.room-equipment > .radiator-type {
+.room-equipment > .group.radiator-type {
     float: left;
-    padding: 20px 10px;
+    padding: 20px 10px !important; 
     width: 235px;
     border-bottom: 1px solid #e6e6e6;
 }

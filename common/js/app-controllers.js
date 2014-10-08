@@ -262,153 +262,6 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
     $scope.COTTAGE = Configurator.cottage;
     $scope.MODEL = levelsService;
 
-    //rooms equipment
-    var getEquipment = function(Configurator) {
-        var equipment = {
-            items: [],
-            radiatorEnding: function(count) {
-                if (count == 1) {
-                    return '';
-                }
-
-                if (count > 1 && count < 5) {
-                    return 'а';
-                }
-
-                return 'ов';
-            },
-
-            floorEnding: function(count) {
-                if (count == 1) {
-                    return 'ля';
-                }
-
-                if (count > 1 && count < 5) {
-                    return 'ли';
-                }
-
-                return 'ель';
-            }
-        };
-
-        for (var l = 0; l < Configurator.levels.length; l++) {
-            var levelInstance = Configurator.levels[l];
-            if (!levelInstance.isLevel) {
-                continue;
-            }
-
-            for (var r = 0; r < levelInstance.rooms.length; r++) {
-                var roomInstance = levelInstance.rooms[r];
-                var roomEquipment = {
-                    id: roomInstance.id,
-                    levelId: levelInstance.id,
-                    boiler: { active: false },
-                    thermostats: [],
-                    radiators: [],
-                    floors: 0
-                };
-
-                if (roomInstance.isBoilerRoom) {
-                    roomEquipment.boiler.active = Configurator.boiler.isBoiler;
-                    roomEquipment.boiler.title = Configurator.boiler.embodiment == 1 ? '1-контурный' : '2-контурный';
-                    roomEquipment.boiler.pump = Configurator.boiler.embodiment == 1 ? Configurator.params.boiler.pump[Configurator.boiler.pump - 1].name : null;
-                    roomEquipment.boiler.src = 'common/img/info/boiler-' + (Configurator.boiler.embodiment == 1 ? 1 : 2) + '-contour.png';
-                }
-
-                if (roomInstance.radiators.controlType == 2 && roomInstance.radiators.commonControl) {
-                    var control = Configurator.params.room.radiators.control[roomInstance.radiators.commonControl - 1];
-                    roomEquipment.thermostats.push({
-                        title: control.name + ' комнатный термостат',
-                        src: 'common/img/products/' + control.preview,
-                    });
-                }
-
-                if (roomInstance.floors.isFloors) {
-                    control = Configurator.params.room.floors.control[roomInstance.floors.control - 1];
-                    roomEquipment.thermostats.push({
-                        title: control.name + ' управление теплыми полами',
-                        src: 'common/img/products/' + control.preview
-                    });
-                }
-
-                roomEquipment.floors = roomInstance.floors.loops;
-
-                var getValveIcon = function(radType) {
-                    if (radType.type == 1) {
-                        if (radType.control > 4) {
-                            return null;
-                        }
-
-                        var control = Configurator.params.room.radiators.control[radiatorType.control - 1];
-                        if (!control) {
-                            return null;
-                        }
-
-                        console.log(control.preview);
-                        return {
-                            title: control.name,
-                            src: 'common/img/products/' + control.preview
-                        };
-                    }
-
-                    if (radType.type == 2) {
-                        var valves = Configurator.params.room.radiators.valves[radiatorType.valves - 1];
-                        var extView = Configurator.params.room.radiators.externalView[valves.externalView - 1];
-
-                        if (!extView) {
-                            return null;
-                        }
-
-                        var iconSrc = 'common/img/info/';
-                        switch (valves.externalView) {
-                        case 3:
-                            iconSrc += 'valve-design-chrome.png';
-                            break;
-                        case 6:
-                            iconSrc += 'valve-design-white.png';
-                            break;
-                        case 7:
-                            iconSrc += 'valve-design-stainless-steel.png';
-                            break;
-                        default:
-                            iconSrc = '';
-                            break;
-                        }
-
-                        return {
-                            title: extView.name,
-                            src: iconSrc
-                        };
-                    }
-
-                    return null;
-                };
-
-                for (var radIndex = 0; radIndex < roomInstance.radiators.list.length; radIndex++) {
-                    var radiatorType = roomInstance.radiators.list[radIndex];
-                    control = radiatorType.type != 1 || radiatorType.control > 4 ? null : Configurator.params.room.radiators.control[radiatorType.control - 1];
-                    var valves = Configurator.params.room.radiators.valves[radiatorType.valves - 1];
-                    if (radiatorType.count > 0) {
-                        roomEquipment.radiators.push({
-                            type: radIndex + 1,
-                            valve: getValveIcon(radiatorType),
-                            interconnection: {
-                                title: 'Обвязка',
-                                src: 'common/img/radiator-preview/' + valves.preview + '.png'
-                            },
-                            count: radiatorType.count
-                        });
-                    }
-                }
-
-                equipment.items.push(roomEquipment);
-            }
-        }
-
-        return equipment;
-    };
-
-    $scope.EQUIPMENT = getEquipment(Configurator);
 
     
 
@@ -484,6 +337,155 @@ appConfigurator.controller('LevelCtrl', function ($scope, Configurator, levelsSe
 
 appConfigurator.controller('LevelCollectorsCtrl', function($scope, $stateParams, Configurator, levelsService, alertService, $modal) {
     $scope.MODEL = levelsService;
+
+    //rooms equipment
+    var getEquipment = function (Configurator) {
+        var equipment = {
+            items: [],
+            radiatorEnding: function (count) {
+                if (count == 1) {
+                    return '';
+                }
+
+                if (count > 1 && count < 5) {
+                    return 'а';
+                }
+
+                return 'ов';
+            },
+
+            floorEnding: function (count) {
+                if (count == 1) {
+                    return 'ля';
+                }
+
+                if (count > 1 && count < 5) {
+                    return 'ли';
+                }
+
+                return 'ель';
+            }
+        };
+
+        for (var l = 0; l < Configurator.levels.length; l++) {
+            var levelInstance = Configurator.levels[l];
+            if (!levelInstance.isLevel) {
+                continue;
+            }
+
+            for (var r = 0; r < levelInstance.rooms.length; r++) {
+                var roomInstance = levelInstance.rooms[r];
+                var roomEquipment = {
+                    id: roomInstance.id,
+                    levelId: levelInstance.id,
+                    boiler: { active: false },
+                    thermostats: [],
+                    radiators: [],
+                    floors: 0
+                };
+
+                if (roomInstance.isBoilerRoom) {
+                    roomEquipment.boiler.active = Configurator.boiler.isBoiler;
+                    roomEquipment.boiler.title = Configurator.boiler.embodiment == 1 ? '1-контурный' : '2-контурный';
+                    roomEquipment.boiler.pump = Configurator.boiler.embodiment == 1 ? Configurator.params.boiler.pump[Configurator.boiler.pump - 1].name : null;
+                    roomEquipment.boiler.src = 'common/img/info/boiler-' + (Configurator.boiler.embodiment == 1 ? 1 : 2) + '-contour.png';
+                }
+
+                if (roomInstance.radiators.controlType == 2 && roomInstance.radiators.commonControl) {
+                    var control = Configurator.params.room.radiators.control[roomInstance.radiators.commonControl - 1];
+                    roomEquipment.thermostats.push({
+                        title: control.name + ' комнатный термостат',
+                        src: 'common/img/products/' + control.preview,
+                    });
+                }
+
+                if (roomInstance.floors.isFloors) {
+                    control = Configurator.params.room.floors.control[roomInstance.floors.control - 1];
+                    roomEquipment.thermostats.push({
+                        title: control.name + ' управление теплыми полами',
+                        src: 'common/img/products/' + control.preview
+                    });
+                }
+
+                roomEquipment.floors = roomInstance.floors.loops;
+
+                var getValveIcon = function (radType) {
+                    if (radType.type == 1) {
+                        if (radType.control > 4) {
+                            return null;
+                        }
+
+                        var control = Configurator.params.room.radiators.control[radiatorType.control - 1];
+                        if (!control) {
+                            return null;
+                        }
+
+                        console.log(control.preview);
+                        return {
+                            title: control.name,
+                            src: 'common/img/products/' + control.preview
+                        };
+                    }
+
+                    if (radType.type == 2) {
+                        var valves = Configurator.params.room.radiators.valves[radiatorType.valves - 1];
+                        var extView = Configurator.params.room.radiators.externalView[valves.externalView - 1];
+
+                        if (!extView) {
+                            return null;
+                        }
+
+                        var iconSrc = 'common/img/info/';
+                        switch (valves.externalView) {
+                            case 3:
+                                iconSrc += 'valve-design-chrome.png';
+                                break;
+                            case 6:
+                                iconSrc += 'valve-design-white.png';
+                                break;
+                            case 7:
+                                iconSrc += 'valve-design-stainless-steel.png';
+                                break;
+                            default:
+                                iconSrc = '';
+                                break;
+                        }
+
+                        return {
+                            title: extView.name,
+                            src: iconSrc
+                        };
+                    }
+
+                    return null;
+                };
+
+                for (var radIndex = 0; radIndex < roomInstance.radiators.list.length; radIndex++) {
+                    var radiatorType = roomInstance.radiators.list[radIndex];
+                    control = radiatorType.type != 1 || radiatorType.control > 4 ? null : Configurator.params.room.radiators.control[radiatorType.control - 1];
+                    var valves = Configurator.params.room.radiators.valves[radiatorType.valves - 1];
+                    if (radiatorType.count > 0) {
+                        roomEquipment.radiators.push({
+                            type: radIndex + 1,
+                            valve: getValveIcon(radiatorType),
+                            interconnection: {
+                                title: 'Обвязка',
+                                src: 'common/img/radiator-preview/' + valves.preview + '.png'
+                            },
+                            count: radiatorType.count
+                        });
+                    }
+                }
+
+                equipment.items.push(roomEquipment);
+            }
+        }
+
+        return equipment;
+    };
+
+    $scope.EQUIPMENT = getEquipment(Configurator);
+
 
     $scope.EDITED_COLLECTOR = null;
 
