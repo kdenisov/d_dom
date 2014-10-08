@@ -1,72 +1,46 @@
 ﻿'use strict';
 //animation effects
-angular.module('appConfigurator')
-    .animation('.house-enter-leave', function() {
+(function() {
+    var animationDuration = 300;
+
+    function animationCancelHandler(item) {
+        return function (cancelled) {
+            if (!cancelled) {
+                return;
+            }
+
+            $(item).stop();
+        };
+    }
+
+    function getEnterLeaveAnimation(cssShow, cssHide) {
+        cssShow = cssShow ? cssShow : { opacity: 1 };
+        cssHide = cssHide ? cssHide : { opacity: 0 };
         return {
-            enter: function(item, done) {
+            enter: function (item, done) {
                 item = $(item);
-                item.hide();
-                item.fadeIn(animationDuration, done);
+                item.css(cssHide);
+                item.animate(cssShow, animationDuration, done);
                 return animationCancelHandler(item);
             },
 
-            leave: function(item, done) {
-                $(item).fadeOut(animationDuration, done);
-                return animationCancelHandler(item);
-            }
-        };
-    })
-    .animation('.room-equipment-panel', function () {
-        var cssShow = { left: '56px' };
-        var cssHide = { left: '-300px' };
-        return {
-            beforeRemoveClass: function(element, className, done) {
-                if (className === 'ng-hide') {
-                    element.css(cssHide);
-                    done();
-                }
+            leave: function (item, done) {
+                item = $(item);
+                item.css(cssShow);
+                item.animate(cssHide, animationDuration, done);
 
-                return animationCancelHandler(element);
-            },
-            removeClass: function(element, className, done) {
-                if (className === 'ng-hide') {
-                    element.animate(cssShow, animationDuration, done);
-                }
-
-                return animationCancelHandler(element);
-            },
-            beforeAddClass: function(element, className, done) {
-                if (className === 'ng-hide') {
-                    element.animate(cssHide, animationDuration, done);
-                }
-
-                return animationCancelHandler(element);
-            }
-        };
-    })
-    .animation('.room-equipment', function () {
-        var cssShow = { opacity: 1 };
-        var cssHide = { opacity: 0 };
-        return {
-            enter: function(item, done) {
-                $(item).css(cssHide);
-                $(item).animate(cssShow, animationDuration, done);
-                return animationCancelHandler(item);
-            },
-
-            leave: function(item, done) {
-                $(item).css(cssShow);
-                $(item).animate(cssHide, animationDuration, done);
                 return animationCancelHandler(item);
             }
         };
-    })
-    .animation('.tree-view', function () {
-        var cssHide = { top: '-100%' };
-        var cssShow = { top: 0 };
+    }
+
+    function getAddRemoveClassAnimation(cssShow, cssHide, cssClassName) {
+        cssClassName = cssClassName ? cssClassName : 'ng-hide';
+        cssShow = cssShow ? cssShow : { opacity: 1 };
+        cssHide = cssHide ? cssHide : { opacity: 0 };
         return {
-            removeClass: function(item, className, done) {
-                if (className !== 'ng-hide') {
+            removeClass: function (item, className, done) {
+                if (className !== cssClassName) {
                     return animationCancelHandler(item);
                 }
 
@@ -76,8 +50,8 @@ angular.module('appConfigurator')
                 return animationCancelHandler(item);
             },
 
-            beforeAddClass: function(item, className, done) {
-                if (className !== 'ng-hide') {
+            beforeAddClass: function (item, className, done) {
+                if (className !== cssClassName) {
                     return animationCancelHandler(item);
                 }
 
@@ -87,134 +61,77 @@ angular.module('appConfigurator')
                 return animationCancelHandler(item);
             }
         };
-    })
-    .animation('.aside-enter-leave', function() {
-        return {
-            enter: function(item, done) {
-                item = $(item);
-                item.css({ left: '-100%' });
-                item.animate({ left: 0 }, animationDuration, done);
-                return animationCancelHandler(item);
-            },
+    }
 
-            leave: function(item, done) {
-                item = $(item);
-                item.css({ left: 0 });
-                item.animate({ left: '-100%' }, animationDuration, done);
-                return animationCancelHandler(item);
-            }
-        };
-    })
-    .animation('.menu-aside-popup', function() {
-        var animationDuration = window.animationDuration / 2;
-        return {
-            removeClass: function(item, className, done) {
-                if (className !== 'ng-hide') {
+    angular.module('appConfigurator')
+        .animation('.content-view-enter-leave', function() {
+            return getEnterLeaveAnimation();
+        })
+        .animation('.house-enter-leave', function() {
+            return getEnterLeaveAnimation();
+        })
+        .animation('.room-equipment-panel', function() {
+            var cssShow = { left: '56px' };
+            var cssHide = { left: '-300px' };
+            return getAddRemoveClassAnimation(cssShow, cssHide, 'ng-hide');
+        })
+        .animation('.room-equipment', function() {
+            return getEnterLeaveAnimation();
+        })
+        .animation('.tree-view', function() {
+            var cssHide = { top: '-100%' };
+            var cssShow = { top: 0 };
+            return getAddRemoveClassAnimation(cssShow, cssHide, 'ng-hide');
+        })
+        .animation('.aside-enter-leave', function() {
+            var cssHide = { left: '-100%' };
+            var cssShow = { left: 0 };
+            return getEnterLeaveAnimation(cssShow, cssHide);
+        })
+        .animation('.menu-aside-popup', function() {
+            var animationDuration = window.animationDuration / 2;
+            return {
+                removeClass: function(item, className, done) {
+                    if (className !== 'ng-hide') {
+                        return animationCancelHandler(item);
+                    }
+
+                    item = $(item);
+                    var shade = $('.menu-aside-popup-shade');
+                    item.css({ width: 0 });
+                    shade.css({ opacity: 0 });
+                    shade.animate({ opacity: 1 }, animationDuration, function() {
+                        item.animate({ width: 203 }, animationDuration, done);
+                    });
+
+                    return animationCancelHandler(item);
+                },
+
+                beforeAddClass: function(item, className, done) {
+                    if (className !== 'ng-hide') {
+                        return animationCancelHandler(item);
+                    }
+
+                    item = $(item);
+                    var shade = $('.menu-aside-popup-shade');
+                    item.css({ width: 203 });
+                    shade.css({ opacity: 1 });
+                    item.animate({ width: 0 }, animationDuration, function() {
+                        shade.animate({ opacity: 0 }, animationDuration, done);
+                    });
+
                     return animationCancelHandler(item);
                 }
+            };
+        })
+        .animation('.info-panel-container', function() {
+            var cssShow = { width: 336 };
+            var cssHide = { width: 0 };
 
-                item = $(item);
-                var shade = $('.menu-aside-popup-shade');
-                item.css({ width: 0 });
-                shade.css({ opacity: 0 });
-                shade.animate({ opacity: 1 }, animationDuration, function() {
-                    item.animate({ width: 203 }, animationDuration, done);
-                });
+            return getAddRemoveClassAnimation(cssShow, cssHide, 'ng-hide');
+        })
+        .animation('.info-panel', function() {
+            return getAddRemoveClassAnimation();
+        });
 
-                return animationCancelHandler(item);
-            },
-
-            beforeAddClass: function(item, className, done) {
-                if (className !== 'ng-hide') {
-                    return animationCancelHandler(item);
-                }
-
-                item = $(item);
-                var shade = $('.menu-aside-popup-shade');
-                item.css({ width: 203 });
-                shade.css({ opacity: 1 });
-                item.animate({ width: 0 }, animationDuration, function() {
-                    shade.animate({ opacity: 0 }, animationDuration, done);
-                });
-
-                return animationCancelHandler(item);
-            }
-        };
-    })
-    .animation('.info-panel-container', function() {
-        var cssShow = { width: 336 };
-        var cssHide = { width: 0 };
-
-        return {
-            removeClass: function(item, className, done) {
-                if (className !== 'ng-hide') {
-                    return animationCancelHandler(item);
-                }
-
-                item = $(item);
-                item.css(cssHide);
-                item.animate(cssShow, animationDuration, function() {
-                    done && done();
-                });
-                return animationCancelHandler(item);
-            },
-
-            beforeAddClass: function(item, className, done) {
-                if (className !== 'ng-hide') {
-                    return animationCancelHandler(item);
-                }
-
-                item = $(item);
-                item.css(cssShow);
-                item.animate(cssHide, animationDuration, function() {
-                    done && done();
-                });
-                return animationCancelHandler(item);
-            }
-        };
-    })
-    .animation('.info-panel', function() {
-        var cssShow = { opacity: 1 };
-        var cssHide = { opacity: 0 };
-
-        return {
-            removeClass: function(item, className, done) {
-                if (className !== 'ng-hide') {
-                    return animationCancelHandler(item);
-                }
-
-                item = $(item);
-                item.css(cssHide);
-                item.animate(cssShow, animationDuration, function() {
-                    done && done();
-                });
-                return animationCancelHandler(item);
-            },
-
-            beforeAddClass: function(item, className, done) {
-                if (className !== 'ng-hide') {
-                    return animationCancelHandler(item);
-                }
-
-                item = $(item);
-                item.css(cssShow);
-                item.animate(cssHide, animationDuration, function() {
-                    done && done();
-                });
-                return animationCancelHandler(item);
-            }
-        };
-    });
-
-
-function animationCancelHandler(item) {
-    return function (cancelled) {
-        if (!cancelled) {
-            return;
-        }
-
-        $(item).stop();
-    };
-}
-
-window.animationDuration = 300;
+})();

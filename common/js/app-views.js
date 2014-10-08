@@ -2,7 +2,8 @@
 
 // Router
 appConfigurator
-    .factory('pageInfo', function() {
+    .factory('pageInfo', function () {
+        //this factory can be used to determine current section and opened page
         var info = this;
 
         info.allSections = {
