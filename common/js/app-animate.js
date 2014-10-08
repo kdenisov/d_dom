@@ -65,7 +65,29 @@
 
     angular.module('appConfigurator')
         .animation('.content-view-enter-leave', function() {
-            return getEnterLeaveAnimation();
+            var cssShow = { opacity: 1 };
+            var cssHide = { opacity: 0 };
+            return {
+                enter: function (item, done) {
+                    item = $(item);
+                    item.css(cssHide);
+                    item.animate(cssShow, animationDuration, done);
+                    return animationCancelHandler(item);
+                },
+
+                leave: function (item, done) {
+                    item = $(item);
+                    item.css(cssShow);
+                    var house = item.find('.house-enter-leave');
+                    if (house.length > 0) {
+                        house.animate({ opacity: 0, width: 0, height: 0, marginLeft: 0, marginTop: 0 }, animationDuration, function() {});
+                    }
+
+                    item.animate(cssHide, animationDuration, done);
+
+                    return animationCancelHandler(item);
+                }
+            };
         })
         .animation('.house-enter-leave', function() {
             return getEnterLeaveAnimation();

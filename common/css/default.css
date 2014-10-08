@@ -394,9 +394,17 @@ body {
 	height: 100%;
 	float: left;
 }
-#viewport-inner {
-	height: 100%;
-	padding: 0 0 0 310px;
+#viewport-inner { 
+    position: absolute;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    padding: 0 0 0 310px;
+    pointer-events:none;
+}
+
+#viewport-inner > * {
+    pointer-events: all;
 }
 
 

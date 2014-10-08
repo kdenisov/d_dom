@@ -123,10 +123,6 @@ appConfigurator.controller('CottageCtrl', function($scope, Configurator, orderBy
         }
     };
 
-    $scope.HIDE_HOUSE = function() {
-        var item = angular.element('.house-enter-leave');
-        item.animate({ opacity: 0, width: 0, height: 0, marginLeft: 0, marginTop: 0 }, 300, function() {});
-    };
 
     setCustomScroll();
     /*if(Configurator.initialized) return;
